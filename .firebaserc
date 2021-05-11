@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "flutter-learn-0225"
+  },
+  "targets": {
+    "flutter-learn-0225": {
+      "hosting": {
+        "site": [
+          "flutterlearn"
+        ]
+      }
+    }
+  }
+}

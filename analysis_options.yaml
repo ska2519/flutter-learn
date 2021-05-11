@@ -1,0 +1,13 @@
+include: package:lint/analysis_options.yaml
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/models/*.dart"
+    - "**/constants/*.dart"
+    - "**/services/uri_path.dart"
+
+linter:
+  rules:
+    sort_pub_dependencies: false
+   
