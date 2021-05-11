@@ -1,5 +1,4 @@
 name: Build & Deploy Website
-
 on:
   push:
     branches:
@@ -32,7 +31,7 @@ jobs:
       - name: Deploy Firebase Hosting
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting:flutter-learn-0225
+          args: deploy --only hosting:<flutter-learn-0225>
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT PATH: ./
