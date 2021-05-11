@@ -1,4 +1,4 @@
-name: Build & Deploy Website
+name: Build & Deploy to Live Channel
 on:
   push:
     branches:
@@ -12,12 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checkout Repository
-      - uses: actions/checkout@v1
-
+      - uses: actions/checkout@v2
       # Install Flutter command
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'dev'
+          channel: 'beta'
 
       # Build Website
       - name: Build Website
@@ -31,7 +30,7 @@ jobs:
       - name: Deploy Firebase Hosting
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --only hosting:<flutter-learn-0225>
+          args: deploy --only hosting:flutter-learn-0225
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT PATH: ./
