@@ -20,20 +20,20 @@ jobs:
         with:
           channel: 'dev'
 
-        # Build Website
-        - name: Build Website
-          run:
-            flutter config --enable-web
-            flutter pub get
-            flutter build web --release
-          working-directory: ./
+      # Build Website
+      - name: Build Website
+        run:
+          flutter config --enable-web
+          flutter pub get
+          flutter build web --release
+        working-directory: ./
 
-        # Deploy Firebase Hosting
-        - name: Deploy Firebase Hosting
-          uses: w9jds/firebase-action@master
-          with:
-            args: deploy --only hosting:flutter-learn-0225
-          env:
-            FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-            PROJECT PATH: ./
+      # Deploy Firebase Hosting
+      - name: Deploy Firebase Hosting
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting:flutter-learn-0225
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT PATH: ./
     
