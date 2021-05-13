@@ -13,15 +13,15 @@ jobs:
     steps:
       # Checkout Repository
       - uses: actions/checkout@v2
+
       # Install Flutter command
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'beta'
+          channel: 'dev'
 
       # Build Website
       - name: Build Website
         run:
-          flutter config --enable-web
           flutter pub get
           flutter build web --release
         working-directory: ./
@@ -32,6 +32,6 @@ jobs:
         with:
           args: deploy --only hosting:flutter-learn-0225
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
           PROJECT PATH: ./
     
