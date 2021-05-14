@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_learn/constants/constants.dart';
-import 'package:flutter_learn/constants/responsive.dart';
 import 'package:pixel_perfect/pixel_perfect.dart';
 
 import 'components/header.dart';
@@ -8,7 +7,7 @@ import 'components/my_files.dart';
 import 'components/recent_files.dart';
 import 'components/storage_details.dart';
 
-class DesktopScreen extends StatelessWidget {
+class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PixelPerfect(
@@ -29,10 +28,13 @@ class DesktopScreen extends StatelessWidget {
                         const MyFiles(),
                         const SizedBox(height: defaultPadding),
                         const RecentFiles(),
-                        const SizedBox(height: defaultPadding),
-                        const StorageDetails(),
                       ],
                     ),
+                  ),
+                  const SizedBox(width: defaultPadding),
+                  const Expanded(
+                    flex: 2,
+                    child: StorageDetails(),
                   ),
                 ],
               )

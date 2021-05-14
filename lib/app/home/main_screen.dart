@@ -44,7 +44,7 @@ class _NavScreenState extends State<NavScreen> {
                   Expanded(
                     // It takes 5/6 part of the screen
                     flex: 5,
-                    child: DesktopScreen(),
+                    child: DashboardScreen(),
                   ),
                 ],
               )
