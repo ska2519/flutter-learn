@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/controllers/menu_controller.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/constants/responsive.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class Header extends StatelessWidget {
+class Header extends HookWidget {
   const Header({
     Key? key,
   }) : super(key: key);
@@ -18,7 +19,7 @@ class Header extends StatelessWidget {
         if (!Responsive.isDesktop(context))
           IconButton(
             icon: const Icon(Icons.menu),
-            onPressed: context.read<MenuController>().controlMenu,
+            onPressed: context.read(menuControllerProvider).controlMenu,
           ),
         if (!Responsive.isMobile(context))
           Text(

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/constants/responsive.dart';
 import 'package:flutter_learn/models/my_files.dart';
-import 'package:pixel_perfect/pixel_perfect.dart';
-import 'file_info_card.dart';
+import 'package:flutter_learn/screens/dashboard/components/file_info_card.dart';
 
 class MyFiles extends StatelessWidget {
   const MyFiles({
