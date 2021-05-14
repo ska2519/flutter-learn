@@ -8,4 +8,6 @@ analyzer:
 linter:
   rules:
     sort_pub_dependencies: false
+    prefer_const_constructors: false
+    prefer_const_literals_to_create_immutables: false
    
