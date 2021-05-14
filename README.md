@@ -65,8 +65,9 @@ The project folders are structured like this:
   /controllers
   /models
   /routes
-  /screens
-    /main
+  /app
+    /home
+    /sign_in
 ```
 
 ## Other packages in use

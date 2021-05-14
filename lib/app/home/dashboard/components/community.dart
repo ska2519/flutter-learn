@@ -5,7 +5,7 @@ import 'package:pixel_perfect/pixel_perfect.dart';
 const iconPath = 'assets/icons/';
 const imagePath = 'assets/pixel_perfect/';
 
-class CommunityScreen extends StatelessWidget {
+class CommunityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PixelPerfect(

@@ -25,7 +25,6 @@ dependencies:
   hooks_riverpod: ^0.14.0+3
   lint: ^1.5.3
   pixel_perfect: ^1.1.0
-  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:

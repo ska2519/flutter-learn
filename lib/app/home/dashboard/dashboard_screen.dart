@@ -8,7 +8,7 @@ import 'components/my_files.dart';
 import 'components/recent_files.dart';
 import 'components/storage_details.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DesktopScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PixelPerfect(
@@ -29,21 +29,11 @@ class DashboardScreen extends StatelessWidget {
                         const MyFiles(),
                         const SizedBox(height: defaultPadding),
                         const RecentFiles(),
-                        if (Responsive.isMobile(context))
-                          const SizedBox(height: defaultPadding),
-                        if (Responsive.isMobile(context))
-                          const StorageDetails(),
+                        const SizedBox(height: defaultPadding),
+                        const StorageDetails(),
                       ],
                     ),
                   ),
-                  if (!Responsive.isMobile(context))
-                    const SizedBox(width: defaultPadding),
-                  // On Mobile means if the screen is less than 850 we don't want to show it
-                  if (!Responsive.isMobile(context))
-                    const Expanded(
-                      flex: 2,
-                      child: StorageDetails(),
-                    ),
                 ],
               )
             ],

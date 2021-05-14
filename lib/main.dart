@@ -1,10 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_learn/app/home/home_page.dart';
+import 'package:flutter_learn/app/home/main_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:flutter_learn/constants/constants.dart';
-import 'package:flutter_learn/screens/main/main_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,12 +17,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Learn',
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: bgColor,
+      theme: ThemeData.light().copyWith(
+        //scaffoldBackgroundColor: bgTestColor,
         textTheme: GoogleFonts.notoSansTextTheme(),
-        canvasColor: secondaryColor,
+        //canvasColor: secondaryColor,
       ),
-      home: MainScreen(),
+      home: NavScreen(),
     );
   }
 }
