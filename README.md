@@ -1,6 +1,6 @@
 # Flutter Learn
 
-Flutter 및 Cloud Firestore에서 제공하는 다중 플랫폼 커뮤니티 앱을 빌드하겠습니다.  
+Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드하겠습니다.  
 *I'll build a multi-platform community app powered by Flutter and Cloud Firestore.*
 
 완성 된 앱은 단일 Dart 코드베이스에서 Android, iOS 및 웹에서 실행됩니다.  
@@ -9,8 +9,8 @@ Flutter 및 Cloud Firestore에서 제공하는 다중 플랫폼 커뮤니티 앱
 이 프로젝트는 Flutter에서 [Riverpod](https://riverpod.dev) 상태 관리 기술을 사용하여 커뮤니티 앱을 ([로플리](https://www.lawfully.com/)에서 영감을 받음) 구현합니다.  
 *This project implement a community app ([Lawfully](https://www.lawfully.com/)-inspired) with [Riverpod](https://riverpod.dev) state management techniques in Flutter.*
 
-이 프로젝트는 YouTube API를 사용하여 동영상 목록을 가져오고 로그인 및 로컬 저장소와 같은 기능을 포함합니다.  
-*The project uses the YouTube API to fetch a list of videos, and includes features such as sign-in and local storage.*
+이 프로젝트는 YouTube API를 사용하여 동영상 목록을 가져오고 회원 가입&로그인과 Firebase Firestore 데이터 저장 기능을 포함합니다.  
+*The project uses the YouTube API to fetch a list of videos, and includes features such as Authentication and Firestore Database storage.*
 
 ## App Overview
 
@@ -54,22 +54,28 @@ You can write, attach images, comment, recommend, and filter on the bulletin boa
 
 The project folders are structured like this:
 
-### To be updated
-
-<!-- ``` dart
-/apps
-  /flutter_bloc
-  /riverpod
-  /provider
+``` dart
+/android
+/assets
+/ios
+/web
   ... and more
-/packages
-  /core
-    /lib
-      /api
-      /models
-        /app_models
-        /app_state
-        /tmdb
-      /persistence
-      /ui
-``` -->
+/lib
+  /constants
+  /controllers
+  /models
+  /routes
+  /screens
+    /main
+```
+
+## Other packages in use
+
+The "core" package of the app uses the following packages:
+
+- [freezed](https://pub.dev/packages/freezed) for app state and [json_annotation](https://pub.dev/packages/json_annotation) for data serialization
+- [cloud_firestore](https://pub.dev/packages/cloud_firestore) for Firebase Cloud Firestore data persistence
+- [firebase_auth](https://pub.dev/packages/firebase_auth) for authentication
+- [dio](https://pub.dev/packages/dio) for the API client
+
+### To be updated
