@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_learn/app/home/home_page.dart';
-import 'package:flutter_learn/app/home/main_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -22,7 +21,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.notoSansTextTheme(),
         //canvasColor: secondaryColor,
       ),
-      home: NavScreen(),
+      home: HomePage(),
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_learn/app/home/main_screen.dart';
+import 'package:flutter_learn/app/home/home_page.dart';
 
 class AppRoutes {
   static const appPage = '/app-page';
@@ -12,7 +12,7 @@ class AppRouter {
     switch (settings.name) {
       case AppRoutes.appPage:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => NavScreen(),
+          builder: (_) => HomePage(),
           //maintainState false = pop으로 돌아가면 위젯 rebuild
           maintainState: false,
           settings: settings,

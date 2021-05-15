@@ -42,7 +42,7 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 
 - [x] 화면 사이즈에 따른 위젯 조정
 - [x] 하단 네비게이션 바
-  - [ ] Desktop 사이즈 시 SideMenu로 변경
+  - [x] Desktop 사이즈 시 SideMenu로 변경
 - [ ] 회원가입 & 로그인
   - [ ] Email 로 가입
   - [ ] Google 계정으로 가입
