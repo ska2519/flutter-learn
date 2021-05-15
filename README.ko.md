@@ -41,8 +41,8 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 
 ## 앱 기능 구현
 
-- [ ] 화면 사이즈에 따른 위젯 조정
-- [ ] 하단 네비게이션 바
+- [x] 화면 사이즈에 따른 위젯 조정
+- [x] 하단 네비게이션 바
   - [ ] Desktop 사이즈 시 SideMenu로 변경
 - [ ] 회원가입 & 로그인
   - [ ] Email 로 가입
@@ -66,14 +66,15 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 ## Firebase 기능 구현
 
 - [ ] Firebase Authentication 설정
-- [ ] Firebase 호스팅에 웹 앱 배포
-- [ ] GitHub workflows로 웹 호스팅 자동화
+- [x] Firebase 호스팅에 웹 앱 배포
+- [x] Firebase 호스팅 자동 빌드 설정 및 GitHub로 배포
 - [ ] Cloud Firestore 데이터 구조 설정
 - [ ] Cloud Firestore 세분화 된 규칙 설정
 
 ## 앱 구조
 
-이 앱은 단일 Dart 코드베이스에서 Android, iOS 및 웹에서 실행하기 위해 만들어졌습니다. 이를 가능하게 하기 위해 **재사용성이 높은** 아키텍처가 설계되었습니다.  
+이 앱은 단일 Dart 코드베이스에서 Android, iOS 및 웹에서 실행하기 위해 만들어졌습니다.  
+이를 가능하게 하기 위해 **재사용성이 높은** 아키텍처가 설계되었습니다.  
 
 프로젝트 폴더는 다음과 같이 구성됩니다 :
 
