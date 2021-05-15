@@ -27,7 +27,7 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 <!-- 현재 선택한 프로필의 즐겨찾기 목록을 보려면 **즐겨찾기** 페이지를 엽니다.
 *Open the **Favorites** page to see the list of Favorites for the currently selected profile.* -->
 
-**프로필** 페이지를 사용하여 현재 선택한 프로필을 업데이트합니다.  
+**프로필** 페이지를 사용하여 현재 선택한 프로필을 업데이트합니다.
 
 ## 기능
 
@@ -38,6 +38,38 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 - Firebase Firestore data persistence (community, favorites, profile)
 
 **Flutter, Firebase, Riverpod을 결합하여 재사용이 가능한 멀티 플랫폼 앱을 개발하고 있습니다.**  
+
+## 앱 기능 구현
+
+- [ ] 화면 사이즈에 따른 위젯 조정
+- [ ] 하단 네비게이션 바
+  - [ ] Desktop 사이즈 시 SideMenu로 변경
+- [ ] 회원가입 & 로그인
+  - [ ] Email 로 가입
+  - [ ] Google 계정으로 가입
+  - [ ] Apple 계정으로 가입
+  - [ ] Github 계정으로 가입
+  - [ ] Kakao 계정으로 가입
+- [ ] 커뮤니티
+  - [ ] 카테고리
+  - [ ] 글쓰기
+  - [ ] 삭제
+  - [ ] 수정
+  - [ ] 좋아요
+  - [ ] 태그
+    - [ ] 태그 추천
+  - [ ] 댓글
+    - [ ] 댓글 좋아요
+    - [ ] 댓글 수정
+- [ ] 유튜브
+
+## Firebase 기능 구현
+
+- [ ] Firebase Authentication 설정
+- [ ] Firebase 호스팅에 웹 앱 배포
+- [ ] GitHub workflows로 웹 호스팅 자동화
+- [ ] Cloud Firestore 데이터 구조 설정
+- [ ] Cloud Firestore 세분화 된 규칙 설정
 
 ## 앱 구조
 

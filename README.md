@@ -56,6 +56,7 @@ The project folders are structured like this:
   /controllers
   /models
   /routes
+  /services
   /app
     /home
     /sign_in
@@ -66,8 +67,9 @@ The project folders are structured like this:
 The "core" package of the app uses the following packages:
 
 - [freezed](https://pub.dev/packages/freezed) for app state and [json_annotation](https://pub.dev/packages/json_annotation) for data serialization
-- [cloud_firestore](https://pub.dev/packages/cloud_firestore) for Firebase Cloud Firestore data persistence
+- [cloud_firestore](https://pub.dev/packages/cloud_firestore) for the remote database
 - [firebase_auth](https://pub.dev/packages/firebase_auth) for authentication
 - [dio](https://pub.dev/packages/dio) for the API client
+- [intl](https://pub.dev/packages/intl) for currency, date, time formatting
 
 ### To be updated
