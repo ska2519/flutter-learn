@@ -33,7 +33,10 @@ class Chart extends StatelessWidget {
                         height: 0.5,
                       ),
                 ),
-                const Text('of 128GB')
+                Text(
+                  'of 128GB',
+                  style: Theme.of(context).textTheme.bodyText2,
+                )
               ],
             ),
           ),

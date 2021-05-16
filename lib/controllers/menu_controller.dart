@@ -9,7 +9,7 @@ final scaffoldKeyProvider = Provider<GlobalKey<ScaffoldState>>((ref) {
 });
 
 class MenuController {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
 
