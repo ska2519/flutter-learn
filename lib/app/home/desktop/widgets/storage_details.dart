@@ -18,13 +18,12 @@ class StorageDetails extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text(
             'Storage Details',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
+            style: Theme.of(context).textTheme.headline6!.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
           ),
           SizedBox(height: defaultPadding),
           Chart(),

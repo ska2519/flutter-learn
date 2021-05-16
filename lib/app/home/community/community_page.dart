@@ -16,8 +16,8 @@ class CommunityPage extends StatelessWidget {
             SliverAppBar(
               pinned: true,
               expandedHeight: 120.0,
-              backgroundColor: Colors.white,
               floating: true,
+              backgroundColor: Colors.white,
               actions: [
                 IconButton(
                   icon: Icon(Icons.search, color: Colors.black),
@@ -43,7 +43,6 @@ class CommunityPage extends StatelessWidget {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) => Container(
-                  color: Colors.white,
                   margin: const EdgeInsets.only(top: defaultPadding),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -83,14 +82,14 @@ class CommunityPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Title Text\nIt will be great design! yes sure! Why Not? #$index',
+                              'Title Text\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed\n #$index',
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.subtitle2,
                             ),
                             SizedBox(height: defaultPadding),
                             Text(
-                              'we test Text field with 3lines.\nIt will be great design! yes sure! Why Not?\n#$index',
+                              'we test Text field with 3lines.\ndo eiusmod tempor incididunt ut labore et dolore magna?\n#$index',
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.bodyText2,

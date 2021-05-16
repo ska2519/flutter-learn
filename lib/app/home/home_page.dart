@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/community/community_page.dart';
+import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/recent_files.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/storage_details.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/side_menu.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:flutter_learn/app/home/desktop/desktop_screen.dart';
 import 'package:flutter_learn/app/home/tab_item.dart';
 import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/responsive.dart';
 import 'package:flutter_learn/controllers/menu_controller.dart';
 
+// final homePageProvider = Provider((ref) => HomePage());
+// final navigatorKeyProvider = Provider<Key>((ref) {
+//   return ref.read(homePageProvider).navigatorKey;
+// });
+
 class HomePage extends StatefulHookWidget {
+  // final _navigatorKey = const Key(Keys.bottomNavigationBar);
+  // Key get navigatorKey => _navigatorKey;
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -32,7 +40,7 @@ class _HomePageState extends State<HomePage> {
       drawer: const SideMenu(),
       body: SafeArea(
         child: Responsive.isDesktop(context)
-            ? DesktopScreen()
+            ? CommunityScreen()
             : IndexedStack(
                 index: _selectedIndex,
                 children: _screens,

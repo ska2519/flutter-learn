@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_learn/app/home/desktop/widgets/recent_files.dart';
 import 'package:flutter_learn/constants/strings.dart';
+import 'package:flutter_learn/routes/app_router.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -20,14 +20,15 @@ class SideMenu extends StatelessWidget {
             DrawerListTile(
               title: Strings.community,
               icon: Icons.list_alt,
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.communityScreen);
+              },
             ),
             DrawerListTile(
               title: Strings.youTube,
               icon: Icons.subscriptions_outlined,
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => RecentFiles()));
+                Navigator.pushNamed(context, AppRoutes.youtubeScreen);
               },
             ),
             DrawerListTile(

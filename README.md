@@ -14,13 +14,13 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 
 ## 앱 개요
 
-애플리케이션은 **커뮤니티**, **비디오** 및 **프로필**의 세 가지 기본 화면으로 구성됩니다.  
+애플리케이션은 **커뮤니티**, **유튜브** 및 **프로필**의 세 가지 기본 화면으로 구성됩니다.  
 처음 시작할 때 앱은 사용자에게 프로필 생성을 요청합니다.  
 
 **커뮤니티** 페이지는 게시판을 제공합니다.  
 게시판은 글작성, 이미지 첨부, 댓글, 추천, 필터링이 가능 합니다.  
 
-**동영상** 페이지는 YouTube API에서 동영상 목록을 로드합니다.  
+**유튜브** 페이지는 YouTube API에서 동영상 목록을 로드합니다.  
 
 각 동영상은 API에서 검색된 썸네일 URL을 사용하여 이미지 링크로 표시됩니다. ❤️ 아이콘을 탭하여 동영상을 즐겨찾기로 추가 할 수 있으며 이 환경 설정은 **Firebase Firestore**에 유지됩니다.  
 
@@ -41,8 +41,9 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 ## 앱 기능 구현
 
 - [x] 화면 사이즈에 따른 위젯 조정
-- [x] 하단 네비게이션 바
+- [x] 네비게이션 바
   - [x] Desktop 사이즈 시 SideMenu로 변경
+    - [ ] SideMenu 클릭 시 화면 변경
 - [ ] 회원가입 & 로그인
   - [ ] Email 로 가입
   - [ ] Google 계정으로 가입
@@ -90,6 +91,8 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
   /routes
   /app
     /home
+      /community
+      /desktop
     /sign_in
 ```
 
@@ -102,4 +105,4 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 - [firebase_auth](https://pub.dev/packages/firebase_auth) for authentication
 - [dio](https://pub.dev/packages/dio) for the API client
 
-### 추후 업데이트 예정
+### 지속적인 업데이트 중
