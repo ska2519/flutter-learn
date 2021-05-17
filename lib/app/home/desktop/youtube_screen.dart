@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_learn/app/home/community/community_page.dart';
-import 'package:flutter_learn/app/home/desktop/widgets/side_menu.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/storage_details.dart';
 import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
 import 'package:flutter_learn/constants/constants.dart';
