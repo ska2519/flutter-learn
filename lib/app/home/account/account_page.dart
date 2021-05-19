@@ -44,6 +44,7 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final firebaseAuth = context.read(firebaseAuthProvider);
     final user = firebaseAuth.currentUser;
+    print('user: $user');
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
