@@ -63,6 +63,9 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
     - [ ] 댓글 수정
 - [ ] 유튜브
 
+## Web 기능 구현
+- [ ] route
+- [ ] 잘못된 주소 처리
 ## Firebase 기능 구현
 
 - [ ] Firebase Authentication 설정
@@ -70,6 +73,7 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 - [x] Firebase 호스팅 자동 빌드 설정 및 GitHub로 배포
 - [ ] Cloud Firestore 데이터 구조 설정
 - [ ] Cloud Firestore 세분화 된 규칙 설정
+
 
 ## 앱 구조
 
@@ -89,11 +93,17 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
   /controllers
   /models
   /routes
+  /services
   /app
     /home
       /community
       /desktop
+      /youtube
     /sign_in
+      /email
+    /widgets
+      /alert_dialogs
+      /buttons
 ```
 
 ## 사용중인 패키지

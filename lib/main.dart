@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_learn/app/home/home_page.dart';
+import 'package:flutter_learn/app/top_level_providers.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -14,6 +15,7 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final firebaseAuth = context.read(firebaseAuthProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Learn',
@@ -25,7 +27,8 @@ class MyApp extends StatelessWidget {
         //canvasColor: secondaryColor,
       ),
       home: HomePage(),
-      onGenerateRoute: (settings) => AppRouter.onGenerateRoute(settings),
+      onGenerateRoute: (settings) =>
+          AppRouter.onGenerateRoute(settings, firebaseAuth),
     );
   }
 }
