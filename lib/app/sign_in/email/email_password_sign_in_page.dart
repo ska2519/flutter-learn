@@ -30,9 +30,9 @@ class EmailPasswordSignInPage extends StatefulWidget {
 }
 
 class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
-  final FocusScopeNode _node = FocusScopeNode();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _node = FocusScopeNode();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   EmailPasswordSignInModel get model => widget.model;
 

@@ -22,7 +22,7 @@ class AppRouter {
         return MaterialPageRoute<dynamic>(
           builder: (_) => EmailPasswordSignInPage.withFirebaseAuth(
             firebaseAuth,
-            onSignedIn: args as void Function(),
+            onSignedIn: args! as void Function(),
           ),
           settings: settings,
           fullscreenDialog: true,
