@@ -6,6 +6,7 @@ import 'package:flutter_learn/app/top_level_providers.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/avatar.dart';
+import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/strings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -83,12 +84,12 @@ class AccountPage extends StatelessWidget {
           borderColor: Colors.black54,
           borderWidth: 1.0,
         ),
-        const SizedBox(height: 9),
+        const SizedBox(height: defaultPadding),
         Text(
           user?.displayName ?? 'Need to Login',
           style: const TextStyle(color: Colors.white),
         ),
-        const SizedBox(height: 9),
+        const SizedBox(height: defaultPadding),
       ],
     );
   }

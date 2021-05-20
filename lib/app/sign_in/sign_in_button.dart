@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_learn/app/widgets/buttons/custom_raised_button.dart';
+import 'package:flutter_learn/app/widgets/buttons/custom_elevated_button.dart';
 
-class SignInButton extends CustomRaisedButton {
+class SignInButton extends CustomElevatedButton {
   SignInButton({
     Key? key,
     required String text,
