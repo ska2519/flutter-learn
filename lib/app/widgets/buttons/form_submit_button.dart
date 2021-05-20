@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_learn/app/widgets/buttons/custom_raised_button.dart';
+import 'package:flutter_learn/app/widgets/buttons/custom_elevated_button.dart';
 
-class FormSubmitButton extends CustomRaisedButton {
+class FormSubmitButton extends CustomElevatedButton {
   FormSubmitButton({
     Key? key,
     required String text,
