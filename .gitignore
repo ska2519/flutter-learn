@@ -47,5 +47,3 @@ app.*.map.json
 
 # Firebase
 web/firebase-config.js
-android/app/src/google-services.json
-ios/Runner/Info.plist
