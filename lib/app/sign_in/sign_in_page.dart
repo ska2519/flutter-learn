@@ -86,17 +86,17 @@ class SignInPageContents extends StatelessWidget {
       child: LayoutBuilder(builder: (context, constraints) {
         return Container(
           width: min(constraints.maxWidth, 600),
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              const SizedBox(height: 32.0),
+              const SizedBox(height: 33),
               SizedBox(
                 height: 50.0,
                 child: _buildHeader(),
               ),
-              const SizedBox(height: 32.0),
+              const SizedBox(height: 33),
               SignInButton(
                 key: emailPasswordButtonKey,
                 text: Strings.signInWithEmailPassword,
@@ -106,13 +106,13 @@ class SignInPageContents extends StatelessWidget {
                 textColor: Colors.white,
                 color: Theme.of(context).primaryColor,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 9),
               const Text(
                 Strings.or,
                 style: TextStyle(fontSize: 14.0, color: Colors.black87),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 9),
               // SignInButton(
               //   key: anonymousButtonKey,
               //   text: Strings.goAnonymous,
