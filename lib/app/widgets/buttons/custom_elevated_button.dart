@@ -8,10 +8,11 @@ class CustomElevatedButton extends StatelessWidget {
     this.color,
     this.textColor,
     this.height = 50.0,
-    this.borderRadius = 4.0,
+    this.borderRadius = 6,
     this.loading = false,
     this.onPressed,
     this.borderColor = Colors.transparent,
+    this.textStyle,
   }) : super(key: key);
   final Widget child;
   final Color? color;
@@ -21,6 +22,7 @@ class CustomElevatedButton extends StatelessWidget {
   final bool loading;
   final VoidCallback? onPressed;
   final Color borderColor;
+  final TextStyle? textStyle;
 
   Widget buildSpinner(BuildContext context) {
     final ThemeData data = Theme.of(context);
@@ -43,9 +45,10 @@ class CustomElevatedButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           onPrimary: textColor,
+          textStyle: textStyle,
           primary: color,
           minimumSize: const Size(88, 36),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 9),
           shape: RoundedRectangleBorder(
             side: BorderSide(color: borderColor),
             borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
