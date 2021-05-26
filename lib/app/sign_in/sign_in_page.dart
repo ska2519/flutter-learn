@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter_learn/app/sign_in/sign_in_button.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_view_model.dart';
+import 'package:flutter_learn/app/sign_in/social_sign_in_button.dart';
 import 'package:flutter_learn/app/top_level_providers.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/constants/keys.dart';
@@ -10,6 +12,7 @@ import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 final signInModelProvider = ChangeNotifierProvider<SignInViewModel>(
   (ref) => SignInViewModel(auth: ref.watch(firebaseAuthProvider)),
@@ -40,7 +43,7 @@ class SignInPage extends ConsumerWidget {
 
 class SignInPageContents extends StatelessWidget {
   const SignInPageContents(
-      {Key? key, required this.viewModel, this.title = 'Architecture Demo'})
+      {Key? key, required this.viewModel, this.title = 'Sign-in Demo'})
       : super(key: key);
   final SignInViewModel viewModel;
   final String title;
@@ -93,7 +96,7 @@ class SignInPageContents extends StatelessWidget {
             children: <Widget>[
               const SizedBox(height: 33),
               SizedBox(
-                height: 50.0,
+                height: 50,
                 child: _buildHeader(),
               ),
               const SizedBox(height: 33),
@@ -106,13 +109,8 @@ class SignInPageContents extends StatelessWidget {
                 textColor: Colors.white,
                 color: Theme.of(context).primaryColor,
               ),
-              const SizedBox(height: 9),
-              const Text(
-                Strings.or,
-                style: TextStyle(fontSize: 14.0, color: Colors.black87),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 9),
+              const SizedBox(height: 13),
+
               // SignInButton(
               //   key: anonymousButtonKey,
               //   text: Strings.goAnonymous,
@@ -121,6 +119,29 @@ class SignInPageContents extends StatelessWidget {
               //   onPressed:
               //       viewModel.isLoading ? null : viewModel.signInAnonymously,
               // ),
+              SocialSignInButton(
+                svgAssetName: 'assets/icons/free-icon-search-281764.svg',
+                textStyle: GoogleFonts.roboto(
+                  textStyle: TextStyle(fontWeight: FontWeight.w500),
+                ),
+                textColor: Colors.black54,
+                text: 'Sign in with Google',
+                color: Colors.white,
+                onPressed:
+                    viewModel.isLoading ? null : viewModel.signInWithGoogle,
+              ),
+              const SizedBox(height: 20),
+              // if (Platform.isIOS)
+              //   SocialSignInButton(
+              //     assetName: 'assets/apple@3x.png',
+              //     text: 'Sign in with Apple',
+              //     textColor: Colors.white,
+              //     color: Colors.black.withOpacity(0.9),
+              //     onPressed:
+              //         viewModel.isLoading ? null : viewModel.signInWithApple,
+              //   )
+              // else
+              //   const SizedBox(),
             ],
           ),
         );
