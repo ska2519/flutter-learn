@@ -1,15 +1,16 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_learn/services/auth_base.dart';
+import 'package:flutter_learn/models/app_user.dart';
 
 class SignInViewModel with ChangeNotifier {
   SignInViewModel({required this.auth});
-  final FirebaseAuth auth;
+  final AuthBase auth;
   bool isLoading = false;
   dynamic error;
 
-  Future<void> _signIn(Future<UserCredential> Function() signInMethod) async {
+  Future<void> _signIn(Future<AppUser?> Function() signInMethod) async {
     try {
       isLoading = true;
       notifyListeners();
@@ -20,6 +21,7 @@ class SignInViewModel with ChangeNotifier {
       rethrow;
     } finally {
       isLoading = false;
+
       notifyListeners();
     }
   }
@@ -29,6 +31,6 @@ class SignInViewModel with ChangeNotifier {
   }
 
   Future<void> signInWithGoogle() async {
-    // await _signIn(auth.sig);
+    await _signIn(auth.signInWithGoogle);
   }
 }

@@ -1,17 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_learn/models/app_user.dart';
+import 'auth_base.dart';
 
-import 'auth_service.dart';
+final authServiceProvider = Provider<AuthBase>((ref) => FirebaseAuthService());
 
-class FirebaseAuthService implements AuthService {
+class FirebaseAuthService implements AuthBase {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  MyAppUser? _userFromFirebase(User? user) {
+  AppUser? _userFromFirebase(User? user) {
     if (user == null) {
       return null;
     }
-    return MyAppUser(
+    return AppUser(
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
@@ -20,19 +23,19 @@ class FirebaseAuthService implements AuthService {
   }
 
   @override
-  Stream<MyAppUser?> get onAuthStateChanged {
+  Stream<AppUser?> get onAuthStateChanged {
     return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
 
   @override
-  Future<MyAppUser?> signInAnonymously() async {
+  Future<AppUser?> signInAnonymously() async {
     final UserCredential userCredential =
         await _firebaseAuth.signInAnonymously();
     return _userFromFirebase(userCredential.user);
   }
 
   @override
-  Future<MyAppUser?> signInWithEmailAndPassword(
+  Future<AppUser?> signInWithEmailAndPassword(
       String email, String password) async {
     final UserCredential userCredential =
         await _firebaseAuth.signInWithEmailAndPassword(
@@ -43,7 +46,7 @@ class FirebaseAuthService implements AuthService {
   }
 
   @override
-  Future<MyAppUser?> createUserWithEmailAndPassword(
+  Future<AppUser?> createUserWithEmailAndPassword(
       String email, String password) async {
     final UserCredential userCredential = await _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password);
@@ -56,7 +59,7 @@ class FirebaseAuthService implements AuthService {
   }
 
   @override
-  Future<MyAppUser?> signInWithEmailAndLink(
+  Future<AppUser?> signInWithEmailAndLink(
       {required String email, required String link}) async {
     final UserCredential userCredential =
         await _firebaseAuth.signInWithEmailLink(email: email, emailLink: link);
@@ -92,7 +95,7 @@ class FirebaseAuthService implements AuthService {
   }
 
   @override
-  Future<MyAppUser?> signInWithGoogle() async {
+  Future<AppUser?> signInWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
@@ -183,7 +186,7 @@ class FirebaseAuthService implements AuthService {
   // }
 
   @override
-  Future<MyAppUser?> currentUser() async {
+  Future<AppUser?> currentUser() async {
     return _userFromFirebase(_firebaseAuth.currentUser);
   }
 
@@ -200,13 +203,13 @@ class FirebaseAuthService implements AuthService {
   void dispose() {}
 
   @override
-  Future<MyAppUser> signInWithApple() {
+  Future<AppUser> signInWithApple() {
     // TODO: implement signInWithApple
     throw UnimplementedError();
   }
 
   @override
-  Future<MyAppUser> signInWithFacebook() {
+  Future<AppUser> signInWithFacebook() {
     // TODO: implement signInWithFacebook
     throw UnimplementedError();
   }
