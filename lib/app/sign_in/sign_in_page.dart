@@ -1,42 +1,61 @@
-import 'dart:io';
 import 'dart:math';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_learn/app/top_level_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter_learn/app/sign_in/sign_in_button.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_view_model.dart';
 import 'package:flutter_learn/app/sign_in/social_sign_in_button.dart';
-import 'package:flutter_learn/app/top_level_providers.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/strings.dart';
 import 'package:flutter_learn/routes/app_router.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_learn/services/firebase_auth_service.dart';
 
 final signInModelProvider = ChangeNotifierProvider<SignInViewModel>(
-  (ref) => SignInViewModel(auth: ref.watch(firebaseAuthProvider)),
+  (ref) {
+    print('authServiceProvider: ${ref.watch(authServiceProvider)}');
+    return SignInViewModel(auth: ref.watch(authServiceProvider));
+  },
 );
 
 class SignInPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final signInModel = watch(signInModelProvider);
-    return ProviderListener<SignInViewModel>(
-      provider: signInModelProvider,
-      onChange: (context, model) async {
-        if (model.error != null) {
-          await showExceptionAlertDialog(
-            context: context,
-            title: Strings.signInFailed,
-            exception: model.error,
-          );
+    final authStateChanges = watch(authStateChangesProvider);
+    return authStateChanges.when(
+      data: (user) {
+        if (user != null) {
+          // Navigator.pop(context);
+          Navigator.of(context).pop();
         }
+        return ProviderListener<SignInViewModel>(
+          provider: signInModelProvider,
+          onChange: (context, model) async {
+            if (model.error != null) {
+              await showExceptionAlertDialog(
+                context: context,
+                title: Strings.signInFailed,
+                exception: model.error,
+              );
+            }
+          },
+          child: SignInPageContents(
+            viewModel: signInModel,
+            title: '로그인 페이지',
+          ),
+        );
       },
-      child: SignInPageContents(
-        viewModel: signInModel,
-        title: '로그인 페이지',
-      ),
+      loading: () {
+        return const SizedBox();
+      },
+      error: (error, stackTrace) {
+        return const SizedBox();
+      },
     );
   }
 }
@@ -120,7 +139,7 @@ class SignInPageContents extends StatelessWidget {
               //       viewModel.isLoading ? null : viewModel.signInAnonymously,
               // ),
               SocialSignInButton(
-                svgAssetName: 'assets/icons/free-icon-search-281764.svg',
+                svgAssetName: 'assets/icons/google_logo.svg',
                 textStyle: GoogleFonts.roboto(
                   textStyle: TextStyle(fontWeight: FontWeight.w500),
                 ),
