@@ -11,15 +11,17 @@ import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/strings.dart';
+import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
 class AccountPage extends HookWidget {
-  Future<void> _signOut(BuildContext context, FirebaseAuth firebaseAuth) async {
+  Future<void> _signOut(BuildContext context) async {
     try {
-      await firebaseAuth.signOut();
+      final auth = context.read(authServiceProvider);
+      await auth.signOut();
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
@@ -29,8 +31,7 @@ class AccountPage extends HookWidget {
     }
   }
 
-  Future<void> _confirmSignOut(
-      BuildContext context, FirebaseAuth firebaseAuth) async {
+  Future<void> _confirmSignOut(BuildContext context) async {
     final bool didRequestSignOut = await showAlertDialog(
           context: context,
           title: Strings.logout,
@@ -40,15 +41,13 @@ class AccountPage extends HookWidget {
         ) ??
         false;
     if (didRequestSignOut == true) {
-      await _signOut(context, firebaseAuth);
+      await _signOut(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final firebaseAuth = context.read(firebaseAuthProvider);
     final authStateChanges = useProvider(authStateChangesProvider);
-
     return authStateChanges.when(
       data: (user) => Scaffold(
         appBar: AppBar(
@@ -57,7 +56,7 @@ class AccountPage extends HookWidget {
               key:
                   user != null ? const Key(Keys.logout) : const Key(Keys.login),
               onPressed: () => user != null
-                  ? _confirmSignOut(context, firebaseAuth)
+                  ? _confirmSignOut(context)
                   : Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -104,7 +103,7 @@ class AccountPage extends HookWidget {
         ),
         const SizedBox(height: defaultPadding),
         Text(
-          user?.displayName ?? '로그인이 필요합니다',
+          user == null ? '로그인이 필요합니다' : user.displayName ?? '닉네임을 만들어주세요',
           style: const TextStyle(color: Colors.white),
         ),
         const SizedBox(height: defaultPadding),
