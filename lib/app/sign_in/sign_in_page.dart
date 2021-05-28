@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/top_level_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,48 +15,37 @@ import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/strings.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final signInModelProvider = ChangeNotifierProvider<SignInViewModel>(
-  (ref) {
-    print('authServiceProvider: ${ref.watch(authServiceProvider)}');
-    return SignInViewModel(auth: ref.watch(authServiceProvider));
-  },
-);
+    (ref) => SignInViewModel(auth: ref.watch(authServiceProvider)));
 
-class SignInPage extends ConsumerWidget {
+class SignInPage extends HookWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final signInModel = watch(signInModelProvider);
-    final authStateChanges = watch(authStateChangesProvider);
-    return authStateChanges.when(
-      data: (user) {
-        if (user != null) {
-          // Navigator.pop(context);
-          Navigator.of(context).pop();
+  Widget build(BuildContext context) {
+    final signInModel = useProvider(signInModelProvider);
+    final authStateChanges = useProvider(authStateChangesProvider);
+    authStateChanges.whenData((user) {
+      if (user != null) {
+        WidgetsBinding.instance!
+            .addPostFrameCallback((_) => Navigator.pop(context));
+      }
+    });
+    return ProviderListener<SignInViewModel>(
+      provider: signInModelProvider,
+      onChange: (context, model) async {
+        if (model.error != null) {
+          await showExceptionAlertDialog(
+            context: context,
+            title: Strings.signInFailed,
+            exception: model.error,
+          );
         }
-        return ProviderListener<SignInViewModel>(
-          provider: signInModelProvider,
-          onChange: (context, model) async {
-            if (model.error != null) {
-              await showExceptionAlertDialog(
-                context: context,
-                title: Strings.signInFailed,
-                exception: model.error,
-              );
-            }
-          },
-          child: SignInPageContents(
-            viewModel: signInModel,
-            title: '로그인 페이지',
-          ),
-        );
       },
-      loading: () {
-        return const SizedBox();
-      },
-      error: (error, stackTrace) {
-        return const SizedBox();
-      },
+      child: SignInPageContents(
+        viewModel: signInModel,
+        title: '로그인 페이지',
+      ),
     );
   }
 }

@@ -14,6 +14,7 @@ class FirebaseAuthService implements AuthBase {
     if (user == null) {
       return null;
     }
+    print('_userFromFirebase: $user');
     return AppUser(
       uid: user.uid,
       email: user.email,

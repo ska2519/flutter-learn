@@ -21,7 +21,6 @@ class SignInViewModel with ChangeNotifier {
       rethrow;
     } finally {
       isLoading = false;
-
       notifyListeners();
     }
   }
