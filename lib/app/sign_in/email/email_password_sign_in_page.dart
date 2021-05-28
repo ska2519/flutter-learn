@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_learn/app/sign_in/email/email_password_sign_in_model.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_learn/app/sign_in/email/email_password_sign_in_strings.d
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/buttons/form_submit_button.dart';
+import 'package:flutter_learn/services/auth_base.dart';
 
 class EmailPasswordSignInPage extends StatefulWidget {
   const EmailPasswordSignInPage(
@@ -16,10 +16,10 @@ class EmailPasswordSignInPage extends StatefulWidget {
   final EmailPasswordSignInModel model;
   final VoidCallback? onSignedIn;
 
-  factory EmailPasswordSignInPage.withFirebaseAuth(FirebaseAuth firebaseAuth,
+  factory EmailPasswordSignInPage.withAuthBase(AuthBase auth,
       {VoidCallback? onSignedIn}) {
     return EmailPasswordSignInPage(
-      model: EmailPasswordSignInModel(firebaseAuth: firebaseAuth),
+      model: EmailPasswordSignInModel(auth: auth),
       onSignedIn: onSignedIn,
     );
   }

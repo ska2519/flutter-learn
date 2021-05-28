@@ -3,7 +3,7 @@ import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/youtube_screen.dart';
 import 'package:flutter_learn/app/home/home_page.dart';
 import 'package:flutter_learn/app/sign_in/email/email_password_sign_in_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_learn/services/auth_base.dart';
 
 class AppRoutes {
   static const emailPasswordSignInPage = '/email-password-sign-in-page';
@@ -14,14 +14,14 @@ class AppRoutes {
 
 class AppRouter {
   static Route<dynamic>? onGenerateRoute(
-      RouteSettings settings, FirebaseAuth firebaseAuth) {
+      RouteSettings settings, AuthBase auth) {
     // ignore: unused_local_variable
     final args = settings.arguments;
     switch (settings.name) {
       case AppRoutes.emailPasswordSignInPage:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => EmailPasswordSignInPage.withFirebaseAuth(
-            firebaseAuth,
+          builder: (_) => EmailPasswordSignInPage.withAuthBase(
+            auth,
             onSignedIn: args! as void Function(),
           ),
           settings: settings,
