@@ -6,6 +6,8 @@ import 'package:flutter_learn/models/app_user.dart';
 import 'auth_base.dart';
 
 final authServiceProvider = Provider<AuthBase>((ref) => FirebaseAuthService());
+// final authStateChangeProvider = StreamProvider<AppUser?>(
+//     (ref) => ref.watch(authServiceProvider).onAuthStateChanged);
 
 class FirebaseAuthService implements AuthBase {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
