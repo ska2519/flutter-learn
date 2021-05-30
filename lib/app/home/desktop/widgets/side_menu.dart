@@ -34,7 +34,9 @@ class SideMenu extends StatelessWidget {
             DrawerListTile(
               title: Strings.more,
               icon: Icons.more_horiz,
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.accountScreen);
+              },
             ),
           ],
         ),

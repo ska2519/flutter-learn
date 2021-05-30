@@ -99,7 +99,13 @@ class FirebaseAuthService implements AuthBase {
 
   @override
   Future<AppUser?> signInWithGoogle() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      scopes: [
+        'profile',
+        'email',
+        'openid',
+      ],
+    );
     final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
     if (googleUser != null) {

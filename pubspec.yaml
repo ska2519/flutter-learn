@@ -22,7 +22,6 @@ dependencies:
   flutter_hooks: ^0.16.0
   flutter_svg: ^0.22.0
   freezed_annotation: ^0.14.1
-  google_fonts: ^2.0.0
   google_sign_in: ^5.0.3
   hooks_riverpod: ^0.14.0+3
   lint: ^1.5.3
@@ -43,3 +42,47 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/pixel_perfect/
+
+  fonts:
+    - family: NotoSansKR
+      fonts:
+        - asset: fonts/NotoSansKR-Thin.otf
+          weight: 100
+        - asset: fonts/NotoSansKR-Light.otf
+          weight: 300        
+        - asset: fonts/NotoSansKR-Regular.otf
+          weight: 400        
+        - asset: fonts/NotoSansKR-Medium.otf
+          weight: 500        
+        - asset: fonts/NotoSansKR-Bold.otf
+          weight: 700        
+        - asset: fonts/NotoSansKR-Black.otf
+          weight: 900
+
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Thin.ttf
+          weight: 100
+        - asset: fonts/Roboto-ThinItalic.ttf
+          style: italic
+        - asset: fonts/Roboto-Light.ttf
+          weight: 300        
+        - asset: fonts/Roboto-LightItalic.ttf
+          style: italic       
+        - asset: fonts/Roboto-Regular.ttf
+          weight: 400        
+        - asset: fonts/Roboto-Italic.ttf
+          style: italic        
+        - asset: fonts/Roboto-Medium.ttf
+          weight: 500   
+        - asset: fonts/Roboto-MediumItalic.ttf
+          style: italic                  
+        - asset: fonts/Roboto-Bold.ttf
+          weight: 700
+        - asset: fonts/Roboto-BoldItalic.ttf
+          style: italic          
+        - asset: fonts/Roboto-Black.ttf
+          weight: 900
+        - asset: fonts/Roboto-BlackItalic.ttf
+          style: italic
+

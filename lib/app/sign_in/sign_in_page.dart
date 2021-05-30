@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/top_level_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter_learn/app/sign_in/sign_in_button.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_view_model.dart';
@@ -130,9 +129,7 @@ class SignInPageContents extends StatelessWidget {
               // ),
               SocialSignInButton(
                 svgAssetName: 'assets/icons/google_logo.svg',
-                textStyle: GoogleFonts.roboto(
-                  textStyle: TextStyle(fontWeight: FontWeight.w500),
-                ),
+                textStyle: TextStyle(fontWeight: FontWeight.w500),
                 textColor: Colors.black54,
                 text: 'Sign in with Google',
                 color: Colors.white,

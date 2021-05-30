@@ -52,22 +52,26 @@ class AccountPage extends HookWidget {
       data: (user) => Scaffold(
         appBar: AppBar(
           actions: <Widget>[
-            TextButton(
-              key:
-                  user != null ? const Key(Keys.logout) : const Key(Keys.login),
-              onPressed: () => user != null
-                  ? _confirmSignOut(context)
-                  : Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SignInPage(),
+            Padding(
+              padding: const EdgeInsets.all(defaultPadding),
+              child: TextButton(
+                key: user != null
+                    ? const Key(Keys.logout)
+                    : const Key(Keys.login),
+                onPressed: () => user != null
+                    ? _confirmSignOut(context)
+                    : Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignInPage(),
+                        ),
                       ),
-                    ),
-              child: Text(
-                user != null ? Strings.logout : Strings.login,
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.white,
+                child: Text(
+                  user != null ? Strings.logout : Strings.login,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
