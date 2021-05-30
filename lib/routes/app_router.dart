@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_learn/app/home/account/account_page.dart';
 import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/youtube_screen.dart';
 import 'package:flutter_learn/app/home/home_page.dart';
@@ -10,6 +11,7 @@ class AppRoutes {
   static const appPage = '/app-page';
   static const communityScreen = '/community-screen';
   static const youtubeScreen = '/youtube-screen';
+  static const accountScreen = '/account-screen';
 }
 
 class AppRouter {
@@ -42,6 +44,11 @@ class AppRouter {
       case AppRoutes.youtubeScreen:
         return MaterialPageRoute<dynamic>(
           builder: (_) => YouTubeScreen(),
+          settings: settings,
+        );
+      case AppRoutes.accountScreen:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => AccountPage(),
           settings: settings,
         );
       default:

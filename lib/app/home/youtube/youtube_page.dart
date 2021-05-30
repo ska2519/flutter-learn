@@ -17,14 +17,14 @@ class YouTubePage extends StatelessWidget {
               pinned: true,
               expandedHeight: 120.0,
               floating: true,
-              backgroundColor: Colors.white,
+              backgroundColor: primaryColor,
               actions: [
                 IconButton(
-                  icon: Icon(Icons.search, color: Colors.black),
+                  icon: Icon(Icons.search),
                   onPressed: () {},
                 ),
                 IconButton(
-                  icon: Icon(Icons.create, color: Colors.black),
+                  icon: Icon(Icons.create),
                   onPressed: () {},
                 )
               ],
