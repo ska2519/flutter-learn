@@ -101,9 +101,9 @@ class FirebaseAuthService implements AuthBase {
   Future<AppUser?> signInWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn(
       scopes: [
-        'profile',
+        // 'profile',
         'email',
-        'openid',
+        //'openid',
       ],
     );
     final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
@@ -112,12 +112,15 @@ class FirebaseAuthService implements AuthBase {
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
       if (googleAuth.accessToken != null && googleAuth.idToken != null) {
-        final UserCredential userCredential = await _firebaseAuth
-            .signInWithCredential(GoogleAuthProvider.credential(
-          idToken: googleAuth.idToken,
+        // Create a new credential.
+        final googleCredential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
-        ));
-        return _userFromFirebase(userCredential.user);
+          idToken: googleAuth.idToken,
+        );
+        // Sign in to Firebase with the Google [UserCredential].
+        final UserCredential googleUserCredential =
+            await _firebaseAuth.signInWithCredential(googleCredential);
+        return _userFromFirebase(googleUserCredential.user);
       } else {
         throw PlatformException(
             code: 'ERROR_MISSING_GOOGLE_AUTH_TOKEN',
