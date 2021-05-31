@@ -11,6 +11,13 @@ final authServiceProvider = Provider<AuthBase>((ref) => FirebaseAuthService());
 
 class FirebaseAuthService implements AuthBase {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn(
+    scopes: [
+      // 'profile',
+      'email',
+      //'openid',
+    ],
+  );
 
   AppUser? _userFromFirebase(User? user) {
     if (user == null) {
@@ -99,15 +106,7 @@ class FirebaseAuthService implements AuthBase {
 
   @override
   Future<AppUser?> signInWithGoogle() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-      scopes: [
-        // 'profile',
-        'email',
-        //'openid',
-      ],
-    );
     final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
     if (googleUser != null) {
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
@@ -204,8 +203,8 @@ class FirebaseAuthService implements AuthBase {
 
   @override
   Future<void> signOut() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
     await googleSignIn.signOut();
+    await googleSignIn.disconnect();
     // final FacebookLogin facebookLogin = FacebookLogin();
     // await facebookLogin.logOut();
     return _firebaseAuth.signOut();
