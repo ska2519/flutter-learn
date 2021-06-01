@@ -17,7 +17,6 @@ class CommunityPage extends StatelessWidget {
               pinned: true,
               expandedHeight: 120.0,
               floating: true,
-              backgroundColor: primaryColor,
               actions: [
                 IconButton(
                   icon: Icon(Icons.search),
@@ -35,7 +34,7 @@ class CommunityPage extends StatelessWidget {
                   bottom: defaultPadding,
                 ),
                 title: Text(
-                  'Community',
+                  '\u{1f60e} Community',
                   style: Theme.of(context).textTheme.headline6,
                 ),
               ),

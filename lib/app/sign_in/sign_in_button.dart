@@ -5,7 +5,7 @@ class SignInButton extends CustomElevatedButton {
   SignInButton({
     Key? key,
     required String text,
-    required Color color,
+    Color? color,
     required VoidCallback? onPressed,
     Color textColor = Colors.black87,
     double height = 50.0,

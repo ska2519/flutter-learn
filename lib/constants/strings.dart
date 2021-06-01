@@ -12,7 +12,7 @@ class Strings {
 
   // Sign In Page
   static const String signIn = '로그인';
-  static const String signInWithEmailPassword = '이메일로 로그인';
+  static const String signInWithEmailPassword = '\u{2709}  이메일로 로그인';
   static const String goAnonymous = 'Go anonymous';
   static const String or = 'or';
   static const String signInFailed = '로그인 실패';

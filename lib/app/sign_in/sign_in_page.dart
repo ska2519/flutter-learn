@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/top_level_providers.dart';
+import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_learn/app/sign_in/sign_in_button.dart';
@@ -74,7 +76,6 @@ class SignInPageContents extends StatelessWidget {
         elevation: 2.0,
         title: Text(title),
       ),
-      backgroundColor: Colors.grey[200],
       body: _buildSignIn(context),
     );
   }
@@ -88,7 +89,11 @@ class SignInPageContents extends StatelessWidget {
     return const Text(
       Strings.signIn,
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w600),
+      style: TextStyle(
+        color: primaryColor,
+        fontSize: 33,
+        fontWeight: FontWeight.w600,
+      ),
     );
   }
 
@@ -114,10 +119,9 @@ class SignInPageContents extends StatelessWidget {
                 onPressed: viewModel.isLoading
                     ? null
                     : () => _showEmailPasswordSignInPage(context),
-                textColor: Colors.white,
-                color: Theme.of(context).primaryColor,
+                color: Colors.white,
               ),
-              const SizedBox(height: 13),
+              const SizedBox(height: defaultPadding),
 
               // SignInButton(
               //   key: anonymousButtonKey,
@@ -130,24 +134,23 @@ class SignInPageContents extends StatelessWidget {
               SocialSignInButton(
                 svgAssetName: 'assets/icons/google_logo.svg',
                 textStyle: TextStyle(fontWeight: FontWeight.w500),
-                textColor: Colors.black54,
+                textColor: Colors.black87,
                 text: 'Sign in with Google',
                 color: Colors.white,
                 onPressed:
                     viewModel.isLoading ? null : viewModel.signInWithGoogle,
               ),
-              const SizedBox(height: 20),
-              // if (Platform.isIOS)
-              //   SocialSignInButton(
-              //     assetName: 'assets/apple@3x.png',
-              //     text: 'Sign in with Apple',
-              //     textColor: Colors.white,
-              //     color: Colors.black.withOpacity(0.9),
-              //     onPressed:
-              //         viewModel.isLoading ? null : viewModel.signInWithApple,
-              //   )
-              // else
-              //   const SizedBox(),
+              const SizedBox(height: defaultPadding),
+              // if (!kIsWeb && Platform.isIOS)
+              SocialSignInButton(
+                svgAssetName: 'assets/icons/btn_apple_white.svg',
+                textStyle: TextStyle(fontWeight: FontWeight.w500),
+                text: 'Sign in with Apple',
+                textColor: Colors.black87,
+                color: Colors.white,
+                onPressed:
+                    viewModel.isLoading ? null : viewModel.signInWithApple,
+              )
             ],
           ),
         );

@@ -1,8 +1,15 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 import 'package:flutter_learn/models/app_user.dart';
+
 import 'auth_base.dart';
 
 final authServiceProvider = Provider<AuthBase>((ref) => FirebaseAuthService());
@@ -131,70 +138,65 @@ class FirebaseAuthService implements AuthBase {
     }
   }
 
-  // @override
-  // Future<MyAppUser> signInWithFacebook() async {
-  //   final fb = FacebookLogin();
-  //   final response = await fb.logIn(permissions: [
-  //     FacebookPermission.publicProfile,
-  //     FacebookPermission.email,
-  //   ]);
-  //   switch (response.status) {
-  //     case FacebookLoginStatus.success:
-  //       final accessToken = response.accessToken;
-  //       final userCredential = await _firebaseAuth.signInWithCredential(
-  //         FacebookAuthProvider.credential(accessToken.token),
-  //       );
-  //       return _userFromFirebase(userCredential.user);
-  //     case FacebookLoginStatus.cancel:
-  //       throw FirebaseAuthException(
-  //         code: 'ERROR_ABORTED_BY_USER',
-  //         message: 'Login cancelado pelo usuário.',
-  //       );
-  //     case FacebookLoginStatus.error:
-  //       throw FirebaseAuthException(
-  //         code: 'ERROR_FACEBOOK_LOGIN_FAILED',
-  //         message: response.error.developerMessage,
-  //       );
-  //     default:
-  //       throw UnimplementedError();
-  //   }
-  // }
+  /// Generates a cryptographically secure random nonce, to be included in a
+  /// credential request.
+  String generateNonce([int length = 32]) {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
 
-  // @override
-  // Future<MyAppUser> signInWithApple({List<Scope> scopes = const []}) async {
-  //   final AuthorizationResult result = await AppleSignIn.performRequests(
-  //       [AppleIdRequest(requestedScopes: scopes)]);
-  //   switch (result.status) {
-  //     case AuthorizationStatus.authorized:
-  //       final appleIdCredential = result.credential;
-  //       final oAuthProvider = OAuthProvider('apple.com');
-  //       final credential = oAuthProvider.credential(
-  //         idToken: String.fromCharCodes(appleIdCredential.identityToken),
-  //         accessToken:
-  //             String.fromCharCodes(appleIdCredential.authorizationCode),
-  //       );
+  /// Returns the sha256 hash of [input] in hex notation.
+  String sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
 
-  //       final authResult = await _firebaseAuth.signInWithCredential(credential);
-  //       final firebaseUser = authResult.user;
-  //       if (scopes.contains(Scope.fullName)) {
-  //         final String displayName =
-  //             '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
-  //         await firebaseUser.updateProfile(displayName: displayName);
-  //       }
-  //       return _userFromFirebase(firebaseUser);
-  //     case AuthorizationStatus.error:
-  //       throw PlatformException(
-  //         code: 'ERROR_AUTHORIZATION_DENIED',
-  //         message: result.error.toString(),
-  //       );
-  //     case AuthorizationStatus.cancelled:
-  //       throw PlatformException(
-  //         code: 'ERROR_ABORTED_BY_USER',
-  //         message: 'Sign in aborted by user',
-  //       );
-  //   }
-  //   return null;
-  // }
+  @override
+  Future<AppUser?> signInWithApple() async {
+    const redirectURL =
+        'https://checker-wry-diascia.glitch.me/callbacks/sign_in_with_apple';
+    const clientID = 'dev.flutterlearn.flutterlearn';
+    final rawNonce = generateNonce();
+    final nonce = sha256ofString(rawNonce);
+
+    // Request credential for the currently signed in Apple account.
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+      webAuthenticationOptions: WebAuthenticationOptions(
+        clientId: clientID,
+        redirectUri: Uri.parse(redirectURL),
+      ),
+      nonce: nonce,
+    );
+
+    // Create an `OAuthCredential` from the credential returned by Apple.
+    final oauthCredential = OAuthProvider('apple.com').credential(
+      idToken: appleCredential.identityToken,
+      accessToken: appleCredential.authorizationCode,
+      rawNonce: rawNonce,
+    );
+
+    // Sign in the user with Firebase. If the nonce we generated earlier does
+    // not match the nonce in `appleCredential.identityToken`, sign in will fail.
+    final authResult =
+        await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+    final firebaseUser = authResult.user;
+    print('firebaseUser: ${firebaseUser!.providerData[0].displayName}');
+    final String displayName = firebaseUser.providerData[0].displayName ?? '';
+    final String photoUrl = firebaseUser.providerData[0].photoURL ?? '';
+    print('displayName: $displayName / photoUrl: $photoUrl');
+    await firebaseUser.updateProfile(
+        displayName: displayName, photoURL: photoUrl);
+
+    return _userFromFirebase(firebaseUser);
+  }
 
   @override
   Future<AppUser?> currentUser() async {
@@ -204,24 +206,9 @@ class FirebaseAuthService implements AuthBase {
   @override
   Future<void> signOut() async {
     await googleSignIn.signOut();
-    await googleSignIn.disconnect();
-    // final FacebookLogin facebookLogin = FacebookLogin();
-    // await facebookLogin.logOut();
     return _firebaseAuth.signOut();
   }
 
   @override
   void dispose() {}
-
-  @override
-  Future<AppUser> signInWithApple() {
-    // TODO: implement signInWithApple
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<AppUser> signInWithFacebook() {
-    // TODO: implement signInWithFacebook
-    throw UnimplementedError();
-  }
 }
