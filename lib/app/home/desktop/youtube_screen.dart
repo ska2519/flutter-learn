@@ -10,19 +10,24 @@ class YouTubeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          // It takes 5/6 part of the screen
-          flex: 5,
-          child: YouTubePage(),
+    return Scaffold(
+      body: SafeArea(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              // It takes 5/6 part of the screen
+              flex: 5,
+              child: YouTubePage(),
+            ),
+            const SizedBox(width: defaultPadding),
+            const Expanded(
+              flex: 2,
+              child: StorageDetails(),
+            ),
+          ],
         ),
-        const SizedBox(width: defaultPadding),
-        const Expanded(
-          flex: 2,
-          child: StorageDetails(),
-        ),
-      ],
+      ),
     );
   }
 }

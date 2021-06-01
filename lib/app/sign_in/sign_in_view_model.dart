@@ -32,4 +32,8 @@ class SignInViewModel with ChangeNotifier {
   Future<void> signInWithGoogle() async {
     await _signIn(auth.signInWithGoogle);
   }
+
+  Future<void> signInWithApple() async {
+    await _signIn(auth.signInWithApple);
+  }
 }

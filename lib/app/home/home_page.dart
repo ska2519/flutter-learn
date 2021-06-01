@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: context.read(menuControllerProvider).scaffoldKey,
-      drawer: const SideMenu(),
+      drawer: Responsive.isDesktop(context) ? const SideMenu() : null,
       body: SafeArea(
         child: Responsive.isDesktop(context)
             ? CommunityScreen()

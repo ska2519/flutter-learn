@@ -20,7 +20,6 @@ abstract class AuthBase {
     required String androidMinimumVersion,
   });
   Future<AppUser?> signInWithGoogle();
-  Future<AppUser?> signInWithFacebook();
   Future<AppUser?> signInWithApple();
   Future<void> signOut();
   Stream<AppUser?> get onAuthStateChanged;

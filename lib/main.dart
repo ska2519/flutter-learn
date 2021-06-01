@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_learn/app/home/home_page.dart';
-import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -20,17 +19,22 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Learn',
       theme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: primaryColor,
-        accentColor: accentColor,
+        brightness: Brightness.light,
+        primarySwatch: Colors.lightBlue,
+        appBarTheme: AppBarTheme(
+          textTheme: TextTheme(
+            headline6: TextStyle(),
+          ),
+          //titleTextStyle: TextStyle(color: Colors.white),
+          //toolbarTextStyle: TextStyle(color: Colors.white),
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+        textTheme: TextTheme(
+          headline6: TextStyle(color: Colors.white),
+        ),
         fontFamily: 'NotoSansKR',
       ),
-      // .light().copyWith(
-      //     //primaryIconTheme: IconThemeData(color: Colors.black),
-      //     //scaffoldBackgroundColor: bgTestColor,
-      //     //iconTheme: IconThemeData(color: Colors.black)
-      //     //canvasColor: secondaryColor,
-      //     ),
+
       home: HomePage(),
       onGenerateRoute: (settings) => AppRouter.onGenerateRoute(settings, auth),
     );

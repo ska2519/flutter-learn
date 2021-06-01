@@ -17,7 +17,6 @@ class YouTubePage extends StatelessWidget {
               pinned: true,
               expandedHeight: 120.0,
               floating: true,
-              backgroundColor: primaryColor,
               actions: [
                 IconButton(
                   icon: Icon(Icons.search),
@@ -35,7 +34,7 @@ class YouTubePage extends StatelessWidget {
                   bottom: defaultPadding,
                 ),
                 title: Text(
-                  'YouTube',
+                  '\u{1f4Fa} YouTube',
                   style: Theme.of(context).textTheme.headline6,
                 ),
               ),
