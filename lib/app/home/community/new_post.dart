@@ -15,6 +15,7 @@ class NewPost extends HookWidget {
     final post = Post(body: text);
     try {
       final database = context.read(databaseProvider);
+
       await database.savePost(post);
     } catch (e) {
       unawaited(showExceptionAlertDialog(

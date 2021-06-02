@@ -1,9 +1,12 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
+
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
-import 'package:flutter_learn/app/top_level_providers.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/avatar.dart';
@@ -11,11 +14,8 @@ import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/strings.dart';
+import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pedantic/pedantic.dart';
 
 class AccountPage extends HookWidget {
   Future<void> _signOut(BuildContext context) async {
@@ -96,18 +96,18 @@ class AccountPage extends HookWidget {
     );
   }
 
-  Widget _buildUserInfo(User? user) {
+  Widget _buildUserInfo(AppUser? appUser) {
     return Column(
       children: [
         Avatar(
-          photoUrl: user?.photoURL,
+          photoUrl: appUser?.photoURL,
           radius: 50,
           borderColor: Colors.black54,
           borderWidth: 1.0,
         ),
         const SizedBox(height: defaultPadding),
         Text(
-          user == null ? '로그인이 필요합니다' : user.displayName ?? '닉네임을 만들어주세요',
+          appUser == null ? '로그인이 필요합니다' : appUser.displayName ?? '닉네임을 만들어주세요',
           style: const TextStyle(color: Colors.white),
         ),
         const SizedBox(height: defaultPadding),
