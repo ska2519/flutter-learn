@@ -4,6 +4,7 @@ import 'package:flutter_learn/services/firestore_path.dart';
 import 'package:flutter_learn/services/firestore_service.dart';
 import 'package:flutter_learn/models/job.dart';
 import 'package:flutter_learn/models/entry.dart';
+import 'package:flutter_learn/models/post.dart';
 
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 
@@ -12,6 +13,14 @@ class FirestoreDatabase {
   final String uid;
 
   final _service = FirestoreService.instance;
+
+  Future<void> savePost(Post post) async {
+    final postWithUid = post.copyWith(author: uid);
+    _service.setData(
+      path: FirestorePath.post(),
+      data: postWithUid.toJson(),
+    );
+  }
 
   Future<void> setJob(Job job) => _service.setData(
         path: FirestorePath.job(uid, job.id),

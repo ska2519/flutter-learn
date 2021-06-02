@@ -22,19 +22,14 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         primarySwatch: Colors.lightBlue,
         appBarTheme: AppBarTheme(
-          textTheme: TextTheme(
-            headline6: TextStyle(),
-          ),
+          // textTheme:
+          //     TextTheme(headline6: TextStyle(fontWeight: FontWeight.bold)),
           //titleTextStyle: TextStyle(color: Colors.white),
-          //toolbarTextStyle: TextStyle(color: Colors.white),
           iconTheme: IconThemeData(color: Colors.white),
         ),
-        textTheme: TextTheme(
-          headline6: TextStyle(color: Colors.white),
-        ),
+        textTheme: TextTheme(headline6: TextStyle(color: Colors.white)),
         fontFamily: 'NotoSansKR',
       ),
-
       home: HomePage(),
       onGenerateRoute: (settings) => AppRouter.onGenerateRoute(settings, auth),
     );
