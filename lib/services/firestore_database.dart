@@ -15,12 +15,10 @@ class FirestoreDatabase {
 
   final _service = FirestoreService.instance;
 
-  Future<void> savePost(Post post) async {
-    _service.setData(
-      path: FirestorePath.post('postId'),
-      data: post.toJson(),
-    );
-  }
+  Future<void> setPost(Post post) => _service.setData(
+        path: FirestorePath.post(post.postId),
+        data: post.toJson(),
+      );
 
   Future<void> setJob(Job job) => _service.setData(
         path: FirestorePath.job(appUser.uid, job.id),
@@ -42,6 +40,11 @@ class FirestoreDatabase {
   Stream<Job> jobStream({required String jobId}) => _service.documentStream(
         path: FirestorePath.job(appUser.uid, jobId),
         builder: (data, documentId) => Job.fromMap(data, documentId),
+      );
+
+  Stream<List<Post>> postsStream() => _service.collectionStream(
+        path: FirestorePath.posts(),
+        builder: (data, documentId) => Post.fromJson(data!),
       );
 
   Stream<List<Job>> jobsStream() => _service.collectionStream(

@@ -21,12 +21,16 @@ class _$PostTearOff {
   const _$PostTearOff();
 
   _Post call(
-      {required String body,
-      String? author,
+      {required String postId,
+      required String author,
+      required String title,
+      required String body,
       Set<dynamic> usersLiked = const {}}) {
     return _Post(
-      body: body,
+      postId: postId,
       author: author,
+      title: title,
+      body: body,
       usersLiked: usersLiked,
     );
   }
@@ -41,8 +45,10 @@ const $Post = _$PostTearOff();
 
 /// @nodoc
 mixin _$Post {
+  String get postId => throw _privateConstructorUsedError;
+  String get author => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
   String get body => throw _privateConstructorUsedError;
-  String? get author => throw _privateConstructorUsedError;
   Set<dynamic> get usersLiked => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -54,7 +60,12 @@ mixin _$Post {
 abstract class $PostCopyWith<$Res> {
   factory $PostCopyWith(Post value, $Res Function(Post) then) =
       _$PostCopyWithImpl<$Res>;
-  $Res call({String body, String? author, Set<dynamic> usersLiked});
+  $Res call(
+      {String postId,
+      String author,
+      String title,
+      String body,
+      Set<dynamic> usersLiked});
 }
 
 /// @nodoc
@@ -67,19 +78,29 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? body = freezed,
+    Object? postId = freezed,
     Object? author = freezed,
+    Object? title = freezed,
+    Object? body = freezed,
     Object? usersLiked = freezed,
   }) {
     return _then(_value.copyWith(
-      body: body == freezed
-          ? _value.body
-          : body // ignore: cast_nullable_to_non_nullable
+      postId: postId == freezed
+          ? _value.postId
+          : postId // ignore: cast_nullable_to_non_nullable
               as String,
       author: author == freezed
           ? _value.author
           : author // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      title: title == freezed
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      body: body == freezed
+          ? _value.body
+          : body // ignore: cast_nullable_to_non_nullable
+              as String,
       usersLiked: usersLiked == freezed
           ? _value.usersLiked
           : usersLiked // ignore: cast_nullable_to_non_nullable
@@ -93,7 +114,12 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
   factory _$PostCopyWith(_Post value, $Res Function(_Post) then) =
       __$PostCopyWithImpl<$Res>;
   @override
-  $Res call({String body, String? author, Set<dynamic> usersLiked});
+  $Res call(
+      {String postId,
+      String author,
+      String title,
+      String body,
+      Set<dynamic> usersLiked});
 }
 
 /// @nodoc
@@ -107,19 +133,29 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? body = freezed,
+    Object? postId = freezed,
     Object? author = freezed,
+    Object? title = freezed,
+    Object? body = freezed,
     Object? usersLiked = freezed,
   }) {
     return _then(_Post(
-      body: body == freezed
-          ? _value.body
-          : body // ignore: cast_nullable_to_non_nullable
+      postId: postId == freezed
+          ? _value.postId
+          : postId // ignore: cast_nullable_to_non_nullable
               as String,
       author: author == freezed
           ? _value.author
           : author // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      title: title == freezed
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      body: body == freezed
+          ? _value.body
+          : body // ignore: cast_nullable_to_non_nullable
+              as String,
       usersLiked: usersLiked == freezed
           ? _value.usersLiked
           : usersLiked // ignore: cast_nullable_to_non_nullable
@@ -131,33 +167,46 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Post extends _Post {
-  const _$_Post({required this.body, this.author, this.usersLiked = const {}})
+  const _$_Post(
+      {required this.postId,
+      required this.author,
+      required this.title,
+      required this.body,
+      this.usersLiked = const {}})
       : super._();
 
   factory _$_Post.fromJson(Map<String, dynamic> json) =>
       _$_$_PostFromJson(json);
 
   @override
-  final String body;
+  final String postId;
   @override
-  final String? author;
+  final String author;
+  @override
+  final String title;
+  @override
+  final String body;
   @JsonKey(defaultValue: const {})
   @override
   final Set<dynamic> usersLiked;
 
   @override
   String toString() {
-    return 'Post(body: $body, author: $author, usersLiked: $usersLiked)';
+    return 'Post(postId: $postId, author: $author, title: $title, body: $body, usersLiked: $usersLiked)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _Post &&
-            (identical(other.body, body) ||
-                const DeepCollectionEquality().equals(other.body, body)) &&
+            (identical(other.postId, postId) ||
+                const DeepCollectionEquality().equals(other.postId, postId)) &&
             (identical(other.author, author) ||
                 const DeepCollectionEquality().equals(other.author, author)) &&
+            (identical(other.title, title) ||
+                const DeepCollectionEquality().equals(other.title, title)) &&
+            (identical(other.body, body) ||
+                const DeepCollectionEquality().equals(other.body, body)) &&
             (identical(other.usersLiked, usersLiked) ||
                 const DeepCollectionEquality()
                     .equals(other.usersLiked, usersLiked)));
@@ -166,8 +215,10 @@ class _$_Post extends _Post {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(body) ^
+      const DeepCollectionEquality().hash(postId) ^
       const DeepCollectionEquality().hash(author) ^
+      const DeepCollectionEquality().hash(title) ^
+      const DeepCollectionEquality().hash(body) ^
       const DeepCollectionEquality().hash(usersLiked);
 
   @JsonKey(ignore: true)
@@ -183,17 +234,23 @@ class _$_Post extends _Post {
 
 abstract class _Post extends Post {
   const factory _Post(
-      {required String body,
-      String? author,
+      {required String postId,
+      required String author,
+      required String title,
+      required String body,
       Set<dynamic> usersLiked}) = _$_Post;
   const _Post._() : super._();
 
   factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
 
   @override
-  String get body => throw _privateConstructorUsedError;
+  String get postId => throw _privateConstructorUsedError;
   @override
-  String? get author => throw _privateConstructorUsedError;
+  String get author => throw _privateConstructorUsedError;
+  @override
+  String get title => throw _privateConstructorUsedError;
+  @override
+  String get body => throw _privateConstructorUsedError;
   @override
   Set<dynamic> get usersLiked => throw _privateConstructorUsedError;
   @override

@@ -10,9 +10,18 @@ class FirestoreService {
     bool merge = false,
   }) async {
     final reference = FirebaseFirestore.instance.doc(path);
-
     print('$path: $data');
     await reference.set(data, SetOptions(merge: merge));
+  }
+
+  Future<String> addData({
+    required String path,
+    required Map<String, dynamic> data,
+  }) async {
+    final collectionReference = FirebaseFirestore.instance.collection(path);
+    print('$path: $data');
+    final documentReference = await collectionReference.add(data);
+    return documentReference.id;
   }
 
   Future<void> deleteData({required String path}) async {
