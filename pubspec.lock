@@ -528,7 +528,7 @@ packages:
     source: hosted
     version: "0.2.1"
   pedantic:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: pedantic
       url: "https://pub.dartlang.org"

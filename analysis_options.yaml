@@ -3,7 +3,7 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
-    - "**/models/*.dart"
+    # - "**/models/*.dart"
 
 linter:
   rules:
@@ -11,4 +11,5 @@ linter:
     prefer_const_constructors: false
     prefer_const_literals_to_create_immutables: false
     avoid_print: false
+    sort_unnamed_constructors_first: false
    

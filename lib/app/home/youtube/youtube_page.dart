@@ -10,126 +10,124 @@ class YouTubePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PixelPerfect(
       //assetPath: '${imagePath}Screenshot_1620879287-393x830.png',
-      child: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              expandedHeight: 120.0,
-              floating: true,
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: Icon(Icons.create),
-                  onPressed: () {},
-                )
-              ],
-              flexibleSpace: FlexibleSpaceBar(
-                centerTitle: false,
-                titlePadding: EdgeInsetsDirectional.only(
-                  start: defaultPadding,
-                  bottom: defaultPadding,
-                ),
-                title: Text(
-                  '\u{1f4Fa} YouTube',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            expandedHeight: 120.0,
+            floating: true,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: Icon(Icons.create),
+                onPressed: () {},
+              )
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              centerTitle: false,
+              titlePadding: EdgeInsetsDirectional.only(
+                start: defaultPadding,
+                bottom: defaultPadding,
+              ),
+              title: Text(
+                '\u{1f4Fa} YouTube',
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => Container(
-                  margin: const EdgeInsets.only(top: defaultPadding),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(defaultPadding * 2),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(backgroundColor: Colors.grey[300]),
-                            SizedBox(width: defaultPadding),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Ska Lee',
-                                  style: Theme.of(context).textTheme.subtitle2,
-                                ),
-                                Text(
-                                  '${59 + index} min',
-                                  style: Theme.of(context).textTheme.caption,
-                                ),
-                              ],
-                            ),
-                            Spacer(),
-                            Text(
-                              'Category',
-                              style: Theme.of(context).textTheme.overline,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: defaultPadding * 2),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Title Text\nIt will be great design! yes sure! Why Not? #$index',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                            SizedBox(height: defaultPadding),
-                            Text(
-                              'we test Text field with 3lines.\nIt will be great design! yes sure! Why Not?\n#$index',
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.bodyText2,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => Container(
+                margin: const EdgeInsets.only(top: defaultPadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(defaultPadding * 2),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          IconButton(
-                            // constraints: BoxConstraints.tight(Size(22, 22)),
-                            // padding: EdgeInsets.zero,
-                            color: Colors.grey,
-                            disabledColor: Colors.black,
-                            icon: Icon(Icons.favorite_border),
-                            onPressed: () {},
+                          CircleAvatar(backgroundColor: Colors.grey[300]),
+                          SizedBox(width: defaultPadding),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Ska Lee',
+                                style: Theme.of(context).textTheme.subtitle2,
+                              ),
+                              Text(
+                                '${59 + index} min',
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                            ],
                           ),
+                          Spacer(),
                           Text(
-                            '좋아요',
-                            style: Theme.of(context).textTheme.caption,
-                          ),
-                          IconButton(
-                            color: Colors.grey,
-                            disabledColor: Colors.black,
-                            icon: Icon(Icons.mode_comment_outlined, size: 22.6),
-                            onPressed: () {},
-                          ),
-                          Text(
-                            '댓글',
-                            style: Theme.of(context).textTheme.caption,
+                            'Category',
+                            style: Theme.of(context).textTheme.overline,
                           ),
                         ],
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: defaultPadding * 2),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Title Text\nIt will be great design! yes sure! Why Not? #$index',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.subtitle2,
+                          ),
+                          SizedBox(height: defaultPadding),
+                          Text(
+                            'we test Text field with 3lines.\nIt will be great design! yes sure! Why Not?\n#$index',
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          // constraints: BoxConstraints.tight(Size(22, 22)),
+                          // padding: EdgeInsets.zero,
+                          color: Colors.grey,
+                          disabledColor: Colors.black,
+                          icon: Icon(Icons.favorite_border),
+                          onPressed: () {},
+                        ),
+                        Text(
+                          '좋아요',
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                        IconButton(
+                          color: Colors.grey,
+                          disabledColor: Colors.black,
+                          icon: Icon(Icons.mode_comment_outlined, size: 22.6),
+                          onPressed: () {},
+                        ),
+                        Text(
+                          '댓글',
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      ],
+                    )
+                  ],
                 ),
-                childCount: 1000,
               ),
-            )
-          ],
-        ),
+              childCount: 1000,
+            ),
+          )
+        ],
       ),
     );
   }

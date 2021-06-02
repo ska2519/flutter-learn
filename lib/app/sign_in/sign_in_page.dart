@@ -74,7 +74,13 @@ class SignInPageContents extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 2.0,
-        title: Text(title),
+        title: Text(
+          title,
+          style: Theme.of(context)
+              .textTheme
+              .subtitle1!
+              .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
       ),
       body: _buildSignIn(context),
     );

@@ -38,14 +38,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: context.read(menuControllerProvider).scaffoldKey,
       drawer: Responsive.isDesktop(context) ? const SideMenu() : null,
-      body: SafeArea(
-        child: Responsive.isDesktop(context)
-            ? CommunityScreen()
-            : IndexedStack(
-                index: _selectedIndex,
-                children: _screens,
-              ),
-      ),
+      body: Responsive.isDesktop(context)
+          ? CommunityScreen()
+          : IndexedStack(
+              index: _selectedIndex,
+              children: _screens,
+            ),
       bottomNavigationBar: Responsive.isDesktop(context)
           ? const SizedBox()
           : BottomNavigationBar(
