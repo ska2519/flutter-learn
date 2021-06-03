@@ -25,7 +25,7 @@ class _PostPageState extends State<PostPage> {
   void initState() {
     super.initState();
     _title = widget.post?.title ?? '';
-    _body = widget.post?.body ?? '';
+    _body = widget.post?.content ?? '';
   }
 
   Post _postFromState() {
@@ -35,7 +35,7 @@ class _PostPageState extends State<PostPage> {
       postId: id,
       author: authStateChanges.data!.value!.displayName ?? '',
       title: _title,
-      body: _body,
+      content: _body,
     );
   }
 

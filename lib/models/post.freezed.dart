@@ -24,13 +24,13 @@ class _$PostTearOff {
       {required String postId,
       required String author,
       required String title,
-      required String body,
+      required String content,
       Set<dynamic> usersLiked = const {}}) {
     return _Post(
       postId: postId,
       author: author,
       title: title,
-      body: body,
+      content: content,
       usersLiked: usersLiked,
     );
   }
@@ -48,7 +48,7 @@ mixin _$Post {
   String get postId => throw _privateConstructorUsedError;
   String get author => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String get body => throw _privateConstructorUsedError;
+  String get content => throw _privateConstructorUsedError;
   Set<dynamic> get usersLiked => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -64,7 +64,7 @@ abstract class $PostCopyWith<$Res> {
       {String postId,
       String author,
       String title,
-      String body,
+      String content,
       Set<dynamic> usersLiked});
 }
 
@@ -81,7 +81,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
     Object? postId = freezed,
     Object? author = freezed,
     Object? title = freezed,
-    Object? body = freezed,
+    Object? content = freezed,
     Object? usersLiked = freezed,
   }) {
     return _then(_value.copyWith(
@@ -97,9 +97,9 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      body: body == freezed
-          ? _value.body
-          : body // ignore: cast_nullable_to_non_nullable
+      content: content == freezed
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
               as String,
       usersLiked: usersLiked == freezed
           ? _value.usersLiked
@@ -118,7 +118,7 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       {String postId,
       String author,
       String title,
-      String body,
+      String content,
       Set<dynamic> usersLiked});
 }
 
@@ -136,7 +136,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
     Object? postId = freezed,
     Object? author = freezed,
     Object? title = freezed,
-    Object? body = freezed,
+    Object? content = freezed,
     Object? usersLiked = freezed,
   }) {
     return _then(_Post(
@@ -152,9 +152,9 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      body: body == freezed
-          ? _value.body
-          : body // ignore: cast_nullable_to_non_nullable
+      content: content == freezed
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
               as String,
       usersLiked: usersLiked == freezed
           ? _value.usersLiked
@@ -171,7 +171,7 @@ class _$_Post extends _Post {
       {required this.postId,
       required this.author,
       required this.title,
-      required this.body,
+      required this.content,
       this.usersLiked = const {}})
       : super._();
 
@@ -185,14 +185,14 @@ class _$_Post extends _Post {
   @override
   final String title;
   @override
-  final String body;
+  final String content;
   @JsonKey(defaultValue: const {})
   @override
   final Set<dynamic> usersLiked;
 
   @override
   String toString() {
-    return 'Post(postId: $postId, author: $author, title: $title, body: $body, usersLiked: $usersLiked)';
+    return 'Post(postId: $postId, author: $author, title: $title, content: $content, usersLiked: $usersLiked)';
   }
 
   @override
@@ -205,8 +205,9 @@ class _$_Post extends _Post {
                 const DeepCollectionEquality().equals(other.author, author)) &&
             (identical(other.title, title) ||
                 const DeepCollectionEquality().equals(other.title, title)) &&
-            (identical(other.body, body) ||
-                const DeepCollectionEquality().equals(other.body, body)) &&
+            (identical(other.content, content) ||
+                const DeepCollectionEquality()
+                    .equals(other.content, content)) &&
             (identical(other.usersLiked, usersLiked) ||
                 const DeepCollectionEquality()
                     .equals(other.usersLiked, usersLiked)));
@@ -218,7 +219,7 @@ class _$_Post extends _Post {
       const DeepCollectionEquality().hash(postId) ^
       const DeepCollectionEquality().hash(author) ^
       const DeepCollectionEquality().hash(title) ^
-      const DeepCollectionEquality().hash(body) ^
+      const DeepCollectionEquality().hash(content) ^
       const DeepCollectionEquality().hash(usersLiked);
 
   @JsonKey(ignore: true)
@@ -237,7 +238,7 @@ abstract class _Post extends Post {
       {required String postId,
       required String author,
       required String title,
-      required String body,
+      required String content,
       Set<dynamic> usersLiked}) = _$_Post;
   const _Post._() : super._();
 
@@ -250,7 +251,7 @@ abstract class _Post extends Post {
   @override
   String get title => throw _privateConstructorUsedError;
   @override
-  String get body => throw _privateConstructorUsedError;
+  String get content => throw _privateConstructorUsedError;
   @override
   Set<dynamic> get usersLiked => throw _privateConstructorUsedError;
   @override

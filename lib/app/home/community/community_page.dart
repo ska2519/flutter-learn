@@ -119,7 +119,7 @@ class CommunityPage extends HookWidget {
                                     ),
                                     SizedBox(height: defaultPadding),
                                     Text(
-                                      post.body,
+                                      post.content,
                                       maxLines: 3,
                                       overflow: TextOverflow.ellipsis,
                                       style:

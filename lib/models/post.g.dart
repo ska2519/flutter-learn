@@ -11,7 +11,7 @@ _$_Post _$_$_PostFromJson(Map<String, dynamic> json) {
     postId: json['postId'] as String,
     author: json['author'] as String,
     title: json['title'] as String,
-    body: json['body'] as String,
+    content: json['content'] as String,
     usersLiked: (json['usersLiked'] as List<dynamic>?)?.toSet() ?? {},
   );
 }
@@ -20,6 +20,6 @@ Map<String, dynamic> _$_$_PostToJson(_$_Post instance) => <String, dynamic>{
       'postId': instance.postId,
       'author': instance.author,
       'title': instance.title,
-      'body': instance.body,
+      'content': instance.content,
       'usersLiked': instance.usersLiked.toList(),
     };
