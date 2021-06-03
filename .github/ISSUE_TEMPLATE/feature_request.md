@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: a new function or requirement for the project
 title: "[FEAT]"
 labels: feature
 assignees: ska2519
