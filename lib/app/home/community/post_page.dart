@@ -19,13 +19,13 @@ class PostPage extends StatefulWidget {
 
 class _PostPageState extends State<PostPage> {
   late String _title;
-  late String _body;
+  late String _content;
 
   @override
   void initState() {
     super.initState();
     _title = widget.post?.title ?? '';
-    _body = widget.post?.content ?? '';
+    _content = widget.post?.content ?? '';
   }
 
   Post _postFromState() {
@@ -35,7 +35,7 @@ class _PostPageState extends State<PostPage> {
       postId: id,
       author: authStateChanges.data!.value!.displayName ?? '',
       title: _title,
-      content: _body,
+      content: _content,
     );
   }
 
@@ -43,6 +43,10 @@ class _PostPageState extends State<PostPage> {
     try {
       final database = context.read(databaseProvider);
       final post = _postFromState();
+      if (post.title.isEmpty || post.content.isEmpty) {
+        showPreventPostSnackBar(context, post.title);
+        return;
+      }
       await database.setPost(post);
       Navigator.of(context).pop();
     } catch (e) {
@@ -53,6 +57,17 @@ class _PostPageState extends State<PostPage> {
       ));
     }
     //posts.add(post);
+  }
+
+  void showPreventPostSnackBar(BuildContext context, String postTitle) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          postTitle.isEmpty ? 'Please write a title' : 'Please write a content',
+        ),
+      ),
+    );
   }
 
   @override
@@ -68,7 +83,7 @@ class _PostPageState extends State<PostPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => newPost(context, _title, _body),
+            onPressed: () => newPost(context, _title, _content),
             child: Text(
               'Post',
               style: Theme.of(context)
@@ -87,14 +102,14 @@ class _PostPageState extends State<PostPage> {
               controller: TextEditingController(text: _title),
               onChanged: (title) => _title = title,
               decoration: InputDecoration(
-                hintText: 'Subject',
+                hintText: 'Title',
                 hintStyle: Theme.of(context).textTheme.button!.copyWith(
                     fontWeight: FontWeight.bold, color: Colors.black38),
               ),
             ),
             TextFormField(
-              controller: TextEditingController(text: _body),
-              onChanged: (body) => _body = body,
+              controller: TextEditingController(text: _content),
+              onChanged: (body) => _content = body,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintMaxLines: 5,
