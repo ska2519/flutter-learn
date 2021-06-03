@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: a new function or requirement for the project
-title: "[FEAT]"
+title: "feat: "
 labels: feature
 assignees: ska2519
 
