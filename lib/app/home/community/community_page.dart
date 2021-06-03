@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/community/post_page.dart';
-import 'package:flutter_learn/app/top_level_providers.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/post.dart';
+import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pixel_perfect/pixel_perfect.dart';
 
