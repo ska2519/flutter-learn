@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
+
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/constants/constants.dart';
+import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:flutter_learn/app/top_level_providers.dart';
-import 'package:flutter_learn/models/post.dart';
-import 'package:pedantic/pedantic.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({this.post});
@@ -33,7 +32,7 @@ class _PostPageState extends State<PostPage> {
     final id = widget.post?.postId ?? documentIdFromCurrentDate();
     return Post(
       postId: id,
-      author: authStateChanges.data!.value!.displayName ?? '',
+      author: authStateChanges.data?.value?.displayName ?? '',
       title: _title,
       content: _content,
     );
