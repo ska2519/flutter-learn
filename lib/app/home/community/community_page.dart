@@ -7,6 +7,7 @@ import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pixel_perfect/pixel_perfect.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const iconPath = 'assets/icons/';
 const imagePath = 'assets/pixel_perfect/';
@@ -52,7 +53,7 @@ class CommunityPage extends HookWidget {
                 bottom: defaultPadding,
               ),
               title: Text(
-                '\u{1f60e} Community',
+                '${AppLocalizations.of(context)?.flutterLearn}\u{1f60e} Community',
                 style: Theme.of(context).textTheme.headline6,
               ),
             ),
