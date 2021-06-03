@@ -12,7 +12,7 @@ class Post with _$Post {
     required String postId,
     required String author,
     required String title,
-    required String body,
+    required String content,
     @Default({}) Set usersLiked,
     // String? id,
   }) = _Post;
