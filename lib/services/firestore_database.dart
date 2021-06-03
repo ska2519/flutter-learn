@@ -6,12 +6,20 @@ import 'package:flutter_learn/services/firestore_service.dart';
 import 'package:flutter_learn/models/job.dart';
 import 'package:flutter_learn/models/entry.dart';
 import 'package:flutter_learn/models/post.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'firebase_auth_service.dart';
 
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 
+final databaseProvider = Provider<FirestoreDatabase>((ref) {
+  final auth = ref.watch(authStateChangesProvider);
+  return FirestoreDatabase(appUser: auth.data?.value);
+});
+
 class FirestoreDatabase {
-  FirestoreDatabase({required this.appUser});
-  final AppUser appUser;
+  FirestoreDatabase({this.appUser});
+  final AppUser? appUser;
 
   final _service = FirestoreService.instance;
 
@@ -21,7 +29,7 @@ class FirestoreDatabase {
       );
 
   Future<void> setJob(Job job) => _service.setData(
-        path: FirestorePath.job(appUser.uid, job.id),
+        path: FirestorePath.job(appUser!.uid, job.id),
         data: job.toMap(),
       );
 
@@ -34,11 +42,11 @@ class FirestoreDatabase {
       }
     }
     // delete job
-    await _service.deleteData(path: FirestorePath.job(appUser.uid, job.id));
+    await _service.deleteData(path: FirestorePath.job(appUser!.uid, job.id));
   }
 
   Stream<Job> jobStream({required String jobId}) => _service.documentStream(
-        path: FirestorePath.job(appUser.uid, jobId),
+        path: FirestorePath.job(appUser!.uid, jobId),
         builder: (data, documentId) => Job.fromMap(data, documentId),
       );
 
@@ -48,21 +56,21 @@ class FirestoreDatabase {
       );
 
   Stream<List<Job>> jobsStream() => _service.collectionStream(
-        path: FirestorePath.jobs(appUser.uid),
+        path: FirestorePath.jobs(appUser!.uid),
         builder: (data, documentId) => Job.fromMap(data, documentId),
       );
 
   Future<void> setEntry(Entry entry) => _service.setData(
-        path: FirestorePath.entry(appUser.uid, entry.id),
+        path: FirestorePath.entry(appUser!.uid, entry.id),
         data: entry.toMap(),
       );
 
   Future<void> deleteEntry(Entry entry) =>
-      _service.deleteData(path: FirestorePath.entry(appUser.uid, entry.id));
+      _service.deleteData(path: FirestorePath.entry(appUser!.uid, entry.id));
 
   Stream<List<Entry>> entriesStream({Job? job}) =>
       _service.collectionStream<Entry>(
-        path: FirestorePath.entries(appUser.uid),
+        path: FirestorePath.entries(appUser!.uid),
         queryBuilder: job != null
             ? (query) => query.where('jobId', isEqualTo: job.id)
             : null,
