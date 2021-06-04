@@ -53,8 +53,8 @@ class CommunityPage extends HookWidget {
                 bottom: defaultPadding,
               ),
               title: Text(
-                '${AppLocalizations.of(context)?.flutterLearn}\u{1f60e} Community',
-                style: Theme.of(context).textTheme.headline6,
+                '\u{1f60e} ${AppLocalizations.of(context)?.community}',
+                style: Theme.of(context).textTheme.subtitle1,
               ),
             ),
           ),

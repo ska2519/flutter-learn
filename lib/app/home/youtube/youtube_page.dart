@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:pixel_perfect/pixel_perfect.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const iconPath = 'assets/icons/';
 const imagePath = 'assets/pixel_perfect/';
@@ -33,8 +34,8 @@ class YouTubePage extends StatelessWidget {
                 bottom: defaultPadding,
               ),
               title: Text(
-                '\u{1f4Fa} YouTube',
-                style: Theme.of(context).textTheme.headline6,
+                '\u{1f4Fa} ${AppLocalizations.of(context)?.youTube}',
+                style: Theme.of(context).textTheme.subtitle1,
               ),
             ),
           ),
