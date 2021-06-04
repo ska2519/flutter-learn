@@ -6,5 +6,9 @@
     "community": "Community",
     "@community": {
         "description": "The conventional newborn programmer greeting"
+    },
+    "youTube": "youTube",
+    "@youTube": {
+        "description": "The conventional newborn programmer greeting"
     }
 }

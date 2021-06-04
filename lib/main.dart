@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.white),
         ),
         textTheme: TextTheme(
-          headline6: TextStyle(color: Colors.white),
+          subtitle1: TextStyle(color: Colors.white),
         ),
         fontFamily: 'NotoSansKR',
       ),
