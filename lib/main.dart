@@ -20,9 +20,6 @@ class MyApp extends StatelessWidget {
     final auth = context.read(authServiceProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // onGenerateTitle: (BuildContext context) =>
-      //     DemoLocalizations.of(context).title,
-      title: 'Flutter Learn',
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.lightBlue,
