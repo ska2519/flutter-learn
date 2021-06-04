@@ -3,7 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/community/post_page.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/constants/constants.dart';
+import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/models/post.dart';
+import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pixel_perfect/pixel_perfect.dart';
@@ -17,11 +19,36 @@ final postsStreamProvider = StreamProvider.autoDispose<List<Post>>((ref) {
   return database.postsStream();
 });
 
-class CommunityPage extends HookWidget {
+class CommunityPage extends StatefulHookWidget {
+  const CommunityPage({Key? key}) : super(key: key);
+
+  @override
+  _CommunityPageState createState() => _CommunityPageState();
+}
+
+class _CommunityPageState extends State<CommunityPage> {
+  Future<void> _likePost(BuildContext context, Post post) async {
+    final authStateChanges = context.read(authStateChangesProvider);
+    final appUser = authStateChanges.data?.value;
+    if (appUser == null) {
+      print('appUser: $appUser');
+    } else {
+      setState(() => post.likePost(appUser));
+      updatePost(post);
+    }
+  }
+
+  Future<void> updatePost(Post post) async {
+    final database = context.read<FirestoreDatabase>(databaseProvider);
+    await database.setPost(post);
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('rebuild Screen');
     final AsyncValue<List<Post>> postsAsyncValue =
         useProvider(postsStreamProvider);
+    final authStateChanges = context.read(authStateChangesProvider);
     return PixelPerfect(
       //assetPath: '${imagePath}Screenshot_1620879287-393x830.png',
       child: CustomScrollView(
@@ -54,7 +81,10 @@ class CommunityPage extends HookWidget {
               ),
               title: Text(
                 '\u{1f60e} ${AppLocalizations.of(context)?.community}',
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle2!
+                    .copyWith(color: Colors.white),
               ),
             ),
           ),
@@ -83,13 +113,14 @@ class CommunityPage extends HookWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          post.author,
+                                          post.displayName,
                                           style: Theme.of(context)
                                               .textTheme
                                               .subtitle2,
                                         ),
                                         Text(
-                                          '${DateTime.now().difference(DateTime.parse(post.postId)).inMinutes} min',
+                                          // '${DateTime.now().difference(DateTime.parse(post.id)).inMinutes} min',
+                                          '1min',
                                           style: Theme.of(context)
                                               .textTheme
                                               .caption,
@@ -131,23 +162,40 @@ class CommunityPage extends HookWidget {
                               ),
                               Row(
                                 children: [
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        iconSize: 19,
+                                        visualDensity: VisualDensity.compact,
+                                        color: post.usersLiked.contains(
+                                                authStateChanges
+                                                    .data!.value!.uid)
+                                            ? Colors.red
+                                            : Colors.grey,
+                                        disabledColor: Colors.black,
+                                        icon: Icon(post.usersLiked.contains(
+                                                authStateChanges
+                                                    .data!.value!.uid)
+                                            ? Icons.favorite
+                                            : Icons.favorite_border),
+                                        onPressed: () =>
+                                            _likePost(context, post),
+                                      ),
+                                      Text(
+                                        post.usersLiked.isNotEmpty
+                                            ? post.usersLiked.length.toString()
+                                            : '좋아요',
+                                        style:
+                                            Theme.of(context).textTheme.caption,
+                                      ),
+                                    ],
+                                  ),
                                   IconButton(
-                                    // constraints: BoxConstraints.tight(Size(22, 22)),
-                                    // padding: EdgeInsets.zero,
+                                    iconSize: 18.7,
+                                    visualDensity: VisualDensity.compact,
                                     color: Colors.grey,
                                     disabledColor: Colors.black,
-                                    icon: Icon(Icons.favorite_border),
-                                    onPressed: () {},
-                                  ),
-                                  Text(
-                                    '좋아요',
-                                    style: Theme.of(context).textTheme.caption,
-                                  ),
-                                  IconButton(
-                                    color: Colors.grey,
-                                    disabledColor: Colors.black,
-                                    icon: Icon(Icons.mode_comment_outlined,
-                                        size: 22.6),
+                                    icon: Icon(Icons.mode_comment_outlined),
                                     onPressed: () {},
                                   ),
                                   Text(
