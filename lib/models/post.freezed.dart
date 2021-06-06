@@ -21,16 +21,20 @@ class _$PostTearOff {
   const _$PostTearOff();
 
   _Post call(
-      {required String postId,
-      required String author,
+      {required String id,
+      required String userId,
+      required String displayName,
       required String title,
       required String content,
+      @TimestampConverter() required DateTime timestamp,
       Set<dynamic> usersLiked = const {}}) {
     return _Post(
-      postId: postId,
-      author: author,
+      id: id,
+      userId: userId,
+      displayName: displayName,
       title: title,
       content: content,
+      timestamp: timestamp,
       usersLiked: usersLiked,
     );
   }
@@ -45,10 +49,14 @@ const $Post = _$PostTearOff();
 
 /// @nodoc
 mixin _$Post {
-  String get postId => throw _privateConstructorUsedError;
-  String get author => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
+  String get displayName => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
+  @TimestampConverter()
+  DateTime get timestamp =>
+      throw _privateConstructorUsedError; //required DocumentReference reference,
   Set<dynamic> get usersLiked => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -61,10 +69,12 @@ abstract class $PostCopyWith<$Res> {
   factory $PostCopyWith(Post value, $Res Function(Post) then) =
       _$PostCopyWithImpl<$Res>;
   $Res call(
-      {String postId,
-      String author,
+      {String id,
+      String userId,
+      String displayName,
       String title,
       String content,
+      @TimestampConverter() DateTime timestamp,
       Set<dynamic> usersLiked});
 }
 
@@ -78,20 +88,26 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? postId = freezed,
-    Object? author = freezed,
+    Object? id = freezed,
+    Object? userId = freezed,
+    Object? displayName = freezed,
     Object? title = freezed,
     Object? content = freezed,
+    Object? timestamp = freezed,
     Object? usersLiked = freezed,
   }) {
     return _then(_value.copyWith(
-      postId: postId == freezed
-          ? _value.postId
-          : postId // ignore: cast_nullable_to_non_nullable
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
-      author: author == freezed
-          ? _value.author
-          : author // ignore: cast_nullable_to_non_nullable
+      userId: userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      displayName: displayName == freezed
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
       title: title == freezed
           ? _value.title
@@ -101,6 +117,10 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
+      timestamp: timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       usersLiked: usersLiked == freezed
           ? _value.usersLiked
           : usersLiked // ignore: cast_nullable_to_non_nullable
@@ -115,10 +135,12 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       __$PostCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String postId,
-      String author,
+      {String id,
+      String userId,
+      String displayName,
       String title,
       String content,
+      @TimestampConverter() DateTime timestamp,
       Set<dynamic> usersLiked});
 }
 
@@ -133,20 +155,26 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? postId = freezed,
-    Object? author = freezed,
+    Object? id = freezed,
+    Object? userId = freezed,
+    Object? displayName = freezed,
     Object? title = freezed,
     Object? content = freezed,
+    Object? timestamp = freezed,
     Object? usersLiked = freezed,
   }) {
     return _then(_Post(
-      postId: postId == freezed
-          ? _value.postId
-          : postId // ignore: cast_nullable_to_non_nullable
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
-      author: author == freezed
-          ? _value.author
-          : author // ignore: cast_nullable_to_non_nullable
+      userId: userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      displayName: displayName == freezed
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
       title: title == freezed
           ? _value.title
@@ -156,6 +184,10 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
+      timestamp: timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       usersLiked: usersLiked == freezed
           ? _value.usersLiked
           : usersLiked // ignore: cast_nullable_to_non_nullable
@@ -168,10 +200,12 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Post extends _Post {
   const _$_Post(
-      {required this.postId,
-      required this.author,
+      {required this.id,
+      required this.userId,
+      required this.displayName,
       required this.title,
       required this.content,
+      @TimestampConverter() required this.timestamp,
       this.usersLiked = const {}})
       : super._();
 
@@ -179,35 +213,46 @@ class _$_Post extends _Post {
       _$_$_PostFromJson(json);
 
   @override
-  final String postId;
+  final String id;
   @override
-  final String author;
+  final String userId;
+  @override
+  final String displayName;
   @override
   final String title;
   @override
   final String content;
-  @JsonKey(defaultValue: const {})
   @override
+  @TimestampConverter()
+  final DateTime timestamp;
+  @JsonKey(defaultValue: const {})
+  @override //required DocumentReference reference,
   final Set<dynamic> usersLiked;
 
   @override
   String toString() {
-    return 'Post(postId: $postId, author: $author, title: $title, content: $content, usersLiked: $usersLiked)';
+    return 'Post(id: $id, userId: $userId, displayName: $displayName, title: $title, content: $content, timestamp: $timestamp, usersLiked: $usersLiked)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _Post &&
-            (identical(other.postId, postId) ||
-                const DeepCollectionEquality().equals(other.postId, postId)) &&
-            (identical(other.author, author) ||
-                const DeepCollectionEquality().equals(other.author, author)) &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.userId, userId) ||
+                const DeepCollectionEquality().equals(other.userId, userId)) &&
+            (identical(other.displayName, displayName) ||
+                const DeepCollectionEquality()
+                    .equals(other.displayName, displayName)) &&
             (identical(other.title, title) ||
                 const DeepCollectionEquality().equals(other.title, title)) &&
             (identical(other.content, content) ||
                 const DeepCollectionEquality()
                     .equals(other.content, content)) &&
+            (identical(other.timestamp, timestamp) ||
+                const DeepCollectionEquality()
+                    .equals(other.timestamp, timestamp)) &&
             (identical(other.usersLiked, usersLiked) ||
                 const DeepCollectionEquality()
                     .equals(other.usersLiked, usersLiked)));
@@ -216,10 +261,12 @@ class _$_Post extends _Post {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(postId) ^
-      const DeepCollectionEquality().hash(author) ^
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(userId) ^
+      const DeepCollectionEquality().hash(displayName) ^
       const DeepCollectionEquality().hash(title) ^
       const DeepCollectionEquality().hash(content) ^
+      const DeepCollectionEquality().hash(timestamp) ^
       const DeepCollectionEquality().hash(usersLiked);
 
   @JsonKey(ignore: true)
@@ -235,24 +282,31 @@ class _$_Post extends _Post {
 
 abstract class _Post extends Post {
   const factory _Post(
-      {required String postId,
-      required String author,
+      {required String id,
+      required String userId,
+      required String displayName,
       required String title,
       required String content,
+      @TimestampConverter() required DateTime timestamp,
       Set<dynamic> usersLiked}) = _$_Post;
   const _Post._() : super._();
 
   factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
 
   @override
-  String get postId => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   @override
-  String get author => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
+  @override
+  String get displayName => throw _privateConstructorUsedError;
   @override
   String get title => throw _privateConstructorUsedError;
   @override
   String get content => throw _privateConstructorUsedError;
   @override
+  @TimestampConverter()
+  DateTime get timestamp => throw _privateConstructorUsedError;
+  @override //required DocumentReference reference,
   Set<dynamic> get usersLiked => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)

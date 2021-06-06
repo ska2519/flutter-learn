@@ -24,7 +24,7 @@ class FirestoreDatabase {
   final _service = FirestoreService.instance;
 
   Future<void> setPost(Post post) => _service.setData(
-        path: FirestorePath.post(post.postId),
+        path: FirestorePath.post(post.id),
         data: post.toJson(),
       );
 
