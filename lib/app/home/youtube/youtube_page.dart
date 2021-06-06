@@ -35,7 +35,10 @@ class YouTubePage extends StatelessWidget {
               ),
               title: Text(
                 '\u{1f4Fa} ${AppLocalizations.of(context)?.youTube}',
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle2!
+                    .copyWith(color: Colors.white),
               ),
             ),
           ),

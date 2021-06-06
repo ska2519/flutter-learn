@@ -29,9 +29,7 @@ class MyApp extends StatelessWidget {
           //titleTextStyle: TextStyle(color: Colors.white),
           iconTheme: IconThemeData(color: Colors.white),
         ),
-        textTheme: TextTheme(
-          subtitle1: TextStyle(color: Colors.white),
-        ),
+        textTheme: TextTheme(),
         fontFamily: 'NotoSansKR',
       ),
       localizationsDelegates: [
