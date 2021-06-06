@@ -7,6 +7,7 @@ import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
+import 'package:uuid/uuid.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({this.post});
@@ -29,12 +30,18 @@ class _PostPageState extends State<PostPage> {
 
   Post _postFromState() {
     final authStateChanges = context.read(authStateChangesProvider);
-    final id = widget.post?.postId ?? documentIdFromCurrentDate();
+    final currentDate = widget.post?.id ?? documentIdFromCurrentDate();
+    final uid = authStateChanges.data!.value!.uid;
+    final displayName = authStateChanges.data!.value!.displayName!;
+    final id = '$currentDate:$uid';
+    final now = DateTime.now();
     return Post(
-      postId: id,
-      author: authStateChanges.data?.value?.displayName ?? '',
+      id: id,
+      userId: uid,
+      displayName: displayName,
       title: _title,
       content: _content,
+      timestamp: now,
     );
   }
 
@@ -47,6 +54,7 @@ class _PostPageState extends State<PostPage> {
         return;
       }
       await database.setPost(post);
+
       Navigator.of(context).pop();
     } catch (e) {
       unawaited(showExceptionAlertDialog(
@@ -58,16 +66,18 @@ class _PostPageState extends State<PostPage> {
     //posts.add(post);
   }
 
-  void showPreventPostSnackBar(BuildContext context, String postTitle) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          postTitle.isEmpty ? 'Please write a title' : 'Please write a content',
-        ),
-      ),
-    );
-  }
+  void showPreventPostSnackBar(BuildContext context, String postTitle) =>
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              postTitle.isEmpty
+                  ? 'Please write a title'
+                  : 'Please write a content',
+            ),
+          ),
+        );
 
   @override
   Widget build(BuildContext context) {

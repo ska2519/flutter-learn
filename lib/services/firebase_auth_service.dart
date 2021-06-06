@@ -188,12 +188,10 @@ class FirebaseAuthService implements AuthBase {
     final authResult =
         await FirebaseAuth.instance.signInWithCredential(oauthCredential);
     final firebaseUser = authResult.user;
-    print('firebaseUser: ${firebaseUser!.providerData[0].displayName}');
-    final String displayName = firebaseUser.providerData[0].displayName ?? '';
-    final String photoUrl = firebaseUser.providerData[0].photoURL ?? '';
-    print('displayName: $displayName / photoUrl: $photoUrl');
-    await firebaseUser.updateProfile(
-        displayName: displayName, photoURL: photoUrl);
+    final String? displayName = firebaseUser?.providerData[0].displayName;
+    final String? photoURL = firebaseUser?.providerData[0].photoURL;
+    await firebaseUser?.updateDisplayName(displayName);
+    await firebaseUser?.updatePhotoURL(photoURL);
 
     return _userFromFirebase(firebaseUser);
   }
