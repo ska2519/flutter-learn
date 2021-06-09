@@ -5,6 +5,8 @@ import 'package:flutter_learn/app/home/community/community_page.dart';
 import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/side_menu.dart';
 import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
+import 'package:flutter_learn/services/firebase_auth_service.dart';
+import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutter_learn/app/home/tab_item.dart';
@@ -36,6 +38,27 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        mini: true,
+        onPressed: () async {
+          final authStateChanges = context.read(appUserStreamProvider);
+          final appUser = context.read(appUserProvider);
+          print('Test appUser: $appUser');
+          // final _service = FirestoreService.instance;
+          // _service.getDoc(
+          //     path: FirestorePath.user(authStateChanges.data!.value!.id));
+          final database = context.read(databaseProvider);
+          // final appUser =
+          //     await database.getUser(authStateChanges.data!.value!.id);
+        },
+        child: Text(
+          'Test',
+          style: Theme.of(context)
+              .textTheme
+              .subtitle2!
+              .copyWith(color: Colors.white),
+        ),
+      ),
       key: context.read(menuControllerProvider).scaffoldKey,
       drawer: Responsive.isDesktop(context) ? const SideMenu() : null,
       body: Responsive.isDesktop(context)

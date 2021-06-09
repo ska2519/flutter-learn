@@ -7,7 +7,6 @@ import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
-import 'package:uuid/uuid.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({this.post});
@@ -29,15 +28,15 @@ class _PostPageState extends State<PostPage> {
   }
 
   Post _postFromState() {
-    final authStateChanges = context.read(authStateChangesProvider);
+    final authStateChanges = context.read(appUserStreamProvider);
     final currentDate = widget.post?.id ?? documentIdFromCurrentDate();
-    final uid = authStateChanges.data!.value!.uid;
+    final id = authStateChanges.data!.value!.id;
     final displayName = authStateChanges.data!.value!.displayName!;
-    final id = '$currentDate:$uid';
+    final postId = '$currentDate:$id';
     final now = DateTime.now();
     return Post(
-      id: id,
-      userId: uid,
+      id: postId,
+      userId: id!,
       displayName: displayName,
       title: _title,
       content: _content,

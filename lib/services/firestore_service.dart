@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreService {
@@ -10,13 +12,45 @@ class FirestoreService {
     bool merge = false,
   }) async {
     final reference = FirebaseFirestore.instance.doc(path);
-    print('$path: $data: $reference');
+    print('setData finish');
     await reference.set(data, SetOptions(merge: merge));
   }
 
+  Future<Map<String, dynamic>?> getDoc({required String path}) =>
+      FirebaseFirestore.instance
+          .doc(path)
+          .get()
+          .then((DocumentSnapshot doc) => doc.data() as Map<String, dynamic>?);
+
+  Future<void> updateDoc({
+    required String path,
+    required Map<String, dynamic> data,
+  }) async =>
+      FirebaseFirestore.instance.doc(path).update(data);
+
+  //   Future<void> setTransaction({
+  //   required String firstPath,
+  //   required String secondPath,
+  //   required Map<String, dynamic> data,
+  //   bool merge = false,
+  // }) async {
+  //   final firstTransactionRef = FirebaseFirestore.instance.doc(firstPath);
+  //   final secondTransactionRef = FirebaseFirestore.instance.doc(secondPath);
+  //   final reference =
+  //       FirebaseFirestore.instance.runTransaction((transaction) {
+  //         return transaction
+  //       .get(firstTransactionRef)
+  //       .then((DocumentSnapshot doc) => Restaurant.fromSnapshot(doc))
+  //       .then((Restaurant fresh) {}
+  //       });
+
+  //   print('setData finish');
+  //   await reference.set(data, SetOptions(merge: merge));
+  // }
+
   Future<void> deleteData({required String path}) async {
     final reference = FirebaseFirestore.instance.doc(path);
-    print('delete: $path');
+    log('delete: $path');
     await reference.delete();
   }
 
