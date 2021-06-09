@@ -68,7 +68,7 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
           await showAlertDialog(
             context: context,
             title: EmailPasswordSignInStrings.resetLinkSentTitle,
-            content: EmailPasswordSignInStrings.resetLinkSentMessage,
+            child: Text(EmailPasswordSignInStrings.resetLinkSentMessage),
             defaultActionText: EmailPasswordSignInStrings.ok,
           );
         } else {

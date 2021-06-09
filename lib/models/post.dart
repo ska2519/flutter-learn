@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_learn/models/values.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'app_user.dart';
@@ -23,16 +20,15 @@ class Post with _$Post {
     @TimestampConverter() required DateTime timestamp,
     //required DocumentReference reference,
     @Default({}) Set usersLiked,
-    // String? id,
   }) = _Post;
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
 
-  void likePost(AppUser user) {
-    if (usersLiked.contains(user.uid)) {
-      usersLiked.remove(user.uid);
+  void likePost(AppUser appUser) {
+    if (usersLiked.contains(appUser.id)) {
+      usersLiked.remove(appUser.id);
     } else {
-      usersLiked.add(user.uid);
+      usersLiked.add(appUser.id);
     }
   }
 

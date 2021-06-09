@@ -1,22 +1,44 @@
 import 'dart:convert';
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import 'package:flutter_learn/exceptions/firestore_api_exception.dart';
 import 'package:flutter_learn/models/app_user.dart';
 
 import 'auth_base.dart';
+import 'firestore_database.dart';
 
-final authServiceProvider = Provider<AuthBase>((ref) => FirebaseAuthService());
-final authStateChangesProvider = StreamProvider<AppUser?>(
-    (ref) => ref.watch(authServiceProvider).onAuthStateChanged);
+final authServiceProvider =
+    Provider<AuthBase>((ref) => FirebaseAuthService(ref.read));
+
+final authStartProvider = Provider<AppUser?>((ref) {
+  final authService = ref.watch(authServiceProvider);
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    authService.userFromFirebase(user);
+  }
+});
+
+final appUserProvider =
+    StateNotifierProvider<AppUserNotifier, AppUser>((ref) => AppUserNotifier());
+
+final appUserStreamProvider = StreamProvider<AppUser?>((ref) {
+  ref.watch(authStartProvider);
+  final database = ref.watch(databaseProvider);
+  final appUser = ref.watch(appUserProvider);
+  return database.appUserStream(appUser);
+});
 
 class FirebaseAuthService implements AuthBase {
+  final Reader _read;
+  FirebaseAuthService(this._read);
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: [
@@ -26,29 +48,58 @@ class FirebaseAuthService implements AuthBase {
     ],
   );
 
-  AppUser? _userFromFirebase(User? user) {
-    if (user == null) {
-      return null;
+  @override
+  Future<AppUser?> createUser(User user) async {
+    final database = _read(databaseProvider);
+    try {
+      await database.setAppUser(user);
+      return database.getAppUser(user);
+    } catch (error) {
+      throw FirestoreApiException(
+        message: 'Failed to create new user',
+        devDetails: '$error',
+      );
     }
-    print('_userFromFirebase: $user');
-    return AppUser(
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-    );
   }
 
   @override
-  Stream<AppUser?> get onAuthStateChanged {
-    return _firebaseAuth.authStateChanges().map(_userFromFirebase);
+  Future<AppUser?> fetchUser(User user) async {
+    final database = _read(databaseProvider);
+    if (user.uid.isNotEmpty) {
+      AppUser? appUser;
+      appUser = await database.getAppUser(user);
+      appUser = appUser ?? await createUser(user);
+      await database.updateAppUser(
+        appUser: appUser!.copyWith(
+          loginTimestamp: DateTime.now(),
+        ),
+      );
+      return appUser;
+    } else {
+      throw FirestoreApiException(
+        message:
+            'Your uid passed in is empty, Please pass in a valid user if from your Firebase user',
+      );
+    }
+  }
+
+  @override
+  Future<AppUser?> userFromFirebase(User? user) async {
+    if (user == null) {
+      return null;
+    }
+    return fetchUser(user).then((appUser) {
+      print('_userFromFirebase: $appUser');
+      _read(appUserProvider.notifier).login(appUser!);
+      return appUser;
+    });
   }
 
   @override
   Future<AppUser?> signInAnonymously() async {
     final UserCredential userCredential =
         await _firebaseAuth.signInAnonymously();
-    return _userFromFirebase(userCredential.user);
+    return userFromFirebase(userCredential.user);
   }
 
   @override
@@ -59,7 +110,7 @@ class FirebaseAuthService implements AuthBase {
       email: email,
       password: password,
     );
-    return _userFromFirebase(userCredential.user);
+    return userFromFirebase(userCredential.user);
   }
 
   @override
@@ -67,7 +118,7 @@ class FirebaseAuthService implements AuthBase {
       String email, String password) async {
     final UserCredential userCredential = await _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password);
-    return _userFromFirebase(userCredential.user);
+    return userFromFirebase(userCredential.user);
   }
 
   @override
@@ -80,7 +131,7 @@ class FirebaseAuthService implements AuthBase {
       {required String email, required String link}) async {
     final UserCredential userCredential =
         await _firebaseAuth.signInWithEmailLink(email: email, emailLink: link);
-    return _userFromFirebase(userCredential.user);
+    return userFromFirebase(userCredential.user);
   }
 
   @override
@@ -126,7 +177,7 @@ class FirebaseAuthService implements AuthBase {
         // Sign in to Firebase with the Google [UserCredential].
         final UserCredential googleUserCredential =
             await _firebaseAuth.signInWithCredential(googleCredential);
-        return _userFromFirebase(googleUserCredential.user);
+        return userFromFirebase(googleUserCredential.user);
       } else {
         throw PlatformException(
             code: 'ERROR_MISSING_GOOGLE_AUTH_TOKEN',
@@ -143,7 +194,7 @@ class FirebaseAuthService implements AuthBase {
   String generateNonce([int length = 32]) {
     const charset =
         '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
-    final random = Random.secure();
+    final random = math.Random.secure();
     return List.generate(length, (_) => charset[random.nextInt(charset.length)])
         .join();
   }
@@ -193,17 +244,18 @@ class FirebaseAuthService implements AuthBase {
     await firebaseUser?.updateDisplayName(displayName);
     await firebaseUser?.updatePhotoURL(photoURL);
 
-    return _userFromFirebase(firebaseUser);
+    return userFromFirebase(firebaseUser);
   }
 
   @override
   Future<AppUser?> currentUser() async {
-    return _userFromFirebase(_firebaseAuth.currentUser);
+    return userFromFirebase(_firebaseAuth.currentUser);
   }
 
   @override
   Future<void> signOut() async {
     await googleSignIn.signOut();
+    _read(appUserProvider.notifier).logout();
     return _firebaseAuth.signOut();
   }
 
