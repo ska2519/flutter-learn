@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +10,6 @@ import 'package:flutter_learn/app/sign_in/sign_in_view_model.dart';
 import 'package:flutter_learn/app/sign_in/social_sign_in_button.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/constants/constants.dart';
-import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/strings.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
@@ -24,9 +21,10 @@ class SignInPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final signInModel = useProvider(signInModelProvider);
-    final authStateChanges = useProvider(authStateChangesProvider);
-    authStateChanges.whenData((user) {
-      if (user != null) {
+    final appUserStream = useProvider(appUserStreamProvider);
+    appUserStream.whenData((appUser) {
+      if (appUser != null) {
+        print('SignInPage appUser: $appUser');
         WidgetsBinding.instance!
             .addPostFrameCallback((_) => Navigator.pop(context));
       }
@@ -52,13 +50,9 @@ class SignInPage extends HookWidget {
 
 class SignInPageContents extends StatelessWidget {
   const SignInPageContents(
-      {Key? key, required this.viewModel, this.title = 'Sign-in Demo'})
-      : super(key: key);
+      {required this.viewModel, this.title = 'Sign-in Demo'});
   final SignInViewModel viewModel;
   final String title;
-
-  static const Key emailPasswordButtonKey = Key(Keys.emailPassword);
-  static const Key anonymousButtonKey = Key(Keys.anonymous);
 
   Future<void> _showEmailPasswordSignInPage(BuildContext context) async {
     final navigator = Navigator.of(context);
@@ -119,15 +113,14 @@ class SignInPageContents extends StatelessWidget {
               ),
               const SizedBox(height: 33),
               SignInButton(
-                key: emailPasswordButtonKey,
                 text: Strings.signInWithEmailPassword,
+                textStyle: TextStyle(fontWeight: FontWeight.w500),
+                color: Colors.white,
                 onPressed: viewModel.isLoading
                     ? null
                     : () => _showEmailPasswordSignInPage(context),
-                color: Colors.white,
               ),
               const SizedBox(height: defaultPadding),
-
               // SignInButton(
               //   key: anonymousButtonKey,
               //   text: Strings.goAnonymous,
@@ -138,9 +131,8 @@ class SignInPageContents extends StatelessWidget {
               // ),
               SocialSignInButton(
                 svgAssetName: 'assets/icons/google_logo.svg',
-                textStyle: TextStyle(fontWeight: FontWeight.w500),
-                textColor: Colors.black87,
                 text: 'Sign in with Google',
+                textStyle: TextStyle(fontWeight: FontWeight.w500),
                 color: Colors.white,
                 onPressed:
                     viewModel.isLoading ? null : viewModel.signInWithGoogle,
@@ -149,9 +141,8 @@ class SignInPageContents extends StatelessWidget {
               // if (!kIsWeb && Platform.isIOS)
               SocialSignInButton(
                 svgAssetName: 'assets/icons/btn_apple_white.svg',
-                textStyle: TextStyle(fontWeight: FontWeight.w500),
                 text: 'Sign in with Apple',
-                textColor: Colors.black87,
+                textStyle: TextStyle(fontWeight: FontWeight.w500),
                 color: Colors.white,
                 onPressed:
                     viewModel.isLoading ? null : viewModel.signInWithApple,

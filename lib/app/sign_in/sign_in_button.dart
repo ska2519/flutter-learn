@@ -3,18 +3,22 @@ import 'package:flutter_learn/app/widgets/buttons/custom_elevated_button.dart';
 
 class SignInButton extends CustomElevatedButton {
   SignInButton({
-    Key? key,
     required String text,
+    required TextStyle textStyle,
     Color? color,
     required VoidCallback? onPressed,
     Color textColor = Colors.black87,
+    double borderRadius = 6,
+    Color borderColor = Colors.transparent,
     double height = 50.0,
   }) : super(
-          key: key,
-          child: Text(text, style: TextStyle(color: textColor, fontSize: 16.0)),
+          textStyle: textStyle,
           color: color,
-          textColor: textColor,
-          height: height,
           onPressed: onPressed,
+          textColor: textColor,
+          borderRadius: borderRadius,
+          borderColor: borderColor,
+          height: height,
+          child: Text(text),
         );
 }

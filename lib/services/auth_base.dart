@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_learn/models/app_user.dart';
 
 abstract class AuthBase {
@@ -22,6 +23,8 @@ abstract class AuthBase {
   Future<AppUser?> signInWithGoogle();
   Future<AppUser?> signInWithApple();
   Future<void> signOut();
-  Stream<AppUser?> get onAuthStateChanged;
+  Future<AppUser?> createUser(User user);
+  Future<AppUser?> fetchUser(User user);
+  Future<AppUser?> userFromFirebase(User? user);
   void dispose();
 }

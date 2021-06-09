@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/community/post_page.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/constants/constants.dart';
-import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
@@ -28,10 +29,9 @@ class CommunityPage extends StatefulHookWidget {
 
 class _CommunityPageState extends State<CommunityPage> {
   Future<void> _likePost(BuildContext context, Post post) async {
-    final authStateChanges = context.read(authStateChangesProvider);
-    final appUser = authStateChanges.data?.value;
+    final appUserStream = context.read(appUserStreamProvider);
+    final appUser = appUserStream.data?.value;
     if (appUser == null) {
-      print('appUser: $appUser');
     } else {
       setState(() => post.likePost(appUser));
       updatePost(post);
@@ -45,10 +45,10 @@ class _CommunityPageState extends State<CommunityPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('rebuild Screen');
+    log('rebuild Screen');
     final AsyncValue<List<Post>> postsAsyncValue =
         useProvider(postsStreamProvider);
-    final authStateChanges = context.read(authStateChangesProvider);
+    final appUserStream = useProvider(appUserStreamProvider);
     return PixelPerfect(
       //assetPath: '${imagePath}Screenshot_1620879287-393x830.png',
       child: CustomScrollView(
@@ -168,14 +168,12 @@ class _CommunityPageState extends State<CommunityPage> {
                                         iconSize: 19,
                                         visualDensity: VisualDensity.compact,
                                         color: post.usersLiked.contains(
-                                                authStateChanges
-                                                    .data!.value!.uid)
+                                                appUserStream.data?.value?.id)
                                             ? Colors.red
                                             : Colors.grey,
                                         disabledColor: Colors.black,
                                         icon: Icon(post.usersLiked.contains(
-                                                authStateChanges
-                                                    .data!.value!.uid)
+                                                appUserStream.data?.value?.id)
                                             ? Icons.favorite
                                             : Icons.favorite_border),
                                         onPressed: () =>
