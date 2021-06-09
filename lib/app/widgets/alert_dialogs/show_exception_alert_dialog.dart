@@ -11,7 +11,7 @@ Future<void> showExceptionAlertDialog({
     showAlertDialog(
       context: context,
       title: title,
-      content: _message(exception),
+      child: Text(_message(exception)),
       defaultActionText: 'OK',
     );
 
