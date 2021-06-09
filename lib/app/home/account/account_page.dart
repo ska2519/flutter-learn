@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
@@ -12,12 +14,20 @@ import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dia
 import 'package:flutter_learn/app/widgets/avatar.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/constants/constants.dart';
-import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/strings.dart';
 import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 
-class AccountPage extends HookWidget {
+class AccountPage extends StatefulHookWidget {
+  const AccountPage({Key? key}) : super(key: key);
+
+  @override
+  _AccountPageState createState() => _AccountPageState();
+}
+
+class _AccountPageState extends State<AccountPage> {
+  String _displayName = '';
+
   Future<void> _signOut(BuildContext context) async {
     try {
       final auth = context.read(authServiceProvider);
@@ -35,7 +45,7 @@ class AccountPage extends HookWidget {
     final bool didRequestSignOut = await showAlertDialog(
           context: context,
           title: Strings.logout,
-          content: Strings.logoutAreYouSure,
+          child: Text(Strings.logoutAreYouSure),
           cancelActionText: Strings.cancel,
           defaultActionText: Strings.logout,
         ) ??
@@ -47,41 +57,42 @@ class AccountPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authStateChanges = useProvider(authStateChangesProvider);
-    return authStateChanges.when(
-      data: (user) => Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(defaultPadding),
-              child: TextButton(
-                key: user != null
-                    ? const Key(Keys.logout)
-                    : const Key(Keys.login),
-                onPressed: () => user != null
-                    ? _confirmSignOut(context)
-                    : Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SignInPage(),
+    final size = MediaQuery.of(context).size;
+    final appUserStream = useProvider(appUserStreamProvider);
+    return appUserStream.when(
+      data: (appUser) {
+        print('AccountPage appUser.displayName: ${appUser?.displayName}');
+        return Scaffold(
+          appBar: AppBar(
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(defaultPadding),
+                child: TextButton(
+                  onPressed: () => appUser != null
+                      ? _confirmSignOut(context)
+                      : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignInPage(),
+                          ),
                         ),
-                      ),
-                child: Text(
-                  user != null ? Strings.logout : Strings.login,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
+                  child: Text(
+                    appUser != null ? Strings.logout : Strings.login,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
+            ],
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(size.height * 0.23),
+              child: _buildUserInfo(appUser, context),
             ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(150.0),
-            child: _buildUserInfo(user),
           ),
-        ),
-      ),
+        );
+      },
       loading: () => const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -96,7 +107,7 @@ class AccountPage extends HookWidget {
     );
   }
 
-  Widget _buildUserInfo(AppUser? appUser) {
+  Widget _buildUserInfo(AppUser? appUser, BuildContext context) {
     return Column(
       children: [
         Avatar(
@@ -106,9 +117,36 @@ class AccountPage extends HookWidget {
           borderWidth: 1.0,
         ),
         const SizedBox(height: defaultPadding),
-        Text(
-          appUser == null ? '로그인이 필요합니다' : appUser.displayName ?? '닉네임을 만들어주세요',
-          style: const TextStyle(color: Colors.white),
+        TextButton(
+          onPressed: appUser == null
+              ? null
+              : () => showAlertDialog(
+                    context: context,
+                    child: TextField(
+                      maxLength: 8,
+                      controller: TextEditingController(
+                          text: _displayName = appUser.displayName ?? ''),
+                      decoration: InputDecoration(hintText: '원하는 닉네임을 적어주세요'),
+                      onChanged: (displayName) => _displayName = displayName,
+                    ),
+                    cancelActionText: Strings.cancel,
+                    defaultActionText: Strings.ok,
+                  ).then(
+                    (isOk) {
+                      if (isOk is bool) {
+                        final database = context.read(databaseProvider);
+                        database.updateAppUser(
+                          appUser: appUser.copyWith(displayName: _displayName),
+                        );
+                      }
+                    },
+                  ),
+          child: Text(
+            appUser == null
+                ? '로그인이 필요합니다'
+                : appUser.displayName ?? '닉네임을 만들어주세요',
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
         const SizedBox(height: defaultPadding),
       ],
