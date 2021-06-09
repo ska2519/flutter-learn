@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+    
   cloud_firestore: ^2.2.0
   cupertino_icons: ^1.0.2
   equatable: ^2.0.2
@@ -40,6 +41,7 @@ dependency_overrides: null
 #     url: git://github.com/ska2519/intl_translation
 # ref: 1a18d5a676ce94918f486ef699cb479f7578fdb6
 dev_dependencies:
+  test: 
   flutter_test:
     sdk: flutter
   build_runner: ^2.0.4
