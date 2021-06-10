@@ -4,10 +4,12 @@ import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/youtube_screen.dart';
 import 'package:flutter_learn/app/home/home_page.dart';
 import 'package:flutter_learn/app/sign_in/email/email_password_sign_in_page.dart';
+import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/services/auth_base.dart';
 
 class AppRoutes {
   static const emailPasswordSignInPage = '/email-password-sign-in-page';
+  static const signInPage = '/sign-in-page';
   static const appPage = '/app-page';
   static const communityScreen = '/community-screen';
   static const youtubeScreen = '/youtube-screen';
@@ -29,6 +31,13 @@ class AppRouter {
           settings: settings,
           fullscreenDialog: true,
         );
+      case AppRoutes.signInPage:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => SignInPage(),
+          settings: settings,
+          fullscreenDialog: true,
+        );
+
       case AppRoutes.appPage:
         return MaterialPageRoute<dynamic>(
           builder: (_) => HomePage(),

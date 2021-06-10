@@ -13,7 +13,6 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-    
   cloud_firestore: ^2.2.0
   cupertino_icons: ^1.0.2
   equatable: ^2.0.2
@@ -22,6 +21,8 @@ dependencies:
   firebase_messaging: ^10.0.0
   firebase_storage: ^8.1.0
   fl_chart: ^0.36.1
+  flutter_emoji:
+    git: https://github.com/cek-cek/flutter-emoji
   flutter_hooks: ^0.16.0
   flutter_svg: ^0.22.0
   freezed_annotation: ^0.14.2
@@ -41,12 +42,12 @@ dependency_overrides: null
 #     url: git://github.com/ska2519/intl_translation
 # ref: 1a18d5a676ce94918f486ef699cb479f7578fdb6
 dev_dependencies:
-  test: 
   flutter_test:
     sdk: flutter
   build_runner: ^2.0.4
   freezed: ^0.14.2
   json_serializable: ^4.1.3
+  test: null
 
 flutter:
   uses-material-design: true
