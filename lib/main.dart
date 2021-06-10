@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -22,7 +23,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
-        primarySwatch: Colors.lightBlue,
+        // primarySwatch: Colors.lightBlue,
+        primaryColor: flutterPrimaryColor,
+        accentColor: flutterAccentColor,
         appBarTheme: AppBarTheme(
           // textTheme:
           //     TextTheme(headline6: TextStyle(fontWeight: FontWeight.bold)),

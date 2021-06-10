@@ -35,7 +35,11 @@ Future<bool?> showAlertDialog({
     context: context,
     builder: (context) => CupertinoAlertDialog(
       title: title != null ? Text(title) : null,
-      content: child,
+      content: Card(
+        color: Colors.transparent,
+        elevation: 0,
+        child: child,
+      ),
       actions: <Widget>[
         if (cancelActionText != null)
           CupertinoDialogAction(
