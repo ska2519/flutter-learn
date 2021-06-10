@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_learn/routes/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -8,15 +10,22 @@ import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 
-class PostPage extends StatefulWidget {
-  const PostPage({this.post});
+class EditPostPage extends StatefulWidget {
+  const EditPostPage({this.post});
   final Post? post;
 
+  static Future<void> show(BuildContext context, {Post? post}) async {
+    await Navigator.of(context, rootNavigator: true).pushNamed(
+      AppRoutes.editPostPage,
+      arguments: post,
+    );
+  }
+
   @override
-  _PostPageState createState() => _PostPageState();
+  _EditPostPageState createState() => _EditPostPageState();
 }
 
-class _PostPageState extends State<PostPage> {
+class _EditPostPageState extends State<EditPostPage> {
   late String _title;
   late String _content;
 
@@ -62,7 +71,6 @@ class _PostPageState extends State<PostPage> {
         exception: e,
       ));
     }
-    //posts.add(post);
   }
 
   void showPreventPostSnackBar(BuildContext context, String postTitle) =>
@@ -112,12 +120,16 @@ class _PostPageState extends State<PostPage> {
               decoration: InputDecoration(
                 hintText: 'Title',
                 hintStyle: Theme.of(context).textTheme.button!.copyWith(
-                    fontWeight: FontWeight.bold, color: Colors.black38),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black38,
+                    ),
               ),
             ),
-            TextFormField(
+            TextField(
               controller: TextEditingController(text: _content),
               onChanged: (body) => _content = body,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintMaxLines: 5,
