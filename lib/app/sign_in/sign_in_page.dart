@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutter_learn/app/sign_in/sign_in_button.dart';
@@ -18,6 +20,11 @@ final signInModelProvider = ChangeNotifierProvider<SignInViewModel>(
     (ref) => SignInViewModel(auth: ref.watch(authServiceProvider)));
 
 class SignInPage extends HookWidget {
+  static Future<void> show(BuildContext context) async {
+    await Navigator.of(context, rootNavigator: true)
+        .pushNamed(AppRoutes.signInPage);
+  }
+
   @override
   Widget build(BuildContext context) {
     final signInModel = useProvider(signInModelProvider);
@@ -42,15 +49,14 @@ class SignInPage extends HookWidget {
       },
       child: SignInPageContents(
         viewModel: signInModel,
-        title: '로그인 페이지',
+        title: Strings.signInPageTitle,
       ),
     );
   }
 }
 
 class SignInPageContents extends StatelessWidget {
-  const SignInPageContents(
-      {required this.viewModel, this.title = 'Sign-in Demo'});
+  const SignInPageContents({required this.viewModel, required this.title});
   final SignInViewModel viewModel;
   final String title;
 
@@ -64,15 +70,31 @@ class SignInPageContents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2.0,
-        title: Text(
-          title,
-          style: Theme.of(context)
-              .textTheme
-              .subtitle1!
-              .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(size.height * 0.16),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          iconTheme: IconThemeData(color: flutterPrimaryColor),
+          elevation: 0.0,
+          flexibleSpace: Padding(
+            padding: const EdgeInsets.all(33),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                      letterSpacing: 1.5,
+                      wordSpacing: 2,
+                    ),
+              ),
+            ),
+          ),
         ),
       ),
       body: _buildSignIn(context),
@@ -85,18 +107,14 @@ class SignInPageContents extends StatelessWidget {
         child: CircularProgressIndicator(),
       );
     }
-    return const Text(
-      Strings.signIn,
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        color: primaryColor,
-        fontSize: 33,
-        fontWeight: FontWeight.w600,
-      ),
+    return SvgPicture.asset(
+      'assets/images/Group Chat-rafiki.svg',
+      fit: BoxFit.fitHeight,
     );
   }
 
   Widget _buildSignIn(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Center(
       child: LayoutBuilder(builder: (context, constraints) {
         return Container(
@@ -108,7 +126,7 @@ class SignInPageContents extends StatelessWidget {
             children: <Widget>[
               const SizedBox(height: 33),
               SizedBox(
-                height: 50,
+                height: size.height * 0.3,
                 child: _buildHeader(),
               ),
               const SizedBox(height: 33),
