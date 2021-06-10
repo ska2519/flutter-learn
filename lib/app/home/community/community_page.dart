@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/community/post_page.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
-import 'package:flutter_learn/app/widgets/alert_dialogs/show_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/app_user.dart';

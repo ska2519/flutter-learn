@@ -21,8 +21,6 @@ dependencies:
   firebase_messaging: ^10.0.0
   firebase_storage: ^8.1.0
   fl_chart: ^0.36.1
-  flutter_emoji:
-    git: https://github.com/cek-cek/flutter-emoji
   flutter_hooks: ^0.16.0
   flutter_svg: ^0.22.0
   freezed_annotation: ^0.14.2
