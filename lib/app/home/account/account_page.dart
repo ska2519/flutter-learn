@@ -55,6 +55,22 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
+  Future<bool?> displayNameUpdateDialog(BuildContext context, AppUser appUser) {
+    return showAlertDialog(
+      context: context,
+      title: '내 프로필',
+      child: TextField(
+        maxLength: 8,
+        controller: TextEditingController(
+            text: _displayName = appUser.displayName ?? ''),
+        decoration: InputDecoration(hintText: '원하는 닉네임을 적어주세요'),
+        onChanged: (displayName) => _displayName = displayName,
+      ),
+      cancelActionText: Strings.cancel,
+      defaultActionText: Strings.ok,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -87,7 +103,7 @@ class _AccountPageState extends State<AccountPage> {
               ),
             ],
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(size.height * 0.23),
+              preferredSize: Size.fromHeight(size.height * 0.25),
               child: _buildUserInfo(appUser, context),
             ),
           ),
@@ -120,18 +136,7 @@ class _AccountPageState extends State<AccountPage> {
         TextButton(
           onPressed: appUser == null
               ? null
-              : () => showAlertDialog(
-                    context: context,
-                    child: TextField(
-                      maxLength: 8,
-                      controller: TextEditingController(
-                          text: _displayName = appUser.displayName ?? ''),
-                      decoration: InputDecoration(hintText: '원하는 닉네임을 적어주세요'),
-                      onChanged: (displayName) => _displayName = displayName,
-                    ),
-                    cancelActionText: Strings.cancel,
-                    defaultActionText: Strings.ok,
-                  ).then(
+              : () => displayNameUpdateDialog(context, appUser).then(
                     (isOk) {
                       if (isOk is bool) {
                         final database = context.read(databaseProvider);
