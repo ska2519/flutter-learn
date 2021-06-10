@@ -6,7 +6,7 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 
 이 프로젝트는 Flutter에서 [Riverpod](https://riverpod.dev) 상태 관리 기술을 사용하여 커뮤니티 앱을 ([로플리](https://www.lawfully.com/)에서 영감을 받음) 구현합니다.  
 
-이 프로젝트는 YouTube API를 사용하여 동영상 목록을 가져오고 가입 & 로그인과 Firebase Firestore 데이터 저장 기능을 포함합니다.  
+이 프로젝트는 게시판 기능과 YouTube API를 사용하여 동영상 목록을 가져오고 가입 & 로그인과 Firebase Firestore 데이터 저장 기능을 포함합니다.  
 
 *주소: [`https://flutter-learn.dev`](https://flutter-learn.dev)*
 
@@ -44,18 +44,18 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 - [x] 네비게이션 바
   - [x] Desktop 사이즈 시 SideMenu로 변경
     - [ ] SideMenu 클릭 시 화면 변경
-- [ ] 회원가입 & 로그인
-  - [ ] Email 로 가입
-  - [ ] Google 계정으로 가입
-  - [ ] Apple 계정으로 가입
+- [x] 회원가입 & 로그인
+  - [x] Email 로 가입
+  - [x] Google 계정으로 가입
+  - [x] Apple 계정으로 가입
   - [ ] Github 계정으로 가입
   - [ ] Kakao 계정으로 가입
 - [ ] 커뮤니티
   - [ ] 카테고리
-  - [ ] 글쓰기
+  - [x] 글쓰기
   - [ ] 삭제
   - [ ] 수정
-  - [ ] 좋아요
+  - [x] 좋아요
   - [ ] 태그
     - [ ] 태그 추천
   - [ ] 댓글
@@ -68,7 +68,7 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 - [ ] 잘못된 주소 처리
 ## Firebase 기능 구현
 
-- [ ] Firebase Authentication 설정
+- [x] Firebase Authentication 설정
 - [x] Firebase 호스팅에 웹 앱 배포
 - [x] Firebase 호스팅 자동 빌드 설정 및 GitHub로 배포
 - [ ] Cloud Firestore 데이터 구조 설정
@@ -91,11 +91,14 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 /lib
   /constants
   /controllers
+  /exceptions
+  /l10n
   /models
   /routes
   /services
   /app
     /home
+      /account
       /community
       /desktop
       /youtube
