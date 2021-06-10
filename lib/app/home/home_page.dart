@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/account/account_page.dart';
-import 'package:flutter_learn/app/home/community/community_page.dart';
+import 'package:flutter_learn/app/home/community/posts_page.dart';
 import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/side_menu.dart';
 import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
@@ -29,7 +29,7 @@ class HomePage extends StatefulHookWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<Widget> _screens = [
-    CommunityPage(),
+    PostsPage(),
     YouTubePage(),
     AccountPage(),
   ];
