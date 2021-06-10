@@ -11,8 +11,10 @@ class Strings {
   static const String cancel = '취소';
 
   // Sign In Page
+  static const String signInPageTitle = '가입하거나 로그인해서\n 사용자들과 생각을 공유하세요';
+  //Sign up or log in and share thoughts with the community
   static const String signIn = '로그인';
-  static const String signInWithEmailPassword = '\u{2709}  이메일로 로그인';
+  static const String signInWithEmailPassword = '✉️ 이메일로 로그인';
   static const String goAnonymous = 'Go anonymous';
   static const String or = 'or';
   static const String signInFailed = '로그인 실패';
