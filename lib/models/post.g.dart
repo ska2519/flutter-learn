@@ -13,8 +13,9 @@ _$_Post _$_$_PostFromJson(Map json) {
     displayName: json['displayName'] as String,
     title: json['title'] as String,
     content: json['content'] as String,
-    timestamp:
-        const TimestampConverter().fromJson(json['timestamp'] as Timestamp),
+    timestamp: (json['timestamp'] as List<dynamic>?)
+        ?.map((e) => DateTime.parse(e as String))
+        .toSet(),
     usersLiked: (json['usersLiked'] as List<dynamic>?)?.toSet() ?? {},
   );
 }
@@ -25,6 +26,6 @@ Map<String, dynamic> _$_$_PostToJson(_$_Post instance) => <String, dynamic>{
       'displayName': instance.displayName,
       'title': instance.title,
       'content': instance.content,
-      'timestamp': const TimestampConverter().toJson(instance.timestamp),
+      'timestamp': instance.timestamp?.map((e) => e.toIso8601String()).toList(),
       'usersLiked': instance.usersLiked.toList(),
     };
