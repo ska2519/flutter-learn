@@ -25,13 +25,13 @@ class _$AppUserTearOff {
       String? email,
       String? photoURL,
       String? displayName,
-      @TimestampConverter() DateTime? loginTimestamp}) {
+      @TimestampConverter() Set<DateTime>? timestamp}) {
     return _AppUser(
       id: id,
       email: email,
       photoURL: photoURL,
       displayName: displayName,
-      loginTimestamp: loginTimestamp,
+      timestamp: timestamp,
     );
   }
 
@@ -50,7 +50,7 @@ mixin _$AppUser {
   String? get photoURL => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   @TimestampConverter()
-  DateTime? get loginTimestamp => throw _privateConstructorUsedError;
+  Set<DateTime>? get timestamp => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -66,7 +66,7 @@ abstract class $AppUserCopyWith<$Res> {
       String? email,
       String? photoURL,
       String? displayName,
-      @TimestampConverter() DateTime? loginTimestamp});
+      @TimestampConverter() Set<DateTime>? timestamp});
 }
 
 /// @nodoc
@@ -83,7 +83,7 @@ class _$AppUserCopyWithImpl<$Res> implements $AppUserCopyWith<$Res> {
     Object? email = freezed,
     Object? photoURL = freezed,
     Object? displayName = freezed,
-    Object? loginTimestamp = freezed,
+    Object? timestamp = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -102,10 +102,10 @@ class _$AppUserCopyWithImpl<$Res> implements $AppUserCopyWith<$Res> {
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
-      loginTimestamp: loginTimestamp == freezed
-          ? _value.loginTimestamp
-          : loginTimestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+      timestamp: timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as Set<DateTime>?,
     ));
   }
 }
@@ -120,7 +120,7 @@ abstract class _$AppUserCopyWith<$Res> implements $AppUserCopyWith<$Res> {
       String? email,
       String? photoURL,
       String? displayName,
-      @TimestampConverter() DateTime? loginTimestamp});
+      @TimestampConverter() Set<DateTime>? timestamp});
 }
 
 /// @nodoc
@@ -138,7 +138,7 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
     Object? email = freezed,
     Object? photoURL = freezed,
     Object? displayName = freezed,
-    Object? loginTimestamp = freezed,
+    Object? timestamp = freezed,
   }) {
     return _then(_AppUser(
       id: id == freezed
@@ -157,10 +157,10 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
-      loginTimestamp: loginTimestamp == freezed
-          ? _value.loginTimestamp
-          : loginTimestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+      timestamp: timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as Set<DateTime>?,
     ));
   }
 }
@@ -173,7 +173,7 @@ class _$_AppUser implements _AppUser {
       this.email,
       this.photoURL,
       this.displayName,
-      @TimestampConverter() this.loginTimestamp});
+      @TimestampConverter() this.timestamp});
 
   factory _$_AppUser.fromJson(Map<String, dynamic> json) =>
       _$_$_AppUserFromJson(json);
@@ -188,11 +188,11 @@ class _$_AppUser implements _AppUser {
   final String? displayName;
   @override
   @TimestampConverter()
-  final DateTime? loginTimestamp;
+  final Set<DateTime>? timestamp;
 
   @override
   String toString() {
-    return 'AppUser(id: $id, email: $email, photoURL: $photoURL, displayName: $displayName, loginTimestamp: $loginTimestamp)';
+    return 'AppUser(id: $id, email: $email, photoURL: $photoURL, displayName: $displayName, timestamp: $timestamp)';
   }
 
   @override
@@ -209,9 +209,9 @@ class _$_AppUser implements _AppUser {
             (identical(other.displayName, displayName) ||
                 const DeepCollectionEquality()
                     .equals(other.displayName, displayName)) &&
-            (identical(other.loginTimestamp, loginTimestamp) ||
+            (identical(other.timestamp, timestamp) ||
                 const DeepCollectionEquality()
-                    .equals(other.loginTimestamp, loginTimestamp)));
+                    .equals(other.timestamp, timestamp)));
   }
 
   @override
@@ -221,7 +221,7 @@ class _$_AppUser implements _AppUser {
       const DeepCollectionEquality().hash(email) ^
       const DeepCollectionEquality().hash(photoURL) ^
       const DeepCollectionEquality().hash(displayName) ^
-      const DeepCollectionEquality().hash(loginTimestamp);
+      const DeepCollectionEquality().hash(timestamp);
 
   @JsonKey(ignore: true)
   @override
@@ -240,7 +240,7 @@ abstract class _AppUser implements AppUser {
       String? email,
       String? photoURL,
       String? displayName,
-      @TimestampConverter() DateTime? loginTimestamp}) = _$_AppUser;
+      @TimestampConverter() Set<DateTime>? timestamp}) = _$_AppUser;
 
   factory _AppUser.fromJson(Map<String, dynamic> json) = _$_AppUser.fromJson;
 
@@ -254,7 +254,7 @@ abstract class _AppUser implements AppUser {
   String? get displayName => throw _privateConstructorUsedError;
   @override
   @TimestampConverter()
-  DateTime? get loginTimestamp => throw _privateConstructorUsedError;
+  Set<DateTime>? get timestamp => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$AppUserCopyWith<_AppUser> get copyWith =>

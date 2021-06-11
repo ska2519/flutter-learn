@@ -53,7 +53,7 @@ class FirebaseAuthService implements AuthBase {
     final database = _read(databaseProvider);
     try {
       await database.setAppUser(user);
-      return database.getAppUser(user);
+      return database.getAppUser(user.uid);
     } catch (error) {
       throw FirestoreApiException(
         message: 'Failed to create new user',
@@ -65,13 +65,17 @@ class FirebaseAuthService implements AuthBase {
   @override
   Future<AppUser?> fetchUser(User user) async {
     final database = _read(databaseProvider);
+
     if (user.uid.isNotEmpty) {
       AppUser? appUser;
-      appUser = await database.getAppUser(user);
+      appUser = await database.getAppUser(user.uid);
       appUser = appUser ?? await createUser(user);
+      final now = DateTime.now();
+      final timestamp = appUser!.timestamp!;
+      timestamp.add(now);
       await database.updateAppUser(
-        appUser: appUser!.copyWith(
-          loginTimestamp: DateTime.now(),
+        appUser: appUser.copyWith(
+          timestamp: timestamp,
         ),
       );
       return appUser;
