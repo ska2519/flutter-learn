@@ -7,6 +7,6 @@ class FirestorePath {
   static String appUser(String id) => 'users/$id';
   static String post(String id) => 'posts/$id';
   static String posts() => 'posts';
-  static String comments() => 'comments';
+  static String comments(String postId) => '/posts/$postId/comments';
   static String comment(String postId) => '/posts/$postId/comments';
 }

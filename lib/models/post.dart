@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_learn/models/timestamp_converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'app_user.dart';
@@ -17,7 +18,8 @@ class Post with _$Post {
     required String displayName,
     required String title,
     required String content,
-    @TimestampConverter() required DateTime timestamp,
+    //@Default(<DateTime>{})
+    @TimestampConverter() Set<DateTime>? timestamp,
     //required DocumentReference reference,
     @Default({}) Set usersLiked,
   }) = _Post;
@@ -54,16 +56,4 @@ class Post with _$Post {
   //     timestamp: DateTime.now(),
   //   );
   // }
-}
-
-class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
-  const TimestampConverter();
-
-  @override
-  DateTime fromJson(Timestamp timestamp) {
-    return timestamp.toDate();
-  }
-
-  @override
-  Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
 }
