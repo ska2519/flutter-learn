@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_learn/models/timestamp_converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,23 +12,11 @@ class AppUser with _$AppUser {
     String? email,
     String? photoURL,
     String? displayName,
-    @TimestampConverter() DateTime? loginTimestamp,
+    @TimestampConverter() Set<DateTime>? timestamp,
   }) = _AppUser;
 
   factory AppUser.fromJson(Map<String, dynamic> json) =>
       _$AppUserFromJson(json);
-}
-
-class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
-  const TimestampConverter();
-
-  @override
-  DateTime fromJson(Timestamp timestamp) {
-    return timestamp.toDate();
-  }
-
-  @override
-  Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
 }
 
 class AppUserNotifier extends StateNotifier<AppUser> {

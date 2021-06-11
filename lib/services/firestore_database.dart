@@ -28,8 +28,8 @@ class FirestoreDatabase {
         : Stream<AppUser?>.value(null);
   }
 
-  Future<AppUser?> getAppUser(User user) async => _service
-      .getDoc(path: FirestorePath.appUser(user.uid))
+  Future<AppUser?> getAppUser(String uid) async => _service
+      .getDoc(path: FirestorePath.appUser(uid))
       .then((appUser) => appUser == null ? null : AppUser.fromJson(appUser));
 
   Future<void> setAppUser(User user) async => _service.setData(
@@ -39,6 +39,7 @@ class FirestoreDatabase {
           email: user.email,
           displayName: user.displayName,
           photoURL: user.photoURL,
+          timestamp: <DateTime>{},
         ).toJson(),
       );
 
@@ -62,6 +63,12 @@ class FirestoreDatabase {
   Stream<List<Post>> postsStream() => _service.collectionStream(
         path: FirestorePath.posts(),
         builder: (data, documentId) => Post.fromJson(data!),
+      );
+  Stream<List<Comment>> commentsStream({required Post post}) =>
+      _service.collectionStream<Comment>(
+        path: FirestorePath.comments(post.id),
+        queryBuilder: (query) => query.where('postId', isEqualTo: post.id),
+        builder: (data, documentId) => Comment.fromJson(data!),
       );
   // Future<void> setJob(Job job) => _service.setData(
   //       path: FirestorePath.job(appUser!.id, job.id),
