@@ -37,10 +37,10 @@ class _EditPostPageState extends State<EditPostPage> {
   }
 
   Post _postFromState() {
-    final authStateChanges = context.read(appUserStreamProvider);
+    final appUserStream = context.read(appUserStreamProvider);
     final currentDate = widget.post?.id ?? documentIdFromCurrentDate();
-    final id = authStateChanges.data!.value!.id;
-    final displayName = authStateChanges.data!.value!.displayName!;
+    final id = appUserStream.data!.value!.id;
+    final displayName = appUserStream.data!.value!.displayName!;
     final postId = '$currentDate:$id';
     final now = DateTime.now();
     return Post(
@@ -53,7 +53,7 @@ class _EditPostPageState extends State<EditPostPage> {
     );
   }
 
-  Future<void> newPost(BuildContext context, String title, String text) async {
+  Future<void> _newPost(BuildContext context, String title, String text) async {
     try {
       final database = context.read(databaseProvider);
       final post = _postFromState();
@@ -99,7 +99,7 @@ class _EditPostPageState extends State<EditPostPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => newPost(context, _title, _content),
+            onPressed: () => _newPost(context, _title, _content),
             child: Text(
               'Post',
               style: Theme.of(context)
