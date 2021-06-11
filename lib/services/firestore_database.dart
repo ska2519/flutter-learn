@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_learn/models/app_user.dart';
+import 'package:flutter_learn/models/comment.dart';
 import 'package:flutter_learn/services/firestore_path.dart';
 import 'package:flutter_learn/services/firestore_service.dart';
 import 'package:flutter_learn/models/post.dart';
@@ -52,6 +53,10 @@ class FirestoreDatabase {
   Future<void> setPost(Post post) => _service.setData(
         path: FirestorePath.post(post.id),
         data: post.toJson(),
+      );
+  Future<void> setComment(Comment comment) => _service.addData(
+        path: FirestorePath.comment(comment.postId),
+        data: comment.toJson(),
       );
 
   Stream<List<Post>> postsStream() => _service.collectionStream(
