@@ -38,18 +38,21 @@ class _EditPostPageState extends State<EditPostPage> {
 
   Post _postFromState() {
     final appUserStream = context.read(appUserStreamProvider);
-    final currentDate = widget.post?.id ?? documentIdFromCurrentDate();
-    final id = appUserStream.data!.value!.id;
+    final appUser = appUserStream.data!.value!;
+    final currentDate = documentIdFromCurrentDate();
     final displayName = appUserStream.data!.value!.displayName!;
-    final postId = '$currentDate:$id';
+    final postId = '$currentDate:${appUser.id}';
     final now = DateTime.now();
+    final timestamp =
+        widget.post == null ? <DateTime>{now} : widget.post!.timestamp!;
+    timestamp.add(now);
     return Post(
       id: postId,
-      userId: id!,
+      userId: appUser.id!,
       displayName: displayName,
       title: _title,
       content: _content,
-      timestamp: now,
+      timestamp: timestamp,
     );
   }
 
