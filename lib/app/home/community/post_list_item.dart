@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
+import 'package:flutter_learn/app/widgets/avatar.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
@@ -52,85 +53,86 @@ class _PostListItemState extends State<PostListItem> {
   @override
   Widget build(BuildContext context) {
     final appUserStream = useProvider(appUserStreamProvider);
-
+    final appUser = appUserStream.data?.value;
     return InkWell(
       onTap: widget.onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (widget.postUserInfo == true)
+      child: Padding(
+        padding: const EdgeInsets.all(defaultPadding * 2),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (widget.postUserInfo == true)
+              PostUserInfo(post: post)
+            else
+              const SizedBox(),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: defaultPadding * 2),
-              child: PostUserInfo(post: post),
-            )
-          else
-            Padding(padding: const EdgeInsets.only(top: defaultPadding)),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(defaultPadding * 2,
-                defaultPadding, defaultPadding * 2, defaultPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              padding: EdgeInsets.symmetric(vertical: defaultPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    post.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
+                  SizedBox(height: defaultPadding),
+                  SelectableText(
+                    post.content,
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                ],
+              ),
+            ),
+            Row(
               children: [
-                Text(
-                  post.title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.subtitle2,
+                IconButton(
+                  padding: EdgeInsets.all(0),
+                  alignment: Alignment.centerLeft,
+                  constraints: BoxConstraints.tight(Size(25, 17)),
+                  iconSize: 19,
+                  color: post.usersLiked.contains(appUser?.id)
+                      ? Colors.red
+                      : Colors.grey,
+                  disabledColor: Colors.black,
+                  icon: Icon(
+                    post.usersLiked.contains(appUser?.id)
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                  ),
+                  onPressed: () => _likePost(context, post),
                 ),
-                SizedBox(height: defaultPadding),
                 Text(
-                  post.content,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyText2,
+                  post.usersLiked.isNotEmpty
+                      ? post.usersLiked.length.toString()
+                      : '좋아요',
+                  style: Theme.of(context).textTheme.caption,
+                ),
+                SizedBox(width: defaultPadding * 2),
+                IconButton(
+                  padding: EdgeInsets.all(0),
+                  alignment: Alignment.centerLeft,
+                  constraints: BoxConstraints.tight(Size(25, 15.5)),
+                  iconSize: 18,
+                  color: Colors.grey,
+                  disabledColor: Colors.black,
+                  icon: Icon(Icons.mode_comment_outlined),
+                  onPressed: () {},
+                ),
+                Text(
+                  '댓글',
+                  style: Theme.of(context).textTheme.caption,
                 ),
               ],
-            ),
-          ),
-          Row(
-            children: [
-              IconButton(
-                iconSize: 19,
-                visualDensity: VisualDensity.compact,
-                color: post.usersLiked.contains(appUserStream.data?.value?.id)
-                    ? Colors.red
-                    : Colors.grey,
-                disabledColor: Colors.black,
-                icon: Icon(
-                  post.usersLiked.contains(appUserStream.data?.value?.id)
-                      ? Icons.favorite
-                      : Icons.favorite_border,
-                ),
-                onPressed: () => _likePost(context, post),
-              ),
-              Text(
-                post.usersLiked.isNotEmpty
-                    ? post.usersLiked.length.toString()
-                    : '좋아요',
-                style: Theme.of(context).textTheme.caption,
-              ),
-              IconButton(
-                iconSize: 18.7,
-                visualDensity: VisualDensity.compact,
-                color: Colors.grey,
-                disabledColor: Colors.black,
-                icon: Icon(Icons.mode_comment_outlined),
-                onPressed: () {},
-              ),
-              Text(
-                '댓글',
-                style: Theme.of(context).textTheme.caption,
-              ),
-            ],
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
-class PostUserInfo extends StatelessWidget {
+class PostUserInfo extends HookWidget {
   const PostUserInfo({
     Key? key,
     required this.post,
@@ -140,10 +142,12 @@ class PostUserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appUserStream = useProvider(appUserStreamProvider);
+    final appUser = appUserStream.data?.value;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CircleAvatar(backgroundColor: Colors.grey[300]),
+        Avatar(photoUrl: appUser?.photoURL, radius: 19),
         SizedBox(width: defaultPadding),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
