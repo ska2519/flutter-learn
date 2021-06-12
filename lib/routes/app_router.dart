@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_learn/app/home/account/account_page.dart';
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
 import 'package:flutter_learn/app/home/community/post_detail_page.dart';
+import 'package:flutter_learn/app/home/community/posts_page.dart';
 import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/youtube_screen.dart';
 import 'package:flutter_learn/app/home/home_page.dart';
@@ -19,6 +20,7 @@ class AppRoutes {
   static const communityScreen = '/community-screen';
   static const youtubeScreen = '/youtube-screen';
   static const accountScreen = '/account-screen';
+  static const postsPage = '/posts-page';
 }
 
 class AppRouter {
@@ -47,6 +49,7 @@ class AppRouter {
           builder: (_) => EditPostPage(post: args as Post?),
           settings: settings,
           fullscreenDialog: true,
+          maintainState: false,
         );
       case AppRoutes.postDetailPage:
         return MaterialPageRoute<dynamic>(
@@ -60,6 +63,13 @@ class AppRouter {
           //maintainState false = pop으로 돌아가면 위젯 rebuild
           maintainState: false,
           settings: settings,
+        );
+      case AppRoutes.postsPage:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => PostsPage(),
+          settings: settings,
+          maintainState: false,
+          // fullscreenDialog: true,
         );
       case AppRoutes.communityScreen:
         return MaterialPageRoute<dynamic>(

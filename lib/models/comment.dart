@@ -7,11 +7,12 @@ part 'comment.freezed.dart';
 @freezed
 class Comment with _$Comment {
   const factory Comment({
+    String? id,
+    //Parent? parent,
     required String text,
     required String postId,
     required String userId,
-    //@Default(<DateTime>{})
-    @TimestampConverter() Set<DateTime>? timestamp,
+    @Default(<DateTime>{}) @TimestampConverter() Set<DateTime>? timestamp,
   }) = _Comment;
 
   factory Comment.fromJson(Map<String, dynamic> json) =>
