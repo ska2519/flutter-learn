@@ -16,13 +16,13 @@ class FirestoreService {
     await reference.set(data, SetOptions(merge: merge));
   }
 
-  Future<void> addData({
+  Future<DocumentReference<Map<String, dynamic>>> addData({
     required String path,
     required Map<String, dynamic> data,
   }) async {
     final reference = FirebaseFirestore.instance.collection(path);
     print('addData finish');
-    await reference.add(data);
+    return reference.add(data);
   }
 
   Future<Map<String, dynamic>?> getDoc({required String path}) =>
@@ -37,6 +37,7 @@ class FirestoreService {
   }) async =>
       FirebaseFirestore.instance.doc(path).update(data);
 
+  // .then((DocumentSnapshot doc) => doc.data() as Map<String, dynamic>?);
   //   Future<void> setTransaction({
   //   required String firstPath,
   //   required String secondPath,

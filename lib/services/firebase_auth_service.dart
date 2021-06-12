@@ -74,9 +74,7 @@ class FirebaseAuthService implements AuthBase {
       final timestamp = appUser!.timestamp!;
       timestamp.add(now);
       await database.updateAppUser(
-        appUser: appUser.copyWith(
-          timestamp: timestamp,
-        ),
+        appUser.copyWith(timestamp: timestamp),
       );
       return appUser;
     } else {
@@ -93,7 +91,6 @@ class FirebaseAuthService implements AuthBase {
       return null;
     }
     return fetchUser(user).then((appUser) {
-      print('_userFromFirebase: $appUser');
       _read(appUserProvider.notifier).login(appUser!);
       return appUser;
     });

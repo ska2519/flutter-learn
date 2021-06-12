@@ -141,7 +141,7 @@ class _AccountPageState extends State<AccountPage> {
                       if (isOk is bool) {
                         final database = context.read(databaseProvider);
                         database.updateAppUser(
-                          appUser: appUser.copyWith(displayName: _displayName),
+                          appUser.copyWith(displayName: _displayName),
                         );
                       }
                     },

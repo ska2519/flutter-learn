@@ -17,7 +17,7 @@ import 'package:pedantic/pedantic.dart';
 final commentsStreamProvider =
     StreamProvider.autoDispose.family<List<Comment>, Post>((ref, post) {
   final database = ref.watch(databaseProvider);
-  return database.commentsStream(post: post);
+  return database.commentsStream(post);
 });
 
 class PostDetailPage extends StatefulHookWidget {
@@ -39,7 +39,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
   late TextEditingController _textEditingController;
   late FocusNode _focusNode;
   late Post post;
-  String _comment = '';
+  Comment? editComment;
+  String _commentText = '';
 
   @override
   void initState() {
@@ -110,20 +111,20 @@ class _PostDetailPageState extends State<PostDetailPage> {
         ],
       ),
       body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  PostListItem(
-                    post: widget.post,
-                    postUserInfo: false,
-                  ),
-                  Divider(),
-                  commentsStream.when(
-                    loading: () => const CircularProgressIndicator(),
-                    error: (error, stack) => const Text('Oops'),
-                    data: (comments) => ListView.builder(
+        child: commentsStream.when(
+          loading: () => const CircularProgressIndicator(),
+          error: (error, stack) => const Text('Oops'),
+          data: (comments) => Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    PostListItem(
+                      post: widget.post,
+                      postUserInfo: false,
+                    ),
+                    Divider(),
+                    ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: comments.length,
@@ -147,36 +148,62 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                     radius: 16,
                                   ),
                                   SizedBox(width: defaultPadding),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          commentUser!.displayName!,
-                                          maxLines: 1,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                        ),
-                                        SizedBox(height: defaultPadding),
-                                        SelectableText(
-                                          comments[i].text,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2,
-                                        ),
-                                      ],
-                                    ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        commentUser!.displayName!,
+                                        maxLines: 1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
+                                      SelectableText(
+                                        comments[i].text,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2,
+                                      ),
+                                    ],
                                   ),
+                                  Spacer(),
                                   IconButton(
-                                    padding: EdgeInsets.all(0),
                                     alignment: Alignment.topCenter,
-                                    onPressed: () => Navigator.pop(context),
+                                    padding: EdgeInsets.all(0),
+                                    onPressed: () => showCupertinoModalPopup(
+                                      context: context,
+                                      builder: (context) =>
+                                          CupertinoActionSheet(
+                                        actions: [
+                                          CupertinoActionSheetAction(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              _editComment(comments[i]);
+                                            },
+                                            child: Text('수정'),
+                                          ),
+                                          CupertinoActionSheetAction(
+                                            onPressed: () {
+                                              _deleteComment(comments[i]);
+                                              Navigator.pop(context);
+                                            },
+                                            isDestructiveAction: true,
+                                            child: Text('삭제'),
+                                          )
+                                        ],
+                                        cancelButton:
+                                            CupertinoActionSheetAction(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: Text('취소'),
+                                        ),
+                                      ),
+                                    ),
                                     icon: Icon(
                                       Icons.more_horiz,
                                       color: Colors.grey,
-                                      size: 20,
+                                      size: 17,
                                     ),
                                   ),
                                 ],
@@ -187,71 +214,95 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: size.height * 0.1)
-                ],
+                    SizedBox(height: size.height * 0.1)
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(defaultPadding),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: CupertinoTextField(
-                  placeholder: 'Write a Comment',
-                  focusNode: _focusNode,
-                  controller: _textEditingController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  maxLength: 500,
-                  expands: true,
-                  textInputAction: TextInputAction.newline,
-                  onChanged: (comment) => _comment = comment,
-                  suffix: TextButton(
-                    onPressed: () {
-                      newComment(
-                        context: context,
-                        comment: _comment,
-                        post: post,
-                      );
-                      _focusNode.unfocus();
-                      _textEditingController.clear();
-                    },
-                    child: Text('POST'),
+              Padding(
+                padding: const EdgeInsets.all(defaultPadding),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: CupertinoTextField(
+                    placeholder: 'Write a Comment',
+                    focusNode: _focusNode,
+                    controller: _textEditingController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    maxLength: 500,
+                    expands: true,
+                    textInputAction: TextInputAction.newline,
+                    onChanged: (commentText) => _commentText = commentText,
+                    suffix: TextButton(
+                      onPressed: () {
+                        _submitComment(post: post);
+                        _focusNode.unfocus();
+                        _textEditingController.clear();
+                      },
+                      child: Text('POST'),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Comment _commentFromState(Post post) {
+  Comment _commentFromState(Post post, Comment? editComment) {
     final appUserStream = context.read(appUserStreamProvider);
-    final id = appUserStream.data!.value!.id;
+    final appUser = appUserStream.data!.value!;
     final now = DateTime.now();
+    if (editComment != null) {
+      editComment.timestamp!.add(now);
+    }
     return Comment(
+      id: editComment != null ? editComment.id! : null,
       postId: post.id,
-      text: _comment,
-      userId: id!,
-      timestamp: <DateTime>{now},
+      text: _commentText,
+      userId: appUser.id!,
+      timestamp: editComment != null ? editComment.timestamp : <DateTime>{now},
     );
   }
 
-  Future<void> newComment({
-    required BuildContext context,
-    required Post post,
-    required String comment,
-  }) async {
+  Future<void> _submitComment({required Post post}) async {
     try {
       final database = context.read(databaseProvider);
-      final comment = _commentFromState(post);
+      final comment = _commentFromState(post, editComment);
       if (comment.text.isEmpty) {
         showPreventCommentSnackBar(context);
         return;
       }
-      await database.setComment(comment);
+      if (editComment == null) {
+        final reference = await database.setComment(comment);
+        await database.updateComment(
+          comment.copyWith(id: reference.id),
+        );
+      } else {
+        await database.updateComment(comment);
+      }
+    } catch (e) {
+      unawaited(showExceptionAlertDialog(
+        context: context,
+        title: 'Operation failed',
+        exception: e,
+      ));
+    }
+  }
+
+  void _editComment(Comment comment) {
+    _textEditingController.text = comment.text;
+    editComment = comment;
+    _focusNode.requestFocus();
+    _textEditingController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _textEditingController.text.length));
+  }
+
+  void _deleteComment(Comment comment) {
+    try {
+      final database = context.read(databaseProvider);
+      database.deleteComment(comment);
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
