@@ -12,9 +12,9 @@ _$_AppUser _$_$_AppUserFromJson(Map json) {
     email: json['email'] as String?,
     photoURL: json['photoURL'] as String?,
     displayName: json['displayName'] as String?,
-    loginTimestamp: json['loginTimestamp'] == null
-        ? null
-        : DateTime.parse(json['loginTimestamp'] as String),
+    timestamp: (json['timestamp'] as List<dynamic>?)
+        ?.map((e) => DateTime.parse(e as String))
+        .toSet(),
   );
 }
 
@@ -24,5 +24,5 @@ Map<String, dynamic> _$_$_AppUserToJson(_$_AppUser instance) =>
       'email': instance.email,
       'photoURL': instance.photoURL,
       'displayName': instance.displayName,
-      'loginTimestamp': instance.loginTimestamp?.toIso8601String(),
+      'timestamp': instance.timestamp?.map((e) => e.toIso8601String()).toList(),
     };
