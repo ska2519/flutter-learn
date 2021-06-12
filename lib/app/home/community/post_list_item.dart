@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/app/widgets/avatar.dart';
 import 'package:flutter_learn/constants/constants.dart';
+import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
@@ -142,33 +143,40 @@ class PostUserInfo extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appUserStream = useProvider(appUserStreamProvider);
-    final appUser = appUserStream.data?.value;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Avatar(photoUrl: appUser?.photoURL, radius: 19),
-        SizedBox(width: defaultPadding),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              post.displayName,
-              style: Theme.of(context).textTheme.subtitle2,
-            ),
-            Text(
-              // '${DateTime.now().difference(DateTime.parse(post.id)).inMinutes} min',
-              '1min',
-              style: Theme.of(context).textTheme.caption,
-            ),
-          ],
-        ),
-        Spacer(),
-        Text(
-          'Category',
-          style: Theme.of(context).textTheme.overline,
-        ),
-      ],
+    final database = useProvider(databaseProvider);
+    return FutureBuilder<AppUser?>(
+      future: database.getAppUser(post.userId),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          late final postUser = snapshot.data;
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Avatar(photoUrl: postUser?.photoURL, radius: 19),
+              SizedBox(width: defaultPadding),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    postUser!.displayName!,
+                    style: Theme.of(context).textTheme.subtitle2,
+                  ),
+                  Text(
+                    '${DateTime.now().difference(post.timestamp!.last).inMinutes} min',
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                ],
+              ),
+              Spacer(),
+              Text(
+                'Category',
+                style: Theme.of(context).textTheme.overline,
+              ),
+            ],
+          );
+        }
+        return SizedBox();
+      },
     );
   }
 }
