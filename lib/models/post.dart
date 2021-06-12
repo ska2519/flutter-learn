@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_learn/models/timestamp_converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
