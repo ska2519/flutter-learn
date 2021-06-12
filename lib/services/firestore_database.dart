@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_learn/models/app_user.dart';
+import 'package:flutter_learn/models/comment.dart';
 import 'package:flutter_learn/services/firestore_path.dart';
 import 'package:flutter_learn/services/firestore_service.dart';
 import 'package:flutter_learn/models/post.dart';
@@ -21,14 +23,13 @@ class FirestoreDatabase {
         ? _service.documentStream(
             path: FirestorePath.appUser(appUser.id!),
             builder: (data, documentId) {
-              print('appUserStream data: $data');
               return AppUser.fromJson(data!);
             })
         : Stream<AppUser?>.value(null);
   }
 
-  Future<AppUser?> getAppUser(User user) async => _service
-      .getDoc(path: FirestorePath.appUser(user.uid))
+  Future<AppUser?> getAppUser(String uid) async => _service
+      .getDoc(path: FirestorePath.appUser(uid))
       .then((appUser) => appUser == null ? null : AppUser.fromJson(appUser));
 
   Future<void> setAppUser(User user) async => _service.setData(
@@ -38,13 +39,11 @@ class FirestoreDatabase {
           email: user.email,
           displayName: user.displayName,
           photoURL: user.photoURL,
+          timestamp: <DateTime>{},
         ).toJson(),
       );
 
-  Future<void> updateAppUser({
-    required AppUser appUser,
-  }) async =>
-      _service.updateDoc(
+  Future<void> updateAppUser(AppUser appUser) async => _service.updateDoc(
         path: FirestorePath.appUser(appUser.id!),
         data: appUser.toJson(),
       );
@@ -53,15 +52,32 @@ class FirestoreDatabase {
         path: FirestorePath.post(post.id),
         data: post.toJson(),
       );
+  Future<DocumentReference<Map<String, dynamic>>> setComment(Comment comment) =>
+      _service.addData(
+        path: FirestorePath.comments(comment.postId),
+        data: comment.toJson(),
+      );
+
+  Future<void> updateComment(Comment comment) => _service.updateDoc(
+        path: FirestorePath.comment(comment.postId, comment.id!),
+        data: comment.toJson(),
+      );
+  Future<void> deleteComment(Comment comment) => _service.deleteData(
+      path: FirestorePath.comment(comment.postId, comment.id!));
 
   Stream<List<Post>> postsStream() => _service.collectionStream(
         path: FirestorePath.posts(),
+        queryBuilder: (query) =>
+            query.orderBy('timestamp', descending: true).limit(50),
         builder: (data, documentId) => Post.fromJson(data!),
       );
-  // Future<void> setJob(Job job) => _service.setData(
-  //       path: FirestorePath.job(appUser!.id, job.id),
-  //       data: job.toMap(),
-  //     );
+
+  Stream<List<Comment>> commentsStream(Post post) =>
+      _service.collectionStream<Comment>(
+        path: FirestorePath.comments(post.id),
+        queryBuilder: (query) => query.where('postId', isEqualTo: post.id),
+        builder: (data, documentId) => Comment.fromJson(data!),
+      );
 
   // Future<void> deleteJob(Job job) async {
   //   // delete where entry.jobId == job.jobId
@@ -79,19 +95,6 @@ class FirestoreDatabase {
   //       path: FirestorePath.job(appUser!.id, jobId),
   //       builder: (data, documentId) => Job.fromMap(data, documentId),
   //     );
-
-  // Stream<List<Job>> jobsStream() => _service.collectionStream(
-  //       path: FirestorePath.jobs(appUser!.id),
-  //       builder: (data, documentId) => Job.fromMap(data, documentId),
-  //     );
-
-  // Future<void> setEntry(Entry entry) => _service.setData(
-  //       path: FirestorePath.entry(appUser!.id, entry.id),
-  //       data: entry.toMap(),
-  //     );
-
-  // Future<void> deleteEntry(Entry entry) =>
-  //     _service.deleteData(path: FirestorePath.entry(appUser!.id, entry.id));
 
   // Stream<List<Entry>> entriesStream({Job? job}) =>
   //     _service.collectionStream<Entry>(
