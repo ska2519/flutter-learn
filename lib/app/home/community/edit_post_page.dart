@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_learn/routes/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -8,15 +10,22 @@ import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 
-class PostPage extends StatefulWidget {
-  const PostPage({this.post});
+class EditPostPage extends StatefulWidget {
+  const EditPostPage({this.post});
   final Post? post;
 
+  static Future<dynamic> show(BuildContext context, {Post? post}) async {
+    await Navigator.of(context, rootNavigator: true).pushNamed(
+      AppRoutes.editPostPage,
+      arguments: post,
+    );
+  }
+
   @override
-  _PostPageState createState() => _PostPageState();
+  _EditPostPageState createState() => _EditPostPageState();
 }
 
-class _PostPageState extends State<PostPage> {
+class _EditPostPageState extends State<EditPostPage> {
   late String _title;
   late String _content;
 
@@ -28,23 +37,26 @@ class _PostPageState extends State<PostPage> {
   }
 
   Post _postFromState() {
-    final authStateChanges = context.read(appUserStreamProvider);
-    final currentDate = widget.post?.id ?? documentIdFromCurrentDate();
-    final id = authStateChanges.data!.value!.id;
-    final displayName = authStateChanges.data!.value!.displayName!;
-    final postId = '$currentDate:$id';
+    final appUserStream = context.read(appUserStreamProvider);
+    final appUser = appUserStream.data!.value!;
+    final currentDate = documentIdFromCurrentDate();
+    final displayName = appUserStream.data!.value!.displayName!;
+    final postId = '$currentDate:${appUser.id}';
     final now = DateTime.now();
+    final timestamp =
+        widget.post == null ? <DateTime>{now} : widget.post!.timestamp!;
+    timestamp.add(now);
     return Post(
       id: postId,
-      userId: id!,
+      userId: appUser.id!,
       displayName: displayName,
       title: _title,
       content: _content,
-      timestamp: now,
+      timestamp: timestamp,
     );
   }
 
-  Future<void> newPost(BuildContext context, String title, String text) async {
+  Future<void> _newPost(BuildContext context, String title, String text) async {
     try {
       final database = context.read(databaseProvider);
       final post = _postFromState();
@@ -53,8 +65,9 @@ class _PostPageState extends State<PostPage> {
         return;
       }
       await database.setPost(post);
-
-      Navigator.of(context).pop();
+      Navigator.pop(context, 'yep');
+      // PostsPage.show(context);
+      //await Navigator.popAndPushNamed(context, AppRoutes.postsPage);
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
@@ -62,7 +75,6 @@ class _PostPageState extends State<PostPage> {
         exception: e,
       ));
     }
-    //posts.add(post);
   }
 
   void showPreventPostSnackBar(BuildContext context, String postTitle) =>
@@ -91,7 +103,7 @@ class _PostPageState extends State<PostPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () => newPost(context, _title, _content),
+            onPressed: () => _newPost(context, _title, _content),
             child: Text(
               'Post',
               style: Theme.of(context)
@@ -112,12 +124,16 @@ class _PostPageState extends State<PostPage> {
               decoration: InputDecoration(
                 hintText: 'Title',
                 hintStyle: Theme.of(context).textTheme.button!.copyWith(
-                    fontWeight: FontWeight.bold, color: Colors.black38),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black38,
+                    ),
               ),
             ),
-            TextFormField(
+            TextField(
               controller: TextEditingController(text: _content),
-              onChanged: (body) => _content = body,
+              onChanged: (content) => _content = content,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintMaxLines: 5,
