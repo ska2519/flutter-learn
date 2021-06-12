@@ -26,7 +26,7 @@ class _$PostTearOff {
       required String displayName,
       required String title,
       required String content,
-      @TimestampConverter() required DateTime timestamp,
+      @TimestampConverter() Set<DateTime>? timestamp,
       Set<dynamic> usersLiked = const {}}) {
     return _Post(
       id: id,
@@ -53,9 +53,10 @@ mixin _$Post {
   String get userId => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String get content => throw _privateConstructorUsedError;
+  String get content =>
+      throw _privateConstructorUsedError; //@Default(<DateTime>{})
   @TimestampConverter()
-  DateTime get timestamp =>
+  Set<DateTime>? get timestamp =>
       throw _privateConstructorUsedError; //required DocumentReference reference,
   Set<dynamic> get usersLiked => throw _privateConstructorUsedError;
 
@@ -74,7 +75,7 @@ abstract class $PostCopyWith<$Res> {
       String displayName,
       String title,
       String content,
-      @TimestampConverter() DateTime timestamp,
+      @TimestampConverter() Set<DateTime>? timestamp,
       Set<dynamic> usersLiked});
 }
 
@@ -120,7 +121,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
       timestamp: timestamp == freezed
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as Set<DateTime>?,
       usersLiked: usersLiked == freezed
           ? _value.usersLiked
           : usersLiked // ignore: cast_nullable_to_non_nullable
@@ -140,7 +141,7 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       String displayName,
       String title,
       String content,
-      @TimestampConverter() DateTime timestamp,
+      @TimestampConverter() Set<DateTime>? timestamp,
       Set<dynamic> usersLiked});
 }
 
@@ -187,7 +188,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
       timestamp: timestamp == freezed
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as Set<DateTime>?,
       usersLiked: usersLiked == freezed
           ? _value.usersLiked
           : usersLiked // ignore: cast_nullable_to_non_nullable
@@ -205,7 +206,7 @@ class _$_Post extends _Post {
       required this.displayName,
       required this.title,
       required this.content,
-      @TimestampConverter() required this.timestamp,
+      @TimestampConverter() this.timestamp,
       this.usersLiked = const {}})
       : super._();
 
@@ -222,9 +223,9 @@ class _$_Post extends _Post {
   final String title;
   @override
   final String content;
-  @override
+  @override //@Default(<DateTime>{})
   @TimestampConverter()
-  final DateTime timestamp;
+  final Set<DateTime>? timestamp;
   @JsonKey(defaultValue: const {})
   @override //required DocumentReference reference,
   final Set<dynamic> usersLiked;
@@ -287,7 +288,7 @@ abstract class _Post extends Post {
       required String displayName,
       required String title,
       required String content,
-      @TimestampConverter() required DateTime timestamp,
+      @TimestampConverter() Set<DateTime>? timestamp,
       Set<dynamic> usersLiked}) = _$_Post;
   const _Post._() : super._();
 
@@ -303,9 +304,9 @@ abstract class _Post extends Post {
   String get title => throw _privateConstructorUsedError;
   @override
   String get content => throw _privateConstructorUsedError;
-  @override
+  @override //@Default(<DateTime>{})
   @TimestampConverter()
-  DateTime get timestamp => throw _privateConstructorUsedError;
+  Set<DateTime>? get timestamp => throw _privateConstructorUsedError;
   @override //required DocumentReference reference,
   Set<dynamic> get usersLiked => throw _privateConstructorUsedError;
   @override
