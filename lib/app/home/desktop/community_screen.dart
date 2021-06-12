@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_learn/app/home/community/community_page.dart';
+import 'package:flutter_learn/app/home/community/posts_page.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/storage_details.dart';
 
 import 'package:flutter_learn/constants/constants.dart';
@@ -22,7 +22,7 @@ class CommunityScreen extends StatelessWidget {
             Expanded(
               // It takes 5/6 part of the screen
               flex: 5,
-              child: CommunityPage(),
+              child: PostsPage(),
             ),
             const SizedBox(width: defaultPadding),
             const Expanded(
