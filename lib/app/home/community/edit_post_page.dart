@@ -14,7 +14,7 @@ class EditPostPage extends StatefulWidget {
   const EditPostPage({this.post});
   final Post? post;
 
-  static Future<void> show(BuildContext context, {Post? post}) async {
+  static Future<dynamic> show(BuildContext context, {Post? post}) async {
     await Navigator.of(context, rootNavigator: true).pushNamed(
       AppRoutes.editPostPage,
       arguments: post,
@@ -65,8 +65,9 @@ class _EditPostPageState extends State<EditPostPage> {
         return;
       }
       await database.setPost(post);
-
-      Navigator.of(context).pop();
+      Navigator.pop(context, 'yep');
+      // PostsPage.show(context);
+      //await Navigator.popAndPushNamed(context, AppRoutes.postsPage);
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
@@ -130,7 +131,7 @@ class _EditPostPageState extends State<EditPostPage> {
             ),
             TextField(
               controller: TextEditingController(text: _content),
-              onChanged: (body) => _content = body,
+              onChanged: (content) => _content = content,
               keyboardType: TextInputType.multiline,
               maxLines: null,
               decoration: InputDecoration(

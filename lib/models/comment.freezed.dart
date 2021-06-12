@@ -21,11 +21,13 @@ class _$CommentTearOff {
   const _$CommentTearOff();
 
   _Comment call(
-      {required String text,
+      {String? id,
+      required String text,
       required String postId,
       required String userId,
-      @TimestampConverter() Set<DateTime>? timestamp}) {
+      @TimestampConverter() Set<DateTime>? timestamp = const <DateTime>{}}) {
     return _Comment(
+      id: id,
       text: text,
       postId: postId,
       userId: userId,
@@ -43,10 +45,10 @@ const $Comment = _$CommentTearOff();
 
 /// @nodoc
 mixin _$Comment {
+  String? get id => throw _privateConstructorUsedError; //Parent? parent,
   String get text => throw _privateConstructorUsedError;
   String get postId => throw _privateConstructorUsedError;
-  String get userId =>
-      throw _privateConstructorUsedError; //@Default(<DateTime>{})
+  String get userId => throw _privateConstructorUsedError;
   @TimestampConverter()
   Set<DateTime>? get timestamp => throw _privateConstructorUsedError;
 
@@ -60,7 +62,8 @@ abstract class $CommentCopyWith<$Res> {
   factory $CommentCopyWith(Comment value, $Res Function(Comment) then) =
       _$CommentCopyWithImpl<$Res>;
   $Res call(
-      {String text,
+      {String? id,
+      String text,
       String postId,
       String userId,
       @TimestampConverter() Set<DateTime>? timestamp});
@@ -76,12 +79,17 @@ class _$CommentCopyWithImpl<$Res> implements $CommentCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? text = freezed,
     Object? postId = freezed,
     Object? userId = freezed,
     Object? timestamp = freezed,
   }) {
     return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       text: text == freezed
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
@@ -108,7 +116,8 @@ abstract class _$CommentCopyWith<$Res> implements $CommentCopyWith<$Res> {
       __$CommentCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String text,
+      {String? id,
+      String text,
       String postId,
       String userId,
       @TimestampConverter() Set<DateTime>? timestamp});
@@ -125,12 +134,17 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? text = freezed,
     Object? postId = freezed,
     Object? userId = freezed,
     Object? timestamp = freezed,
   }) {
     return _then(_Comment(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       text: text == freezed
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
@@ -155,33 +169,39 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Comment implements _Comment {
   const _$_Comment(
-      {required this.text,
+      {this.id,
+      required this.text,
       required this.postId,
       required this.userId,
-      @TimestampConverter() this.timestamp});
+      @TimestampConverter() this.timestamp = const <DateTime>{}});
 
   factory _$_Comment.fromJson(Map<String, dynamic> json) =>
       _$_$_CommentFromJson(json);
 
   @override
+  final String? id;
+  @override //Parent? parent,
   final String text;
   @override
   final String postId;
   @override
   final String userId;
-  @override //@Default(<DateTime>{})
+  @JsonKey(defaultValue: const <DateTime>{})
+  @override
   @TimestampConverter()
   final Set<DateTime>? timestamp;
 
   @override
   String toString() {
-    return 'Comment(text: $text, postId: $postId, userId: $userId, timestamp: $timestamp)';
+    return 'Comment(id: $id, text: $text, postId: $postId, userId: $userId, timestamp: $timestamp)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _Comment &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.text, text) ||
                 const DeepCollectionEquality().equals(other.text, text)) &&
             (identical(other.postId, postId) ||
@@ -196,6 +216,7 @@ class _$_Comment implements _Comment {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(text) ^
       const DeepCollectionEquality().hash(postId) ^
       const DeepCollectionEquality().hash(userId) ^
@@ -214,7 +235,8 @@ class _$_Comment implements _Comment {
 
 abstract class _Comment implements Comment {
   const factory _Comment(
-      {required String text,
+      {String? id,
+      required String text,
       required String postId,
       required String userId,
       @TimestampConverter() Set<DateTime>? timestamp}) = _$_Comment;
@@ -222,12 +244,14 @@ abstract class _Comment implements Comment {
   factory _Comment.fromJson(Map<String, dynamic> json) = _$_Comment.fromJson;
 
   @override
+  String? get id => throw _privateConstructorUsedError;
+  @override //Parent? parent,
   String get text => throw _privateConstructorUsedError;
   @override
   String get postId => throw _privateConstructorUsedError;
   @override
   String get userId => throw _privateConstructorUsedError;
-  @override //@Default(<DateTime>{})
+  @override
   @TimestampConverter()
   Set<DateTime>? get timestamp => throw _privateConstructorUsedError;
   @override
