@@ -17,7 +17,7 @@ class Post with _$Post {
     required String displayName,
     required String title,
     required String content,
-    //@Default(<DateTime>{})
+    @Default(0) int commentCount,
     @TimestampConverter() Set<DateTime>? timestamp,
     //required DocumentReference reference,
     @Default({}) Set usersLiked,

@@ -37,26 +37,19 @@ class FirestoreService {
   }) async =>
       FirebaseFirestore.instance.doc(path).update(data);
 
-  // .then((DocumentSnapshot doc) => doc.data() as Map<String, dynamic>?);
-  //   Future<void> setTransaction({
-  //   required String firstPath,
-  //   required String secondPath,
-  //   required Map<String, dynamic> data,
-  //   bool merge = false,
-  // }) async {
-  //   final firstTransactionRef = FirebaseFirestore.instance.doc(firstPath);
-  //   final secondTransactionRef = FirebaseFirestore.instance.doc(secondPath);
-  //   final reference =
-  //       FirebaseFirestore.instance.runTransaction((transaction) {
-  //         return transaction
-  //       .get(firstTransactionRef)
-  //       .then((DocumentSnapshot doc) => Restaurant.fromSnapshot(doc))
-  //       .then((Restaurant fresh) {}
-  //       });
-
-  //   print('setData finish');
-  //   await reference.set(data, SetOptions(merge: merge));
-  // }
+  Future<void> setTransaction({
+    required String firstPath,
+    required String secondPath,
+    required Map<String, dynamic> firstData,
+    required Map<String, dynamic> secondData,
+  }) async {
+    final firstTransactionRef = FirebaseFirestore.instance.doc(firstPath);
+    final secondTransactionRef = FirebaseFirestore.instance.doc(secondPath);
+    FirebaseFirestore.instance.runTransaction((transaction) async {
+      transaction.set(firstTransactionRef, firstData);
+      transaction.update(secondTransactionRef, secondData);
+    });
+  }
 
   Future<void> deleteData({required String path}) async {
     final reference = FirebaseFirestore.instance.doc(path);
