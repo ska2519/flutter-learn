@@ -32,6 +32,10 @@ class FirestoreDatabase {
       .getDoc(path: FirestorePath.appUser(uid))
       .then((appUser) => appUser == null ? null : AppUser.fromJson(appUser));
 
+  Future<Post?> getPost(String postId) async => _service
+      .getDoc(path: FirestorePath.post(postId))
+      .then((post) => post == null ? null : Post.fromJson(post));
+
   Future<void> setAppUser(User user) async => _service.setData(
         path: FirestorePath.appUser(user.uid),
         data: AppUser(
@@ -52,6 +56,13 @@ class FirestoreDatabase {
         path: FirestorePath.post(post.id),
         data: post.toJson(),
       );
+
+  Future<void> updatePost(Post post) => _service.setData(
+        path: FirestorePath.post(post.id),
+        data: post.toJson(),
+        merge: true,
+      );
+
   Future<DocumentReference<Map<String, dynamic>>> setComment(Comment comment) =>
       _service.addData(
         path: FirestorePath.comments(comment.postId),
@@ -62,20 +73,30 @@ class FirestoreDatabase {
         path: FirestorePath.comment(comment.postId, comment.id!),
         data: comment.toJson(),
       );
+  Future<void> transactionComment(Comment comment, Post post) =>
+      _service.setTransaction(
+        firstPath: FirestorePath.comment(comment.postId, comment.id!),
+        secondPath: FirestorePath.post(comment.postId),
+        firstData: comment.toJson(),
+        secondData: post.toJson(),
+      );
   Future<void> deleteComment(Comment comment) => _service.deleteData(
       path: FirestorePath.comment(comment.postId, comment.id!));
 
   Stream<List<Post>> postsStream() => _service.collectionStream(
         path: FirestorePath.posts(),
         queryBuilder: (query) =>
-            query.orderBy('timestamp', descending: true).limit(50),
+            query.orderBy('timestamp', descending: true).limit(20),
         builder: (data, documentId) => Post.fromJson(data!),
       );
 
   Stream<List<Comment>> commentsStream(Post post) =>
       _service.collectionStream<Comment>(
         path: FirestorePath.comments(post.id),
-        queryBuilder: (query) => query.where('postId', isEqualTo: post.id),
+        queryBuilder: (query) => query
+            .where('postId', isEqualTo: post.id)
+            // .orderBy('timestamp', descending: true)
+            .limit(20),
         builder: (data, documentId) => Comment.fromJson(data!),
       );
 

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -13,6 +14,8 @@ import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
+
+import 'format.dart';
 
 final commentsStreamProvider =
     StreamProvider.autoDispose.family<List<Comment>, Post>((ref, post) {
@@ -36,8 +39,9 @@ class PostDetailPage extends StatefulHookWidget {
 }
 
 class _PostDetailPageState extends State<PostDetailPage> {
+  final formKey = GlobalKey<FormFieldState<String>>();
   late TextEditingController _textEditingController;
-  late FocusNode _focusNode;
+  late FocusNode focusNode;
   late Post post;
   Comment? editComment;
   String _commentText = '';
@@ -46,46 +50,51 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void initState() {
     super.initState();
     _textEditingController = TextEditingController();
-    _focusNode = FocusNode();
+    focusNode = FocusNode();
     post = widget.post;
   }
 
   @override
   void dispose() {
-    _focusNode.dispose();
+    focusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final appUserStream = useProvider(appUserStreamProvider);
     final commentsStream = useProvider(commentsStreamProvider(widget.post));
     final database = useProvider(databaseProvider);
-    final appUser = appUserStream.data?.value;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Row(
-          children: [
-            Avatar(photoUrl: appUser?.photoURL, radius: 19),
-            SizedBox(width: defaultPadding),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  post.displayName,
-                  maxLines: 1,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                Text(
-                  post.timestamp.toString(),
-                  style: Theme.of(context).textTheme.overline,
-                )
-              ],
-            ),
-          ],
+        titleSpacing: 0,
+        title: FutureBuilder<AppUser?>(
+          future: database.getAppUser(post.userId),
+          builder: (context, postUser) => Row(
+            children: [
+              Avatar(
+                  photoUrl: postUser.data?.photoURL,
+                  displayName: postUser.data?.displayName,
+                  radius: 19),
+              SizedBox(width: defaultPadding),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    post.displayName,
+                    maxLines: 1,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  Text(
+                    Format.duration(post.timestamp!.last),
+                    style: Theme.of(context).textTheme.overline,
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -223,8 +232,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: CupertinoTextField(
+                    key: formKey,
                     placeholder: 'Write a Comment',
-                    focusNode: _focusNode,
+                    focusNode: focusNode,
                     controller: _textEditingController,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
@@ -235,7 +245,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     suffix: TextButton(
                       onPressed: () {
                         _submitComment(post: post);
-                        _focusNode.unfocus();
+                        focusNode.unfocus();
                         _textEditingController.clear();
                       },
                       child: Text('POST'),
@@ -275,10 +285,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
         return;
       }
       if (editComment == null) {
-        final reference = await database.setComment(comment);
-        await database.updateComment(
-          comment.copyWith(id: reference.id),
-        );
+        //final DocumentReference reference =
+        await database.setComment(comment);
+        // await database.updateComment(comment.copyWith(id: reference.id));
+        final nowPost = await database.getPost(post.id);
+        if (nowPost != null) {
+          await database.updatePost(
+              nowPost.copyWith(commentCount: nowPost.commentCount + 1));
+        }
       } else {
         await database.updateComment(comment);
       }
@@ -294,7 +308,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void _editComment(Comment comment) {
     _textEditingController.text = comment.text;
     editComment = comment;
-    _focusNode.requestFocus();
+    focusNode.requestFocus();
     _textEditingController.selection = TextSelection.fromPosition(
         TextPosition(offset: _textEditingController.text.length));
   }
