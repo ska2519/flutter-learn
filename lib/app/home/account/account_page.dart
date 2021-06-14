@@ -103,7 +103,7 @@ class _AccountPageState extends State<AccountPage> {
               ),
             ],
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(size.height * 0.25),
+              preferredSize: Size.fromHeight(size.height * 0.27),
               child: _buildUserInfo(appUser, context),
             ),
           ),
@@ -128,6 +128,7 @@ class _AccountPageState extends State<AccountPage> {
       children: [
         Avatar(
           photoUrl: appUser?.photoURL,
+          displayName: appUser?.displayName,
           radius: 50,
           borderColor: Colors.black54,
           borderWidth: 1.0,
@@ -137,8 +138,8 @@ class _AccountPageState extends State<AccountPage> {
           onPressed: appUser == null
               ? null
               : () => displayNameUpdateDialog(context, appUser).then(
-                    (isOk) {
-                      if (isOk is bool) {
+                    (value) {
+                      if (value == true) {
                         final database = context.read(databaseProvider);
                         database.updateAppUser(
                           appUser.copyWith(displayName: _displayName),
