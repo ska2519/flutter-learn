@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,7 +72,7 @@ class SignInPageContents extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.16),
+        preferredSize: Size.fromHeight(size.height * 0.2),
         child: AppBar(
           backgroundColor: Colors.transparent,
           iconTheme: IconThemeData(color: flutterPrimaryColor),
@@ -138,14 +138,16 @@ class SignInPageContents extends StatelessWidget {
                     : () => _showEmailPasswordSignInPage(context),
               ),
               const SizedBox(height: defaultPadding),
-              // SignInButton(
-              //   key: anonymousButtonKey,
-              //   text: Strings.goAnonymous,
-              //   color: Theme.of(context).primaryColor,
-              //   textColor: Colors.white,
-              //   onPressed:
-              //       viewModel.isLoading ? null : viewModel.signInAnonymously,
-              // ),
+              if (!kIsWeb)
+                SocialSignInButton(
+                  svgAssetName: 'assets/icons/btn_apple_white.svg',
+                  text: 'Sign in with Apple',
+                  textStyle: TextStyle(fontWeight: FontWeight.w500),
+                  color: Colors.white,
+                  onPressed:
+                      viewModel.isLoading ? null : viewModel.signInWithApple,
+                ),
+              if (!kIsWeb) const SizedBox(height: defaultPadding),
               SocialSignInButton(
                 svgAssetName: 'assets/icons/google_logo.svg',
                 text: 'Sign in with Google',
@@ -155,15 +157,6 @@ class SignInPageContents extends StatelessWidget {
                     viewModel.isLoading ? null : viewModel.signInWithGoogle,
               ),
               const SizedBox(height: defaultPadding),
-              // if (!kIsWeb && Platform.isIOS)
-              SocialSignInButton(
-                svgAssetName: 'assets/icons/btn_apple_white.svg',
-                text: 'Sign in with Apple',
-                textStyle: TextStyle(fontWeight: FontWeight.w500),
-                color: Colors.white,
-                onPressed:
-                    viewModel.isLoading ? null : viewModel.signInWithApple,
-              )
             ],
           ),
         );

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
@@ -38,151 +39,154 @@ class PostsPage extends HookWidget {
     final appUser = appUserStream.data?.value;
     final AsyncValue<List<Post>> postsAsyncValue =
         useProvider(postsStreamProvider);
-    return RefreshIndicator(
-      onRefresh: () async {
-        context.refresh(postsStreamProvider);
-      },
-      child: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: 120.0,
-            floating: true,
-            actions: [
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {},
-              ),
-              IconButton(
-                  icon: Icon(Icons.create),
-                  onPressed: () => EditPostPage.show(context))
-            ],
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: false,
-              titlePadding: EdgeInsetsDirectional.only(
-                start: defaultPadding,
-                bottom: defaultPadding,
-              ),
-              title: Text(
-                '😎 ${AppLocalizations.of(context)?.community}',
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle1!
-                    .copyWith(color: Colors.white),
-              ),
+
+    return CustomScrollView(
+      physics:
+          const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      slivers: [
+        SliverAppBar(
+          pinned: true,
+          expandedHeight: 120.0,
+          floating: true,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.create),
+              onPressed: () => appUser == null
+                  ? SignInPage.show(context)
+                  : EditPostPage.show(context),
+            )
+          ],
+          flexibleSpace: FlexibleSpaceBar(
+            centerTitle: false,
+            titlePadding: EdgeInsetsDirectional.only(
+              start: defaultPadding,
+              bottom: defaultPadding,
+            ),
+            title: Text(
+              '😎 ${AppLocalizations.of(context)?.community}',
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle1!
+                  .copyWith(color: Colors.white),
             ),
           ),
-          postsAsyncValue.when(
-            data: (items) => items.isNotEmpty
-                ? SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final post = items[index];
-                        return
-                            //Text(post.title);
-                            //     PostListItem(
-                            //   post: post,
-                            //   onTap: () => PostDetailPage.show(context, post: post),
-                            // );
-                            InkWell(
-                          onTap: () => PostDetailPage.show(context, post: post),
-                          child: Padding(
-                            padding: const EdgeInsets.all(defaultPadding * 2),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                PostUserInfo(post: post),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: defaultPadding),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        post.title,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2,
-                                      ),
-                                      SizedBox(height: defaultPadding),
-                                      SelectableText(
-                                        post.content,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Row(
+        ),
+        CupertinoSliverRefreshControl(
+          onRefresh: () async => context.refresh(postsStreamProvider),
+        ),
+        postsAsyncValue.when(
+          data: (items) => items.isNotEmpty
+              ? SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final post = items[index];
+
+                      return
+                          //Text(post.title);
+                          //     PostListItem(
+                          //   post: post,
+                          //   onTap: () => PostDetailPage.show(context, post: post),
+                          // );
+                          InkWell(
+                        onTap: () => PostDetailPage.show(context, post: post),
+                        child: Padding(
+                          padding: const EdgeInsets.all(defaultPadding * 2),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              PostUserInfo(post: post),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: defaultPadding),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    IconButton(
-                                      padding: EdgeInsets.all(0),
-                                      alignment: Alignment.centerLeft,
-                                      constraints:
-                                          BoxConstraints.tight(Size(25, 17)),
-                                      iconSize: 19,
-                                      color:
-                                          post.usersLiked.contains(appUser?.id)
-                                              ? Colors.red
-                                              : Colors.grey,
-                                      disabledColor: Colors.black,
-                                      icon: Icon(
-                                        post.usersLiked.contains(appUser?.id)
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                      ),
-                                      onPressed: () => _likePost(context, post),
-                                    ),
                                     Text(
-                                      post.usersLiked.isNotEmpty
-                                          ? post.usersLiked.length.toString()
-                                          : '좋아요',
+                                      post.title,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                       style:
-                                          Theme.of(context).textTheme.caption,
+                                          Theme.of(context).textTheme.subtitle2,
                                     ),
-                                    SizedBox(width: defaultPadding * 2),
-                                    IconButton(
-                                      padding: EdgeInsets.all(0),
-                                      alignment: Alignment.centerLeft,
-                                      constraints:
-                                          BoxConstraints.tight(Size(25, 15.5)),
-                                      iconSize: 18,
-                                      color: Colors.grey,
-                                      disabledColor: Colors.black,
-                                      icon: Icon(Icons.mode_comment_outlined),
-                                      onPressed: () {},
-                                    ),
+                                    SizedBox(height: defaultPadding),
                                     Text(
-                                      '댓글',
+                                      post.content,
                                       style:
-                                          Theme.of(context).textTheme.caption,
+                                          Theme.of(context).textTheme.bodyText2,
                                     ),
                                   ],
-                                )
-                              ],
-                            ),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    padding: EdgeInsets.all(0),
+                                    alignment: Alignment.centerLeft,
+                                    constraints:
+                                        BoxConstraints.tight(Size(25, 17)),
+                                    iconSize: 19,
+                                    color: post.usersLiked.contains(appUser?.id)
+                                        ? Colors.red
+                                        : Colors.grey,
+                                    disabledColor: Colors.black,
+                                    icon: Icon(
+                                      post.usersLiked.contains(appUser?.id)
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                    ),
+                                    onPressed: () => _likePost(context, post),
+                                  ),
+                                  Text(
+                                    post.usersLiked.isNotEmpty
+                                        ? post.usersLiked.length.toString()
+                                        : '좋아요',
+                                    style: Theme.of(context).textTheme.caption,
+                                  ),
+                                  SizedBox(width: defaultPadding * 2),
+                                  IconButton(
+                                    padding: EdgeInsets.all(0),
+                                    alignment: Alignment.centerLeft,
+                                    constraints:
+                                        BoxConstraints.tight(Size(25, 15.5)),
+                                    iconSize: 18,
+                                    color: Colors.grey,
+                                    disabledColor: Colors.black,
+                                    icon: Icon(Icons.mode_comment_outlined),
+                                    onPressed: () => PostDetailPage.show(
+                                        context,
+                                        post: post),
+                                  ),
+                                  Text(
+                                    post.commentCount > 0
+                                        ? post.commentCount.toString()
+                                        : '댓글',
+                                    style: Theme.of(context).textTheme.caption,
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
-                        );
-                      },
-                      childCount: items.length,
-                    ),
-                  )
-                : SliverToBoxAdapter(child: const EmptyContent()),
-            loading: () => SliverToBoxAdapter(
-                child: const Center(child: CircularProgressIndicator())),
-            error: (_, __) => SliverToBoxAdapter(
-              child: const EmptyContent(
-                title: 'Something went wrong',
-                message: "Can't load items right now",
-              ),
+                        ),
+                      );
+                    },
+                    childCount: items.length,
+                  ),
+                )
+              : SliverToBoxAdapter(child: const EmptyContent()),
+          loading: () => SliverToBoxAdapter(
+              child: const Center(child: CircularProgressIndicator())),
+          error: (_, __) => SliverToBoxAdapter(
+            child: const EmptyContent(
+              title: 'Something went wrong',
+              message: "Can't load items right now",
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
