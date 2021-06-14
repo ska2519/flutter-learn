@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/app/widgets/avatar.dart';
 import 'package:flutter_learn/constants/constants.dart';
@@ -7,7 +9,8 @@ import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'format.dart';
 
 class PostListItem extends StatefulHookWidget {
   const PostListItem({
@@ -121,7 +124,7 @@ class _PostListItemState extends State<PostListItem> {
                   onPressed: () {},
                 ),
                 Text(
-                  '댓글',
+                  post.commentCount > 0 ? post.commentCount.toString() : '댓글',
                   style: Theme.of(context).textTheme.caption,
                 ),
               ],
@@ -152,7 +155,11 @@ class PostUserInfo extends HookWidget {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Avatar(photoUrl: postUser?.photoURL, radius: 19),
+              Avatar(
+                photoUrl: postUser?.photoURL,
+                displayName: postUser?.displayName,
+                radius: 19,
+              ),
               SizedBox(width: defaultPadding),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +169,7 @@ class PostUserInfo extends HookWidget {
                     style: Theme.of(context).textTheme.subtitle2,
                   ),
                   Text(
-                    '${DateTime.now().difference(post.timestamp!.last).inMinutes} min',
+                    Format.duration(post.timestamp!.last),
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ],
