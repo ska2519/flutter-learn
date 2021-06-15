@@ -6,6 +6,7 @@ import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/side_menu.dart';
 import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
 import 'package:flutter_learn/models/post.dart';
+import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -54,18 +55,21 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appUser = useProvider(appUserProvider);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        mini: true,
-        onPressed: _submitMockPosts,
-        child: Text(
-          'Test',
-          style: Theme.of(context)
-              .textTheme
-              .subtitle2!
-              .copyWith(color: Colors.white),
-        ),
-      ),
+      floatingActionButton: appUser.id == '7ytll7EosoUNI8Ix2hpPf8ZR3rH3'
+          ? FloatingActionButton(
+              mini: true,
+              onPressed: _submitMockPosts,
+              child: Text(
+                'Test',
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle2!
+                    .copyWith(color: Colors.white),
+              ),
+            )
+          : null,
       key: context.read(menuControllerProvider).scaffoldKey,
       drawer: Responsive.isDesktop(context) ? const SideMenu() : null,
       body: Responsive.isDesktop(context)
