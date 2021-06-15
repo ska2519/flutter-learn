@@ -163,7 +163,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                     children: [
                                       Text(
                                         commentUser!.displayName!,
-                                        maxLines: 1,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyText1,
