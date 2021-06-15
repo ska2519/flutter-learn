@@ -178,7 +178,8 @@ class PostsPage extends HookWidget {
                 )
               : SliverToBoxAdapter(child: const EmptyContent()),
           loading: () => SliverToBoxAdapter(
-              child: const Center(child: CupertinoActivityIndicator())),
+              // child: const Center(child: CupertinoActivityIndicator()),
+              ),
           error: (_, __) => SliverToBoxAdapter(
             child: const EmptyContent(
               title: 'Something went wrong',
