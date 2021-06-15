@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_learn/app/home/community/post_detail_page.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
@@ -62,10 +63,14 @@ class _EditPostPageState extends State<EditPostPage> {
         showPreventPostSnackBar(context, post.title);
         return;
       }
+      if (widget.post != null) {
+        await database.updatePost(post);
+        Navigator.pop(context);
+        return PostDetailPage.show(context, post: post);
+      }
       await database.setPost(post);
-      Navigator.pop(context, 'yep');
-      // PostsPage.show(context);
-      //await Navigator.popAndPushNamed(context, AppRoutes.postsPage);
+      Navigator.pop(context);
+      PostDetailPage.show(context, post: post);
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
