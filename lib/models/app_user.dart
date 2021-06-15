@@ -25,9 +25,11 @@ class AppUserNotifier extends StateNotifier<AppUser> {
   // ignore: use_setters_to_change_properties
   void login(AppUser appUser) {
     state = appUser;
+    print('login: state = appUser');
   }
 
   void logout() {
     state = AppUser();
+    print('logout: state = AppUser()');
   }
 }
