@@ -74,8 +74,8 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final appUserStream = useProvider(appUserStreamProvider);
-    return appUserStream.when(
+    final appUserAsyncValue = useProvider(appUserStreamProvider);
+    return appUserAsyncValue.when(
       data: (appUser) {
         print('AccountPage appUser.displayName: ${appUser?.displayName}');
         return Scaffold(
