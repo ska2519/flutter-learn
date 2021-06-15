@@ -12,7 +12,7 @@ class AppUser with _$AppUser {
     String? email,
     String? photoURL,
     String? displayName,
-    @TimestampConverter() Set<DateTime>? timestamp,
+    @TimestampsConverter() Set<DateTime>? timestamp,
   }) = _AppUser;
 
   factory AppUser.fromJson(Map<String, dynamic> json) =>
