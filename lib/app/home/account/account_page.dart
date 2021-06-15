@@ -111,7 +111,7 @@ class _AccountPageState extends State<AccountPage> {
       },
       loading: () => const Scaffold(
         body: Center(
-          child: CircularProgressIndicator(),
+          child: CupertinoActivityIndicator(),
         ),
       ),
       error: (_, __) => const Scaffold(

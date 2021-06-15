@@ -25,7 +25,7 @@ class _$AppUserTearOff {
       String? email,
       String? photoURL,
       String? displayName,
-      @TimestampConverter() Set<DateTime>? timestamp}) {
+      @TimestampsConverter() Set<DateTime>? timestamp}) {
     return _AppUser(
       id: id,
       email: email,
@@ -49,7 +49,7 @@ mixin _$AppUser {
   String? get email => throw _privateConstructorUsedError;
   String? get photoURL => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
-  @TimestampConverter()
+  @TimestampsConverter()
   Set<DateTime>? get timestamp => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -66,7 +66,7 @@ abstract class $AppUserCopyWith<$Res> {
       String? email,
       String? photoURL,
       String? displayName,
-      @TimestampConverter() Set<DateTime>? timestamp});
+      @TimestampsConverter() Set<DateTime>? timestamp});
 }
 
 /// @nodoc
@@ -120,7 +120,7 @@ abstract class _$AppUserCopyWith<$Res> implements $AppUserCopyWith<$Res> {
       String? email,
       String? photoURL,
       String? displayName,
-      @TimestampConverter() Set<DateTime>? timestamp});
+      @TimestampsConverter() Set<DateTime>? timestamp});
 }
 
 /// @nodoc
@@ -173,7 +173,7 @@ class _$_AppUser implements _AppUser {
       this.email,
       this.photoURL,
       this.displayName,
-      @TimestampConverter() this.timestamp});
+      @TimestampsConverter() this.timestamp});
 
   factory _$_AppUser.fromJson(Map<String, dynamic> json) =>
       _$_$_AppUserFromJson(json);
@@ -187,7 +187,7 @@ class _$_AppUser implements _AppUser {
   @override
   final String? displayName;
   @override
-  @TimestampConverter()
+  @TimestampsConverter()
   final Set<DateTime>? timestamp;
 
   @override
@@ -240,7 +240,7 @@ abstract class _AppUser implements AppUser {
       String? email,
       String? photoURL,
       String? displayName,
-      @TimestampConverter() Set<DateTime>? timestamp}) = _$_AppUser;
+      @TimestampsConverter() Set<DateTime>? timestamp}) = _$_AppUser;
 
   factory _AppUser.fromJson(Map<String, dynamic> json) = _$_AppUser.fromJson;
 
@@ -253,7 +253,7 @@ abstract class _AppUser implements AppUser {
   @override
   String? get displayName => throw _privateConstructorUsedError;
   @override
-  @TimestampConverter()
+  @TimestampsConverter()
   Set<DateTime>? get timestamp => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
