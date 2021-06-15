@@ -1,4 +1,5 @@
 import 'package:flutter_learn/models/timestamp_converter.dart';
+import 'package:flutter_learn/models/values.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'comment.g.dart';
@@ -12,9 +13,19 @@ class Comment with _$Comment {
     required String text,
     required String postId,
     required String userId,
-    @Default(<DateTime>{}) @TimestampConverter() Set<DateTime>? timestamp,
+    @TimestampConverter() DateTime? timestamp,
   }) = _Comment;
 
   factory Comment.fromJson(Map<String, dynamic> json) =>
       _$CommentFromJson(json);
+
+  factory Comment.random(String postId) {
+    return _$_Comment(
+      // id: getRandomCommentId(),
+      text: getRandomContent(),
+      postId: postId,
+      userId: getRandomUserIds(),
+      timestamp: getRandomTimestamp(),
+    );
+  }
 }

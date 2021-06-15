@@ -169,7 +169,7 @@ class PostUserInfo extends HookWidget {
                     style: Theme.of(context).textTheme.subtitle2,
                   ),
                   Text(
-                    Format.duration(post.timestamp!.last),
+                    Format.duration(post.timestamp!),
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ],
