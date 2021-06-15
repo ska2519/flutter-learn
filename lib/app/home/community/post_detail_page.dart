@@ -59,42 +59,76 @@ class _PostDetailPageState extends State<PostDetailPage> {
     super.dispose();
   }
 
+  Future<void> _submitMockComments() async {
+    final comments = List.generate(10, (_) => Comment.random(post.id));
+    await addCommentsBatch(comments);
+  }
+
+  Future<void> addCommentsBatch(List<Comment> comments) async {
+    final database = context.read(databaseProvider);
+    for (final comment in comments) {
+      await database.setComment(comment);
+      final nowPost = await database.getPost(post.id);
+      if (nowPost != null) {
+        await database.updatePost(
+            nowPost.copyWith(commentCount: nowPost.commentCount + 1));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final commentsStream = useProvider(commentsStreamProvider(widget.post));
     final database = useProvider(databaseProvider);
     return Scaffold(
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: defaultPadding * 6),
+        child: FloatingActionButton(
+          mini: true,
+          onPressed: _submitMockComments,
+          child: Text(
+            'Test',
+            style: Theme.of(context)
+                .textTheme
+                .subtitle2!
+                .copyWith(color: Colors.white),
+          ),
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         titleSpacing: 0,
         title: FutureBuilder<AppUser?>(
           future: database.getAppUser(post.userId),
-          builder: (context, postUser) => Row(
-            children: [
-              Avatar(
-                  photoUrl: postUser.data?.photoURL,
-                  displayName: postUser.data?.displayName,
-                  radius: 19),
-              SizedBox(width: defaultPadding),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Row(
                 children: [
-                  Text(
-                    post.displayName,
-                    maxLines: 1,
-                    style: Theme.of(context).textTheme.bodyText1,
+                  Avatar(
+                      photoUrl: snapshot.data?.photoURL,
+                      displayName: snapshot.data?.displayName,
+                      radius: 19),
+                  SizedBox(width: defaultPadding),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        post.displayName,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      Text(
+                        Format.duration(post.timestamp!),
+                        style: Theme.of(context).textTheme.overline,
+                      )
+                    ],
                   ),
-                  Text(
-                    Format.duration(post.timestamp!.last),
-                    style: Theme.of(context).textTheme.overline,
-                  )
                 ],
-              ),
-              Spacer()
-            ],
-          ),
+              );
+            }
+            return SizedBox();
+          },
         ),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -121,7 +155,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       ),
       body: SafeArea(
         child: commentsStream.when(
-          loading: () => const CircularProgressIndicator(),
+          loading: () => Center(child: const CupertinoActivityIndicator()),
           error: (error, stack) => const Text('Oops'),
           data: (comments) => Stack(
             children: [
@@ -154,28 +188,30 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                 children: [
                                   Avatar(
                                     photoUrl: commentUser?.photoURL,
+                                    displayName: commentUser?.displayName,
                                     radius: 16,
                                   ),
                                   SizedBox(width: defaultPadding),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        commentUser!.displayName!,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1,
-                                      ),
-                                      SelectableText(
-                                        comments[i].text,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2,
-                                      ),
-                                    ],
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          commentUser!.displayName!,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                        SelectableText(
+                                          comments[i].text,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  Spacer(),
                                   IconButton(
                                     alignment: Alignment.topCenter,
                                     padding: EdgeInsets.all(0),
@@ -263,15 +299,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
     final appUserStream = context.read(appUserStreamProvider);
     final appUser = appUserStream.data!.value!;
     final now = DateTime.now();
-    if (editComment != null) {
-      editComment.timestamp!.add(now);
-    }
     return Comment(
       id: editComment != null ? editComment.id! : null,
       postId: post.id,
       text: _commentText,
       userId: appUser.id!,
-      timestamp: editComment != null ? editComment.timestamp : <DateTime>{now},
+      timestamp: editComment != null ? editComment.timestamp : now,
     );
   }
 
