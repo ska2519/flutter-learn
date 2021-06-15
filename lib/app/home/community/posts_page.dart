@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
 import 'package:flutter_learn/app/home/community/post_detail_page.dart';
+import 'package:flutter_learn/app/home/community/post_list_item.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/constants/constants.dart';
@@ -35,10 +36,9 @@ class PostsPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     log('rebuild Screen');
-    final appUserStream = useProvider(appUserStreamProvider);
-    final appUser = appUserStream.data?.value;
-    final AsyncValue<List<Post>> postsAsyncValue =
-        useProvider(postsStreamProvider);
+    final appUserAsyncValue = useProvider(appUserStreamProvider);
+    final appUser = appUserAsyncValue.data?.value;
+    final postsAsyncValue = useProvider(postsStreamProvider);
 
     return CustomScrollView(
       physics:
@@ -84,90 +84,15 @@ class PostsPage extends HookWidget {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final post = items[index];
-                      return
-                          //Text(post.title);
-                          //     PostListItem(
-                          //   post: post,
-                          //   onTap: () => PostDetailPage.show(context, post: post),
-                          // );
-                          InkWell(
+                      return InkWell(
                         onTap: () => PostDetailPage.show(context, post: post),
                         child: Padding(
-                          padding: const EdgeInsets.all(defaultPadding * 2),
+                          padding: const EdgeInsets.all(defaultPadding),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               PostUserInfo(post: post),
-                              Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: defaultPadding),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      post.title,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle1!
-                                          .copyWith(
-                                              fontWeight: FontWeight.w500),
-                                    ),
-                                    SizedBox(height: defaultPadding),
-                                    Text(
-                                      post.content,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    padding: EdgeInsets.all(0),
-                                    alignment: Alignment.centerLeft,
-                                    constraints:
-                                        BoxConstraints.tight(Size(25, 17)),
-                                    iconSize: 19,
-                                    color: post.likedUsers.contains(appUser?.id)
-                                        ? Colors.red
-                                        : Colors.grey,
-                                    disabledColor: Colors.black,
-                                    icon: Icon(
-                                      post.likedUsers.contains(appUser?.id)
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                    ),
-                                    onPressed: () => _likePost(context, post),
-                                  ),
-                                  Text(
-                                    post.likedUsers.isNotEmpty
-                                        ? post.likedUsers.length.toString()
-                                        : '좋아요',
-                                    style: Theme.of(context).textTheme.caption,
-                                  ),
-                                  SizedBox(width: defaultPadding * 2),
-                                  IconButton(
-                                    padding: EdgeInsets.all(0),
-                                    alignment: Alignment.centerLeft,
-                                    constraints:
-                                        BoxConstraints.tight(Size(25, 15.5)),
-                                    iconSize: 18,
-                                    color: Colors.grey,
-                                    disabledColor: Colors.black,
-                                    icon: Icon(Icons.mode_comment_outlined),
-                                    onPressed: () => PostDetailPage.show(
-                                        context,
-                                        post: post),
-                                  ),
-                                  Text(
-                                    post.commentCount > 0
-                                        ? post.commentCount.toString()
-                                        : '댓글',
-                                    style: Theme.of(context).textTheme.caption,
-                                  ),
-                                ],
-                              )
+                              PostListItem(post: post),
+                              SizedBox(height: defaultPadding),
                             ],
                           ),
                         ),
@@ -177,9 +102,7 @@ class PostsPage extends HookWidget {
                   ),
                 )
               : SliverToBoxAdapter(child: const EmptyContent()),
-          loading: () => SliverToBoxAdapter(
-              // child: const Center(child: CupertinoActivityIndicator()),
-              ),
+          loading: () => SliverToBoxAdapter(),
           error: (_, __) => SliverToBoxAdapter(
             child: const EmptyContent(
               title: 'Something went wrong',
@@ -189,21 +112,5 @@ class PostsPage extends HookWidget {
         ),
       ],
     );
-  }
-
-  Future<void> _likePost(BuildContext context, Post post) async {
-    final appUserStream = context.read(appUserStreamProvider);
-    final appUser = appUserStream.data?.value;
-    if (appUser == null) {
-      SignInPage.show(context);
-    } else {
-      post.likePost(appUser);
-      updatePost(context, post);
-    }
-  }
-
-  Future<void> updatePost(BuildContext context, Post post) async {
-    final database = context.read<FirestoreDatabase>(databaseProvider);
-    await database.setPost(post);
   }
 }

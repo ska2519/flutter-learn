@@ -45,24 +45,4 @@ class Post with _$Post {
       timestamp: getRandomTimestamp(),
     );
   }
-  // factory Restaurant.random() {
-  //   return Restaurant._(
-  //     category: getRandomCategory(),
-  //     city: getRandomCity(),
-  //     name: getRandomName(),
-  //     price: Random().nextInt(3) + 1,
-  //     photo: getRandomPhoto(),
-  //   );
-  // }
-
-  // Post.fromUserInput({
-  //   required String userId,
-  //   required String displayName,
-  //   required String title,
-  //   required String content,
-  // });
-  // : id = null,
-  //       timestamp = null,
-  //       reference = null;
-
 }
