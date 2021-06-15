@@ -109,8 +109,11 @@ class PostsPage extends HookWidget {
                                       post.title,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style:
-                                          Theme.of(context).textTheme.subtitle2,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1!
+                                          .copyWith(
+                                              fontWeight: FontWeight.w500),
                                     ),
                                     SizedBox(height: defaultPadding),
                                     Text(
