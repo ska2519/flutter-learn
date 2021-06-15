@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter_learn/models/timestamp_converter.dart';
+import 'package:flutter_learn/models/values.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'app_user.dart';
@@ -33,6 +36,25 @@ class Post with _$Post {
     }
   }
 
+  factory Post.random() {
+    return _$_Post(
+      id: getRandomIds(),
+      userId: getRandomUserIds(),
+      displayName: getRandomDisplayName(),
+      title: getRandomTitle(),
+      content: getRandomContent(),
+    );
+  }
+  // factory Restaurant.random() {
+  //   return Restaurant._(
+  //     category: getRandomCategory(),
+  //     city: getRandomCity(),
+  //     name: getRandomName(),
+  //     price: Random().nextInt(3) + 1,
+  //     photo: getRandomPhoto(),
+  //   );
+  // }
+
   // Post.fromUserInput({
   //   required String userId,
   //   required String displayName,
@@ -43,16 +65,4 @@ class Post with _$Post {
   //       timestamp = null,
   //       reference = null;
 
-  // factory Post.random({required String displayName, required String userId}) {
-  //   final rating = Random().nextInt(4) + 1;
-  //   final title = getRandomReviewText(rating);
-  //   final content = getRandomReviewText(rating);
-  //   return Post(
-  //     userId: userId,
-  //     displayName: displayName,
-  //     title: title,
-  //     content: content,
-  //     timestamp: DateTime.now(),
-  //   );
-  // }
 }
