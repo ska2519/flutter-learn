@@ -28,8 +28,8 @@ class SignInPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final signInModel = useProvider(signInModelProvider);
-    final appUserStream = useProvider(appUserStreamProvider);
-    appUserStream.whenData((appUser) {
+    final appUserAsyncValue = useProvider(appUserStreamProvider);
+    appUserAsyncValue.whenData((appUser) {
       if (appUser != null) {
         print('SignInPage appUser: $appUser');
         WidgetsBinding.instance!
