@@ -92,6 +92,7 @@ class FirebaseAuthService implements AuthBase {
     }
     return fetchUser(user).then((appUser) {
       _read(appUserProvider.notifier).login(appUser!);
+
       return appUser;
     });
   }
