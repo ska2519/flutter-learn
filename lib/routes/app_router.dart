@@ -56,6 +56,7 @@ class AppRouter {
           builder: (_) => PostDetailPage(post: args! as Post),
           settings: settings,
           fullscreenDialog: true,
+          maintainState: false,
         );
       case AppRoutes.appPage:
         return MaterialPageRoute<dynamic>(
