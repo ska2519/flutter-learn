@@ -85,8 +85,7 @@ class FirestoreDatabase {
 
   Stream<List<Post>> postsStream() => _service.collectionStream(
         path: FirestorePath.posts(),
-        queryBuilder: (query) =>
-            query.orderBy('timestamp', descending: true).limit(20),
+        queryBuilder: (query) => query.orderBy('timestamp', descending: true),
         builder: (data, documentId) => Post.fromJson(data!),
       );
 
