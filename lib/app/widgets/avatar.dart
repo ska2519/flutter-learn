@@ -38,7 +38,7 @@ class Avatar extends StatelessWidget {
                     ),
                   ),
                 ),
-                placeholder: (context, url) => CupertinoActivityIndicator(),
+                placeholder: (context, url) => SizedBox(),
                 imageUrl: photoUrl!,
               )
             : displayName != null

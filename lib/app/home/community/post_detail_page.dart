@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_learn/app/home/community/edit_post_page.dart';
 import 'package:flutter_learn/app/home/community/post_list_item.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/avatar.dart';
@@ -40,7 +41,7 @@ class PostDetailPage extends StatefulHookWidget {
 class _PostDetailPageState extends State<PostDetailPage> {
   final formKey = GlobalKey<FormFieldState<String>>();
   late TextEditingController _textEditingController;
-  late FocusNode focusNode;
+  late FocusNode _focusNode;
   late Post post;
   Comment? editComment;
   String _commentText = '';
@@ -49,13 +50,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void initState() {
     super.initState();
     _textEditingController = TextEditingController();
-    focusNode = FocusNode();
+    _focusNode = FocusNode();
     post = widget.post;
   }
 
   @override
   void dispose() {
-    focusNode.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -67,7 +68,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Future<void> addCommentsBatch(List<Comment> comments) async {
     final database = context.read(databaseProvider);
     for (final comment in comments) {
-      await database.setComment(comment);
+      final reference = await database.setComment(comment);
+      await database.updateComment(comment.copyWith(id: reference.id));
       final nowPost = await database.getPost(post.id);
       if (nowPost != null) {
         await database.updatePost(
@@ -81,21 +83,24 @@ class _PostDetailPageState extends State<PostDetailPage> {
     final size = MediaQuery.of(context).size;
     final commentsStream = useProvider(commentsStreamProvider(widget.post));
     final database = useProvider(databaseProvider);
+    final appUser = useProvider(appUserProvider);
     return Scaffold(
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: defaultPadding * 6),
-        child: FloatingActionButton(
-          mini: true,
-          onPressed: _submitMockComments,
-          child: Text(
-            'Test',
-            style: Theme.of(context)
-                .textTheme
-                .subtitle2!
-                .copyWith(color: Colors.white),
-          ),
-        ),
-      ),
+      floatingActionButton: appUser.id == '7ytll7EosoUNI8Ix2hpPf8ZR3rH3'
+          ? Padding(
+              padding: const EdgeInsets.only(bottom: defaultPadding * 6),
+              child: FloatingActionButton(
+                mini: true,
+                onPressed: _submitMockComments,
+                child: Text(
+                  'Test',
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle2!
+                      .copyWith(color: Colors.white),
+                ),
+              ),
+            )
+          : null,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -104,18 +109,20 @@ class _PostDetailPageState extends State<PostDetailPage> {
           future: database.getAppUser(post.userId),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              final postUser = snapshot.data;
               return Row(
                 children: [
                   Avatar(
-                      photoUrl: snapshot.data?.photoURL,
-                      displayName: snapshot.data?.displayName,
-                      radius: 19),
+                    photoUrl: postUser?.photoURL,
+                    displayName: postUser?.displayName,
+                    radius: 19,
+                  ),
                   SizedBox(width: defaultPadding),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        post.displayName,
+                        postUser!.displayName!,
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       Text(
@@ -139,16 +146,54 @@ class _PostDetailPageState extends State<PostDetailPage> {
           ),
         ),
         actions: [
-          Icon(
-            Icons.notifications_off_outlined,
-            color: flutterPrimaryColor,
-            size: 20,
+          IconButton(
+            padding: EdgeInsets.all(0),
+            icon: Icon(
+              Icons.notifications_off_outlined,
+              color: flutterPrimaryColor,
+              size: 20,
+            ),
+            onPressed: () {},
           ),
-          SizedBox(width: defaultPadding),
-          Icon(
-            Icons.more_horiz,
-            color: flutterPrimaryColor,
-            size: 20,
+          IconButton(
+            padding: EdgeInsets.all(0),
+            constraints: BoxConstraints.tight(Size(25, 17)),
+            icon: Icon(
+              Icons.more_horiz,
+              color: post.userId == appUser.id
+                  ? flutterPrimaryColor
+                  : Colors.grey[400],
+              size: 20,
+            ),
+            onPressed: () => post.userId == appUser.id
+                ? showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => CupertinoActionSheet(
+                      actions: [
+                        CupertinoActionSheetAction(
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            await EditPostPage.show(context, post: post);
+                          },
+                          child: Text('수정'),
+                        ),
+                        CupertinoActionSheetAction(
+                          onPressed: () {
+                            _deletePost(post);
+                            Navigator.pop(context);
+                          },
+                          isDestructiveAction: true,
+                          child: Text('삭제'),
+                        )
+                      ],
+                      cancelButton: CupertinoActionSheetAction(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text('취소'),
+                      ),
+                    ),
+                  )
+                : null,
           ),
           SizedBox(width: defaultPadding * 2),
         ],
@@ -215,41 +260,19 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                   IconButton(
                                     alignment: Alignment.topCenter,
                                     padding: EdgeInsets.all(0),
-                                    onPressed: () => showCupertinoModalPopup(
-                                      context: context,
-                                      builder: (context) =>
-                                          CupertinoActionSheet(
-                                        actions: [
-                                          CupertinoActionSheetAction(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              _editComment(comments[i]);
-                                            },
-                                            child: Text('수정'),
-                                          ),
-                                          CupertinoActionSheetAction(
-                                            onPressed: () {
-                                              _deleteComment(comments[i]);
-                                              Navigator.pop(context);
-                                            },
-                                            isDestructiveAction: true,
-                                            child: Text('삭제'),
-                                          )
-                                        ],
-                                        cancelButton:
-                                            CupertinoActionSheetAction(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: Text('취소'),
-                                        ),
-                                      ),
-                                    ),
+                                    onPressed: () =>
+                                        comments[i].userId == appUser.id
+                                            ? commentHorizPopup(
+                                                context, comments[i])
+                                            : null,
                                     icon: Icon(
                                       Icons.more_horiz,
-                                      color: Colors.grey,
+                                      color: comments[i].userId == appUser.id
+                                          ? flutterPrimaryColor
+                                          : Colors.grey[400],
                                       size: 17,
                                     ),
-                                  ),
+                                  )
                                 ],
                               );
                             }
@@ -269,7 +292,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                   child: CupertinoTextField(
                     key: formKey,
                     placeholder: 'Write a Comment',
-                    focusNode: focusNode,
+                    focusNode: _focusNode,
                     controller: _textEditingController,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
@@ -280,7 +303,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     suffix: TextButton(
                       onPressed: () {
                         _submitComment(post: post);
-                        focusNode.unfocus();
+                        _focusNode.unfocus();
                         _textEditingController.clear();
                       },
                       child: Text('POST'),
@@ -290,6 +313,35 @@ class _PostDetailPageState extends State<PostDetailPage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Future<dynamic> commentHorizPopup(BuildContext context, Comment comment) {
+    return showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+              _editComment(comment);
+            },
+            child: Text('수정'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              _deleteComment(comment);
+              Navigator.pop(context);
+            },
+            isDestructiveAction: true,
+            child: Text('삭제'),
+          )
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () => Navigator.pop(context),
+          child: Text('취소'),
         ),
       ),
     );
@@ -318,8 +370,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
       }
       if (editComment == null) {
         //final DocumentReference reference =
-        await database.setComment(comment);
-        // await database.updateComment(comment.copyWith(id: reference.id));
+        final reference = await database.setComment(comment);
+        await database.updateComment(comment.copyWith(id: reference.id));
         final nowPost = await database.getPost(post.id);
         if (nowPost != null) {
           await database.updatePost(
@@ -337,10 +389,37 @@ class _PostDetailPageState extends State<PostDetailPage> {
     }
   }
 
+  // void _editPost(Post post) {
+  //   try {
+  //     final database = context.read(databaseProvider);
+  //     database.updatePost(post);
+  //   } catch (e) {
+  //     unawaited(showExceptionAlertDialog(
+  //       context: context,
+  //       title: 'Operation failed',
+  //       exception: e,
+  //     ));
+  //   }
+  // }
+
+  void _deletePost(Post post) {
+    try {
+      final database = context.read(databaseProvider);
+      database.deletePost(post.id);
+      Navigator.pop(context);
+    } catch (e) {
+      unawaited(showExceptionAlertDialog(
+        context: context,
+        title: 'Operation failed',
+        exception: e,
+      ));
+    }
+  }
+
   void _editComment(Comment comment) {
     _textEditingController.text = comment.text;
     editComment = comment;
-    focusNode.requestFocus();
+    _focusNode.requestFocus();
     _textEditingController.selection = TextSelection.fromPosition(
         TextPosition(offset: _textEditingController.text.length));
   }
