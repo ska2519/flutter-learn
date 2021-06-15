@@ -1,13 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-class TimestampConverter
-    implements JsonConverter<Set<DateTime>, Set<Timestamp>> {
+class TimestampConverter implements JsonConverter<DateTime, Timestamp> {
   const TimestampConverter();
+
+  @override
+  DateTime fromJson(Timestamp timestamp) => timestamp.toDate();
+
+  @override
+  Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
+}
+
+class TimestampsConverter
+    implements JsonConverter<Set<DateTime>, Set<Timestamp>> {
+  const TimestampsConverter();
   static const Set<DateTime> defaultDateTime = <DateTime>{};
   static const Set<Timestamp> defaultTimestamp = <Timestamp>{};
 
-// timestamp.toDate();
   @override
   Set<DateTime> fromJson(Set<Timestamp> timestamp) {
     if (timestamp.isEmpty) {
