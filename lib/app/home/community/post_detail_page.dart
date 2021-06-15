@@ -52,6 +52,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     _textEditingController = TextEditingController();
     _focusNode = FocusNode();
     post = widget.post;
+    _addReadUsers(post);
   }
 
   @override
@@ -403,6 +404,19 @@ class _PostDetailPageState extends State<PostDetailPage> {
   //     ));
   //   }
   // }
+  void _addReadUsers(Post post) {
+    final appUser = context.read(appUserProvider);
+    print('_addReadUsers appUser: ${appUser.id} / ${appUser.displayName}');
+    if (appUser.id == null) {
+      return;
+    } else if (!post.readUsers.contains(appUser.id)) {
+      final readUsers = post.readUsers;
+      readUsers.add(appUser.id);
+
+      final database = context.read(databaseProvider);
+      database.updatePost(post.copyWith(readUsers: readUsers));
+    }
+  }
 
   void _deletePost(Post post) {
     try {

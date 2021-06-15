@@ -21,16 +21,17 @@ class Post with _$Post {
     required String content,
     @Default(0) int commentCount,
     @TimestampConverter() DateTime? timestamp,
-    @Default({}) Set usersLiked,
+    @Default({}) Set likedUsers,
+    @Default({}) Set readUsers,
   }) = _Post;
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
 
   void likePost(AppUser appUser) {
-    if (usersLiked.contains(appUser.id)) {
-      usersLiked.remove(appUser.id);
+    if (likedUsers.contains(appUser.id)) {
+      likedUsers.remove(appUser.id);
     } else {
-      usersLiked.add(appUser.id);
+      likedUsers.add(appUser.id);
     }
   }
 
