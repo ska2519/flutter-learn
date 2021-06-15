@@ -12,7 +12,6 @@ class FirestoreService {
     bool merge = false,
   }) async {
     final reference = FirebaseFirestore.instance.doc(path);
-    print('setData finish');
     await reference.set(data, SetOptions(merge: merge));
   }
 
@@ -21,7 +20,6 @@ class FirestoreService {
     required Map<String, dynamic> data,
   }) async {
     final reference = FirebaseFirestore.instance.collection(path);
-    print('addData finish');
     return reference.add(data);
   }
 
