@@ -118,18 +118,20 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     radius: 19,
                   ),
                   SizedBox(width: defaultPadding),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        postUser!.displayName!,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      Text(
-                        Format.duration(post.timestamp!),
-                        style: Theme.of(context).textTheme.overline,
-                      )
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          postUser!.displayName!,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        Text(
+                          Format.duration(post.timestamp!),
+                          style: Theme.of(context).textTheme.overline,
+                        )
+                      ],
+                    ),
                   ),
                 ],
               );
