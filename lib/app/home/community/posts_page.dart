@@ -106,8 +106,6 @@ class PostsPage extends HookWidget {
                                   children: [
                                     Text(
                                       post.title,
-                                      softWrap: true,
-                                      maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: Theme.of(context)
                                           .textTheme
