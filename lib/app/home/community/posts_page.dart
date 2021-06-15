@@ -129,20 +129,20 @@ class PostsPage extends HookWidget {
                                     constraints:
                                         BoxConstraints.tight(Size(25, 17)),
                                     iconSize: 19,
-                                    color: post.usersLiked.contains(appUser?.id)
+                                    color: post.likedUsers.contains(appUser?.id)
                                         ? Colors.red
                                         : Colors.grey,
                                     disabledColor: Colors.black,
                                     icon: Icon(
-                                      post.usersLiked.contains(appUser?.id)
+                                      post.likedUsers.contains(appUser?.id)
                                           ? Icons.favorite
                                           : Icons.favorite_border,
                                     ),
                                     onPressed: () => _likePost(context, post),
                                   ),
                                   Text(
-                                    post.usersLiked.isNotEmpty
-                                        ? post.usersLiked.length.toString()
+                                    post.likedUsers.isNotEmpty
+                                        ? post.likedUsers.length.toString()
                                         : '좋아요',
                                     style: Theme.of(context).textTheme.caption,
                                   ),
