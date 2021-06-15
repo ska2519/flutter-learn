@@ -17,7 +17,8 @@ _$_Post _$_$_PostFromJson(Map json) {
     timestamp: json['timestamp'] == null
         ? null
         : DateTime.parse(json['timestamp'] as String),
-    usersLiked: (json['usersLiked'] as List<dynamic>?)?.toSet() ?? {},
+    likedUsers: (json['likedUsers'] as List<dynamic>?)?.toSet() ?? {},
+    readUsers: (json['readUsers'] as List<dynamic>?)?.toSet() ?? {},
   );
 }
 
@@ -29,5 +30,6 @@ Map<String, dynamic> _$_$_PostToJson(_$_Post instance) => <String, dynamic>{
       'content': instance.content,
       'commentCount': instance.commentCount,
       'timestamp': instance.timestamp?.toIso8601String(),
-      'usersLiked': instance.usersLiked.toList(),
+      'likedUsers': instance.likedUsers.toList(),
+      'readUsers': instance.readUsers.toList(),
     };
