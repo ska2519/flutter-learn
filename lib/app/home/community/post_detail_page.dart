@@ -5,6 +5,7 @@ import 'package:flutter_learn/app/home/community/edit_post_page.dart';
 import 'package:flutter_learn/app/home/community/post_list_item.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/avatar.dart';
+import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/models/comment.dart';
@@ -16,11 +17,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
 import 'format.dart';
+import 'post_list_item.dart';
 
 final commentsStreamProvider =
     StreamProvider.autoDispose.family<List<Comment>, Post>((ref, post) {
   final database = ref.watch(databaseProvider);
   return database.commentsStream(post);
+});
+final postProvider =
+    StreamProvider.autoDispose.family<Post, String>((ref, postId) {
+  final database = ref.watch(databaseProvider);
+  return database.postStream(postId);
 });
 
 class PostDetailPage extends StatefulHookWidget {
@@ -82,7 +89,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final commentsStream = useProvider(commentsStreamProvider(widget.post));
+    final commentsAsyncValue = useProvider(commentsStreamProvider(widget.post));
+    final postAsyncValue = useProvider(postProvider(widget.post.id));
     final database = useProvider(databaseProvider);
     final appUser = useProvider(appUserProvider);
     return Scaffold(
@@ -202,20 +210,33 @@ class _PostDetailPageState extends State<PostDetailPage> {
         ],
       ),
       body: SafeArea(
-        child: commentsStream.when(
-          loading: () => Center(child: const CupertinoActivityIndicator()),
-          error: (error, stack) => const Text('Oops'),
-          data: (comments) => Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    PostListItem(
-                      post: widget.post,
-                      postUserInfo: false,
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: defaultPadding * 2,
                     ),
-                    Divider(),
-                    ListView.builder(
+                    child: postAsyncValue.when(
+                        loading: () =>
+                            Center(child: const CupertinoActivityIndicator()),
+                        error: (_, __) => const EmptyContent(
+                              title: 'Something went wrong',
+                              message: "Can't load items right now",
+                            ),
+                        data: (post) => PostListItem(post: post)),
+                  ),
+                  Divider(),
+                  commentsAsyncValue.when(
+                    loading: () =>
+                        Center(child: const CupertinoActivityIndicator()),
+                    error: (_, __) => const EmptyContent(
+                      title: 'Something went wrong',
+                      message: "Can't load items right now",
+                    ),
+                    data: (comments) => ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: comments.length,
@@ -284,38 +305,38 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: size.height * 0.1)
-                  ],
-                ),
+                  ),
+                  SizedBox(height: size.height * 0.1)
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(defaultPadding),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: CupertinoTextField(
-                    key: formKey,
-                    placeholder: 'Write a Comment',
-                    focusNode: _focusNode,
-                    controller: _textEditingController,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    maxLength: 500,
-                    expands: true,
-                    textInputAction: TextInputAction.newline,
-                    onChanged: (commentText) => _commentText = commentText,
-                    suffix: TextButton(
-                      onPressed: () {
-                        _submitComment(post: post);
-                        _focusNode.unfocus();
-                        _textEditingController.clear();
-                      },
-                      child: Text('POST'),
-                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(defaultPadding),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: CupertinoTextField(
+                  key: formKey,
+                  placeholder: 'Write a Comment',
+                  focusNode: _focusNode,
+                  controller: _textEditingController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  maxLength: 500,
+                  expands: true,
+                  textInputAction: TextInputAction.newline,
+                  onChanged: (commentText) => _commentText = commentText,
+                  suffix: TextButton(
+                    onPressed: () {
+                      _submitComment(post: post);
+                      _focusNode.unfocus();
+                      _textEditingController.clear();
+                    },
+                    child: Text('POST'),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -351,8 +372,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   Comment _commentFromState(Post post, Comment? editComment) {
-    final appUserStream = context.read(appUserStreamProvider);
-    final appUser = appUserStream.data!.value!;
+    final appUserAsyncValue = context.read(appUserStreamProvider);
+    final appUser = appUserAsyncValue.data!.value!;
     final now = DateTime.now();
     return Comment(
       id: editComment != null ? editComment.id! : null,

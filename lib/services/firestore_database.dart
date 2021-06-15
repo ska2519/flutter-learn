@@ -91,7 +91,10 @@ class FirestoreDatabase {
         queryBuilder: (query) => query.orderBy('timestamp', descending: true),
         builder: (data, documentId) => Post.fromJson(data!),
       );
-
+  Stream<Post> postStream(String postId) => _service.documentStream(
+        path: FirestorePath.post(postId),
+        builder: (data, documentId) => Post.fromJson(data!),
+      );
   Stream<List<Comment>> commentsStream(Post post) =>
       _service.collectionStream<Comment>(
         path: FirestorePath.comments(post.id),
