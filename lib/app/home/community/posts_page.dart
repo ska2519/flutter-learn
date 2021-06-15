@@ -106,7 +106,6 @@ class PostsPage extends HookWidget {
                                   children: [
                                     Text(
                                       post.title,
-                                      overflow: TextOverflow.ellipsis,
                                       style: Theme.of(context)
                                           .textTheme
                                           .subtitle1!
@@ -179,7 +178,7 @@ class PostsPage extends HookWidget {
                 )
               : SliverToBoxAdapter(child: const EmptyContent()),
           loading: () => SliverToBoxAdapter(
-              child: const Center(child: CircularProgressIndicator())),
+              child: const Center(child: CupertinoActivityIndicator())),
           error: (_, __) => SliverToBoxAdapter(
             child: const EmptyContent(
               title: 'Something went wrong',
