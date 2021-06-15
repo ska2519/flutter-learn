@@ -14,7 +14,6 @@
 
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 
 final _ids = [
@@ -28,6 +27,7 @@ final _userIds = [
   '7ytll7EosoUNI8Ix2hpPf8ZR3rH3',
 ];
 
+// ignore: unused_element
 final _cities = [
   'Albuquerque',
   'Arlington',
@@ -139,16 +139,16 @@ final _contents = [
 ];
 
 final random = Random();
+// final randomPostIdList = <String>[];
+// String getRandomPostId() {
+//   return randomPostIdList[random.nextInt(randomPostIdList.length)];
+// }
 
-String getRandomIds() {
+String getRandomPostIds() {
   final currentDate = documentIdFromCurrentDate();
-  print('currentDate: $currentDate');
-  final serverTimestamp = FieldValue.serverTimestamp();
-  print('serverTimestamp: $serverTimestamp');
-  // final now = DateTime.now();
-  // final timestamp = <DateTime>{now};
-  //${random.nextInt(currentDate)}:
-  return _ids[random.nextInt(_ids.length)];
+  final randomPostIds = '$currentDate:${_ids[random.nextInt(_ids.length)]}';
+  // randomPostIdList.add(randomPostIds);
+  return randomPostIds;
 }
 
 String getRandomUserIds() {
@@ -172,8 +172,22 @@ String getRandomContent() {
   return _contents[random.nextInt(_contents.length)];
 }
 
+DateTime getRandomTimestamp() {
+  final now = DateTime.now();
+  return now.subtract(Duration(seconds: random.nextInt(172800)));
+}
+
+// for Comments
+String getRandomCommentId() => getRandomString(28);
+
+//
+
 String getRandomPhoto() {
   final photoId = random.nextInt(21) + 1;
   return 'https://randomuser.me/api/portraits/women/$photoId.jpg';
   // return 'https://storage.googleapis.com/firestorequickstarts.appspot.com/food_$photoId.png';
 }
+
+const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+    length, (_) => _chars.codeUnitAt(random.nextInt(_chars.length))));

@@ -1,8 +1,7 @@
-import 'dart:math';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:flutter_learn/models/timestamp_converter.dart';
 import 'package:flutter_learn/models/values.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'app_user.dart';
 
@@ -21,8 +20,7 @@ class Post with _$Post {
     required String title,
     required String content,
     @Default(0) int commentCount,
-    @TimestampConverter() Set<DateTime>? timestamp,
-    //required DocumentReference reference,
+    @TimestampConverter() DateTime? timestamp,
     @Default({}) Set usersLiked,
   }) = _Post;
 
@@ -38,11 +36,12 @@ class Post with _$Post {
 
   factory Post.random() {
     return _$_Post(
-      id: getRandomIds(),
+      id: getRandomPostIds(),
       userId: getRandomUserIds(),
       displayName: getRandomDisplayName(),
       title: getRandomTitle(),
       content: getRandomContent(),
+      timestamp: getRandomTimestamp(),
     );
   }
   // factory Restaurant.random() {
