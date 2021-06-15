@@ -83,6 +83,9 @@ class FirestoreDatabase {
   Future<void> deleteComment(Comment comment) => _service.deleteData(
       path: FirestorePath.comment(comment.postId, comment.id!));
 
+  Future<void> deletePost(String postId) =>
+      _service.deleteData(path: FirestorePath.post(postId));
+
   Stream<List<Post>> postsStream() => _service.collectionStream(
         path: FirestorePath.posts(),
         queryBuilder: (query) => query.orderBy('timestamp', descending: true),
