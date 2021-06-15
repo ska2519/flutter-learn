@@ -84,7 +84,6 @@ class PostsPage extends HookWidget {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final post = items[index];
-
                       return
                           //Text(post.title);
                           //     PostListItem(
