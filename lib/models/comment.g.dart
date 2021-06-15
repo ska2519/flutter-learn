@@ -12,10 +12,9 @@ _$_Comment _$_$_CommentFromJson(Map json) {
     text: json['text'] as String,
     postId: json['postId'] as String,
     userId: json['userId'] as String,
-    timestamp: (json['timestamp'] as List<dynamic>?)
-            ?.map((e) => DateTime.parse(e as String))
-            .toSet() ??
-        {},
+    timestamp: json['timestamp'] == null
+        ? null
+        : DateTime.parse(json['timestamp'] as String),
   );
 }
 
@@ -25,5 +24,5 @@ Map<String, dynamic> _$_$_CommentToJson(_$_Comment instance) =>
       'text': instance.text,
       'postId': instance.postId,
       'userId': instance.userId,
-      'timestamp': instance.timestamp?.map((e) => e.toIso8601String()).toList(),
+      'timestamp': instance.timestamp?.toIso8601String(),
     };
