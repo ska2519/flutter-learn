@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 @immutable
@@ -31,9 +32,7 @@ class CustomElevatedButton extends StatelessWidget {
       child: const SizedBox(
         width: 28,
         height: 28,
-        child: CircularProgressIndicator(
-          strokeWidth: 3.0,
-        ),
+        child: CupertinoActivityIndicator(),
       ),
     );
   }
