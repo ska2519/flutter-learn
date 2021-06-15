@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/account/account_page.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_learn/app/home/community/posts_page.dart';
 import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/side_menu.dart';
 import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
+import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -35,22 +38,31 @@ class _HomePageState extends State<HomePage> {
   ];
   int _selectedIndex = 0;
 
+  void addPostsBatch(List<Post> posts) {
+    final database = context.read(databaseProvider);
+    for (final post in posts) {
+      database.setPost(post);
+    }
+  }
+
+  Future<void> _submitTest() async {
+    // final authStateChanges = context.read(appUserStreamProvider);
+    // final database = context.read(databaseProvider);
+    // final appUser = context.read(appUserProvider);
+    // print('Test appUser: $appUser: $authStateChanges: $database');
+
+    final numPosts = Random().nextInt(20);
+    final posts = List.generate(numPosts, (_) => Post.random());
+    print('posts: ${posts.length}: ${posts.first}');
+    addPostsBatch(posts);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         mini: true,
-        onPressed: () async {
-          final authStateChanges = context.read(appUserStreamProvider);
-          final appUser = context.read(appUserProvider);
-          print('Test appUser: $appUser');
-          // final _service = FirestoreService.instance;
-          // _service.getDoc(
-          //     path: FirestorePath.user(authStateChanges.data!.value!.id));
-          final database = context.read(databaseProvider);
-          // final appUser =
-          //     await database.getUser(authStateChanges.data!.value!.id);
-        },
+        onPressed: () => _submitTest(),
         child: Text(
           'Test',
           style: Theme.of(context)
