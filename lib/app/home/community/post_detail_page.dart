@@ -24,7 +24,7 @@ final commentsStreamProvider =
   final database = ref.watch(databaseProvider);
   return database.commentsStream(post);
 });
-final postProvider =
+final postStreamProvider =
     StreamProvider.autoDispose.family<Post, String>((ref, postId) {
   final database = ref.watch(databaseProvider);
   return database.postStream(postId);
@@ -90,7 +90,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final commentsAsyncValue = useProvider(commentsStreamProvider(widget.post));
-    final postAsyncValue = useProvider(postProvider(widget.post.id));
+    final postAsyncValue = useProvider(postStreamProvider(widget.post.id));
     final database = useProvider(databaseProvider);
     final appUser = useProvider(appUserProvider);
     return Scaffold(
