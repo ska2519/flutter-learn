@@ -1,7 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dev.flutterlearn.flutter_learn">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
    <application
-        android:label="flutter_learn"
+        android:label="Flutter Learn"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
