@@ -1,13 +1,15 @@
 import 'dart:math';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_learn/app/sign_in/email/email_password_sign_in_model.dart';
-import 'package:flutter_learn/app/sign_in/email/email_password_sign_in_strings.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/buttons/form_submit_button.dart';
 import 'package:flutter_learn/services/auth_base.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 class EmailPasswordSignInPage extends StatefulWidget {
   const EmailPasswordSignInPage(
@@ -67,9 +69,9 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
         if (model.formType == EmailPasswordSignInFormType.forgotPassword) {
           await showAlertDialog(
             context: context,
-            title: EmailPasswordSignInStrings.resetLinkSentTitle,
-            child: Text(EmailPasswordSignInStrings.resetLinkSentMessage),
-            defaultActionText: EmailPasswordSignInStrings.ok,
+            title: LocaleKeys.resetLinkSentTitle.tr(),
+            child: Text(LocaleKeys.resetLinkSentMessage.tr()),
+            defaultActionText: LocaleKeys.ok.tr(),
           );
         } else {
           if (widget.onSignedIn != null) {
@@ -107,8 +109,8 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
       key: const Key('email'),
       controller: _emailController,
       decoration: InputDecoration(
-        labelText: EmailPasswordSignInStrings.emailLabel,
-        hintText: EmailPasswordSignInStrings.emailHint,
+        labelText: LocaleKeys.email.tr(),
+        hintText: LocaleKeys.emailHint.tr(),
         errorText: model.emailErrorText,
         enabled: !model.isLoading,
       ),
@@ -178,8 +180,7 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
                     ? null
                     : () => _updateFormType(
                         EmailPasswordSignInFormType.forgotPassword),
-                child: const Text(
-                    EmailPasswordSignInStrings.forgotPasswordQuestion),
+                child: Text(LocaleKeys.forgot_password_question.tr()),
               ),
           ],
         ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_learn/constants/strings.dart';
 import 'package:flutter_learn/routes/app_router.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -32,7 +34,7 @@ class SideMenu extends StatelessWidget {
               },
             ),
             DrawerListTile(
-              title: Strings.more,
+              title: LocaleKeys.more.tr(),
               icon: Icons.more_horiz,
               onTap: () {
                 Navigator.pushNamed(context, AppRoutes.accountScreen);

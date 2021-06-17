@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_learn/app/sign_in/email/string_validators.dart';
-import 'package:flutter_learn/app/sign_in/email/email_password_sign_in_strings.dart';
 import 'package:flutter_learn/services/auth_base.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 enum EmailPasswordSignInFormType { signIn, register, forgotPassword }
 
@@ -90,30 +92,25 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
 
   String get passwordLabelText {
     if (formType == EmailPasswordSignInFormType.register) {
-      return EmailPasswordSignInStrings.password8CharactersLabel;
+      return LocaleKeys.password8CharactersLabel.tr();
     }
-    return EmailPasswordSignInStrings.passwordLabel;
+    return LocaleKeys.password.tr();
   }
 
   // Getters
   String get primaryButtonText {
     return <EmailPasswordSignInFormType, String>{
-      EmailPasswordSignInFormType.register:
-          EmailPasswordSignInStrings.createAnAccount,
-      EmailPasswordSignInFormType.signIn: EmailPasswordSignInStrings.signIn,
-      EmailPasswordSignInFormType.forgotPassword:
-          EmailPasswordSignInStrings.sendResetLink,
+      EmailPasswordSignInFormType.register: LocaleKeys.createAnAccount.tr(),
+      EmailPasswordSignInFormType.signIn: LocaleKeys.signIn.tr(),
+      EmailPasswordSignInFormType.forgotPassword: LocaleKeys.sendResetLink.tr(),
     }[formType]!;
   }
 
   String get secondaryButtonText {
     return <EmailPasswordSignInFormType, String>{
-      EmailPasswordSignInFormType.register:
-          EmailPasswordSignInStrings.haveAnAccount,
-      EmailPasswordSignInFormType.signIn:
-          EmailPasswordSignInStrings.needAnAccount,
-      EmailPasswordSignInFormType.forgotPassword:
-          EmailPasswordSignInStrings.backToSignIn,
+      EmailPasswordSignInFormType.register: LocaleKeys.haveAnAccount.tr(),
+      EmailPasswordSignInFormType.signIn: LocaleKeys.needAnAccount.tr(),
+      EmailPasswordSignInFormType.forgotPassword: LocaleKeys.backToSignIn.tr(),
     }[formType]!;
   }
 
@@ -128,21 +125,19 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
 
   String get errorAlertTitle {
     return <EmailPasswordSignInFormType, String>{
-      EmailPasswordSignInFormType.register:
-          EmailPasswordSignInStrings.registrationFailed,
-      EmailPasswordSignInFormType.signIn:
-          EmailPasswordSignInStrings.signInFailed,
+      EmailPasswordSignInFormType.register: LocaleKeys.registrationFailed.tr(),
+      EmailPasswordSignInFormType.signIn: LocaleKeys.signInFailed.tr(),
       EmailPasswordSignInFormType.forgotPassword:
-          EmailPasswordSignInStrings.passwordResetFailed,
+          LocaleKeys.passwordResetFailed.tr(),
     }[formType]!;
   }
 
   String get title {
     return <EmailPasswordSignInFormType, String>{
-      EmailPasswordSignInFormType.register: EmailPasswordSignInStrings.register,
-      EmailPasswordSignInFormType.signIn: EmailPasswordSignInStrings.signIn,
+      EmailPasswordSignInFormType.register: LocaleKeys.register.tr(),
+      EmailPasswordSignInFormType.signIn: LocaleKeys.signIn.tr(),
       EmailPasswordSignInFormType.forgotPassword:
-          EmailPasswordSignInStrings.forgotPassword,
+          LocaleKeys.forgotPassword.tr(),
     }[formType]!;
   }
 
@@ -168,16 +163,16 @@ class EmailPasswordSignInModel with EmailAndPasswordValidators, ChangeNotifier {
   String? get emailErrorText {
     final bool showErrorText = submitted && !canSubmitEmail;
     final String errorText = email.isEmpty
-        ? EmailPasswordSignInStrings.invalidEmailEmpty
-        : EmailPasswordSignInStrings.invalidEmailErrorText;
+        ? LocaleKeys.invalidEmailEmpty.tr()
+        : LocaleKeys.invalidEmailErrorText.tr();
     return showErrorText ? errorText : null;
   }
 
   String? get passwordErrorText {
     final bool showErrorText = submitted && !canSubmitPassword;
     final String errorText = password.isEmpty
-        ? EmailPasswordSignInStrings.invalidPasswordEmpty
-        : EmailPasswordSignInStrings.invalidPasswordTooShort;
+        ? LocaleKeys.invalidPasswordEmpty.tr()
+        : LocaleKeys.invalidPasswordTooShort.tr();
     return showErrorText ? errorText : null;
   }
 
