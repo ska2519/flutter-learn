@@ -52,7 +52,10 @@ class Avatar extends StatelessWidget {
                           .copyWith(color: Colors.white),
                     ),
                   )
-                : null,
+                : Image.asset(
+                    'assets/icons/camera_button_icon.png',
+                    fit: BoxFit.cover,
+                  ),
       ),
     );
   }
