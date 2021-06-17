@@ -13,12 +13,12 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+    flutterVersionCode = '3'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '0.1.0'
+    flutterVersionName = '0.1.1'
 }
 
 apply plugin: 'com.android.application'
@@ -34,13 +34,12 @@ if (keystorePropertiesFile.exists()) {
    
 android {
     compileSdkVersion 30
-
+    ndkVersion '22.1.7171670'
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "dev.flutterlearn.flutter_learn"
         minSdkVersion 21
         targetSdkVersion 30
@@ -66,6 +65,9 @@ android {
    buildTypes {
        release {
            signingConfig signingConfigs.release
+           ndk {
+                debugSymbolLevel 'SYMBOL_TABLE'
+            }
        }
    }
 }
