@@ -17,8 +17,14 @@ _$_Post _$_$_PostFromJson(Map json) {
     timestamp: json['timestamp'] == null
         ? null
         : DateTime.parse(json['timestamp'] as String),
-    likedUsers: (json['likedUsers'] as List<dynamic>?)?.toSet() ?? {},
-    readUsers: (json['readUsers'] as List<dynamic>?)?.toSet() ?? {},
+    likedUsers: (json['likedUsers'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toSet() ??
+        {},
+    readUsers: (json['readUsers'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toSet() ??
+        {},
   );
 }
 

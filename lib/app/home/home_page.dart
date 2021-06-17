@@ -14,7 +14,8 @@ import 'package:flutter_learn/app/home/tab_item.dart';
 import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/responsive.dart';
 import 'package:flutter_learn/controllers/menu_controller.dart';
-
+import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 // final homePageProvider = Provider((ref) => HomePage());
 // final navigatorKeyProvider = Provider<Key>((ref) {
 //   return ref.read(homePageProvider).navigatorKey;
@@ -62,10 +63,10 @@ class _HomePageState extends State<HomePage> {
               mini: true,
               onPressed: _submitMockPosts,
               child: Text(
-                'Test',
+                LocaleKeys.test.tr(),
                 style: Theme.of(context)
                     .textTheme
-                    .subtitle2!
+                    .caption!
                     .copyWith(color: Colors.white),
               ),
             )
