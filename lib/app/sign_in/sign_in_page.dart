@@ -12,9 +12,10 @@ import 'package:flutter_learn/app/sign_in/sign_in_view_model.dart';
 import 'package:flutter_learn/app/sign_in/social_sign_in_button.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/constants/constants.dart';
-import 'package:flutter_learn/constants/strings.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 final signInModelProvider = ChangeNotifierProvider<SignInViewModel>(
     (ref) => SignInViewModel(auth: ref.watch(authServiceProvider)));
@@ -42,14 +43,14 @@ class SignInPage extends HookWidget {
         if (model.error != null) {
           await showExceptionAlertDialog(
             context: context,
-            title: Strings.signInFailed,
+            title: LocaleKeys.signInFailed.tr(),
             exception: model.error,
           );
         }
       },
       child: SignInPageContents(
         viewModel: signInModel,
-        title: Strings.signInPageTitle,
+        title: LocaleKeys.signInPageTitle.tr(),
       ),
     );
   }
@@ -131,7 +132,7 @@ class SignInPageContents extends StatelessWidget {
               ),
               const SizedBox(height: 33),
               SignInButton(
-                text: Strings.signInWithEmailPassword,
+                text: LocaleKeys.signInWithEmail.tr(),
                 textStyle: TextStyle(fontWeight: FontWeight.w500),
                 color: Colors.white,
                 onPressed: viewModel.isLoading
@@ -142,7 +143,7 @@ class SignInPageContents extends StatelessWidget {
               if (!kIsWeb)
                 SocialSignInButton(
                   svgAssetName: 'assets/icons/btn_apple_white.svg',
-                  text: 'Sign in with Apple',
+                  text: LocaleKeys.signInWithApple.tr(),
                   textStyle: TextStyle(fontWeight: FontWeight.w500),
                   color: Colors.white,
                   onPressed:
@@ -151,7 +152,7 @@ class SignInPageContents extends StatelessWidget {
               if (!kIsWeb) const SizedBox(height: defaultPadding),
               SocialSignInButton(
                 svgAssetName: 'assets/icons/google_logo.svg',
-                text: 'Sign in with Google',
+                text: LocaleKeys.signInWithGoogle.tr(),
                 textStyle: TextStyle(fontWeight: FontWeight.w500),
                 color: Colors.white,
                 onPressed:
