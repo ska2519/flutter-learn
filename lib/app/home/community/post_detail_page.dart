@@ -1,6 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
+
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
 import 'package:flutter_learn/app/home/community/post_list_item.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
@@ -13,8 +17,7 @@ import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pedantic/pedantic.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 import 'format.dart';
 import 'post_list_item.dart';
@@ -59,7 +62,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
     _textEditingController = TextEditingController();
     _focusNode = FocusNode();
     post = widget.post;
-    _addReadUsers(post);
+    print('post:$post');
+    WidgetsBinding.instance!.addPostFrameCallback((_) => _addReadUsers(post));
   }
 
   @override
@@ -101,10 +105,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 mini: true,
                 onPressed: _submitMockComments,
                 child: Text(
-                  'Test',
+                  LocaleKeys.test.tr(),
                   style: Theme.of(context)
                       .textTheme
-                      .subtitle2!
+                      .caption!
                       .copyWith(color: Colors.white),
                 ),
               ),
@@ -187,7 +191,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                             Navigator.pop(context);
                             await EditPostPage.show(context, post: post);
                           },
-                          child: Text('수정'),
+                          child: Text(LocaleKeys.edit.tr()),
                         ),
                         CupertinoActionSheetAction(
                           onPressed: () {
@@ -195,12 +199,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
                             Navigator.pop(context);
                           },
                           isDestructiveAction: true,
-                          child: Text('삭제'),
+                          child: Text(LocaleKeys.delete.tr()),
                         )
                       ],
                       cancelButton: CupertinoActionSheetAction(
                         onPressed: () => Navigator.pop(context),
-                        child: Text('취소'),
+                        child: Text(LocaleKeys.cancel.tr()),
                       ),
                     ),
                   )
@@ -245,7 +249,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                           defaultPadding * 2,
                           defaultPadding,
                           defaultPadding,
-                          defaultPadding,
+                          0,
                         ),
                         child: FutureBuilder<AppUser?>(
                           future: database.getAppUser(comments[i].userId),
@@ -255,10 +259,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
                               return Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Avatar(
-                                    photoUrl: commentUser?.photoURL,
-                                    displayName: commentUser?.displayName,
-                                    radius: 16,
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5),
+                                    child: Avatar(
+                                      photoUrl: commentUser?.photoURL,
+                                      displayName: commentUser?.displayName,
+                                      radius: 14,
+                                    ),
                                   ),
                                   SizedBox(width: defaultPadding),
                                   Expanded(
@@ -267,16 +274,18 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          commentUser!.displayName!,
+                                          '${commentUser!.displayName!} • ${Format.duration(comments[i].timestamp!)}',
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText1,
+                                              .overline!
+                                              .copyWith(color: Colors.black54),
                                         ),
                                         SelectableText(
                                           comments[i].text,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText2,
+                                              .caption!
+                                              .copyWith(color: Colors.black87),
                                         ),
                                       ],
                                     ),
@@ -316,7 +325,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 alignment: Alignment.bottomCenter,
                 child: CupertinoTextField(
                   key: formKey,
-                  placeholder: 'Write a Comment',
+                  placeholder: LocaleKeys.pleaseWriteComment.tr(),
                   focusNode: _focusNode,
                   controller: _textEditingController,
                   keyboardType: TextInputType.multiline,
@@ -331,7 +340,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       _focusNode.unfocus();
                       _textEditingController.clear();
                     },
-                    child: Text('POST'),
+                    child: Text(LocaleKeys.post.tr()),
                   ),
                 ),
               ),
@@ -352,7 +361,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
               Navigator.pop(context);
               _editComment(comment);
             },
-            child: Text('수정'),
+            child: Text(LocaleKeys.edit.tr()),
           ),
           CupertinoActionSheetAction(
             onPressed: () {
@@ -360,12 +369,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
               Navigator.pop(context);
             },
             isDestructiveAction: true,
-            child: Text('삭제'),
+            child: Text(LocaleKeys.delete.tr()),
           )
         ],
         cancelButton: CupertinoActionSheetAction(
           onPressed: () => Navigator.pop(context),
-          child: Text('취소'),
+          child: Text(LocaleKeys.cancel.tr()),
         ),
       ),
     );
@@ -407,7 +416,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
-        title: 'Operation failed',
+        title: LocaleKeys.operationFailed.tr(),
         exception: e,
       ));
     }
@@ -427,13 +436,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
   // }
   void _addReadUsers(Post post) {
     final appUser = context.read(appUserProvider);
-    print('_addReadUsers appUser: ${appUser.id} / ${appUser.displayName}');
     if (appUser.id == null) {
       return;
     } else if (!post.readUsers.contains(appUser.id)) {
-      final readUsers = post.readUsers;
-      readUsers.add(appUser.id);
-
+      final readUsers = post.readUsers.toSet();
+      readUsers.add(appUser.id!);
       final database = context.read(databaseProvider);
       database.updatePost(post.copyWith(readUsers: readUsers));
     }
@@ -447,7 +454,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
-        title: 'Operation failed',
+        title: LocaleKeys.operationFailed.tr(),
         exception: e,
       ));
     }
@@ -468,7 +475,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
-        title: 'Operation failed',
+        title: LocaleKeys.operationFailed.tr(),
         exception: e,
       ));
     }
@@ -478,7 +485,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       ScaffoldMessenger.of(context)
         ..clearSnackBars()
         ..showSnackBar(SnackBar(
-          content: Text('Please write a comment'),
+          content: Text(LocaleKeys.pleaseWriteComment.tr()),
           duration: Duration(milliseconds: 300),
         ));
 }

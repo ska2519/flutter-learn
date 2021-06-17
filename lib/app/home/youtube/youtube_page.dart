@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_learn/constants/constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 const iconPath = 'assets/icons/';
 const imagePath = 'assets/pixel_perfect/';
@@ -32,7 +34,7 @@ class YouTubePage extends StatelessWidget {
               bottom: defaultPadding,
             ),
             title: Text(
-              '\u{1f4Fa} ${AppLocalizations.of(context)?.youTube}',
+              '\u{1f4Fa} ${LocaleKeys.youTube.tr()}',
               style: Theme.of(context)
                   .textTheme
                   .subtitle1!
@@ -49,7 +51,7 @@ class YouTubePage extends StatelessWidget {
                 children: [],
               ),
             ),
-            childCount: 1000,
+            childCount: 100,
           ),
         )
       ],

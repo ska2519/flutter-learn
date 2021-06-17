@@ -57,10 +57,9 @@ class FirestoreDatabase {
         data: post.toJson(),
       );
 
-  Future<void> updatePost(Post post) => _service.setData(
+  Future<void> updatePost(Post post) => _service.updateDoc(
         path: FirestorePath.post(post.id),
         data: post.toJson(),
-        merge: true,
       );
 
   Future<DocumentReference<Map<String, dynamic>>> setComment(Comment comment) =>
@@ -98,10 +97,7 @@ class FirestoreDatabase {
   Stream<List<Comment>> commentsStream(Post post) =>
       _service.collectionStream<Comment>(
         path: FirestorePath.comments(post.id),
-        queryBuilder: (query) => query
-            .where('postId', isEqualTo: post.id)
-            // .orderBy('timestamp', descending: true)
-            .limit(20),
+        queryBuilder: (query) => query.orderBy('timestamp', descending: true),
         builder: (data, documentId) => Comment.fromJson(data!),
       );
 

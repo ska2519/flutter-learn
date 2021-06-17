@@ -1,7 +1,11 @@
 import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
 import 'package:flutter_learn/app/home/community/post_detail_page.dart';
 import 'package:flutter_learn/app/home/community/post_list_item.dart';
@@ -12,8 +16,7 @@ import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 import 'post_list_item.dart';
 
@@ -67,7 +70,7 @@ class PostsPage extends HookWidget {
               bottom: defaultPadding,
             ),
             title: Text(
-              '😎 ${AppLocalizations.of(context)?.community}',
+              '😎   ${LocaleKeys.community.tr()}',
               style: Theme.of(context)
                   .textTheme
                   .subtitle1!
