@@ -43,10 +43,10 @@ class _EditPostPageState extends State<EditPostPage> {
     final appUserAsyncValue = context.read(appUserStreamProvider);
     final appUser = appUserAsyncValue.data!.value!;
     final currentDate = documentIdFromCurrentDate();
-    final postId = '$currentDate:${appUser.id}';
-    final displayName = appUserAsyncValue.data!.value!.displayName!;
+    final postId = widget.post?.id ?? '$currentDate:${appUser.id}';
+    final displayName = appUserAsyncValue.data?.value?.displayName ?? '랜덤 아이디';
     final now = DateTime.now();
-    final timestamp = widget.post == null ? now : widget.post!.timestamp!;
+    final timestamp = widget.post?.timestamp ?? now;
     return Post(
       id: postId,
       userId: appUser.id!,
@@ -66,6 +66,7 @@ class _EditPostPageState extends State<EditPostPage> {
         return;
       }
       if (widget.post != null) {
+        print('post: $post');
         await database.updatePost(post);
         Navigator.pop(context);
         return PostDetailPage.show(context, post: post);
