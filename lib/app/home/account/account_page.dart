@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
@@ -14,9 +14,10 @@ import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dia
 import 'package:flutter_learn/app/widgets/avatar.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/constants/constants.dart';
-import 'package:flutter_learn/constants/strings.dart';
 import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
+import 'package:flutter_learn/services/firestore_database.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 class AccountPage extends StatefulHookWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -35,7 +36,7 @@ class _AccountPageState extends State<AccountPage> {
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
-        title: Strings.logoutFailed,
+        title: LocaleKeys.signOutFailed.tr(),
         exception: e,
       ));
     }
@@ -44,10 +45,10 @@ class _AccountPageState extends State<AccountPage> {
   Future<void> _confirmSignOut(BuildContext context) async {
     final bool didRequestSignOut = await showAlertDialog(
           context: context,
-          title: Strings.logout,
-          child: Text(Strings.logoutAreYouSure),
-          cancelActionText: Strings.cancel,
-          defaultActionText: Strings.logout,
+          title: LocaleKeys.signOut.tr(),
+          child: Text(LocaleKeys.sign_out_are_you_sure.tr()),
+          cancelActionText: LocaleKeys.cancel.tr(),
+          defaultActionText: LocaleKeys.signOut.tr(),
         ) ??
         false;
     if (didRequestSignOut == true) {
@@ -58,16 +59,17 @@ class _AccountPageState extends State<AccountPage> {
   Future<bool?> displayNameUpdateDialog(BuildContext context, AppUser appUser) {
     return showAlertDialog(
       context: context,
-      title: '내 프로필',
+      title: LocaleKeys.my_profile.tr(),
       child: TextField(
         maxLength: 8,
         controller: TextEditingController(
             text: _displayName = appUser.displayName ?? ''),
-        decoration: InputDecoration(hintText: '원하는 닉네임을 적어주세요'),
+        decoration:
+            InputDecoration(hintText: LocaleKeys.write_name_you_want.tr()),
         onChanged: (displayName) => _displayName = displayName,
       ),
-      cancelActionText: Strings.cancel,
-      defaultActionText: Strings.ok,
+      cancelActionText: LocaleKeys.cancel.tr(),
+      defaultActionText: LocaleKeys.ok.tr(),
     );
   }
 
@@ -93,7 +95,9 @@ class _AccountPageState extends State<AccountPage> {
                           ),
                         ),
                   child: Text(
-                    appUser != null ? Strings.logout : Strings.login,
+                    appUser != null
+                        ? LocaleKeys.signOut.tr()
+                        : LocaleKeys.signIn.tr(),
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
@@ -149,8 +153,8 @@ class _AccountPageState extends State<AccountPage> {
                   ),
           child: Text(
             appUser == null
-                ? '로그인이 필요합니다'
-                : appUser.displayName ?? '닉네임을 만들어주세요',
+                ? LocaleKeys.requiredSignIn.tr()
+                : appUser.displayName ?? LocaleKeys.makeAUsername.tr(),
             style: const TextStyle(color: Colors.white),
           ),
         ),
