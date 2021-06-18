@@ -53,9 +53,9 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  # adaptive_icon_background: #ffffff
-  # image_path: 'assets/icons/dash.png'
-  image_path: 'assets/icons/dash_icon.png'
+  remove_alpha_ios: true
+  adaptive_icon_background: #ffffff
+  image_path: 'assets/icons/dash_icon_512.png'
 
 flutter:
   uses-material-design: true
