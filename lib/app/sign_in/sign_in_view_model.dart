@@ -12,10 +12,10 @@ class SignInViewModel with ChangeNotifier {
 
   Future<void> _signIn(Future<AppUser?> Function() signInMethod) async {
     try {
+      error = null;
       isLoading = true;
       notifyListeners();
       await signInMethod();
-      error = null;
     } catch (e) {
       error = e;
       rethrow;
