@@ -71,7 +71,11 @@ class CodegenLoader extends AssetLoader{
   "resetLinkSentMessage": "Check your email to reset your password",
   "passwordResetFailed": "Password reset failed",
   "requiredSignIn": "Sign In required",
-  "shareQuestionsExperiences": "Share your questions or experiences. Flutter Learn Community is for sharing information and experiences to help each other. Please be considerate of other people when writing."
+  "shareQuestionsExperiences": "Share your questions or experiences. Flutter Learn Community is for sharing information and experiences to help each other. Please be considerate of other people when writing.",
+  "signInAbortedByUser": "Sign in aborted by user",
+  "missingGoogleAuthToken": "Missing Google Auth Token",
+  "failedToCreateNewUser": "Failed to create new user",
+  "uidPassedEmpty": "Your UID passed in is empty, Please pass in a valid user if from your Firebase user"
 };
 static const Map<String,dynamic> ko = {
   "community": "커뮤니티",
@@ -130,7 +134,11 @@ static const Map<String,dynamic> ko = {
   "resetLinkSentMessage": "비밀번호를 재설정하려면 이메일을 확인하세요",
   "passwordResetFailed": "비밀번호 재설정 실패",
   "requiredSignIn": "로그인이 필요합니다",
-  "shareQuestionsExperiences": "질문이나 경험을 공유해주세요. 플러터 런 커뮤니티는 서로 돕기 위해 정보와 경험을 공유합니다. 글을 쓸 때는 다른 사람을 배려해 주세요."
+  "shareQuestionsExperiences": "질문이나 경험을 공유해주세요. 플러터 런 커뮤니티는 서로 돕기 위해 정보와 경험을 공유합니다. 글을 쓸 때는 다른 사람을 배려해 주세요.",
+  "signInAbortedByUser": "사용자가 로그인을 중단했어요",
+  "missingGoogleAuthToken": "Google 인증 토큰 누락",
+  "failedToCreateNewUser": "새 계정을 생성하지 못했습니다",
+  "uidPassedEmpty": "전달 된 UID가 비어 있습니다. 계정을 확인해주세요."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ko": ko};
 }
