@@ -55,5 +55,9 @@
   "resetLinkSentMessage": "Check your email to reset your password",
   "passwordResetFailed": "Password reset failed",
   "requiredSignIn": "Sign In required",
-  "shareQuestionsExperiences": "Share your questions or experiences. Flutter Learn Community is for sharing information and experiences to help each other. Please be considerate of other people when writing."
+  "shareQuestionsExperiences": "Share your questions or experiences. Flutter Learn Community is for sharing information and experiences to help each other. Please be considerate of other people when writing.",
+  "signInAbortedByUser": "Sign in aborted by user",
+  "missingGoogleAuthToken": "Missing Google Auth Token",
+  "failedToCreateNewUser": "Failed to create new user",
+  "uidPassedEmpty": "Your UID passed in is empty, Please pass in a valid user if from your Firebase user"
 }

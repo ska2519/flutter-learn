@@ -58,5 +58,9 @@ abstract class  LocaleKeys {
   static const passwordResetFailed = 'passwordResetFailed';
   static const requiredSignIn = 'requiredSignIn';
   static const shareQuestionsExperiences = 'shareQuestionsExperiences';
+  static const signInAbortedByUser = 'signInAbortedByUser';
+  static const missingGoogleAuthToken = 'missingGoogleAuthToken';
+  static const failedToCreateNewUser = 'failedToCreateNewUser';
+  static const uidPassedEmpty = 'uidPassedEmpty';
 
 }
