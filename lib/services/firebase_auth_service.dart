@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:crypto/crypto.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'package:flutter_learn/exceptions/firestore_api_exception.dart';
 import 'package:flutter_learn/models/app_user.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 import 'auth_base.dart';
 import 'firestore_database.dart';
@@ -56,7 +58,7 @@ class FirebaseAuthService implements AuthBase {
       return database.getAppUser(user.uid);
     } catch (error) {
       throw FirestoreApiException(
-        message: 'Failed to create new user',
+        message: LocaleKeys.failedToCreateNewUser.tr(),
         devDetails: '$error',
       );
     }
@@ -79,8 +81,7 @@ class FirebaseAuthService implements AuthBase {
       return appUser;
     } else {
       throw FirestoreApiException(
-        message:
-            'Your uid passed in is empty, Please pass in a valid user if from your Firebase user',
+        message: LocaleKeys.uidPassedEmpty.tr(),
       );
     }
   }
@@ -183,11 +184,13 @@ class FirebaseAuthService implements AuthBase {
       } else {
         throw PlatformException(
             code: 'ERROR_MISSING_GOOGLE_AUTH_TOKEN',
-            message: 'Missing Google Auth Token');
+            message: LocaleKeys.missingGoogleAuthToken.tr());
       }
     } else {
+      print('ERROR_ABORTED_BY_USER');
       throw PlatformException(
-          code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
+          code: 'ERROR_ABORTED_BY_USER',
+          message: LocaleKeys.signInAbortedByUser.tr());
     }
   }
 
@@ -245,7 +248,6 @@ class FirebaseAuthService implements AuthBase {
     final String? photoURL = firebaseUser?.providerData[0].photoURL;
     await firebaseUser?.updateDisplayName(displayName);
     await firebaseUser?.updatePhotoURL(photoURL);
-
     return userFromFirebase(firebaseUser);
   }
 
