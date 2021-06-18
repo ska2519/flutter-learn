@@ -66,7 +66,6 @@ class _EditPostPageState extends State<EditPostPage> {
         return;
       }
       if (widget.post != null) {
-        print('post: $post');
         await database.updatePost(post);
         Navigator.pop(context);
         return PostDetailPage.show(context, post: post);
