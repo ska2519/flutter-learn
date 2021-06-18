@@ -52,10 +52,10 @@ class PostsPage extends HookWidget {
           expandedHeight: 120.0,
           floating: true,
           actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {},
-            ),
+            // IconButton(
+            //   icon: Icon(Icons.search),
+            //   onPressed: () {},
+            // ),
             IconButton(
               icon: Icon(Icons.create),
               onPressed: () => appUser == null
