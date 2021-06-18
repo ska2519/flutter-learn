@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -62,7 +63,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
     _textEditingController = TextEditingController();
     _focusNode = FocusNode();
     post = widget.post;
-    print('post:$post');
     WidgetsBinding.instance!.addPostFrameCallback((_) => _addReadUsers(post));
   }
 
@@ -97,6 +97,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     final postAsyncValue = useProvider(postStreamProvider(widget.post.id));
     final database = useProvider(databaseProvider);
     final appUser = useProvider(appUserProvider);
+    print('detailPage appUser: $appUser');
     return Scaffold(
       floatingActionButton: appUser.id == '7ytll7EosoUNI8Ix2hpPf8ZR3rH3'
           ? Padding(
@@ -161,15 +162,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
           ),
         ),
         actions: [
-          IconButton(
-            padding: EdgeInsets.all(0),
-            icon: Icon(
-              Icons.notifications_off_outlined,
-              color: flutterPrimaryColor,
-              size: 20,
-            ),
-            onPressed: () {},
-          ),
+          // IconButton(
+          //   padding: EdgeInsets.all(0),
+          //   icon: Icon(
+          //     Icons.notifications_off_outlined,
+          //     color: flutterPrimaryColor,
+          //     size: 20,
+          //   ),
+          //   onPressed: () {},
+          // ),
           IconButton(
             padding: EdgeInsets.all(0),
             constraints: BoxConstraints.tight(Size(25, 17)),
@@ -323,24 +324,32 @@ class _PostDetailPageState extends State<PostDetailPage> {
               padding: const EdgeInsets.all(defaultPadding),
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: CupertinoTextField(
-                  key: formKey,
-                  placeholder: LocaleKeys.pleaseWriteComment.tr(),
-                  focusNode: _focusNode,
-                  controller: _textEditingController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  maxLength: 500,
-                  expands: true,
-                  textInputAction: TextInputAction.newline,
-                  onChanged: (commentText) => _commentText = commentText,
-                  suffix: TextButton(
-                    onPressed: () {
-                      _submitComment(post: post);
-                      _focusNode.unfocus();
-                      _textEditingController.clear();
-                    },
-                    child: Text(LocaleKeys.post.tr()),
+                child: InkWell(
+                  onTap: appUser.id == null
+                      ? () => SignInPage.show(context)
+                      : null,
+                  child: CupertinoTextField(
+                    key: formKey,
+                    // ignore: avoid_bool_literals_in_conditional_expressions
+                    enabled: appUser.id == null ? false : true,
+
+                    placeholder: LocaleKeys.pleaseWriteComment.tr(),
+                    focusNode: _focusNode,
+                    controller: _textEditingController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    maxLength: 500,
+                    expands: true,
+                    textInputAction: TextInputAction.newline,
+                    onChanged: (commentText) => _commentText = commentText,
+                    suffix: TextButton(
+                      onPressed: () {
+                        _submitComment(post: post);
+                        _focusNode.unfocus();
+                        _textEditingController.clear();
+                      },
+                      child: Text(LocaleKeys.post.tr()),
+                    ),
                   ),
                 ),
               ),
