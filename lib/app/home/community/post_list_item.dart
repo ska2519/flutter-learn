@@ -97,7 +97,7 @@ class PostListItem extends HookWidget {
               iconSize: 18.3,
               color: Colors.grey,
               icon: Icon(Icons.mode_comment_outlined),
-              onPressed: () => PostDetailPage.show(context, post: post),
+              onPressed: null,
             ),
             SizedBox(width: 2),
             Text(
