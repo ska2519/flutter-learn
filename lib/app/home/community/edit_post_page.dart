@@ -68,11 +68,11 @@ class _EditPostPageState extends State<EditPostPage> {
       if (widget.post != null) {
         await database.updatePost(post);
         Navigator.pop(context);
-        return PostDetailPage.show(context, post: post);
+        return PostDetailPage.show(context, postId: post.id);
       }
       await database.setPost(post);
       Navigator.pop(context);
-      PostDetailPage.show(context, post: post);
+      PostDetailPage.show(context, postId: post.id);
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
