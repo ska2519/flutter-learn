@@ -14,6 +14,8 @@ class Comment with _$Comment {
     required String postId,
     required String userId,
     @TimestampConverter() DateTime? timestamp,
+    String? parent,
+    int? level,
   }) = _Comment;
 
   factory Comment.fromJson(Map<String, dynamic> json) =>
