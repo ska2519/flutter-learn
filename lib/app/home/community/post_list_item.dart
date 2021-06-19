@@ -11,7 +11,6 @@ import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'format.dart';
-import 'post_detail_page.dart';
 
 class PostListItem extends HookWidget {
   const PostListItem({

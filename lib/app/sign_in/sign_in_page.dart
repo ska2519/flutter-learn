@@ -71,10 +71,10 @@ class SignInPageContents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final _size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.2),
+        preferredSize: Size.fromHeight(_size.height * 0.2),
         child: AppBar(
           backgroundColor: Colors.transparent,
           iconTheme: IconThemeData(color: flutterPrimaryColor),
@@ -115,7 +115,7 @@ class SignInPageContents extends StatelessWidget {
   }
 
   Widget _buildSignIn(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final _size = MediaQuery.of(context).size;
     return Center(
       child: LayoutBuilder(builder: (context, constraints) {
         return Container(
@@ -127,7 +127,7 @@ class SignInPageContents extends StatelessWidget {
             children: <Widget>[
               const SizedBox(height: 33),
               SizedBox(
-                height: size.height * 0.3,
+                height: _size.height * 0.3,
                 child: _buildHeader(),
               ),
               const SizedBox(height: 33),
