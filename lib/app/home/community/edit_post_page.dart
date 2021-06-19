@@ -65,12 +65,9 @@ class _EditPostPageState extends State<EditPostPage> {
         showPreventPostSnackBar(context, post.title);
         return;
       }
-      if (widget.post != null) {
-        await database.updatePost(post);
-        Navigator.pop(context);
-        return PostDetailPage.show(context, postId: post.id);
-      }
-      await database.setPost(post);
+      widget.post != null
+          ? await database.updatePost(post)
+          : await database.setPost(post);
       Navigator.pop(context);
       PostDetailPage.show(context, postId: post.id);
     } catch (e) {
