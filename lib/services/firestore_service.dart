@@ -35,7 +35,7 @@ class FirestoreService {
   }) async =>
       FirebaseFirestore.instance.doc(path).update(data);
 
-  Future<void> setTransaction({
+  Future<void> setDelTransaction({
     required String firstPath,
     required String secondPath,
     required Map<String, dynamic> firstData,
@@ -44,7 +44,7 @@ class FirestoreService {
     final firstTransactionRef = FirebaseFirestore.instance.doc(firstPath);
     final secondTransactionRef = FirebaseFirestore.instance.doc(secondPath);
     FirebaseFirestore.instance.runTransaction((transaction) async {
-      transaction.set(firstTransactionRef, firstData);
+      transaction.delete(firstTransactionRef);
       transaction.update(secondTransactionRef, secondData);
     });
   }
@@ -53,6 +53,35 @@ class FirestoreService {
     final reference = FirebaseFirestore.instance.doc(path);
     log('delete: $path');
     await reference.delete();
+  }
+
+  Stream<List<T>> collectionGroupStream<T>({
+    required String path,
+    required T Function(Map<String, dynamic>? data, String documentID) builder,
+    Query Function(Query query)? queryBuilder,
+    int Function(T lhs, T rhs)? sort,
+  }) {
+    Query query = FirebaseFirestore.instance.collectionGroup(path);
+    if (queryBuilder != null) {
+      query = queryBuilder(query);
+    }
+
+    final Stream<QuerySnapshot> snapshots = query.snapshots();
+
+    return snapshots.map((snapshot) {
+      final result = snapshot.docs
+          .map((snapshot) {
+            print('snapshot: ${snapshot.data().runtimeType}');
+            return builder(
+                snapshot.data()! as Map<String, dynamic>, snapshot.id);
+          })
+          .where((value) => value != null)
+          .toList();
+      if (sort != null) {
+        result.sort(sort);
+      }
+      return result;
+    });
   }
 
   Stream<List<T>> collectionStream<T>({
