@@ -4,6 +4,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_learn/app/home/community/format.dart';
+import 'package:flutter_learn/app/home/community/post_detail_page.dart';
+import 'package:flutter_learn/models/comment.dart';
+import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
@@ -18,6 +22,13 @@ import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
+
+final userCommentsStreamProvider =
+    StreamProvider.autoDispose<List<Comment>>((ref) {
+  final database = ref.watch(databaseProvider);
+  final appUser = ref.watch(appUserProvider);
+  return database.userCommentsStream(appUser.id);
+});
 
 class AccountPage extends StatefulHookWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -75,7 +86,7 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final _size = MediaQuery.of(context).size;
     final appUserAsyncValue = useProvider(appUserStreamProvider);
     return appUserAsyncValue.when(
       data: (appUser) {
@@ -107,8 +118,14 @@ class _AccountPageState extends State<AccountPage> {
               ),
             ],
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(size.height * 0.27),
+              preferredSize: Size.fromHeight(_size.height * 0.27),
               child: _buildUserInfo(appUser, context),
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(defaultPadding * 2),
+              child: appUser == null ? null : _buildUserComments(context),
             ),
           ),
         );
@@ -162,4 +179,69 @@ class _AccountPageState extends State<AccountPage> {
       ],
     );
   }
+}
+
+Widget _buildUserComments(BuildContext context) {
+  final userCommentsAsyncValue = useProvider(userCommentsStreamProvider);
+  final database = useProvider(databaseProvider);
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Text('최근 내가 작성한 댓글'),
+      Divider(),
+      userCommentsAsyncValue.when(
+        loading: () => Center(child: const CupertinoActivityIndicator()),
+        error: (error, stackTrace) => EmptyContent(
+          title: '$error Something went wrong',
+          message: "Can't load items right now",
+        ),
+        data: (userComments) {
+          return ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: 3,
+            itemBuilder: (context, i) => GestureDetector(
+              onTap: () =>
+                  PostDetailPage.show(context, postId: userComments[i].postId),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FutureBuilder<Post?>(
+                        future: database.getPost(userComments[i].postId),
+                        builder: (context, snapshot) => snapshot.data != null
+                            ? Text(
+                                snapshot.data!.title,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption!
+                                    .copyWith(color: Colors.black87),
+                              )
+                            : const SizedBox(),
+                      ),
+                      Text(
+                        Format.duration(userComments[i].timestamp!),
+                        style: Theme.of(context)
+                            .textTheme
+                            .caption!
+                            .copyWith(color: Colors.black87),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    userComments[i].text,
+                    style: Theme.of(context).textTheme.bodyText1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: defaultPadding),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    ],
+  );
 }
