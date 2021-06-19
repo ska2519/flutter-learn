@@ -72,14 +72,17 @@ class FirestoreDatabase {
         path: FirestorePath.comment(comment.postId, comment.id!),
         data: comment.toJson(),
       );
-  Future<void> transactionComment(Comment comment, Post post) =>
-      _service.setTransaction(
+  Future<void> transactionDelComment(Comment comment, Post post) =>
+      _service.setDelTransaction(
         firstPath: FirestorePath.comment(comment.postId, comment.id!),
         secondPath: FirestorePath.post(comment.postId),
         firstData: comment.toJson(),
         secondData: post.toJson(),
       );
   Future<void> deleteComment(Comment comment) => _service.deleteData(
+      path: FirestorePath.comment(comment.postId, comment.id!));
+
+  Future<void> deleteCComment(Comment comment) => _service.deleteData(
       path: FirestorePath.comment(comment.postId, comment.id!));
 
   Future<void> deletePost(String postId) =>
@@ -94,10 +97,16 @@ class FirestoreDatabase {
         path: FirestorePath.post(postId),
         builder: (data, documentId) => Post.fromJson(data!),
       );
-  Stream<List<Comment>> commentsStream(Post post) =>
+  Stream<List<Comment>> commentsStream(String postId) =>
       _service.collectionStream<Comment>(
-        path: FirestorePath.comments(post.id),
+        path: FirestorePath.comments(postId),
         queryBuilder: (query) => query.orderBy('timestamp', descending: true),
+        builder: (data, documentId) => Comment.fromJson(data!),
+      );
+  Stream<List<Comment>> userCommentsStream(String? userId) =>
+      _service.collectionGroupStream<Comment>(
+        path: FirestorePath.collectionGroupComments(),
+        queryBuilder: (query) => query.where('userId', isEqualTo: userId),
         builder: (data, documentId) => Comment.fromJson(data!),
       );
 
