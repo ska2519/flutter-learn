@@ -27,7 +27,7 @@ class Responsive extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
+    final _size = MediaQuery.of(context).size;
     // If our width is more than 1100 then we consider it a desktop
     if (_size.width >= 1100) {
       return desktop;
