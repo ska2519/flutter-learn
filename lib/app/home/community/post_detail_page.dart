@@ -442,18 +442,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
     }
   }
 
-  // void _editPost(Post post) {
-  //   try {
-  //     final database = context.read(databaseProvider);
-  //     database.updatePost(post);
-  //   } catch (e) {
-  //     unawaited(showExceptionAlertDialog(
-  //       context: context,
-  //       title: 'Operation failed',
-  //       exception: e,
-  //     ));
-  //   }
-  // }
   Future _addReadUsers(Post post) async {
     final appUser = context.read(appUserProvider);
     if (appUser.id == null) {
