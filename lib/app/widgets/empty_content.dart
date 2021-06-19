@@ -15,9 +15,9 @@ class EmptyContent extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
+          SelectableText(
             title,
-            style: const TextStyle(fontSize: 32.0, color: Colors.black54),
+            style: const TextStyle(fontSize: 12.0, color: Colors.black54),
           ),
           Text(
             message,
