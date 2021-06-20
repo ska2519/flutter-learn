@@ -21,7 +21,7 @@ class _$PostTearOff {
   const _$PostTearOff();
 
   _Post call(
-      {required String id,
+      {String? id,
       required String userId,
       required String displayName,
       required String title,
@@ -53,7 +53,7 @@ const $Post = _$PostTearOff();
 
 /// @nodoc
 mixin _$Post {
-  String get id => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
@@ -74,7 +74,7 @@ abstract class $PostCopyWith<$Res> {
   factory $PostCopyWith(Post value, $Res Function(Post) then) =
       _$PostCopyWithImpl<$Res>;
   $Res call(
-      {String id,
+      {String? id,
       String userId,
       String displayName,
       String title,
@@ -109,7 +109,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -152,7 +152,7 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       __$PostCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String id,
+      {String? id,
       String userId,
       String displayName,
       String title,
@@ -188,7 +188,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -229,7 +229,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Post extends _Post {
   const _$_Post(
-      {required this.id,
+      {this.id,
       required this.userId,
       required this.displayName,
       required this.title,
@@ -244,7 +244,7 @@ class _$_Post extends _Post {
       _$_$_PostFromJson(json);
 
   @override
-  final String id;
+  final String? id;
   @override
   final String userId;
   @override
@@ -327,7 +327,7 @@ class _$_Post extends _Post {
 
 abstract class _Post extends Post {
   const factory _Post(
-      {required String id,
+      {String? id,
       required String userId,
       required String displayName,
       required String title,
@@ -341,7 +341,7 @@ abstract class _Post extends Post {
   factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   @override
   String get userId => throw _privateConstructorUsedError;
   @override
