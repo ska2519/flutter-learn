@@ -14,7 +14,7 @@ part 'post.g.dart';
 class Post with _$Post {
   const Post._();
   const factory Post({
-    required String id,
+    String? id,
     required String userId,
     required String displayName,
     required String title,
@@ -37,7 +37,7 @@ class Post with _$Post {
 
   factory Post.random() {
     return _$_Post(
-      id: getRandomPostIds(),
+      // id: getRandomPostIds(),
       userId: getRandomUserIds(),
       displayName: getRandomDisplayName(),
       title: getRandomTitle(),

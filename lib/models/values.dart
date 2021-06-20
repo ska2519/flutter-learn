@@ -174,7 +174,7 @@ String getRandomContent() {
 
 DateTime getRandomTimestamp() {
   final now = DateTime.now();
-  return now.subtract(Duration(seconds: random.nextInt(172800)));
+  return now.subtract(Duration(seconds: random.nextInt(60)));
 }
 
 // for Comments
