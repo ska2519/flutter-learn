@@ -40,18 +40,14 @@ class _HomePageState extends State<HomePage> {
   Future<void> addPostsBatch(List<Post> posts) async {
     final database = context.read(databaseProvider);
     for (final post in posts) {
-      await database.setPost(post);
+      print('post: $post');
+      await database.addPost(post);
     }
   }
 
-  Future<void> _submitMockPosts() async {
-    // final authStateChanges = context.read(appUserStreamProvider);
-    // final database = context.read(databaseProvider);
-    // final appUser = context.read(appUserProvider);
-    // print('Test appUser: $appUser: $authStateChanges: $database');
-
+  void _submitMockPosts() {
     final posts = List.generate(10, (_) => Post.random());
-    await addPostsBatch(posts);
+    addPostsBatch(posts);
   }
 
   @override
