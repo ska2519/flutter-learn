@@ -52,17 +52,16 @@ class FirestoreDatabase {
         data: appUser.toJson(),
       );
 
-  Future<void> setPost(Post post) => _service.setData(
-        path: FirestorePath.post(post.id),
+  Future<DocumentReference> addPost(Post post) => _service.addData(
+        path: FirestorePath.posts(),
         data: post.toJson(),
       );
-
   Future<void> updatePost(Post post) => _service.updateDoc(
-        path: FirestorePath.post(post.id),
+        path: FirestorePath.post(post.id!),
         data: post.toJson(),
       );
 
-  Future<DocumentReference<Map<String, dynamic>>> setComment(Comment comment) =>
+  Future<DocumentReference<Map<String, dynamic>>> addComment(Comment comment) =>
       _service.addData(
         path: FirestorePath.comments(comment.postId),
         data: comment.toJson(),
@@ -80,9 +79,6 @@ class FirestoreDatabase {
         secondData: post.toJson(),
       );
   Future<void> deleteComment(Comment comment) => _service.deleteData(
-      path: FirestorePath.comment(comment.postId, comment.id!));
-
-  Future<void> deleteCComment(Comment comment) => _service.deleteData(
       path: FirestorePath.comment(comment.postId, comment.id!));
 
   Future<void> deletePost(String postId) =>
@@ -106,7 +102,9 @@ class FirestoreDatabase {
   Stream<List<Comment>> userCommentsStream(String? userId) =>
       _service.collectionGroupStream<Comment>(
         path: FirestorePath.collectionGroupComments(),
-        queryBuilder: (query) => query.where('userId', isEqualTo: userId),
+        queryBuilder: (query) => query
+            .where('userId', isEqualTo: userId)
+            .orderBy('timestamp', descending: true),
         builder: (data, documentId) => Comment.fromJson(data!),
       );
 
@@ -121,11 +119,6 @@ class FirestoreDatabase {
   //   // delete job
   //   await _service.deleteData(path: FirestorePath.job(appUser!.id, job.id));
   // }
-
-  // Stream<Job> jobStream({required String jobId}) => _service.documentStream(
-  //       path: FirestorePath.job(appUser!.id, jobId),
-  //       builder: (data, documentId) => Job.fromMap(data, documentId),
-  //     );
 
   // Stream<List<Entry>> entriesStream({Job? job}) =>
   //     _service.collectionStream<Entry>(
