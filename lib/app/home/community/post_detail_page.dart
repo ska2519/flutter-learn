@@ -80,13 +80,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Future<void> addCommentsBatch(List<Comment> comments) async {
     final database = context.read(databaseProvider);
     for (final comment in comments) {
-      final reference = await database.setComment(comment);
+      final reference = await database.addComment(comment);
       await database.updateComment(comment.copyWith(id: reference.id));
-      final nowPost = await database.getPost(postId);
-      if (nowPost != null) {
-        await database.updatePost(
-            nowPost.copyWith(commentCount: nowPost.commentCount + 1));
-      }
+      _addCommentCount(postId);
     }
   }
 
@@ -352,7 +348,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         onChanged: (commentText) => _commentText = commentText,
                         suffix: TextButton(
                           onPressed: () {
-                            _submitComment(post: post);
+                            _submitComment(postId: post.id!);
                             _focusNode.unfocus();
                             _textEditingController.clear();
                           },
@@ -400,36 +396,31 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  Comment _commentFromState(Post post, Comment? editComment) {
+  Comment _commentFromState(String postId, Comment? editComment) {
     final appUserAsyncValue = context.read(appUserStreamProvider);
     final appUser = appUserAsyncValue.data!.value!;
     final now = DateTime.now();
     return Comment(
       id: editComment?.id,
-      postId: post.id,
+      postId: postId,
       text: _commentText,
       userId: appUser.id!,
       timestamp: editComment != null ? editComment.timestamp : now,
     );
   }
 
-  Future<void> _submitComment({required Post post}) async {
+  Future<void> _submitComment({required String postId}) async {
     try {
       final database = context.read(databaseProvider);
-      final comment = _commentFromState(post, editComment);
+      final comment = _commentFromState(postId, editComment);
       if (comment.text.isEmpty) {
         showPreventCommentSnackBar(context);
         return;
       }
       if (editComment == null) {
-        final reference = await database.setComment(comment);
+        final reference = await database.addComment(comment);
         await database.updateComment(comment.copyWith(id: reference.id));
-        // Add commentCount
-        final nowPost = await database.getPost(post.id);
-        if (nowPost != null) {
-          await database.updatePost(
-              nowPost.copyWith(commentCount: nowPost.commentCount + 1));
-        }
+        await _addCommentCount(postId);
       } else {
         await database.updateComment(comment);
       }
@@ -442,12 +433,21 @@ class _PostDetailPageState extends State<PostDetailPage> {
     }
   }
 
+  Future<void> _addCommentCount(String postId) async {
+    final database = context.read(databaseProvider);
+    final nowPost = await database.getPost(postId);
+    if (nowPost != null) {
+      await database
+          .updatePost(nowPost.copyWith(commentCount: nowPost.commentCount + 1));
+    }
+    return;
+  }
+
   Future _addReadUsers(Post post) async {
     final appUser = context.read(appUserProvider);
     if (appUser.id == null) {
       return;
     }
-
     if (!post.readUsers.contains(appUser.id)) {
       final readUsers = post.readUsers.toSet();
       readUsers.add(appUser.id!);
@@ -459,7 +459,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void _deletePost(Post post) {
     try {
       final database = context.read(databaseProvider);
-      database.deletePost(post.id);
+      database.deletePost(post.id!);
       Navigator.pop(context);
     } catch (e) {
       unawaited(showExceptionAlertDialog(
