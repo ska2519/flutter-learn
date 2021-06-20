@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_learn/app/home/community/post_detail_page.dart';
@@ -42,13 +43,13 @@ class _EditPostPageState extends State<EditPostPage> {
   Post _postFromState() {
     final appUserAsyncValue = context.read(appUserStreamProvider);
     final appUser = appUserAsyncValue.data!.value!;
-    final currentDate = documentIdFromCurrentDate();
-    final postId = widget.post?.id ?? '$currentDate:${appUser.id}';
+    // final currentDate = documentIdFromCurrentDate();
+    // final postId = widget.post?.id ?? '$currentDate:${appUser.id}';
     final displayName = appUserAsyncValue.data?.value?.displayName ?? '랜덤 아이디';
     final now = DateTime.now();
     final timestamp = widget.post?.timestamp ?? now;
     return Post(
-      id: postId,
+      // id: postId,
       userId: appUser.id!,
       displayName: displayName,
       title: _title,
@@ -65,11 +66,12 @@ class _EditPostPageState extends State<EditPostPage> {
         showPreventPostSnackBar(context, post.title);
         return;
       }
+      late DocumentReference documentReference;
       widget.post != null
           ? await database.updatePost(post)
-          : await database.setPost(post);
+          : documentReference = await database.addPost(post);
       Navigator.pop(context);
-      PostDetailPage.show(context, postId: post.id);
+      PostDetailPage.show(context, postId: documentReference.id);
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,

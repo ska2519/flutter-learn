@@ -8,5 +8,7 @@
 //     response.send('Hello from Firebase!');
 // });
 
-export {commentCount} from './firestore';
+// export {increaseCommentCount} from './firestore';
+// export {decreaseCommentCount} from './firestore';
+export {addPostId} from './firestore';
 
