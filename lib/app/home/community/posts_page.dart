@@ -89,7 +89,7 @@ class PostsPage extends HookWidget {
                       final post = items[index];
                       return InkWell(
                         onTap: () =>
-                            PostDetailPage.show(context, postId: post.id),
+                            PostDetailPage.show(context, postId: post.id!),
                         child: Padding(
                           padding: const EdgeInsets.all(defaultPadding),
                           child: Column(
