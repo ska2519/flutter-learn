@@ -96,7 +96,7 @@ class PostsPage extends HookWidget {
                             children: [
                               PostUserInfo(post: post),
                               PostListItem(post: post),
-                              SizedBox(height: defaultPadding),
+                              const SizedBox(height: defaultPadding),
                             ],
                           ),
                         ),
