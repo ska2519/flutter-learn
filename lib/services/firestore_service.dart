@@ -21,7 +21,30 @@ class FirestoreService {
     return reference.add(data);
   }
 
-  Future<Map<String, dynamic>?> getDoc({required String path}) =>
+  Future<List<T>> getCollection<T>({
+    required String path,
+    required T Function(Map<String, dynamic>? data, String documentID) builder,
+    Query Function(Query query)? queryBuilder,
+    int Function(T lhs, T rhs)? sort,
+  }) async {
+    Query query = FirebaseFirestore.instance.collection(path);
+    if (queryBuilder != null) {
+      query = queryBuilder(query);
+    }
+    final QuerySnapshot snapshots = await query.get();
+
+    final result = snapshots.docs
+        .map((QueryDocumentSnapshot doc) =>
+            builder(doc.data() as Map<String, dynamic>?, doc.id))
+        .where((value) => value != null)
+        .toList();
+    if (sort != null) {
+      result.sort(sort);
+    }
+    return result;
+  }
+
+  Future<Map<String, dynamic>?> getDoc({required String path}) async =>
       FirebaseFirestore.instance
           .doc(path)
           .get()
@@ -34,16 +57,16 @@ class FirestoreService {
       FirebaseFirestore.instance.doc(path).update(data);
 
   Future<void> setDelTransaction({
-    required String firstPath,
-    required String secondPath,
-    required Map<String, dynamic> firstData,
-    required Map<String, dynamic> secondData,
+    required String deletePath,
+    required String updatePath,
+    Map<String, dynamic>? deleteData,
+    required Map<String, dynamic> updateData,
   }) async {
-    final firstTransactionRef = FirebaseFirestore.instance.doc(firstPath);
-    final secondTransactionRef = FirebaseFirestore.instance.doc(secondPath);
+    final firstTransactionRef = FirebaseFirestore.instance.doc(deletePath);
+    final secondTransactionRef = FirebaseFirestore.instance.doc(updatePath);
     FirebaseFirestore.instance.runTransaction((transaction) async {
       transaction.delete(firstTransactionRef);
-      transaction.update(secondTransactionRef, secondData);
+      transaction.update(secondTransactionRef, updateData);
     });
   }
 
@@ -62,16 +85,11 @@ class FirestoreService {
     if (queryBuilder != null) {
       query = queryBuilder(query);
     }
-
     final Stream<QuerySnapshot> snapshots = query.snapshots();
-
     return snapshots.map((snapshot) {
       final result = snapshot.docs
-          .map((snapshot) {
-            print('snapshot: ${snapshot.data().runtimeType}');
-            return builder(
-                snapshot.data()! as Map<String, dynamic>, snapshot.id);
-          })
+          .map((snapshot) =>
+              builder(snapshot.data() as Map<String, dynamic>?, snapshot.id))
           .where((value) => value != null)
           .toList();
       if (sort != null) {
@@ -95,7 +113,7 @@ class FirestoreService {
     return snapshots.map((snapshot) {
       final result = snapshot.docs
           .map((snapshot) =>
-              builder(snapshot.data()! as Map<String, dynamic>, snapshot.id))
+              builder(snapshot.data() as Map<String, dynamic>?, snapshot.id))
           .where((value) => value != null)
           .toList();
       if (sort != null) {
@@ -112,6 +130,6 @@ class FirestoreService {
     final DocumentReference reference = FirebaseFirestore.instance.doc(path);
     final Stream<DocumentSnapshot> snapshots = reference.snapshots();
     return snapshots.map((snapshot) =>
-        builder(snapshot.data()! as Map<String, dynamic>, snapshot.id));
+        builder(snapshot.data() as Map<String, dynamic>?, snapshot.id));
   }
 }
