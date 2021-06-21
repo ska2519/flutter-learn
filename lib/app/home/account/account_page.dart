@@ -7,7 +7,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/community/format.dart';
 import 'package:flutter_learn/app/home/community/post_detail_page.dart';
 import 'package:flutter_learn/models/comment.dart';
+import 'package:flutter_learn/models/post_liked.dart';
 import 'package:flutter_learn/models/post.dart';
+import 'package:flutter_learn/models/read_post.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
@@ -28,6 +30,18 @@ final userCommentsStreamProvider =
   final database = ref.watch(databaseProvider);
   final appUser = ref.watch(appUserProvider);
   return database.userCommentsStream(appUser.id);
+});
+final readPostsStreamProvider =
+    StreamProvider.autoDispose<List<ReadPost>>((ref) {
+  final database = ref.watch(databaseProvider);
+  final appUser = ref.watch(appUserProvider);
+  return database.userReadPostsStream(appUser.id);
+});
+final likedPostsStreamProvider =
+    StreamProvider.autoDispose<List<PostLiked>>((ref) {
+  final database = ref.watch(databaseProvider);
+  final appUser = ref.watch(appUserProvider);
+  return database.userLikedPostsStream(appUser.id);
 });
 
 class AccountPage extends StatefulHookWidget {
@@ -124,8 +138,20 @@ class _AccountPageState extends State<AccountPage> {
           ),
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(defaultPadding * 2),
-              child: appUser == null ? null : _buildUserComments(context),
+              padding: const EdgeInsets.all(defaultPadding),
+              child: Column(
+                children: [
+                  if (appUser != null)
+                    _buildUserComments(context)
+                  else
+                    const SizedBox(),
+                  Divider(),
+                  if (appUser != null)
+                    _buildReadPosts(context)
+                  else
+                    const SizedBox(),
+                ],
+              ),
             ),
           ),
         );
@@ -184,64 +210,146 @@ class _AccountPageState extends State<AccountPage> {
 Widget _buildUserComments(BuildContext context) {
   final userCommentsAsyncValue = useProvider(userCommentsStreamProvider);
   final database = useProvider(databaseProvider);
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      Text('최근 내가 작성한 댓글'),
-      Divider(),
-      userCommentsAsyncValue.when(
-        loading: () => Center(child: const CupertinoActivityIndicator()),
-        error: (error, stackTrace) => EmptyContent(
-          title: '$error Something went wrong',
-          message: "Can't load items right now",
-        ),
-        data: (userComments) {
-          return ListView.builder(
+  return userCommentsAsyncValue.when(
+    loading: () => Center(child: const CupertinoActivityIndicator()),
+    error: (error, stackTrace) => EmptyContent(
+      title: '$error Something went wrong',
+      message: "Can't load items right now",
+    ),
+    data: (userComments) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: defaultPadding),
+            child: Text(
+                userComments.isNotEmpty ? '최근 내가 작성한 댓글' : '작성한 댓글이 없어요 🙃'),
+          ),
+          ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: 3,
+            itemCount: userComments.length > 3 ? 3 : userComments.length,
             itemBuilder: (context, i) => GestureDetector(
               onTap: () =>
                   PostDetailPage.show(context, postId: userComments[i].postId),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(defaultPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FutureBuilder<Post?>(
-                        future: database.getPost(userComments[i].postId),
-                        builder: (context, snapshot) => snapshot.data != null
-                            ? Text(
-                                snapshot.data!.title,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption!
-                                    .copyWith(color: Colors.black87),
-                              )
-                            : const SizedBox(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          FutureBuilder<Post?>(
+                            future: database.getPost(userComments[i].postId),
+                            builder: (context, snapshot) =>
+                                snapshot.data != null
+                                    ? Text(
+                                        snapshot.data!.title,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption!
+                                            .copyWith(color: Colors.black87),
+                                      )
+                                    : const SizedBox(),
+                          ),
+                          Text(
+                            Format.duration(userComments[i].timestamp!),
+                            style: Theme.of(context)
+                                .textTheme
+                                .caption!
+                                .copyWith(color: Colors.black87),
+                          ),
+                        ],
                       ),
                       Text(
-                        Format.duration(userComments[i].timestamp!),
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption!
-                            .copyWith(color: Colors.black87),
+                        userComments[i].text,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
-                  Text(
-                    userComments[i].text,
-                    style: Theme.of(context).textTheme.bodyText1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: defaultPadding),
-                ],
+                ),
               ),
             ),
-          );
-        },
-      ),
-    ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Widget _buildReadPosts(BuildContext context) {
+  final readPostsAsyncValue = useProvider(readPostsStreamProvider);
+  final database = useProvider(databaseProvider);
+  return readPostsAsyncValue.when(
+    loading: () => Center(child: const CupertinoActivityIndicator()),
+    error: (error, stackTrace) => EmptyContent(
+      title: '$error Something went wrong',
+      message: "Can't load items right now",
+    ),
+    data: (readPosts) {
+      print('readPosts: $readPosts');
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: defaultPadding),
+            child:
+                Text(readPosts.isNotEmpty ? '최근 내가 읽은 포스트' : '읽은 포스트가 없어요 🙃'),
+          ),
+          ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: readPosts.length > 3 ? 3 : readPosts.length,
+            itemBuilder: (context, i) => GestureDetector(
+              onTap: () =>
+                  PostDetailPage.show(context, postId: readPosts[i].postId),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(defaultPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          FutureBuilder<Post?>(
+                            future: database.getPost(readPosts[i].postId),
+                            builder: (context, snapshot) =>
+                                snapshot.data != null
+                                    ? Text(
+                                        snapshot.data!.title,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption!
+                                            .copyWith(color: Colors.black87),
+                                      )
+                                    : const SizedBox(),
+                          ),
+                          Text(
+                            Format.duration(readPosts[i].timestamp!),
+                            style: Theme.of(context)
+                                .textTheme
+                                .caption!
+                                .copyWith(color: Colors.black87),
+                          ),
+                        ],
+                      ),
+                      // Text(
+                      //   readPosts[i].text,
+                      //   style: Theme.of(context).textTheme.bodyText1,
+                      //   overflow: TextOverflow.ellipsis,
+                      // ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    },
   );
 }
