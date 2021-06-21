@@ -3,8 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_learn/models/timestamp_converter.dart';
 import 'package:flutter_learn/models/values.dart';
 
-import 'app_user.dart';
-
 part 'post.freezed.dart';
 part 'post.g.dart';
 
@@ -21,19 +19,11 @@ class Post with _$Post {
     required String content,
     @Default(0) int commentCount,
     @TimestampConverter() DateTime? timestamp,
-    @Default({}) Set<String> likedUsers,
-    @Default({}) Set<String> readUsers,
+    @Default(0) int likedCount,
+    @Default(0) int readCount,
   }) = _Post;
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
-
-  void likePost(AppUser appUser) {
-    if (likedUsers.contains(appUser.id)) {
-      likedUsers.remove(appUser.id);
-    } else {
-      likedUsers.add(appUser.id!);
-    }
-  }
 
   factory Post.random() {
     return _$_Post(

@@ -48,31 +48,30 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
   - [x] Email 로 가입
   - [x] Google 계정으로 가입
   - [x] Apple 계정으로 가입
-  - [ ] Github 계정으로 가입
-  - [ ] Kakao 계정으로 가입
 - [ ] 커뮤니티
   - [ ] 카테고리
   - [x] 글쓰기
-  - [ ] 삭제
-  - [ ] 수정
+  - [x] 삭제
+  - [x] 수정
   - [x] 좋아요
   - [ ] 태그
     - [ ] 태그 추천
-  - [ ] 댓글
+  - [x] 댓글
     - [ ] 댓글 좋아요
-    - [ ] 댓글 수정
+    - [x] 댓글 수정
 - [ ] 유튜브
 
 ## Web 기능 구현
-- [ ] route
+- [x] route
 - [ ] 잘못된 주소 처리
 ## Firebase 기능 구현
 
-- [x] Firebase Authentication 설정
+- [x] Firebase Authentication
 - [x] Firebase 호스팅에 웹 앱 배포
 - [x] Firebase 호스팅 자동 빌드 설정 및 GitHub로 배포
-- [ ] Cloud Firestore 데이터 구조 설정
-- [ ] Cloud Firestore 세분화 된 규칙 설정
+- [x] Cloud Firestore 데이터 구조 설계
+- [x] Cloud Functions Collection Group Queries
+- [ ] Cloud Firestore 세분화 된 규칙
 
 
 ## 앱 구조

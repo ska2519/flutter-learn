@@ -38,7 +38,7 @@ class Avatar extends StatelessWidget {
                     ),
                   ),
                 ),
-                placeholder: (context, url) => SizedBox(),
+                placeholder: (context, url) => const SizedBox(),
                 imageUrl: photoUrl!,
               )
             : displayName != null

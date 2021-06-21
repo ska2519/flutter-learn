@@ -10,5 +10,5 @@
 
 // export {increaseCommentCount} from './firestore';
 // export {decreaseCommentCount} from './firestore';
-export {addPostId} from './firestore';
+// export {addPostId} from './firestore';
 
