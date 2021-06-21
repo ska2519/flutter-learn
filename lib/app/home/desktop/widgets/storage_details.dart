@@ -25,7 +25,7 @@ class StorageDetails extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
           ),
-          SizedBox(height: defaultPadding),
+          const SizedBox(height: defaultPadding),
           Chart(),
           StorageInfoCard(
             svgSrc: 'assets/icons/documents.svg',

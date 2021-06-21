@@ -32,7 +32,7 @@ class SocialSignInButton extends CustomElevatedButton {
                 ),
               ),
               Text(text),
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
             ],
           ),
         );

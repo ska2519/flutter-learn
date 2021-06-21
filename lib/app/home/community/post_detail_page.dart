@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
+import 'package:flutter_learn/models/read_post.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -28,6 +29,7 @@ final commentsStreamProvider =
   final database = ref.watch(databaseProvider);
   return database.commentsStream(postId);
 });
+
 final postStreamProvider =
     StreamProvider.autoDispose.family<Post, String>((ref, postId) {
   final database = ref.watch(databaseProvider);
@@ -82,7 +84,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     for (final comment in comments) {
       final reference = await database.addComment(comment);
       await database.updateComment(comment.copyWith(id: reference.id));
-      _addCommentCount(postId);
+      _addCommentCount();
     }
   }
 
@@ -100,7 +102,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         message: "Can't load items right now",
       ),
       data: (post) => FutureBuilder(
-        future: _addReadUsers(post),
+        future: _addReadUsers(),
         builder: (context, snapshot) => Scaffold(
           floatingActionButton: appUser.id == '7ytll7EosoUNI8Ix2hpPf8ZR3rH3'
               ? Padding(
@@ -134,7 +136,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         displayName: postUser?.displayName,
                         radius: 19,
                       ),
-                      SizedBox(width: defaultPadding),
+                      const SizedBox(width: defaultPadding),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -153,7 +155,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     ],
                   );
                 }
-                return SizedBox();
+                return const SizedBox();
               },
             ),
             leading: IconButton(
@@ -214,7 +216,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       )
                     : null,
               ),
-              SizedBox(width: defaultPadding * 2),
+              const SizedBox(width: defaultPadding * 2),
             ],
           ),
           body: SafeArea(
@@ -268,7 +270,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                             radius: 14,
                                           ),
                                         ),
-                                        SizedBox(width: defaultPadding),
+                                        const SizedBox(width: defaultPadding),
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment:
@@ -313,7 +315,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                       ],
                                     );
                                   }
-                                  return SizedBox();
+                                  return const SizedBox();
                                 },
                               ),
                             ),
@@ -336,7 +338,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         key: formKey,
                         // ignore: avoid_bool_literals_in_conditional_expressions
                         enabled: appUser.id == null ? false : true,
-
                         placeholder: LocaleKeys.pleaseWriteComment.tr(),
                         focusNode: _focusNode,
                         controller: _textEditingController,
@@ -348,7 +349,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         onChanged: (commentText) => _commentText = commentText,
                         suffix: TextButton(
                           onPressed: () {
-                            _submitComment(postId: post.id!);
+                            _submitComment();
                             _focusNode.unfocus();
                             _textEditingController.clear();
                           },
@@ -409,7 +410,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  Future<void> _submitComment({required String postId}) async {
+  Future<void> _submitComment() async {
     try {
       final database = context.read(databaseProvider);
       final comment = _commentFromState(postId, editComment);
@@ -420,7 +421,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       if (editComment == null) {
         final reference = await database.addComment(comment);
         await database.updateComment(comment.copyWith(id: reference.id));
-        await _addCommentCount(postId);
+        await _addCommentCount();
       } else {
         await database.updateComment(comment);
       }
@@ -433,26 +434,64 @@ class _PostDetailPageState extends State<PostDetailPage> {
     }
   }
 
-  Future<void> _addCommentCount(String postId) async {
-    final database = context.read(databaseProvider);
-    final nowPost = await database.getPost(postId);
-    if (nowPost != null) {
-      await database
-          .updatePost(nowPost.copyWith(commentCount: nowPost.commentCount + 1));
+  Future<void> _addCommentCount() async {
+    try {
+      final database = context.read(databaseProvider);
+      final nowPost = await database.getPost(postId);
+      if (nowPost != null) {
+        await database.updatePost(
+            nowPost.copyWith(commentCount: nowPost.commentCount + 1));
+      }
+    } catch (e) {
+      unawaited(showExceptionAlertDialog(
+        context: context,
+        title: LocaleKeys.operationFailed.tr(),
+        exception: e,
+      ));
     }
-    return;
   }
 
-  Future _addReadUsers(Post post) async {
-    final appUser = context.read(appUserProvider);
-    if (appUser.id == null) {
-      return;
-    }
-    if (!post.readUsers.contains(appUser.id)) {
-      final readUsers = post.readUsers.toSet();
-      readUsers.add(appUser.id!);
+  Future<void> _addReadUsers() async {
+    try {
+      final appUser = context.read(appUserProvider);
       final database = context.read(databaseProvider);
-      database.updatePost(post.copyWith(readUsers: readUsers));
+      if (appUser.id == null) {
+        return;
+      }
+      final readUsers = await database.getPostReadUsers(postId);
+      if (!readUsers.contains(appUser.id)) {
+        database.setReadUser(
+          ReadPost(
+            postId: postId,
+            userId: appUser.id!,
+            timestamp: DateTime.now(),
+          ),
+        );
+        await _addReadCount();
+      }
+    } catch (e) {
+      unawaited(showExceptionAlertDialog(
+        context: context,
+        title: LocaleKeys.operationFailed.tr(),
+        exception: e,
+      ));
+    }
+  }
+
+  Future<void> _addReadCount() async {
+    try {
+      final database = context.read(databaseProvider);
+      final nowPost = await database.getPost(postId);
+      if (nowPost != null) {
+        await database
+            .updatePost(nowPost.copyWith(readCount: nowPost.readCount + 1));
+      }
+    } catch (e) {
+      unawaited(showExceptionAlertDialog(
+        context: context,
+        title: LocaleKeys.operationFailed.tr(),
+        exception: e,
+      ));
     }
   }
 
