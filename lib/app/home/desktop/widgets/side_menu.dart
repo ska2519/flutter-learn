@@ -68,7 +68,7 @@ class DrawerListTile extends StatelessWidget {
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 3),
+          const SizedBox(height: 3),
           Icon(icon, color: Colors.black),
         ],
       ),

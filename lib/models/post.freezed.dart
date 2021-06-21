@@ -28,8 +28,8 @@ class _$PostTearOff {
       required String content,
       int commentCount = 0,
       @TimestampConverter() DateTime? timestamp,
-      Set<String> likedUsers = const {},
-      Set<String> readUsers = const {}}) {
+      int likedCount = 0,
+      int readCount = 0}) {
     return _Post(
       id: id,
       userId: userId,
@@ -38,8 +38,8 @@ class _$PostTearOff {
       content: content,
       commentCount: commentCount,
       timestamp: timestamp,
-      likedUsers: likedUsers,
-      readUsers: readUsers,
+      likedCount: likedCount,
+      readCount: readCount,
     );
   }
 
@@ -60,9 +60,11 @@ mixin _$Post {
   String get content => throw _privateConstructorUsedError;
   int get commentCount => throw _privateConstructorUsedError;
   @TimestampConverter()
-  DateTime? get timestamp => throw _privateConstructorUsedError;
-  Set<String> get likedUsers => throw _privateConstructorUsedError;
-  Set<String> get readUsers => throw _privateConstructorUsedError;
+  DateTime? get timestamp =>
+      throw _privateConstructorUsedError; // @Default({}) Set<String> likedUsers,
+// @Default({}) Set<String> readUsers,
+  int get likedCount => throw _privateConstructorUsedError;
+  int get readCount => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -81,8 +83,8 @@ abstract class $PostCopyWith<$Res> {
       String content,
       int commentCount,
       @TimestampConverter() DateTime? timestamp,
-      Set<String> likedUsers,
-      Set<String> readUsers});
+      int likedCount,
+      int readCount});
 }
 
 /// @nodoc
@@ -102,8 +104,8 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
     Object? content = freezed,
     Object? commentCount = freezed,
     Object? timestamp = freezed,
-    Object? likedUsers = freezed,
-    Object? readUsers = freezed,
+    Object? likedCount = freezed,
+    Object? readCount = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -134,14 +136,14 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      likedUsers: likedUsers == freezed
-          ? _value.likedUsers
-          : likedUsers // ignore: cast_nullable_to_non_nullable
-              as Set<String>,
-      readUsers: readUsers == freezed
-          ? _value.readUsers
-          : readUsers // ignore: cast_nullable_to_non_nullable
-              as Set<String>,
+      likedCount: likedCount == freezed
+          ? _value.likedCount
+          : likedCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      readCount: readCount == freezed
+          ? _value.readCount
+          : readCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -159,8 +161,8 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       String content,
       int commentCount,
       @TimestampConverter() DateTime? timestamp,
-      Set<String> likedUsers,
-      Set<String> readUsers});
+      int likedCount,
+      int readCount});
 }
 
 /// @nodoc
@@ -181,8 +183,8 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
     Object? content = freezed,
     Object? commentCount = freezed,
     Object? timestamp = freezed,
-    Object? likedUsers = freezed,
-    Object? readUsers = freezed,
+    Object? likedCount = freezed,
+    Object? readCount = freezed,
   }) {
     return _then(_Post(
       id: id == freezed
@@ -213,14 +215,14 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      likedUsers: likedUsers == freezed
-          ? _value.likedUsers
-          : likedUsers // ignore: cast_nullable_to_non_nullable
-              as Set<String>,
-      readUsers: readUsers == freezed
-          ? _value.readUsers
-          : readUsers // ignore: cast_nullable_to_non_nullable
-              as Set<String>,
+      likedCount: likedCount == freezed
+          ? _value.likedCount
+          : likedCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      readCount: readCount == freezed
+          ? _value.readCount
+          : readCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -236,8 +238,8 @@ class _$_Post extends _Post {
       required this.content,
       this.commentCount = 0,
       @TimestampConverter() this.timestamp,
-      this.likedUsers = const {},
-      this.readUsers = const {}})
+      this.likedCount = 0,
+      this.readCount = 0})
       : super._();
 
   factory _$_Post.fromJson(Map<String, dynamic> json) =>
@@ -259,16 +261,17 @@ class _$_Post extends _Post {
   @override
   @TimestampConverter()
   final DateTime? timestamp;
-  @JsonKey(defaultValue: const {})
+  @JsonKey(defaultValue: 0)
+  @override // @Default({}) Set<String> likedUsers,
+// @Default({}) Set<String> readUsers,
+  final int likedCount;
+  @JsonKey(defaultValue: 0)
   @override
-  final Set<String> likedUsers;
-  @JsonKey(defaultValue: const {})
-  @override
-  final Set<String> readUsers;
+  final int readCount;
 
   @override
   String toString() {
-    return 'Post(id: $id, userId: $userId, displayName: $displayName, title: $title, content: $content, commentCount: $commentCount, timestamp: $timestamp, likedUsers: $likedUsers, readUsers: $readUsers)';
+    return 'Post(id: $id, userId: $userId, displayName: $displayName, title: $title, content: $content, commentCount: $commentCount, timestamp: $timestamp, likedCount: $likedCount, readCount: $readCount)';
   }
 
   @override
@@ -293,12 +296,12 @@ class _$_Post extends _Post {
             (identical(other.timestamp, timestamp) ||
                 const DeepCollectionEquality()
                     .equals(other.timestamp, timestamp)) &&
-            (identical(other.likedUsers, likedUsers) ||
+            (identical(other.likedCount, likedCount) ||
                 const DeepCollectionEquality()
-                    .equals(other.likedUsers, likedUsers)) &&
-            (identical(other.readUsers, readUsers) ||
+                    .equals(other.likedCount, likedCount)) &&
+            (identical(other.readCount, readCount) ||
                 const DeepCollectionEquality()
-                    .equals(other.readUsers, readUsers)));
+                    .equals(other.readCount, readCount)));
   }
 
   @override
@@ -311,8 +314,8 @@ class _$_Post extends _Post {
       const DeepCollectionEquality().hash(content) ^
       const DeepCollectionEquality().hash(commentCount) ^
       const DeepCollectionEquality().hash(timestamp) ^
-      const DeepCollectionEquality().hash(likedUsers) ^
-      const DeepCollectionEquality().hash(readUsers);
+      const DeepCollectionEquality().hash(likedCount) ^
+      const DeepCollectionEquality().hash(readCount);
 
   @JsonKey(ignore: true)
   @override
@@ -334,8 +337,8 @@ abstract class _Post extends Post {
       required String content,
       int commentCount,
       @TimestampConverter() DateTime? timestamp,
-      Set<String> likedUsers,
-      Set<String> readUsers}) = _$_Post;
+      int likedCount,
+      int readCount}) = _$_Post;
   const _Post._() : super._();
 
   factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
@@ -355,10 +358,11 @@ abstract class _Post extends Post {
   @override
   @TimestampConverter()
   DateTime? get timestamp => throw _privateConstructorUsedError;
+  @override // @Default({}) Set<String> likedUsers,
+// @Default({}) Set<String> readUsers,
+  int get likedCount => throw _privateConstructorUsedError;
   @override
-  Set<String> get likedUsers => throw _privateConstructorUsedError;
-  @override
-  Set<String> get readUsers => throw _privateConstructorUsedError;
+  int get readCount => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$PostCopyWith<_Post> get copyWith => throw _privateConstructorUsedError;

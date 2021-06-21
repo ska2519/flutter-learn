@@ -1,8 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
+import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/avatar.dart';
+import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/models/app_user.dart';
+import 'package:flutter_learn/models/post_liked.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_learn/constants/constants.dart';
@@ -10,36 +14,88 @@ import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:pedantic/pedantic.dart';
 import 'format.dart';
 
-class PostListItem extends HookWidget {
-  const PostListItem({
-    required this.post,
-  });
+final postLikedStreamProvider =
+    StreamProvider.autoDispose.family<List<PostLiked>, String>((ref, postId) {
+  final database = ref.watch(databaseProvider);
+  return database.postLikedStream(postId);
+});
 
+class PostListItem extends HookWidget {
+  const PostListItem({required this.post});
   final Post post;
 
-  Future<void> _likePost(BuildContext context, Post post) async {
-    final appUserAsyncValue = context.read(appUserStreamProvider);
-    final appUser = appUserAsyncValue.data?.value;
+  Future<void> _likePost(
+      BuildContext context, bool userLiked, AppUser? appUser) async {
     if (appUser == null) {
       SignInPage.show(context);
     } else {
-      post.likePost(appUser);
-      _updatePost(context, post);
+      _setPostLiked(context, userLiked, appUser);
     }
   }
 
-  Future<void> _updatePost(BuildContext context, Post post) async {
+  Future<void> _setPostLiked(
+      BuildContext context, bool userLiked, AppUser appUser) async {
     final database = context.read<FirestoreDatabase>(databaseProvider);
-    await database.updatePost(post);
+    try {
+      if (userLiked == false) {
+        await database.setPostLiked(
+          PostLiked(
+            postId: post.id!,
+            userId: appUser.id!,
+            timestamp: DateTime.now(),
+          ),
+        );
+        await _addLikedCount(context);
+      } else {
+        await _deleteLikedCount(context, appUser);
+      }
+    } catch (e) {
+      unawaited(showExceptionAlertDialog(
+        context: context,
+        title: LocaleKeys.operationFailed.tr(),
+        exception: e,
+      ));
+    }
+  }
+
+  Future<void> _addLikedCount(BuildContext context) async {
+    try {
+      final database = context.read(databaseProvider);
+      final nowPost = await database.getPost(post.id!);
+      if (nowPost != null) {
+        await database
+            .updatePost(nowPost.copyWith(likedCount: nowPost.likedCount + 1));
+      }
+    } catch (e) {
+      unawaited(showExceptionAlertDialog(
+        context: context,
+        title: LocaleKeys.operationFailed.tr(),
+        exception: e,
+      ));
+    }
+  }
+
+  Future<void> _deleteLikedCount(BuildContext context, AppUser appUser) async {
+    try {
+      final database = context.read(databaseProvider);
+      await database.transactionDelPostLiked(
+          appUser.id!, post.copyWith(likedCount: post.likedCount - 1));
+    } catch (e) {
+      unawaited(showExceptionAlertDialog(
+        context: context,
+        title: LocaleKeys.operationFailed.tr(),
+        exception: e,
+      ));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final appUserAsyncValue = useProvider(appUserStreamProvider);
-    final appUser = appUserAsyncValue.data?.value;
-
+    final postLikedAsyncValue = useProvider(postLikedStreamProvider(post.id!));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -49,7 +105,7 @@ class PostListItem extends HookWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(post.title, style: Theme.of(context).textTheme.subtitle2),
-              SizedBox(height: defaultPadding),
+              const SizedBox(height: defaultPadding),
               Text(
                 post.content,
                 style: Theme.of(context).textTheme.bodyText2,
@@ -57,55 +113,73 @@ class PostListItem extends HookWidget {
             ],
           ),
         ),
-        Row(
-          children: [
-            InkWell(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () => _likePost(context, post),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-                child: SizedBox(
-                  width: defaultPadding * 7,
-                  child: Row(
-                    children: [
-                      Icon(
-                        post.likedUsers.contains(appUser?.id)
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: post.likedUsers.contains(appUser?.id)
-                            ? Colors.red
-                            : Colors.grey,
-                        size: 19,
-                      ),
-                      SizedBox(width: 3),
-                      Text(
-                        post.likedUsers.isNotEmpty
-                            ? post.likedUsers.length.toString()
-                            : LocaleKeys.like.tr(),
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                    ],
-                  ),
+        appUserAsyncValue.when(
+          loading: () => Center(child: const CupertinoActivityIndicator()),
+          error: (_, __) => const EmptyContent(
+            title: 'Something went wrong',
+            message: "Can't load items right now",
+          ),
+          data: (appUser) => Row(
+            children: [
+              postLikedAsyncValue.when(
+                loading: () =>
+                    Center(child: const CupertinoActivityIndicator()),
+                error: (_, __) => const EmptyContent(
+                  title: 'Something went wrong',
+                  message: "Can't load items right now",
                 ),
+                data: (postLiked) {
+                  final userLiked =
+                      postLiked.any((element) => element.userId == appUser?.id);
+                  return InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () => _likePost(context, userLiked, appUser),
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: defaultPadding),
+                      child:  SizedBox(
+                        width: defaultPadding * 7,
+                        child: Row(
+                          children: [
+                            Icon(
+                              userLiked
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: userLiked ? Colors.red : Colors.grey,
+                              size: 19,
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              postLiked.isNotEmpty
+                                  ? postLiked.length.toString()
+                                  : LocaleKeys.like.tr(),
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
-            ),
-            IconButton(
-              padding: EdgeInsets.all(0),
-              constraints: BoxConstraints.tight(Size(25, 16)),
-              iconSize: 18.3,
-              color: Colors.grey,
-              icon: Icon(Icons.mode_comment_outlined),
-              onPressed: null,
-            ),
-            SizedBox(width: 2),
-            Text(
-              post.commentCount > 0
-                  ? post.commentCount.toString()
-                  : LocaleKeys.comment.tr(),
-              style: Theme.of(context).textTheme.caption,
-            ),
-          ],
+              IconButton(
+                padding: EdgeInsets.all(0),
+                constraints: BoxConstraints.tight(Size(25, 16)),
+                iconSize: 18.3,
+                color: Colors.grey,
+                icon: Icon(Icons.mode_comment_outlined),
+                onPressed: null,
+              ),
+              const SizedBox(width: 2),
+              Text(
+                post.commentCount > 0
+                    ? post.commentCount.toString()
+                    : LocaleKeys.comment.tr(),
+                style: Theme.of(context).textTheme.caption,
+              ),
+            ],
+          ),
         )
       ],
     );
@@ -136,7 +210,7 @@ class PostUserInfo extends HookWidget {
                 displayName: postUser?.displayName,
                 radius: 14,
               ),
-              SizedBox(width: defaultPadding),
+              const SizedBox(width: defaultPadding),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -161,7 +235,7 @@ class PostUserInfo extends HookWidget {
             ],
           );
         }
-        return SizedBox();
+        return const SizedBox();
       },
     );
   }
