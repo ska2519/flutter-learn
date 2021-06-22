@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/account/account_page.dart';
@@ -16,15 +17,8 @@ import 'package:flutter_learn/constants/responsive.dart';
 import 'package:flutter_learn/controllers/menu_controller.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
-// final homePageProvider = Provider((ref) => HomePage());
-// final navigatorKeyProvider = Provider<Key>((ref) {
-//   return ref.read(homePageProvider).navigatorKey;
-// });
 
 class HomePage extends StatefulHookWidget {
-  // final _navigatorKey = const Key(Keys.bottomNavigationBar);
-  // Key get navigatorKey => _navigatorKey;
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -41,7 +35,8 @@ class _HomePageState extends State<HomePage> {
     final database = context.read(databaseProvider);
     for (final post in posts) {
       print('post: $post');
-      await database.addPost(post);
+      final DocumentReference documentReference = await database.addPost(post);
+      await database.updatePost(post.copyWith(id: documentReference.id));
     }
   }
 
