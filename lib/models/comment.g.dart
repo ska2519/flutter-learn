@@ -15,8 +15,12 @@ _$_Comment _$_$_CommentFromJson(Map json) {
     timestamp: json['timestamp'] == null
         ? null
         : DateTime.parse(json['timestamp'] as String),
-    parent: json['parent'] as String?,
-    level: json['level'] as int?,
+    likedUsers: (json['likedUsers'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toSet() ??
+        {},
+    level: json['level'] as int? ?? 0,
+    parent: json['parent'] as String? ?? '',
   );
 }
 
@@ -27,6 +31,7 @@ Map<String, dynamic> _$_$_CommentToJson(_$_Comment instance) =>
       'postId': instance.postId,
       'userId': instance.userId,
       'timestamp': instance.timestamp?.toIso8601String(),
-      'parent': instance.parent,
+      'likedUsers': instance.likedUsers.toList(),
       'level': instance.level,
+      'parent': instance.parent,
     };

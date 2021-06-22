@@ -32,7 +32,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
-        // primarySwatch: Colors.lightBlue,
         primaryColor: flutterPrimaryColor,
         accentColor: flutterAccentColor,
         appBarTheme: AppBarTheme(
