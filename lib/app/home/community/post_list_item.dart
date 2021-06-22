@@ -1,21 +1,25 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_learn/routes/app_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
+
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/avatar.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
-import 'package:flutter_learn/models/app_user.dart';
-import 'package:flutter_learn/models/post_liked.dart';
-import 'package:flutter_learn/services/firestore_database.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_learn/constants/constants.dart';
+import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/models/post.dart';
+import 'package:flutter_learn/models/post_liked.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
+import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:pedantic/pedantic.dart';
+
 import 'format.dart';
+import 'post_detail_page.dart';
 
 final postLikedStreamProvider =
     StreamProvider.autoDispose.family<List<PostLiked>, String>((ref, postId) {
@@ -92,10 +96,15 @@ class PostListItem extends HookWidget {
     }
   }
 
+  void tapEmptyComment(BuildContext context, String postId) {
+    PostDetailPage.show(context, postId: postId, autoFocus: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final appUserAsyncValue = useProvider(appUserStreamProvider);
     final postLikedAsyncValue = useProvider(postLikedStreamProvider(post.id!));
+    final routeName = ModalRoute.of(context)!.settings.name;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -138,7 +147,7 @@ class PostListItem extends HookWidget {
                     child: Padding(
                       padding:
                           const EdgeInsets.symmetric(vertical: defaultPadding),
-                      child:  SizedBox(
+                      child: SizedBox(
                         width: defaultPadding * 7,
                         child: Row(
                           children: [
@@ -150,11 +159,14 @@ class PostListItem extends HookWidget {
                               size: 19,
                             ),
                             const SizedBox(width: 3),
-                            Text(
-                              postLiked.isNotEmpty
-                                  ? postLiked.length.toString()
-                                  : LocaleKeys.like.tr(),
-                              style: Theme.of(context).textTheme.caption,
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 4),
+                              child: Text(
+                                postLiked.isNotEmpty
+                                    ? postLiked.length.toString()
+                                    : LocaleKeys.like.tr(),
+                                style: Theme.of(context).textTheme.caption,
+                              ),
                             ),
                           ],
                         ),
@@ -163,20 +175,36 @@ class PostListItem extends HookWidget {
                   );
                 },
               ),
-              IconButton(
-                padding: EdgeInsets.all(0),
-                constraints: BoxConstraints.tight(Size(25, 16)),
-                iconSize: 18.3,
-                color: Colors.grey,
-                icon: Icon(Icons.mode_comment_outlined),
-                onPressed: null,
-              ),
-              const SizedBox(width: 2),
-              Text(
-                post.commentCount > 0
-                    ? post.commentCount.toString()
-                    : LocaleKeys.comment.tr(),
-                style: Theme.of(context).textTheme.caption,
+              InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: routeName != AppRoutes.postDetailPage
+                    ? post.commentCount == 0
+                        ? () => tapEmptyComment(context, post.id!)
+                        : null
+                    : null,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.mode_comment_outlined,
+                        color: Colors.grey,
+                        size: 18.3,
+                      ),
+                      const SizedBox(width: 5),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Text(
+                          post.commentCount > 0
+                              ? post.commentCount.toString()
+                              : LocaleKeys.comment.tr(),
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

@@ -17,8 +17,8 @@ class Post with _$Post {
     required String displayName,
     required String title,
     required String content,
-    @Default(0) int commentCount,
     @TimestampConverter() DateTime? timestamp,
+    @Default(0) int commentCount,
     @Default(0) int likedCount,
     @Default(0) int readCount,
   }) = _Post;
