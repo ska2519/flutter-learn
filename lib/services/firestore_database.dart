@@ -99,7 +99,7 @@ class FirestoreDatabase {
   Future<void> deletePost(String postId) =>
       _service.deleteData(path: FirestorePath.post(postId));
 
-  Future<List<String>> getPostReadUsers(String postId) async =>
+  Future<List<String>?> getPostReadUsers(String postId) async =>
       _service.getCollection(
         path: FirestorePath.postReadUsers(postId),
         builder: (data, documentId) {
@@ -119,11 +119,21 @@ class FirestoreDatabase {
         builder: (data, documentId) => Post.fromJson(data!),
       );
 
-  Stream<List<Comment>> commentsStream(String postId) =>
+  Stream<List<Comment>> topLevelCommentsStream(String postId) =>
       _service.collectionStream<Comment>(
         path: FirestorePath.comments(postId),
-        queryBuilder: (query) => query.orderBy('timestamp', descending: true),
+        queryBuilder: (query) => query.where('level', isEqualTo: 0),
         builder: (data, documentId) => Comment.fromJson(data!),
+        sort: (lhs, rhs) => rhs.timestamp!.compareTo(lhs.timestamp!),
+      );
+  Stream<List<Comment>> childCommentsStream(Comment comment) =>
+      _service.collectionStream<Comment>(
+        path: FirestorePath.comments(comment.postId),
+        queryBuilder: (query) => query
+            .where('parent', isGreaterThanOrEqualTo: comment.id)
+            .where('parent', isLessThanOrEqualTo: '${comment.id}~'),
+        builder: (data, documentId) => Comment.fromJson(data!),
+        sort: (lhs, rhs) => rhs.timestamp!.compareTo(lhs.timestamp!),
       );
 
   Stream<List<PostLiked>> postLikedStream(String postId) =>
