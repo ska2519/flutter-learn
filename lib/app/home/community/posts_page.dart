@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +15,6 @@ import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-
 import 'post_list_item.dart';
 
 const iconPath = 'assets/icons/';
@@ -38,11 +35,9 @@ class PostsPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('rebuild Screen');
     final appUserAsyncValue = useProvider(appUserStreamProvider);
     final appUser = appUserAsyncValue.data?.value;
     final postsAsyncValue = useProvider(postsStreamProvider);
-
     return CustomScrollView(
       physics:
           const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),

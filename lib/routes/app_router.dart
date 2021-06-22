@@ -52,8 +52,17 @@ class AppRouter {
           maintainState: false,
         );
       case AppRoutes.postDetailPage:
+        final mapArgs = args as Map<String, dynamic>?;
+        final postId = mapArgs!['postId'] as String;
+        final key = mapArgs['key'] as Key?;
+        final autoFocus = mapArgs['autoFocus'] as bool?;
+
         return MaterialPageRoute<dynamic>(
-          builder: (_) => PostDetailPage(postId: args! as String),
+          builder: (_) => PostDetailPage(
+            postId: postId,
+            autoFocus: autoFocus,
+            key: key,
+          ),
           settings: settings,
           fullscreenDialog: true,
           maintainState: false,
