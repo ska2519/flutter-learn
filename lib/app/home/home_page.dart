@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/account/account_page.dart';
@@ -19,6 +20,10 @@ import 'package:flutter_learn/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class HomePage extends StatefulHookWidget {
+  const HomePage({required this.analytics, required this.observer});
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -31,12 +36,35 @@ class _HomePageState extends State<HomePage> {
   ];
   int _selectedIndex = 0;
 
+  /// analytics Test
+  String _message = '';
+
+  void setMessage(String message) {
+    setState(() {
+      _message = message;
+    });
+  }
+
+  Future<void> _sendAnalyticsEvent() async {
+    await widget.analytics.logEvent(
+      name: 'test_event',
+      parameters: <String, dynamic>{
+        'string': 'string',
+        'int': 42,
+        'long': 12345678910,
+        'double': 42.0,
+        'bool': true,
+      },
+    );
+    setMessage('logEvent succeeded');
+  }
+
   Future<void> addPostsBatch(List<Post> posts) async {
     final database = context.read(databaseProvider);
     for (final post in posts) {
       print('post: $post');
-      final DocumentReference documentReference = await database.addPost(post);
-      await database.updatePost(post.copyWith(id: documentReference.id));
+      await database.setPost(post);
+      // await database.updatePost(post.copyWith(id: documentReference.id));
     }
   }
 

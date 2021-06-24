@@ -20,23 +20,21 @@ final databaseProvider = Provider<FirestoreDatabase>((ref) {
 class FirestoreDatabase {
   final _service = FirestoreService.instance;
 
-  Stream<AppUser?> appUserStream(AppUser appUser) {
-    return appUser.id != null
-        ? _service.documentStream(
-            path: FirestorePath.appUser(appUser.id!),
-            builder: (data, documentId) {
-              return AppUser.fromJson(data!);
-            })
-        : Stream<AppUser?>.value(null);
-  }
+  Stream<AppUser?> appUserStream(AppUser appUser) => appUser.id != null
+      ? _service.documentStream(
+          path: FirestorePath.appUser(appUser.id!),
+          builder: (data, documentId) => AppUser.fromJson(data!))
+      : Stream<AppUser?>.value(null);
 
-  Future<AppUser?> getAppUser(String uid) async => _service
-      .getDoc(path: FirestorePath.appUser(uid))
-      .then((appUser) => appUser == null ? null : AppUser.fromJson(appUser));
+  Future<AppUser?> getAppUser(String uid) async => _service.getDoc(
+        path: FirestorePath.appUser(uid),
+        builder: (data, documentId) => AppUser.fromJson(data!),
+      );
 
-  Future<Post?> getPost(String postId) async => _service
-      .getDoc(path: FirestorePath.post(postId))
-      .then((post) => post == null ? null : Post.fromJson(post));
+  Future<Post?> getPost(String postId) async => _service.getDoc(
+        path: FirestorePath.post(postId),
+        builder: (data, documentId) => Post.fromJson(data!),
+      );
 
   Future<void> setAppUser(User user) async => _service.setData(
         path: FirestorePath.appUser(user.uid),
@@ -54,9 +52,14 @@ class FirestoreDatabase {
         data: appUser.toJson(),
       );
 
-  Future<DocumentReference> addPost(Post post) => _service.addData(
-        path: FirestorePath.posts(),
-        data: post.toJson(),
+  Future<void> setPost(Post post) {
+    return _service.setData(
+        path: FirestorePath.post(post.id!), data: post.toJson());
+  }
+
+  Future<void> setComment(Comment comment) => _service.setData(
+        path: FirestorePath.comment(comment.postId, comment.id!),
+        data: comment.toJson(),
       );
   Future<void> updatePost(Post post) => _service.updateDoc(
         path: FirestorePath.post(post.id!),
@@ -103,21 +106,24 @@ class FirestoreDatabase {
       _service.getCollection(
         path: FirestorePath.postReadUsers(postId),
         builder: (data, documentId) {
-          print('data: $data / documentId: $documentId');
           return documentId;
         },
       );
 
   Stream<List<Post>> postsStream() => _service.collectionStream(
-        path: FirestorePath.posts(),
-        queryBuilder: (query) => query.orderBy('timestamp', descending: true),
-        builder: (data, documentId) => Post.fromJson(data!),
-      );
+      path: FirestorePath.posts(),
+      queryBuilder: (query) => query.orderBy('timestamp', descending: true),
+      builder: (data, documentId) {
+        data!['id'] = documentId;
+        return Post.fromJson(data);
+      });
 
   Stream<Post> postStream(String postId) => _service.documentStream(
-        path: FirestorePath.post(postId),
-        builder: (data, documentId) => Post.fromJson(data!),
-      );
+      path: FirestorePath.post(postId),
+      builder: (data, documentId) {
+        data!['id'] = documentId;
+        return Post.fromJson(data);
+      });
 
   Stream<List<Comment>> topLevelCommentsStream(String postId) =>
       _service.collectionStream<Comment>(
@@ -126,6 +132,8 @@ class FirestoreDatabase {
         builder: (data, documentId) => Comment.fromJson(data!),
         sort: (lhs, rhs) => rhs.timestamp!.compareTo(lhs.timestamp!),
       );
+
+  /// 1단계 하위 레벨만 isLessThanOrEqualTo로 솔팅 가능
   Stream<List<Comment>> childCommentsStream(Comment comment) =>
       _service.collectionStream<Comment>(
         path: FirestorePath.comments(comment.postId),
@@ -134,6 +142,7 @@ class FirestoreDatabase {
             .where('parent', isLessThanOrEqualTo: '${comment.id}~'),
         builder: (data, documentId) => Comment.fromJson(data!),
         sort: (lhs, rhs) => rhs.timestamp!.compareTo(lhs.timestamp!),
+        // sort: (lhs, rhs) => lhs.level!.compareTo(rhs.level!),
       );
 
   Stream<List<PostLiked>> postLikedStream(String postId) =>
