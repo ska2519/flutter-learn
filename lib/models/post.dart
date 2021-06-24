@@ -27,7 +27,7 @@ class Post with _$Post {
 
   factory Post.random() {
     return _$_Post(
-      // id: getRandomPostIds(),
+      id: getRandomPostIds(),
       userId: getRandomUserIds(),
       displayName: getRandomDisplayName(),
       title: getRandomTitle(),

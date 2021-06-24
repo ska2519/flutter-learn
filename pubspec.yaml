@@ -11,15 +11,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cached_network_image: ^3.0.0
   cloud_firestore: ^2.2.0
   cupertino_icons: ^1.0.2
   duration: ^3.0.6
   easy_localization: ^3.0.0
   equatable: ^2.0.2
+  firebase_analytics: ^8.1.2
   firebase_auth: ^1.2.0
   firebase_core: ^1.2.0
+  firebase_crashlytics: ^2.0.6
   firebase_messaging: ^10.0.0
   firebase_storage: ^8.1.0
   fl_chart: ^0.36.1
@@ -55,12 +56,12 @@ flutter_icons:
   ios: true
   remove_alpha_ios: true
   adaptive_icon_background: #ffffff
+    null
   image_path: 'assets/icons/dash_icon_512.png'
 
 flutter:
   uses-material-design: true
   # generate: true
-
   assets:
     - assets/images/
     - assets/icons/
