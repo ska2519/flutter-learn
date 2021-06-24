@@ -32,7 +32,13 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+#   pod 'Firebase/Crashlytics'
+#     script_phase :name=> 'FirebaseCrashlytics',
+#                  :script=> '"${PODS_ROOT}/FirebaseCrashlytics/run"',
+#                  :input_files=> ['$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)']
 end
+
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
