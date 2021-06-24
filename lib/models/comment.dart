@@ -2,6 +2,8 @@ import 'package:flutter_learn/models/timestamp_converter.dart';
 import 'package:flutter_learn/models/values.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'app_user.dart';
+
 part 'comment.g.dart';
 part 'comment.freezed.dart';
 
@@ -19,6 +21,14 @@ class Comment with _$Comment {
     @Default(0) int? level,
     @Default('') String? parent,
   }) = _Comment;
+
+  void likeComment(AppUser appUser) {
+    if (likedUsers.contains(appUser.id)) {
+      likedUsers.remove(appUser.id);
+    } else {
+      likedUsers.add(appUser.id!);
+    }
+  }
 
   factory Comment.fromJson(Map<String, dynamic> json) =>
       _$CommentFromJson(json);

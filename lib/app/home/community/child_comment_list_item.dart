@@ -13,45 +13,40 @@ final childCommentsStreamProvider =
   final database = ref.watch(databaseProvider);
   return database.childCommentsStream(comment);
 });
-typedef Callback = Future<void> Function(Comment childComment);
+typedef CommentCallback = void Function(Comment childComment);
 
 class ChildCommentListItem extends HookWidget {
   const ChildCommentListItem({
-    required this.comment,
+    required this.topLevelComment,
     required this.menuIconTap,
     required this.replyIconTap,
-    required this.callBack,
     Key? key,
   }) : super(key: key);
-  final Comment comment;
-  final VoidCallback menuIconTap;
-  final VoidCallback replyIconTap;
-  final Callback callBack;
+  final Comment topLevelComment;
+  final CommentCallback menuIconTap;
+  final CommentCallback replyIconTap;
 
   @override
   Widget build(BuildContext context) {
     final childCommentsAsyncValue =
-        useProvider(childCommentsStreamProvider(comment));
+        useProvider(childCommentsStreamProvider(topLevelComment));
     return childCommentsAsyncValue.when(
-      loading: () => Center(child: const CupertinoActivityIndicator()),
+      loading: () => const SizedBox(),
       error: (_, __) => const EmptyContent(
         title: 'Something went wrong',
         message: "Can't load items right now",
       ),
       data: (childComments) {
-        print('childComments: $childComments');
         return ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: childComments.length,
           itemBuilder: (context, i) {
-            return FutureBuilder(
-              future: callBack(childComments[i]),
-              builder: (context, snapshot) => CommentListItem(
-                comment: childComments[i],
-                menuIconTap: menuIconTap,
-                replyIconTap: replyIconTap,
-              ),
+            return CommentListItem(
+              commentKey: Key('comment-${childComments[i].id}'),
+              comment: childComments[i],
+              menuIconTap: () => menuIconTap(childComments[i]),
+              replyIconTap: () => replyIconTap(childComments[i]),
             );
           },
         );
