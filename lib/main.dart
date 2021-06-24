@@ -1,4 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -25,6 +27,10 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  static late FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
+
   @override
   Widget build(BuildContext context) {
     final auth = context.read(authServiceProvider);
@@ -43,10 +49,14 @@ class MyApp extends StatelessWidget {
         textTheme: TextTheme(),
         fontFamily: 'NotoSansKR',
       ),
+      navigatorObservers: <NavigatorObserver>[observer],
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: HomePage(),
+      home: HomePage(
+        analytics: analytics,
+        observer: observer,
+      ),
       onGenerateRoute: (settings) => AppRouter.onGenerateRoute(settings, auth),
     );
   }

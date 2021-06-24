@@ -44,12 +44,6 @@ class FirestoreService {
     return result;
   }
 
-  Future<Map<String, dynamic>?> getDoc({required String path}) async =>
-      FirebaseFirestore.instance
-          .doc(path)
-          .get()
-          .then((DocumentSnapshot doc) => doc.data() as Map<String, dynamic>?);
-
   Future<void> updateDoc({
     required String path,
     required Map<String, dynamic> data,
@@ -116,11 +110,25 @@ class FirestoreService {
               builder(snapshot.data() as Map<String, dynamic>?, snapshot.id))
           .where((value) => value != null)
           .toList();
+      // print('result: $result');
       if (sort != null) {
         result.sort(sort);
       }
       return result;
     });
+  }
+
+  Future<T> getDoc<T>({
+    required String path,
+    required T Function(Map<String, dynamic>? data, String documentID) builder,
+  }) async {
+    final DocumentReference reference = FirebaseFirestore.instance.doc(path);
+    final DocumentSnapshot snapshot = await reference.get();
+    return builder(snapshot.data() as Map<String, dynamic>?, snapshot.id);
+    // print('result: $result');
+    // return result;
+    // },
+    // );
   }
 
   Stream<T> documentStream<T>({
