@@ -11,3 +11,4 @@ targets:
           create_to_json: true
           disallow_unrecognized_keys: false
           explicit_to_json: true
+          generic_argument_factories: true
