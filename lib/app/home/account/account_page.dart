@@ -290,7 +290,7 @@ Widget _buildReadPosts(BuildContext context) {
       message: "Can't load items right now",
     ),
     data: (readPosts) {
-      print('readPosts: $readPosts');
+      print('accountPage readPosts: $readPosts');
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
