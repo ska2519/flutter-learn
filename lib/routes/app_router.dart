@@ -8,6 +8,7 @@ import 'package:flutter_learn/app/home/desktop/youtube_screen.dart';
 import 'package:flutter_learn/app/home/home_page.dart';
 import 'package:flutter_learn/app/sign_in/email/email_password_sign_in_page.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
+import 'package:flutter_learn/main.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/auth_base.dart';
 
@@ -69,7 +70,10 @@ class AppRouter {
         );
       case AppRoutes.appPage:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => HomePage(),
+          builder: (_) => HomePage(
+            analytics: MyApp.analytics,
+            observer: MyApp.observer,
+          ),
           //maintainState false = pop으로 돌아가면 위젯 rebuild
           maintainState: false,
           settings: settings,

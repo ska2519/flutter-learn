@@ -52,9 +52,6 @@ class PostDetailPage extends StatefulHookWidget {
     );
   }
 
-  // void createStateCommentField({required bool autofocus}) =>
-  //     createState().commentField(autofocus: autofocus);
-
   @override
   _PostDetailPageState createState() => _PostDetailPageState();
 }
@@ -62,32 +59,35 @@ class PostDetailPage extends StatefulHookWidget {
 class _PostDetailPageState extends State<PostDetailPage> {
   static final GlobalKey _commentFieldKey = GlobalKey();
   late TextEditingController _textEditingController;
-  late FocusNode _focusNode;
+  late FocusNode focusNode;
   late String postId;
-  Comment? editComment, parentComment, childComment;
+  Comment? editComment, parentComment;
   String _commentText = '';
   bool autoFocus = false;
-
-  void updateChildComment(Comment callBackComment) {
-    setState(() {
-      print('callBackComment: $callBackComment');
-      childComment = callBackComment;
-    });
-  }
+  late Future _checkReadUsers;
 
   @override
   void initState() {
     super.initState();
     _textEditingController = TextEditingController();
-    _focusNode = FocusNode();
+    focusNode = FocusNode();
+    focusNode.addListener(() {
+      print("Has focus: ${focusNode.hasFocus}");
+    });
     postId = widget.postId!;
     if (widget.autoFocus != null) autoFocus = widget.autoFocus!;
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _checkReadUsers = _addReadUsers();
+  }
+
+  @override
   void dispose() {
     _textEditingController.dispose();
-    _focusNode.dispose();
+    focusNode.dispose();
     super.dispose();
   }
 
@@ -101,7 +101,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
     for (final comment in comments) {
       final reference = await database.addComment(comment);
       await database.updateComment(comment.copyWith(id: reference.id));
-      _addCommentCount();
     }
   }
 
@@ -136,25 +135,35 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   Comment _commentFromState() {
-    final appUserAsyncValue = context.read(appUserStreamProvider);
-    final appUser = appUserAsyncValue.data!.value!;
+    final appUser = context.read(appUserProvider);
     final now = DateTime.now();
+    final currentDate = documentIdFromCurrentDate().substring(0, 19);
+    print('currentDate: $currentDate ${currentDate.length}');
+    final commentId = editComment?.id ?? '$currentDate:${appUser.id}';
     return Comment(
-      id: editComment?.id,
+      id: commentId,
       postId: postId,
       text: _commentText,
       userId: appUser.id!,
       timestamp: editComment != null ? editComment!.timestamp : now,
-      level: parentComment != null ? parentComment!.level! + 1 : 0,
+      level: editComment != null
+          ? editComment!.level
+          : parentComment != null
+              ? parentComment!.level! + 1
+              : 0,
       parent: parentComment != null
-          ? '${parentComment!.parent}${parentComment!.id}'
+          ? '${parentComment?.parent}${parentComment?.id}'
           : '',
     );
   }
 
   void _replyComment(Comment comment) {
-    _focusNode.requestFocus();
+    focusNode.requestFocus();
+    print('parentComment.id: ${comment.id}');
     parentComment = comment;
+    // 게시 버튼 클릭 안하고 포커스 아웃되면 parentComment = null
+    // 앱 전환으로도 포커스 아웃 될 수 있음
+    print('parentComment.parent: ${parentComment?.parent}');
   }
 
   Future<void> _submitComment() async {
@@ -167,8 +176,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
       }
       if (editComment == null) {
         final reference = await database.addComment(comment);
-        await database.updateComment(comment.copyWith(id: reference.id));
-        await _addCommentCount();
+        await database.addComment(comment);
+        // await database.updateComment(comment.copyWith(id: reference.id));
       } else {
         await database.updateComment(comment);
       }
@@ -183,25 +192,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     }
   }
 
-  Future<void> _addCommentCount() async {
-    try {
-      final database = context.read(databaseProvider);
-      final nowPost = await database.getPost(postId);
-      if (nowPost != null) {
-        await database.updatePost(
-            nowPost.copyWith(commentCount: nowPost.commentCount + 1));
-      }
-    } catch (e) {
-      unawaited(showExceptionAlertDialog(
-        context: context,
-        title: LocaleKeys.operationFailed.tr(),
-        exception: e,
-      ));
-    }
-  }
-
   Future<void> _addReadUsers() async {
-    print('_addReadUsers');
     try {
       final appUser = context.read(appUserProvider);
       final database = context.read(databaseProvider);
@@ -262,7 +253,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void _editComment(Comment comment) {
     _textEditingController.text = comment.text;
     editComment = comment;
-    _focusNode.requestFocus();
+    focusNode.requestFocus();
     _textEditingController.selection = TextSelection.fromPosition(
         TextPosition(offset: _textEditingController.text.length));
   }
@@ -270,10 +261,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void _deleteComment(Comment comment, Post post) {
     try {
       final database = context.read(databaseProvider);
-      database.transactionDelComment(
-        comment,
-        post.copyWith(commentCount: post.commentCount - 1),
-      );
+      database.deleteComment(comment);
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
@@ -293,6 +281,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!focusNode.hasFocus) parentComment = null;
     print('PostDetailPage build');
     final _size = MediaQuery.of(context).size;
     final commentsAsyncValue =
@@ -308,7 +297,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           message: "Can't load items right now",
         ),
         data: (post) => FutureBuilder(
-          future: _addReadUsers(),
+          future: _checkReadUsers,
           builder: (context, snapshot) => Scaffold(
             floatingActionButton: appUser.id == '7ytll7EosoUNI8Ix2hpPf8ZR3rH3'
                 ? Padding(
@@ -426,6 +415,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                 child: Column(
                                   children: [
                                     CommentListItem(
+                                      commentKey:
+                                          Key('comment-${comments[i].id}'),
                                       comment: comments[i],
                                       menuIconTap: () => commentHorizPopup(
                                           context, comments[i], post),
@@ -433,13 +424,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                           _replyComment(comments[i]),
                                     ),
                                     ChildCommentListItem(
-                                      comment: comments[i],
-                                      menuIconTap: () => commentHorizPopup(
-                                          context, childComment!, post),
-                                      replyIconTap: () =>
-                                          _replyComment(childComment!),
-                                      callBack: (Comment childComment) async =>
-                                          updateChildComment(childComment),
+                                      topLevelComment: comments[i],
+                                      menuIconTap: (Comment childComment) =>
+                                          commentHorizPopup(
+                                              context, childComment, post),
+                                      replyIconTap: (Comment childComment) =>
+                                          _replyComment(childComment),
                                     ),
                                   ],
                                 ),
@@ -466,7 +456,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                           // ignore: avoid_bool_literals_in_conditional_expressions
                           enabled: appUser.id == null ? false : true,
                           placeholder: LocaleKeys.pleaseWriteComment.tr(),
-                          focusNode: _focusNode,
+                          focusNode: focusNode,
                           controller: _textEditingController,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
@@ -478,7 +468,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                           suffix: TextButton(
                             onPressed: () {
                               _submitComment();
-                              _focusNode.unfocus();
+                              focusNode.unfocus();
                               _textEditingController.clear();
                             },
                             child: Text(LocaleKeys.post.tr()),
