@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 
@@ -5,14 +6,13 @@ import 'package:crypto/crypto.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_learn/exceptions/firestore_api_exception.dart';
+import 'package:flutter_learn/models/app_user.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
-import 'package:flutter_learn/exceptions/firestore_api_exception.dart';
-import 'package:flutter_learn/models/app_user.dart';
-import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 import 'auth_base.dart';
 import 'firestore_database.dart';
@@ -20,22 +20,10 @@ import 'firestore_database.dart';
 final authServiceProvider =
     Provider<AuthBase>((ref) => FirebaseAuthService(ref.read));
 
-final authStartProvider = Provider<AppUser?>((ref) {
+final appUserStreamProvider = StreamProvider<AppUser?>((ref) async* {
   final authService = ref.watch(authServiceProvider);
-  final user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    authService.userFromFirebase(user);
-  }
-});
-
-final appUserProvider =
-    StateNotifierProvider<AppUserNotifier, AppUser>((ref) => AppUserNotifier());
-
-final appUserStreamProvider = StreamProvider<AppUser?>((ref) {
-  ref.watch(authStartProvider);
-  final database = ref.watch(databaseProvider);
-  final appUser = ref.watch(appUserProvider);
-  return database.appUserStream(appUser);
+  // yield* authService.idTokenChanges;
+  yield* authService.onAuthStateChanged;
 });
 
 class FirebaseAuthService implements AuthBase {
@@ -51,11 +39,26 @@ class FirebaseAuthService implements AuthBase {
   );
 
   @override
+  Stream<AppUser?> get onAuthStateChanged =>
+      _firebaseAuth.authStateChanges().asyncMap(
+            (user) async => user != null
+                ? await userFromFirebase(user)
+                : await signInAnonymously(),
+          );
+
+  // @override
+  // Stream<AppUser?> get idTokenChanges =>
+  //     _firebaseAuth.idTokenChanges().asyncMap((user) async {
+  //       print('idTokenChanges: ${idTokenChanges.last}');
+  //       return user != null ? await userFromFirebase(user) : null;
+  //     });
+
+  @override
   Future<AppUser?> createUser(User user) async {
     final database = _read(databaseProvider);
     try {
       await database.setAppUser(user);
-      return database.getAppUser(user.uid);
+      return await database.getAppUser(user.uid);
     } catch (error) {
       throw FirestoreApiException(
         message: LocaleKeys.failedToCreateNewUser.tr(),
@@ -67,18 +70,10 @@ class FirebaseAuthService implements AuthBase {
   @override
   Future<AppUser?> fetchUser(User user) async {
     final database = _read(databaseProvider);
-
+    print('fetchUser: $user');
     if (user.uid.isNotEmpty) {
-      AppUser? appUser;
-      appUser = await database.getAppUser(user.uid);
-      appUser = appUser ?? await createUser(user);
-      final now = DateTime.now();
-      final timestamp = appUser!.timestamp!;
-      timestamp.add(now);
-      await database.updateAppUser(
-        appUser.copyWith(timestamp: timestamp),
-      );
-      return appUser;
+      AppUser? appUser = await database.getAppUser(user.uid);
+      return appUser ??= await createUser(user);
     } else {
       throw FirestoreApiException(
         message: LocaleKeys.uidPassedEmpty.tr(),
@@ -87,22 +82,23 @@ class FirebaseAuthService implements AuthBase {
   }
 
   @override
-  Future<AppUser?> userFromFirebase(User? user) async {
-    if (user == null) {
-      return null;
+  Future<void> deleteUser(AppUser appUser) async {
+    try {
+      final database = _read(databaseProvider);
+      await database.updateAppUser(appUser.copyWith(deletedUser: true));
+      await _firebaseAuth.currentUser!.delete();
+      print('deleteUser: $appUser');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        print(
+            'The user must reauthenticate before this operation can be executed.');
+      }
     }
-    return fetchUser(user).then((appUser) {
-      _read(appUserProvider.notifier).login(appUser!);
-
-      return appUser;
-    });
   }
 
   @override
-  Future<AppUser?> signInAnonymously() async {
-    final UserCredential userCredential =
-        await _firebaseAuth.signInAnonymously();
-    return userFromFirebase(userCredential.user);
+  Future<AppUser?> userFromFirebase(User? user) async {
+    return user == null || user.isAnonymous ? null : await fetchUser(user);
   }
 
   @override
@@ -187,7 +183,6 @@ class FirebaseAuthService implements AuthBase {
             message: LocaleKeys.missingGoogleAuthToken.tr());
       }
     } else {
-      print('ERROR_ABORTED_BY_USER');
       throw PlatformException(
           code: 'ERROR_ABORTED_BY_USER',
           message: LocaleKeys.signInAbortedByUser.tr());
@@ -252,15 +247,21 @@ class FirebaseAuthService implements AuthBase {
   }
 
   @override
-  Future<AppUser?> currentUser() async {
-    return userFromFirebase(_firebaseAuth.currentUser);
-  }
+  Future<AppUser?> currentUser() async =>
+      userFromFirebase(_firebaseAuth.currentUser);
 
   @override
   Future<void> signOut() async {
     await googleSignIn.signOut();
-    _read(appUserProvider.notifier).logout();
     return _firebaseAuth.signOut();
+  }
+
+  @override
+  Future<AppUser?> signInAnonymously() async {
+    final UserCredential userCredential =
+        await _firebaseAuth.signInAnonymously();
+    print('userCredential: $userCredential');
+    return userFromFirebase(userCredential.user);
   }
 
   @override

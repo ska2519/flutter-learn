@@ -1,11 +1,11 @@
 {
-    "name": "flutter_learn",
-    "short_name": "flutter_learn",
+    "name": "플러터 런 - Flutter Learn",
+    "short_name": "플러터 런 - Flutter Learn",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "플러터 공부&자료 공유 - Here is Flutter Learn for learning flutter.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

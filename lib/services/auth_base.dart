@@ -25,6 +25,9 @@ abstract class AuthBase {
   Future<void> signOut();
   Future<AppUser?> createUser(User user);
   Future<AppUser?> fetchUser(User user);
+  Future<void> deleteUser(AppUser appUser);
   Future<AppUser?> userFromFirebase(User? user);
+  Stream<AppUser?> get onAuthStateChanged;
+  // Stream<AppUser?> get idTokenChanges;
   void dispose();
 }
