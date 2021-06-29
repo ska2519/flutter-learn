@@ -40,6 +40,8 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 
 ## 앱 기능 구현
 
+- [x] 영문 버전
+
 - [x] 화면 사이즈에 따른 위젯 조정
 - [x] 네비게이션 바
   - [x] Desktop 사이즈 시 SideMenu로 변경
@@ -77,7 +79,10 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 - [ ] 유튜브
 
 ## Web 기능 구현
-- [x] route
+- [x] Route
+- [x] Favicon
+- [x] Title
+- [x] Web App Icon
 - [ ] 잘못된 주소 처리
 
 ## Firebase 기능 구현
@@ -145,8 +150,8 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 앱의 '핵심' 패키지는 다음과 같습니다 :
 
 - [freezed](https://pub.dev/packages/freezed) for app state and [json_annotation](https://pub.dev/packages/json_annotation) for data serialization
-- [cloud_firestore](https://pub.dev/packages/cloud_firestore) for Firebase Cloud Firestore data persistence
 - [firebase_auth](https://pub.dev/packages/firebase_auth) for authentication
+- [cloud_firestore](https://pub.dev/packages/cloud_firestore) for Firebase Cloud Firestore data persistence
 - [dio](https://pub.dev/packages/dio) for the API client
 
 ### 지속적인 업데이트 중
