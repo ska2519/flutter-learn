@@ -1,5 +1,6 @@
-import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter_learn/constants/constants.dart';
 
 class CloudStorageInfo {
   final String svgSrc, title, totalStorage;
