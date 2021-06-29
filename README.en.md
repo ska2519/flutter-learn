@@ -32,13 +32,82 @@ Use the **Profile** page to update the currently selected profile.
 ## Features
 
 - Community
-- Videos (with pagination)
-- Save Favorites to Favorites list
+- YouTube Videos
 - Update profile
 - Firebase Firestore data persistence (community, favorites, profile)
 
 **Combining Flutter, Firebase, and Riverpod to create reusable, multi-platform apps.**
+## Implement app features
 
+- [x] English version
+
+- [x] Widget adjustment according to screen size
+- [x] navigation bar
+  - [x] Changed to SideMenu in desktop size
+
+- [x] community
+  - [x] Write 
+  - [x] Delete
+  - [x] Edit
+  - [x] Like
+  - [x] Comment
+    - [x] Like comment
+    - [x] Edit comment
+    - [x] Write a comment
+    - [x] Likes comments
+
+- [x] Register & Login
+  - [x] Sign up with Email
+  - [x] Sign up with your Google Account
+  - [x] Sign up with your Apple account
+  - [x] Sign out
+  - [x] Delete account
+  - [x] Update User info
+
+  - [x] App settings
+  - [x] My posts
+  - [x] My comment
+  - [x] My liked posts
+  - [x] My read posts 
+
+## Coming soon
+    - [ ] Changes the screen when clicking SideMenu
+  - [ ] category
+  - [ ] tag
+    - [ ] tag recommendation
+- [ ] Youtube
+
+## Implement web function
+- [x] Route
+- [x] Favicon
+- [x] Title
+- [x] Web App Icon
+- [ ] Invalid address handling
+
+## Implement Firebase Features
+- [x] Firebase Authentication
+  - [x] Anonymous Login
+  - [x] Email Login
+  - [x] Google Login
+  - [x] Apple Login
+    
+- [x] Firebase Crashlytics
+  - Check Android and iOS crash reports
+
+- [x] Firestore Database
+  - [x] Firestore data structure design
+  - Apply [x] Firestore Collection Group Queries
+  
+- [x] Firebase Hosting
+  - [x] Hosting Website Deployment
+  - [x] Setting up and deploying automatic builds to GitHub
+  
+- [x] Firebase Functions
+  - [x] increase the number of users who read the article
+  - [x] Update comment count when adding or deleting comments
+
+
+- [ ] Cloud Firestore fine-grained rules
 ## App Structure
 
 *This app is built to run on Android, iOS and the web on a single Dart codebase. To make this possible, the **highly reusable** architecture has been designed.*
@@ -50,16 +119,27 @@ The project folders are structured like this:
 /assets
 /ios
 /web
+/functions
   ... and more
 /lib
   /constants
   /controllers
+  /exceptions
+  /l10n
   /models
   /routes
   /services
   /app
     /home
+      /account
+      /community
+      /desktop
+      /youtube
     /sign_in
+      /email
+    /widgets
+      /alert_dialogs
+      /buttons
 ```
 
 
