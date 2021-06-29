@@ -12,9 +12,7 @@ _$_AppUser _$_$_AppUserFromJson(Map json) {
     email: json['email'] as String?,
     photoURL: json['photoURL'] as String?,
     displayName: json['displayName'] as String?,
-    timestamp: (json['timestamp'] as List<dynamic>?)
-        ?.map((e) => DateTime.parse(e as String))
-        .toSet(),
+    deletedUser: json['deletedUser'] as bool? ?? false,
   );
 }
 
@@ -24,5 +22,5 @@ Map<String, dynamic> _$_$_AppUserToJson(_$_AppUser instance) =>
       'email': instance.email,
       'photoURL': instance.photoURL,
       'displayName': instance.displayName,
-      'timestamp': instance.timestamp?.map((e) => e.toIso8601String()).toList(),
+      'deletedUser': instance.deletedUser,
     };

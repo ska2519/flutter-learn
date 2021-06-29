@@ -25,13 +25,13 @@ class _$AppUserTearOff {
       String? email,
       String? photoURL,
       String? displayName,
-      @TimestampsConverter() Set<DateTime>? timestamp}) {
+      bool deletedUser = false}) {
     return _AppUser(
       id: id,
       email: email,
       photoURL: photoURL,
       displayName: displayName,
-      timestamp: timestamp,
+      deletedUser: deletedUser,
     );
   }
 
@@ -49,8 +49,7 @@ mixin _$AppUser {
   String? get email => throw _privateConstructorUsedError;
   String? get photoURL => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
-  @TimestampsConverter()
-  Set<DateTime>? get timestamp => throw _privateConstructorUsedError;
+  bool get deletedUser => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -66,7 +65,7 @@ abstract class $AppUserCopyWith<$Res> {
       String? email,
       String? photoURL,
       String? displayName,
-      @TimestampsConverter() Set<DateTime>? timestamp});
+      bool deletedUser});
 }
 
 /// @nodoc
@@ -83,7 +82,7 @@ class _$AppUserCopyWithImpl<$Res> implements $AppUserCopyWith<$Res> {
     Object? email = freezed,
     Object? photoURL = freezed,
     Object? displayName = freezed,
-    Object? timestamp = freezed,
+    Object? deletedUser = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -102,10 +101,10 @@ class _$AppUserCopyWithImpl<$Res> implements $AppUserCopyWith<$Res> {
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
-      timestamp: timestamp == freezed
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
-              as Set<DateTime>?,
+      deletedUser: deletedUser == freezed
+          ? _value.deletedUser
+          : deletedUser // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -120,7 +119,7 @@ abstract class _$AppUserCopyWith<$Res> implements $AppUserCopyWith<$Res> {
       String? email,
       String? photoURL,
       String? displayName,
-      @TimestampsConverter() Set<DateTime>? timestamp});
+      bool deletedUser});
 }
 
 /// @nodoc
@@ -138,7 +137,7 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
     Object? email = freezed,
     Object? photoURL = freezed,
     Object? displayName = freezed,
-    Object? timestamp = freezed,
+    Object? deletedUser = freezed,
   }) {
     return _then(_AppUser(
       id: id == freezed
@@ -157,10 +156,10 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
-      timestamp: timestamp == freezed
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
-              as Set<DateTime>?,
+      deletedUser: deletedUser == freezed
+          ? _value.deletedUser
+          : deletedUser // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -173,7 +172,7 @@ class _$_AppUser implements _AppUser {
       this.email,
       this.photoURL,
       this.displayName,
-      @TimestampsConverter() this.timestamp});
+      this.deletedUser = false});
 
   factory _$_AppUser.fromJson(Map<String, dynamic> json) =>
       _$_$_AppUserFromJson(json);
@@ -186,13 +185,13 @@ class _$_AppUser implements _AppUser {
   final String? photoURL;
   @override
   final String? displayName;
+  @JsonKey(defaultValue: false)
   @override
-  @TimestampsConverter()
-  final Set<DateTime>? timestamp;
+  final bool deletedUser;
 
   @override
   String toString() {
-    return 'AppUser(id: $id, email: $email, photoURL: $photoURL, displayName: $displayName, timestamp: $timestamp)';
+    return 'AppUser(id: $id, email: $email, photoURL: $photoURL, displayName: $displayName, deletedUser: $deletedUser)';
   }
 
   @override
@@ -209,9 +208,9 @@ class _$_AppUser implements _AppUser {
             (identical(other.displayName, displayName) ||
                 const DeepCollectionEquality()
                     .equals(other.displayName, displayName)) &&
-            (identical(other.timestamp, timestamp) ||
+            (identical(other.deletedUser, deletedUser) ||
                 const DeepCollectionEquality()
-                    .equals(other.timestamp, timestamp)));
+                    .equals(other.deletedUser, deletedUser)));
   }
 
   @override
@@ -221,7 +220,7 @@ class _$_AppUser implements _AppUser {
       const DeepCollectionEquality().hash(email) ^
       const DeepCollectionEquality().hash(photoURL) ^
       const DeepCollectionEquality().hash(displayName) ^
-      const DeepCollectionEquality().hash(timestamp);
+      const DeepCollectionEquality().hash(deletedUser);
 
   @JsonKey(ignore: true)
   @override
@@ -240,7 +239,7 @@ abstract class _AppUser implements AppUser {
       String? email,
       String? photoURL,
       String? displayName,
-      @TimestampsConverter() Set<DateTime>? timestamp}) = _$_AppUser;
+      bool deletedUser}) = _$_AppUser;
 
   factory _AppUser.fromJson(Map<String, dynamic> json) = _$_AppUser.fromJson;
 
@@ -253,8 +252,7 @@ abstract class _AppUser implements AppUser {
   @override
   String? get displayName => throw _privateConstructorUsedError;
   @override
-  @TimestampsConverter()
-  Set<DateTime>? get timestamp => throw _privateConstructorUsedError;
+  bool get deletedUser => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$AppUserCopyWith<_AppUser> get copyWith =>
