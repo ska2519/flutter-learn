@@ -1,7 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_learn/constants/keys.dart';
 
-import 'package:flutter_learn/constants/strings.dart';
+import 'package:flutter_learn/constants/keys.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 enum TabItem { community, youTube, more }
 
@@ -16,20 +17,20 @@ class TabItemData {
   final String label;
   final IconData icon;
 
-  static const Map<TabItem, TabItemData> allTabs = {
+  static Map<TabItem, TabItemData> allTabs = {
     TabItem.community: TabItemData(
       key: Keys.communityTab,
-      label: Strings.community,
+      label: LocaleKeys.community.tr(),
       icon: Icons.list_alt,
     ),
     TabItem.youTube: TabItemData(
       key: Keys.youTubeTab,
-      label: Strings.youTube,
+      label: LocaleKeys.youTube.tr(),
       icon: Icons.subscriptions_outlined,
     ),
     TabItem.more: TabItemData(
       key: Keys.moreTab,
-      label: Strings.more,
+      label: LocaleKeys.more.tr(),
       icon: Icons.more_horiz,
     ),
   };
