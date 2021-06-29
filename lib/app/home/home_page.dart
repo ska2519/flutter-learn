@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -6,18 +7,17 @@ import 'package:flutter_learn/app/home/account/account_page.dart';
 import 'package:flutter_learn/app/home/community/posts_page.dart';
 import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/side_menu.dart';
-import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
-import 'package:flutter_learn/models/post.dart';
-import 'package:flutter_learn/services/firebase_auth_service.dart';
-import 'package:flutter_learn/services/firestore_database.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:flutter_learn/app/home/tab_item.dart';
+import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
 import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/responsive.dart';
 import 'package:flutter_learn/controllers/menu_controller.dart';
+import 'package:flutter_learn/models/post.dart';
+import 'package:flutter_learn/secret_keys.dart';
+import 'package:flutter_learn/services/firebase_auth_service.dart';
+import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomePage extends StatefulHookWidget {
   const HomePage({required this.analytics, required this.observer});
@@ -59,25 +59,24 @@ class _HomePageState extends State<HomePage> {
     setMessage('logEvent succeeded');
   }
 
-  Future<void> addPostsBatch(List<Post> posts) async {
+  Future<void> setPostsBatch(List<Post> posts) async {
     final database = context.read(databaseProvider);
     for (final post in posts) {
-      print('post: $post');
       await database.setPost(post);
-      // await database.updatePost(post.copyWith(id: documentReference.id));
     }
   }
 
   void _submitMockPosts() {
     final posts = List.generate(10, (_) => Post.random());
-    addPostsBatch(posts);
+    setPostsBatch(posts);
   }
 
   @override
   Widget build(BuildContext context) {
-    final appUser = useProvider(appUserProvider);
+    final appUser = useProvider(appUserStreamProvider).data?.value;
+    print('HomePage appUser: $appUser');
     return Scaffold(
-      floatingActionButton: appUser.id == '7ytll7EosoUNI8Ix2hpPf8ZR3rH3'
+      floatingActionButton: appUser?.id == adminAppUserId
           ? FloatingActionButton(
               mini: true,
               onPressed: _submitMockPosts,

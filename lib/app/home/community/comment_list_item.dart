@@ -9,42 +9,41 @@ import 'package:flutter_learn/models/comment.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'format.dart';
 
 class CommentListItem extends HookWidget {
   const CommentListItem({
-    required this.commentKey,
     required this.comment,
-    required this.menuIconTap,
-    required this.replyIconTap,
+    this.menuIconTap,
+    this.replyIconTap,
+    this.myComments,
   });
-  final Key commentKey;
   final Comment comment;
-  final VoidCallback menuIconTap;
-  final VoidCallback replyIconTap;
+  final VoidCallback? menuIconTap;
+  final VoidCallback? replyIconTap;
+  final bool? myComments;
 
   Future<void> _likeComment(BuildContext context, Comment comment) async {
-    final appUser = context.read(appUserProvider);
-    if (appUser.id == null) {
+    final appUser = context.read(appUserStreamProvider).data?.value;
+    final database = context.read<FirestoreDatabase>(databaseProvider);
+    if (appUser == null) {
       SignInPage.show(context);
     } else {
       comment.likeComment(appUser);
-      _updateComment(context, comment);
+      await database.updateComment(comment);
     }
-  }
-
-  Future<void> _updateComment(BuildContext context, Comment comment) async {
-    final database = context.read<FirestoreDatabase>(databaseProvider);
-    await database.updateComment(comment);
   }
 
   @override
   Widget build(BuildContext context) {
     final database = useProvider(databaseProvider);
-    final appUser = useProvider(appUserProvider);
+    final appUser = useProvider(appUserStreamProvider).data?.value;
+    print('comment $comment');
     return FutureBuilder<AppUser?>(
-      key: commentKey,
+      // key: Key('comment-${comment.id}'),
       future: database.getAppUser(comment.userId),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -56,8 +55,10 @@ class CommentListItem extends HookWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: Avatar(
-                  photoUrl: commentUser!.photoURL,
-                  displayName: commentUser.displayName,
+                  photoUrl:
+                      commentUser!.deletedUser ? null : commentUser.photoURL,
+                  displayName:
+                      commentUser.deletedUser ? 'D' : commentUser.displayName,
                   radius: 14,
                 ),
               ),
@@ -67,7 +68,7 @@ class CommentListItem extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${commentUser.displayName!} • ${Format.duration(comment.timestamp!)}',
+                      '${commentUser.deletedUser ? LocaleKeys.deletedUser.tr() : commentUser.displayName!} • ${Format.duration(comment.timestamp!)}',
                       style: Theme.of(context)
                           .textTheme
                           .overline!
@@ -95,39 +96,48 @@ class CommentListItem extends HookWidget {
                           const SizedBox(width: defaultPadding)
                         else
                           const SizedBox(),
-                        InkWell(
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                          onTap:
-                              comment.userId == appUser.id ? menuIconTap : null,
-                          child: Padding(
-                            padding: const EdgeInsets.all(defaultPadding),
-                            child: Icon(
-                              Icons.more_horiz,
-                              color: comment.userId == appUser.id
-                                  ? flutterPrimaryColor
-                                  : Colors.grey[400],
-                              size: 17,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: defaultPadding),
-                        // 1레벨 댓글만 가능
-                        if (comment.level! > 0)
+                        if (myComments == true)
                           const SizedBox()
                         else
-                          InkWell(
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                            onTap: replyIconTap,
-                            child: Padding(
-                              padding: const EdgeInsets.all(defaultPadding),
-                              child: Icon(
-                                Icons.reply,
-                                color: flutterPrimaryColor,
-                                size: 17,
+                          Row(
+                            children: [
+                              InkWell(
+                                highlightColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                onTap: comment.userId == appUser?.id
+                                    ? menuIconTap
+                                    : null,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(defaultPadding),
+                                  child: Icon(
+                                    Icons.more_horiz,
+                                    color: comment.userId == appUser?.id
+                                        ? flutterPrimaryColor
+                                        : Colors.grey[400],
+                                    size: 17,
+                                  ),
+                                ),
                               ),
-                            ),
+                              const SizedBox(width: defaultPadding),
+                              // 1레벨 댓글만 가능
+                              if (comment.level! > 0)
+                                const SizedBox()
+                              else
+                                InkWell(
+                                  highlightColor: Colors.transparent,
+                                  splashColor: Colors.transparent,
+                                  onTap: replyIconTap,
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.all(defaultPadding),
+                                    child: Icon(
+                                      Icons.reply,
+                                      color: flutterPrimaryColor,
+                                      size: 17,
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                       ],
                     )
@@ -141,10 +151,10 @@ class CommentListItem extends HookWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(defaultPadding),
                   child: Icon(
-                    comment.likedUsers.contains(appUser.id)
+                    comment.likedUsers.contains(appUser?.id)
                         ? Icons.favorite
                         : Icons.favorite_border,
-                    color: comment.likedUsers.contains(appUser.id)
+                    color: comment.likedUsers.contains(appUser?.id)
                         ? Colors.red
                         : Colors.grey,
                     size: 15,
