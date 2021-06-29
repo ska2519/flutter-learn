@@ -7,9 +7,14 @@
 //     functions.logger.info('Hello logs!', {structuredData: true});
 //     response.send('Hello from Firebase!');
 // });
-
+export {increaseUserCount} from './firestore';
+export {decreaseUserCount} from './firestore';
 export {increaseCommentCount} from './firestore';
 export {decreaseCommentCount} from './firestore';
 export {increaseReadUserCount} from './firestore';
+export {increasePostCount} from './firestore';
+export {decreasePosCount} from './firestore';
 // export {addPostId} from './firestore';
+// export {createdUserRecord} from './firestore';
+// export {resizeAvatar} from './storage';
 
