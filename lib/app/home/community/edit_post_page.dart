@@ -1,17 +1,16 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_learn/app/home/community/post_detail_page.dart';
-import 'package:flutter_learn/routes/app_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pedantic/pedantic.dart';
-
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/post.dart';
+import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
 
 class EditPostPage extends StatefulWidget {
   const EditPostPage({this.post});
@@ -40,16 +39,15 @@ class _EditPostPageState extends State<EditPostPage> {
   }
 
   Post _postFromState() {
-    final appUser = context.read(appUserProvider);
+    final appUser = context.read(appUserStreamProvider).data?.value;
     final currentDate = documentIdFromCurrentDate().substring(0, 19);
-    print('currentDate: $currentDate ${currentDate.length}');
-    final postId = widget.post?.id ?? '$currentDate:${appUser.id}';
-    final displayName = appUser.displayName ?? '랜덤 아이디';
+    final postId = widget.post?.id ?? '$currentDate:${appUser?.id}';
+    final displayName = appUser?.displayName ?? '랜덤 아이디';
     final now = DateTime.now();
     final timestamp = widget.post?.timestamp ?? now;
     return Post(
       id: postId,
-      userId: appUser.id!,
+      userId: appUser!.id!,
       displayName: displayName,
       title: _title,
       content: _content,
@@ -71,7 +69,7 @@ class _EditPostPageState extends State<EditPostPage> {
           : await database.setPost(post);
       // await database.updatePost(post.copyWith(id: documentReference.id));
       Navigator.pop(context);
-      PostDetailPage.show(context, postId: post.id!);
+      PostDetailPage.show(context, postId: post.id);
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
@@ -99,7 +97,7 @@ class _EditPostPageState extends State<EditPostPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          LocaleKeys.write_post.tr(),
+          LocaleKeys.writePost.tr(),
           style: Theme.of(context)
               .textTheme
               .subtitle1!

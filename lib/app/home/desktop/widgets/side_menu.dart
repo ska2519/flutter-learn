@@ -1,8 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_learn/constants/strings.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -20,14 +19,14 @@ class SideMenu extends StatelessWidget {
               child: Image.asset("assets/images/flutter-text-logo.png"),
             ),
             DrawerListTile(
-              title: Strings.community,
+              title: LocaleKeys.community.tr(),
               icon: Icons.list_alt,
               onTap: () {
                 Navigator.pushNamed(context, AppRoutes.communityScreen);
               },
             ),
             DrawerListTile(
-              title: Strings.youTube,
+              title: LocaleKeys.youTube.tr(),
               icon: Icons.subscriptions_outlined,
               onTap: () {
                 Navigator.pushNamed(context, AppRoutes.youtubeScreen);
