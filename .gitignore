@@ -1,4 +1,5 @@
 **/seceret_keys.dart
+service-account.json
 lib/services/
 # Miscellaneous
 *.class
