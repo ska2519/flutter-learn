@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_learn/app/home/account/account_page.dart';
+import 'package:flutter_learn/app/home/account/liked_posts_page.dart';
+import 'package:flutter_learn/app/home/account/my_posts_page.dart';
+import 'package:flutter_learn/app/home/account/settings_page.dart';
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
 import 'package:flutter_learn/app/home/community/post_detail_page.dart';
 import 'package:flutter_learn/app/home/community/posts_page.dart';
@@ -13,15 +16,18 @@ import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/auth_base.dart';
 
 class AppRoutes {
+  static const homePage = '/';
   static const emailPasswordSignInPage = '/email-password-sign-in-page';
   static const signInPage = '/sign-in-page';
   static const editPostPage = '/edit-post-page';
   static const postDetailPage = '/post-detail-page';
-  static const appPage = '/app-page';
   static const communityScreen = '/community-screen';
   static const youtubeScreen = '/youtube-screen';
   static const accountScreen = '/account-screen';
   static const postsPage = '/posts-page';
+  static const settingsPage = '/settings-page';
+  static const myPostsPage = '/my-posts-page';
+  static const myLikedPostsPage = '/my-liked-posts-page';
 }
 
 class AppRouter {
@@ -37,19 +43,35 @@ class AppRouter {
             onSignedIn: args! as void Function(),
           ),
           settings: settings,
-          fullscreenDialog: true,
         );
       case AppRoutes.signInPage:
         return MaterialPageRoute<dynamic>(
           builder: (_) => SignInPage(),
           settings: settings,
-          fullscreenDialog: true,
+        );
+      case AppRoutes.settingsPage:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => SettingsPage(),
+          settings: settings,
+          maintainState: false,
+        );
+      case AppRoutes.myPostsPage:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => MyPostsPage(initialIndex: args! as int),
+          settings: settings,
+          maintainState: false,
+        );
+      case AppRoutes.myLikedPostsPage:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => LikedPostsPage(initialIndex: args! as int),
+          settings: settings,
+          maintainState: false,
         );
       case AppRoutes.editPostPage:
         return MaterialPageRoute<dynamic>(
           builder: (_) => EditPostPage(post: args as Post?),
           settings: settings,
-          fullscreenDialog: true,
+          //fullscreenDialog: true, // iOS 아래서 나옴
           maintainState: false,
         );
       case AppRoutes.postDetailPage:
@@ -57,7 +79,6 @@ class AppRouter {
         final postId = mapArgs!['postId'] as String;
         final key = mapArgs['key'] as Key?;
         final autoFocus = mapArgs['autoFocus'] as bool?;
-
         return MaterialPageRoute<dynamic>(
           builder: (_) => PostDetailPage(
             postId: postId,
@@ -65,17 +86,16 @@ class AppRouter {
             key: key,
           ),
           settings: settings,
-          fullscreenDialog: true,
-          maintainState: false,
+          // maintainState: false,
         );
-      case AppRoutes.appPage:
+      case AppRoutes.homePage:
         return MaterialPageRoute<dynamic>(
           builder: (_) => HomePage(
             analytics: MyApp.analytics,
             observer: MyApp.observer,
           ),
           //maintainState false = pop으로 돌아가면 위젯 rebuild
-          maintainState: false,
+          // maintainState: false,
           settings: settings,
         );
       case AppRoutes.postsPage:

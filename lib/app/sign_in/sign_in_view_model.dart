@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_learn/services/auth_base.dart';
+
 import 'package:flutter_learn/models/app_user.dart';
+import 'package:flutter_learn/services/auth_base.dart';
 
 class SignInViewModel with ChangeNotifier {
   SignInViewModel({required this.auth});
@@ -25,9 +26,9 @@ class SignInViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> signInAnonymously() async {
-    await _signIn(auth.signInAnonymously);
-  }
+  // Future<void> signInAnonymously() async {
+  //   await _signIn(auth.signInAnonymously);
+  // }
 
   Future<void> signInWithGoogle() async {
     await _signIn(auth.signInWithGoogle);

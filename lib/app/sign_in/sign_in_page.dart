@@ -1,12 +1,10 @@
 import 'dart:math';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:flutter_learn/app/sign_in/sign_in_button.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_view_model.dart';
 import 'package:flutter_learn/app/sign_in/social_sign_in_button.dart';
@@ -15,7 +13,9 @@ import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final signInModelProvider = ChangeNotifierProvider<SignInViewModel>(
     (ref) => SignInViewModel(auth: ref.watch(authServiceProvider)));
@@ -29,14 +29,13 @@ class SignInPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final signInModel = useProvider(signInModelProvider);
-    final appUserAsyncValue = useProvider(appUserStreamProvider);
-    appUserAsyncValue.whenData((appUser) {
-      if (appUser != null) {
-        print('SignInPage appUser: $appUser');
-        WidgetsBinding.instance!
-            .addPostFrameCallback((_) => Navigator.pop(context));
-      }
-    });
+    final appUser = useProvider(appUserStreamProvider).data?.value;
+    if (appUser != null) {
+      print('SignInPage appUser: $appUser');
+      WidgetsBinding.instance!
+          .addPostFrameCallback((_) => Navigator.pop(context));
+    }
+
     return ProviderListener<SignInViewModel>(
       provider: signInModelProvider,
       onChange: (context, model) async {
