@@ -18,14 +18,14 @@ class YouTubePage extends StatelessWidget {
           expandedHeight: 120.0,
           floating: true,
           actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.create),
-              onPressed: () {},
-            )
+            // IconButton(
+            //   icon: Icon(Icons.search),
+            //   onPressed: () {},
+            // ),
+            // IconButton(
+            //   icon: Icon(Icons.create),
+            //   onPressed: () {},
+            // )
           ],
           flexibleSpace: FlexibleSpaceBar(
             centerTitle: false,
