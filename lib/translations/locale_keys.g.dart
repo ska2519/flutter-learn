@@ -8,8 +8,6 @@ abstract class  LocaleKeys {
   static const password = 'password';
   static const register = 'register';
   static const my_profile = 'my_profile';
-  static const write_name_you_want = 'write_name_you_want';
-  static const write_post = 'write_post';
   static const title = 'title';
   static const ago = 'ago';
   static const edit = 'edit';
@@ -20,8 +18,6 @@ abstract class  LocaleKeys {
   static const tag = 'tag';
   static const ok = 'ok';
   static const more = 'more';
-  static const sign_out_are_you_sure = 'sign_out_are_you_sure';
-  static const forgot_password_question = 'forgot_password_question';
   static const haveAnAccount = 'haveAnAccount';
   static const backToSignIn = 'backToSignIn';
   static const cantLoadDataRightNow = 'cantLoadDataRightNow';
@@ -62,5 +58,20 @@ abstract class  LocaleKeys {
   static const missingGoogleAuthToken = 'missingGoogleAuthToken';
   static const failedToCreateNewUser = 'failedToCreateNewUser';
   static const uidPassedEmpty = 'uidPassedEmpty';
+  static const forgotPasswordQuestion = 'forgotPasswordQuestion';
+  static const signOutAreYouSure = 'signOutAreYouSure';
+  static const writeNameYouWant = 'writeNameYouWant';
+  static const writePost = 'writePost';
+  static const myPosts = 'myPosts';
+  static const myComments = 'myComments';
+  static const settingApp = 'settingApp';
+  static const settings = 'settings';
+  static const myBookmarks = 'myBookmarks';
+  static const deleteAccount = 'deleteAccount';
+  static const deleteAccountAreYouSure = 'deleteAccountAreYouSure';
+  static const deletedUser = 'deletedUser';
+  static const myReadPosts = 'myReadPosts';
+  static const myLikedPosts = 'myLikedPosts';
+  static const appInfo = 'appInfo';
 
 }

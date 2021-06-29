@@ -180,7 +180,7 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
                     ? null
                     : () => _updateFormType(
                         EmailPasswordSignInFormType.forgotPassword),
-                child: Text(LocaleKeys.forgot_password_question.tr()),
+                child: Text(LocaleKeys.forgotPasswordQuestion.tr()),
               ),
           ],
         ),

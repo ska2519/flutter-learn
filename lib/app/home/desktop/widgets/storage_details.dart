@@ -20,7 +20,7 @@ class StorageDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Storage Details',
+            '업데이트 예정',
             style: Theme.of(context).textTheme.headline6!.copyWith(
                   fontWeight: FontWeight.w500,
                 ),

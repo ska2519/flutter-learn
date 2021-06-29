@@ -35,7 +35,7 @@ class Comment with _$Comment {
 
   factory Comment.random(String postId) {
     return _$_Comment(
-      // id: getRandomCommentId(),
+      id: getRandomIds(),
       text: getRandomContent(),
       postId: postId,
       userId: getRandomUserIds(),
