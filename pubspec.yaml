@@ -24,13 +24,15 @@ dependencies:
   firebase_messaging: ^10.0.0
   firebase_storage: ^8.1.0
   fl_chart: ^0.36.1
-  flutter_hooks: ^0.16.0
+  flex_color_scheme: ^3.0.0
+  flutter_hooks: ^0.17.0
   flutter_svg: ^0.22.0
   freezed_annotation: ^0.14.2
   google_sign_in: ^5.0.4
-  hooks_riverpod: ^0.14.0+3
+  hooks_riverpod: ^0.14.0+4
   intl: ^0.17.0
   lint: ^1.5.3
+  package_info_plus: ^1.0.3
   pedantic: ^1.11.0
   pixel_perfect: ^1.1.0
   sign_in_with_apple: ^3.0.0
