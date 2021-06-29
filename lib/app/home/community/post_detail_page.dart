@@ -2,12 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pedantic/pedantic.dart';
-
 import 'package:flutter_learn/app/home/community/child_comment_list_item.dart';
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
-import 'package:flutter_learn/app/home/community/post_list_item.dart';
+import 'package:flutter_learn/app/home/community/post_item_info.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/avatar.dart';
@@ -18,13 +15,16 @@ import 'package:flutter_learn/models/comment.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/models/read_post.dart';
 import 'package:flutter_learn/routes/app_router.dart';
+import 'package:flutter_learn/secret_keys.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
 
 import 'comment_list_item.dart';
 import 'format.dart';
-import 'post_list_item.dart';
+import 'post_item_info.dart';
 
 final topLevelCommentsStreamProvider =
     StreamProvider.autoDispose.family<List<Comment>, String>((ref, postId) {
@@ -71,9 +71,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     super.initState();
     _textEditingController = TextEditingController();
     focusNode = FocusNode();
-    focusNode.addListener(() {
-      print("Has focus: ${focusNode.hasFocus}");
-    });
+    focusNode.addListener(() {});
     postId = widget.postId!;
     if (widget.autoFocus != null) autoFocus = widget.autoFocus!;
   }
@@ -93,14 +91,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   Future<void> _submitMockComments() async {
     final comments = List.generate(10, (_) => Comment.random(postId));
-    await addCommentsBatch(comments);
+    await setCommentsBatch(comments);
   }
 
-  Future<void> addCommentsBatch(List<Comment> comments) async {
+  Future<void> setCommentsBatch(List<Comment> comments) async {
     final database = context.read(databaseProvider);
     for (final comment in comments) {
-      final reference = await database.addComment(comment);
-      await database.updateComment(comment.copyWith(id: reference.id));
+      await database.setComment(comment);
     }
   }
 
@@ -135,16 +132,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   Comment _commentFromState() {
-    final appUser = context.read(appUserProvider);
+    final appUser = context.read(appUserStreamProvider).data?.value;
     final now = DateTime.now();
     final currentDate = documentIdFromCurrentDate().substring(0, 19);
-    print('currentDate: $currentDate ${currentDate.length}');
-    final commentId = editComment?.id ?? '$currentDate:${appUser.id}';
+    final commentId = editComment?.id ?? '$currentDate:${appUser!.id}';
     return Comment(
       id: commentId,
       postId: postId,
       text: _commentText,
-      userId: appUser.id!,
+      userId: appUser!.id!,
       timestamp: editComment != null ? editComment!.timestamp : now,
       level: editComment != null
           ? editComment!.level
@@ -159,11 +155,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   void _replyComment(Comment comment) {
     focusNode.requestFocus();
-    print('parentComment.id: ${comment.id}');
     parentComment = comment;
-    // 게시 버튼 클릭 안하고 포커스 아웃되면 parentComment = null
-    // 앱 전환으로도 포커스 아웃 될 수 있음
-    print('parentComment.parent: ${parentComment?.parent}');
   }
 
   Future<void> _submitComment() async {
@@ -175,9 +167,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         return;
       }
       if (editComment == null) {
-        final reference = await database.addComment(comment);
-        await database.addComment(comment);
-        // await database.updateComment(comment.copyWith(id: reference.id));
+        await database.setComment(comment);
       } else {
         await database.updateComment(comment);
       }
@@ -194,13 +184,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   Future<void> _addReadUsers() async {
     try {
-      final appUser = context.read(appUserProvider);
+      final appUser = context.read(appUserStreamProvider).data?.value;
       final database = context.read(databaseProvider);
-      if (appUser.id == null) {
+      if (appUser == null) {
         return;
       }
       final readUsers = await database.getPostReadUsers(postId);
-      if (readUsers != null && !readUsers.contains(appUser.id)) {
+      if (!readUsers.contains(appUser.id)) {
         database.setReadUser(
           ReadPost(
             postId: postId,
@@ -208,24 +198,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
             timestamp: DateTime.now(),
           ),
         );
-        await _addReadCount();
-      }
-    } catch (e) {
-      unawaited(showExceptionAlertDialog(
-        context: context,
-        title: LocaleKeys.operationFailed.tr(),
-        exception: e,
-      ));
-    }
-  }
-
-  Future<void> _addReadCount() async {
-    try {
-      final database = context.read(databaseProvider);
-      final nowPost = await database.getPost(postId);
-      if (nowPost != null) {
-        await database
-            .updatePost(nowPost.copyWith(readCount: nowPost.readCount + 1));
       }
     } catch (e) {
       unawaited(showExceptionAlertDialog(
@@ -239,7 +211,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void _deletePost(Post post) {
     try {
       final database = context.read(databaseProvider);
-      database.deletePost(post.id!);
+      database.deletePost(post.id);
       Navigator.pop(context);
     } catch (e) {
       unawaited(showExceptionAlertDialog(
@@ -282,24 +254,24 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   Widget build(BuildContext context) {
     if (!focusNode.hasFocus) parentComment = null;
-    print('PostDetailPage build');
     final _size = MediaQuery.of(context).size;
     final commentsAsyncValue =
         useProvider(topLevelCommentsStreamProvider(postId));
     final postAsyncValue = useProvider(postStreamProvider(postId));
-    final appUser = useProvider(appUserProvider);
+    final appUser = useProvider(appUserStreamProvider).data?.value;
+    print('PostDetailPage build');
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: postAsyncValue.when(
         loading: () => Center(child: const CupertinoActivityIndicator()),
-        error: (_, __) => const EmptyContent(
-          title: 'Something went wrong',
-          message: "Can't load items right now",
+        error: (_, __) => EmptyContent(
+          title: LocaleKeys.somethingWentWrong.tr(),
+          message: LocaleKeys.cantLoadDataRightNow.tr(),
         ),
         data: (post) => FutureBuilder(
           future: _checkReadUsers,
           builder: (context, snapshot) => Scaffold(
-            floatingActionButton: appUser.id == '7ytll7EosoUNI8Ix2hpPf8ZR3rH3'
+            floatingActionButton: appUser?.id == adminAppUserId
                 ? Padding(
                     padding: const EdgeInsets.only(bottom: defaultPadding * 6),
                     child: FloatingActionButton(
@@ -338,46 +310,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 //   ),
                 //   onPressed: () {},
                 // ),
-                IconButton(
-                  padding: EdgeInsets.all(0),
-                  constraints: BoxConstraints.tight(Size(25, 17)),
-                  icon: Icon(
-                    Icons.more_horiz,
-                    color: post.userId == appUser.id
-                        ? flutterPrimaryColor
-                        : Colors.grey[400],
-                    size: 20,
-                  ),
-                  onPressed: () => post.userId == appUser.id
-                      ? showCupertinoModalPopup(
-                          context: context,
-                          builder: (context) => CupertinoActionSheet(
-                            actions: [
-                              CupertinoActionSheetAction(
-                                onPressed: () async {
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  await EditPostPage.show(context, post: post);
-                                },
-                                child: Text(LocaleKeys.edit.tr()),
-                              ),
-                              CupertinoActionSheetAction(
-                                onPressed: () {
-                                  _deletePost(post);
-                                  Navigator.pop(context);
-                                },
-                                isDestructiveAction: true,
-                                child: Text(LocaleKeys.delete.tr()),
-                              )
-                            ],
-                            cancelButton: CupertinoActionSheetAction(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text(LocaleKeys.cancel.tr()),
-                            ),
-                          ),
-                        )
-                      : null,
-                ),
+                if (post.userId == appUser?.id)
+                  IconButton(
+                    padding: EdgeInsets.all(0),
+                    constraints: BoxConstraints.tight(Size(25, 17)),
+                    icon: Icon(Icons.more_horiz,
+                        color: flutterPrimaryColor, size: 20),
+                    onPressed: () => editOrDeletePostPopup(context, post),
+                  )
+                else
+                  const SizedBox(),
                 const SizedBox(width: defaultPadding * 2),
               ],
             ),
@@ -390,51 +332,52 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: defaultPadding * 2),
-                          child: PostListItem(post: post),
+                          child: PostItemInfo(post: post),
                         ),
                         Divider(),
                         commentsAsyncValue.when(
                           loading: () =>
                               Center(child: const CupertinoActivityIndicator()),
-                          error: (_, __) => const EmptyContent(
-                            title: 'Something went wrong',
-                            message: "Can't load items right now",
+                          error: (_, __) => EmptyContent(
+                            title: LocaleKeys.somethingWentWrong.tr(),
+                            message: LocaleKeys.cantLoadDataRightNow.tr(),
                           ),
                           data: (comments) {
                             return ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: comments.length,
-                              itemBuilder: (context, i) => Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  defaultPadding * 2,
-                                  defaultPadding,
-                                  defaultPadding,
-                                  0,
-                                ),
-                                child: Column(
-                                  children: [
-                                    CommentListItem(
-                                      commentKey:
-                                          Key('comment-${comments[i].id}'),
-                                      comment: comments[i],
-                                      menuIconTap: () => commentHorizPopup(
-                                          context, comments[i], post),
-                                      replyIconTap: () =>
-                                          _replyComment(comments[i]),
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: comments.length,
+                                itemBuilder: (context, i) {
+                                  print('comments[i]: ${comments[i].id}');
+                                  return Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                      defaultPadding * 2,
+                                      defaultPadding,
+                                      defaultPadding,
+                                      0,
                                     ),
-                                    ChildCommentListItem(
-                                      topLevelComment: comments[i],
-                                      menuIconTap: (Comment childComment) =>
-                                          commentHorizPopup(
-                                              context, childComment, post),
-                                      replyIconTap: (Comment childComment) =>
-                                          _replyComment(childComment),
+                                    child: Column(
+                                      children: [
+                                        CommentListItem(
+                                          comment: comments[i],
+                                          menuIconTap: () => commentHorizPopup(
+                                              context, comments[i], post),
+                                          replyIconTap: () =>
+                                              _replyComment(comments[i]),
+                                        ),
+                                        ChildCommentListItem(
+                                          topLevelComment: comments[i],
+                                          menuIconTap: (Comment childComment) =>
+                                              commentHorizPopup(
+                                                  context, childComment, post),
+                                          replyIconTap:
+                                              (Comment childComment) =>
+                                                  _replyComment(childComment),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                            );
+                                  );
+                                });
                           },
                         ),
                         SizedBox(height: _size.height * 0.1),
@@ -443,38 +386,73 @@ class _PostDetailPageState extends State<PostDetailPage> {
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: InkWell(
-                      onTap: appUser.id == null
-                          ? () => SignInPage.show(context)
-                          : null,
-                      child: Container(
-                        color: Colors.white,
-                        padding: const EdgeInsets.all(defaultPadding),
-                        child: CupertinoTextField(
-                          key: _commentFieldKey,
-                          autofocus: autoFocus,
-                          // ignore: avoid_bool_literals_in_conditional_expressions
-                          enabled: appUser.id == null ? false : true,
-                          placeholder: LocaleKeys.pleaseWriteComment.tr(),
-                          focusNode: focusNode,
-                          controller: _textEditingController,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          maxLength: 500,
-                          expands: true,
-                          textInputAction: TextInputAction.newline,
-                          onChanged: (commentText) =>
-                              _commentText = commentText,
-                          suffix: TextButton(
-                            onPressed: () {
-                              _submitComment();
-                              focusNode.unfocus();
-                              _textEditingController.clear();
-                            },
-                            child: Text(LocaleKeys.post.tr()),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (parentComment != null)
+                          Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: flutterPrimaryColor,
+                                  width: 2,
+                                ),
+                                color: flutterAccentColor,
+                              ),
+                              padding: const EdgeInsets.all(defaultPadding),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.reply,
+                                    color: Colors.white,
+                                    size: 17,
+                                  ),
+                                  const SizedBox(width: defaultPadding),
+                                  Expanded(
+                                    child: Text(parentComment!.text,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .overline!
+                                            .copyWith(color: Colors.white)),
+                                  ),
+                                ],
+                              ))
+                        else
+                          const SizedBox(),
+                        InkWell(
+                          onTap: appUser == null
+                              ? () => SignInPage.show(context)
+                              : null,
+                          child: Container(
+                            color: Colors.white,
+                            padding: const EdgeInsets.all(defaultPadding),
+                            child: CupertinoTextField(
+                              key: _commentFieldKey,
+                              autofocus: autoFocus,
+                              // ignore: avoid_bool_literals_in_conditional_expressions
+                              enabled: appUser == null ? false : true,
+                              placeholder: LocaleKeys.pleaseWriteComment.tr(),
+                              focusNode: focusNode,
+                              controller: _textEditingController,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              maxLength: 500,
+                              expands: true,
+                              textInputAction: TextInputAction.newline,
+                              onChanged: (commentText) =>
+                                  _commentText = commentText,
+                              suffix: TextButton(
+                                onPressed: () {
+                                  _submitComment();
+                                  focusNode.unfocus();
+                                  _textEditingController.clear();
+                                },
+                                child: Text(LocaleKeys.post.tr()),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ],
@@ -485,6 +463,35 @@ class _PostDetailPageState extends State<PostDetailPage> {
       ),
     );
   }
+
+  Future<void> editOrDeletePostPopup(BuildContext context, Post post) =>
+      showCupertinoModalPopup(
+        context: context,
+        builder: (context) => CupertinoActionSheet(
+          actions: [
+            CupertinoActionSheetAction(
+              onPressed: () async {
+                Navigator.pop(context);
+                Navigator.pop(context);
+                await EditPostPage.show(context, post: post);
+              },
+              child: Text(LocaleKeys.edit.tr()),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                _deletePost(post);
+                Navigator.pop(context);
+              },
+              isDestructiveAction: true,
+              child: Text(LocaleKeys.delete.tr()),
+            )
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () => Navigator.pop(context),
+            child: Text(LocaleKeys.cancel.tr()),
+          ),
+        ),
+      );
 }
 
 class PostDetailAppBarTitle extends StatelessWidget {

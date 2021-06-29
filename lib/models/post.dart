@@ -1,7 +1,6 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:flutter_learn/models/timestamp_converter.dart';
 import 'package:flutter_learn/models/values.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'post.freezed.dart';
 part 'post.g.dart';
@@ -12,7 +11,7 @@ part 'post.g.dart';
 class Post with _$Post {
   const Post._();
   const factory Post({
-    String? id,
+    required String id,
     required String userId,
     required String displayName,
     required String title,
@@ -27,7 +26,7 @@ class Post with _$Post {
 
   factory Post.random() {
     return _$_Post(
-      id: getRandomPostIds(),
+      id: getRandomIds(),
       userId: getRandomUserIds(),
       displayName: getRandomDisplayName(),
       title: getRandomTitle(),

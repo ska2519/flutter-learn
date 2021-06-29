@@ -110,7 +110,6 @@ class FirestoreService {
               builder(snapshot.data() as Map<String, dynamic>?, snapshot.id))
           .where((value) => value != null)
           .toList();
-      // print('result: $result');
       if (sort != null) {
         result.sort(sort);
       }
@@ -124,11 +123,8 @@ class FirestoreService {
   }) async {
     final DocumentReference reference = FirebaseFirestore.instance.doc(path);
     final DocumentSnapshot snapshot = await reference.get();
-    return builder(snapshot.data() as Map<String, dynamic>?, snapshot.id);
-    // print('result: $result');
-    // return result;
-    // },
-    // );
+    final data = snapshot.data() as Map<String, dynamic>?;
+    return builder(data, snapshot.id);
   }
 
   Stream<T> documentStream<T>({

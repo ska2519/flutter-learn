@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutter_learn/app/home/home_page.dart';
-import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/translations/codegen_loader.g.dart';
+
+import 'app/home/community/format.dart';
+import 'constants/constants.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,9 +36,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = context.read(authServiceProvider);
+    Format.getLocale(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
+      title: '플러터 런 - Flutter Learn',
+      theme:
+          // FlexColorScheme.light(scheme: FlexScheme.mandyRed).toTheme,
+          // The Mandy red, dark theme.
+          // darkTheme: FlexColorScheme.dark(scheme: FlexScheme.mandyRed).toTheme,
+          // Use dark or light theme based on system setting.
+          // themeMode: ThemeMode.system,
+          ThemeData(
         brightness: Brightness.light,
         primaryColor: flutterPrimaryColor,
         accentColor: flutterAccentColor,
@@ -53,10 +63,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: HomePage(
-        analytics: analytics,
-        observer: observer,
-      ),
+      home: HomePage(analytics: analytics, observer: observer),
       onGenerateRoute: (settings) => AppRouter.onGenerateRoute(settings, auth),
     );
   }
