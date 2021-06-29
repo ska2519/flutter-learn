@@ -332,7 +332,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: defaultPadding * 2),
-                          child: PostItemInfo(post: post),
+                          child: PostItemInfo(
+                            post: post,
+                            selectableText: true,
+                          ),
                         ),
                         Divider(),
                         commentsAsyncValue.when(
