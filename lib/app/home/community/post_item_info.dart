@@ -26,8 +26,12 @@ final postLikedStreamProvider =
 });
 
 class PostItemInfo extends HookWidget {
-  const PostItemInfo({required this.post});
+  const PostItemInfo({
+    required this.post,
+    this.selectableText = false,
+  });
   final Post post;
+  final bool selectableText;
 
   Future<void> _likePost(
       BuildContext context, bool userLiked, AppUser? appUser) async {
@@ -113,10 +117,16 @@ class PostItemInfo extends HookWidget {
             children: [
               Text(post.title, style: Theme.of(context).textTheme.subtitle2),
               const SizedBox(height: defaultPadding),
-              Text(
-                post.content,
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
+              if (selectableText)
+                SelectableText(
+                  post.content,
+                  style: Theme.of(context).textTheme.bodyText2,
+                )
+              else
+                Text(
+                  post.content,
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
             ],
           ),
         ),
