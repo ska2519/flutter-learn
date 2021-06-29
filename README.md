@@ -43,36 +43,67 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 - [x] 화면 사이즈에 따른 위젯 조정
 - [x] 네비게이션 바
   - [x] Desktop 사이즈 시 SideMenu로 변경
-    - [ ] SideMenu 클릭 시 화면 변경
+
+- [x] 커뮤니티
+  - [x] 글 쓰기
+  - [x] 삭제
+  - [x] 수정
+  - [x] 좋아요
+  - [x] 댓글
+    - [x] 댓글 좋아요
+    - [x] 댓글 수정
+    - [x] 대댓글 작성
+    - [x] 대댓글 좋아요
+
 - [x] 회원가입 & 로그인
   - [x] Email 로 가입
   - [x] Google 계정으로 가입
   - [x] Apple 계정으로 가입
-- [ ] 커뮤니티
+  - [x] 로그 아웃
+  - [x] 계정 삭제
+  - [x] 회원 정보 업데이트
+
+  - [x] 앱설정
+  - [x] 내 게시글
+  - [x] 내 댓글
+  - [x] 좋아요 한 게시글
+  - [x] 읽은 게시글
+
+## 구현 예정
+    - [ ] SideMenu 클릭 시 화면 변경
   - [ ] 카테고리
-  - [x] 글쓰기
-  - [x] 삭제
-  - [x] 수정
-  - [x] 좋아요
   - [ ] 태그
     - [ ] 태그 추천
-  - [x] 댓글
-    - [x] 댓글 좋아요
-    - [x] 댓글 수정
 - [ ] 유튜브
 
 ## Web 기능 구현
 - [x] route
 - [ ] 잘못된 주소 처리
+
 ## Firebase 기능 구현
-
 - [x] Firebase Authentication
-- [x] Firebase 호스팅에 웹 앱 배포
-- [x] Firebase 호스팅 자동 빌드 설정 및 GitHub로 배포
-- [x] Cloud Firestore 데이터 구조 설계
-- [x] Cloud Functions Collection Group Queries
-- [ ] Cloud Firestore 세분화 된 규칙
+  - [x] Anonymous Login
+  - [x] Email Login
+  - [x] Google Login
+  - [x] Apple Login
+    
+- [x] Firebase Crashlytics
+  - Android, iOS 크래쉬 리포트 확인
 
+- [x] Firestore Database
+  - [x] Firestore 데이터 구조 설계
+  - [x] Firestore Collection Group Queries 적용  
+  
+- [x] Firebase Hosting
+  - [x] 호스팅 웹사이트 배포
+  - [x] GitHub에 자동 빌드 설정 및 배포
+  
+- [x] Firebase Functions
+  - [x] 글 읽은 유저 수 카운트 증가
+  - [x] 댓글 추가 삭제 시 댓글 카운트 업데이트
+
+
+- [ ] Cloud Firestore 세분화 된 규칙
 
 ## 앱 구조
 
@@ -86,6 +117,7 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 /assets
 /ios
 /web
+/functions
   ... and more
 /lib
   /constants
