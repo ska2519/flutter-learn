@@ -1,5 +1,5 @@
 **/seceret_keys.dart
-services/
+lib/services/
 # Miscellaneous
 *.class
 *.log
