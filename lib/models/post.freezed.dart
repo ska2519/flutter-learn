@@ -29,7 +29,8 @@ class _$PostTearOff {
       @TimestampConverter() DateTime? timestamp,
       int commentCount = 0,
       int likedCount = 0,
-      int readCount = 0}) {
+      int readCount = 0,
+      bool deletedByAuthor = false}) {
     return _Post(
       id: id,
       userId: userId,
@@ -40,6 +41,7 @@ class _$PostTearOff {
       commentCount: commentCount,
       likedCount: likedCount,
       readCount: readCount,
+      deletedByAuthor: deletedByAuthor,
     );
   }
 
@@ -63,6 +65,7 @@ mixin _$Post {
   int get commentCount => throw _privateConstructorUsedError;
   int get likedCount => throw _privateConstructorUsedError;
   int get readCount => throw _privateConstructorUsedError;
+  bool get deletedByAuthor => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -82,7 +85,8 @@ abstract class $PostCopyWith<$Res> {
       @TimestampConverter() DateTime? timestamp,
       int commentCount,
       int likedCount,
-      int readCount});
+      int readCount,
+      bool deletedByAuthor});
 }
 
 /// @nodoc
@@ -104,6 +108,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
     Object? commentCount = freezed,
     Object? likedCount = freezed,
     Object? readCount = freezed,
+    Object? deletedByAuthor = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -142,6 +147,10 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.readCount
           : readCount // ignore: cast_nullable_to_non_nullable
               as int,
+      deletedByAuthor: deletedByAuthor == freezed
+          ? _value.deletedByAuthor
+          : deletedByAuthor // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -160,7 +169,8 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       @TimestampConverter() DateTime? timestamp,
       int commentCount,
       int likedCount,
-      int readCount});
+      int readCount,
+      bool deletedByAuthor});
 }
 
 /// @nodoc
@@ -183,6 +193,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
     Object? commentCount = freezed,
     Object? likedCount = freezed,
     Object? readCount = freezed,
+    Object? deletedByAuthor = freezed,
   }) {
     return _then(_Post(
       id: id == freezed
@@ -221,6 +232,10 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.readCount
           : readCount // ignore: cast_nullable_to_non_nullable
               as int,
+      deletedByAuthor: deletedByAuthor == freezed
+          ? _value.deletedByAuthor
+          : deletedByAuthor // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -237,7 +252,8 @@ class _$_Post extends _Post {
       @TimestampConverter() this.timestamp,
       this.commentCount = 0,
       this.likedCount = 0,
-      this.readCount = 0})
+      this.readCount = 0,
+      this.deletedByAuthor = false})
       : super._();
 
   factory _$_Post.fromJson(Map<String, dynamic> json) =>
@@ -265,10 +281,13 @@ class _$_Post extends _Post {
   @JsonKey(defaultValue: 0)
   @override
   final int readCount;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool deletedByAuthor;
 
   @override
   String toString() {
-    return 'Post(id: $id, userId: $userId, displayName: $displayName, title: $title, content: $content, timestamp: $timestamp, commentCount: $commentCount, likedCount: $likedCount, readCount: $readCount)';
+    return 'Post(id: $id, userId: $userId, displayName: $displayName, title: $title, content: $content, timestamp: $timestamp, commentCount: $commentCount, likedCount: $likedCount, readCount: $readCount, deletedByAuthor: $deletedByAuthor)';
   }
 
   @override
@@ -298,7 +317,10 @@ class _$_Post extends _Post {
                     .equals(other.likedCount, likedCount)) &&
             (identical(other.readCount, readCount) ||
                 const DeepCollectionEquality()
-                    .equals(other.readCount, readCount)));
+                    .equals(other.readCount, readCount)) &&
+            (identical(other.deletedByAuthor, deletedByAuthor) ||
+                const DeepCollectionEquality()
+                    .equals(other.deletedByAuthor, deletedByAuthor)));
   }
 
   @override
@@ -312,7 +334,8 @@ class _$_Post extends _Post {
       const DeepCollectionEquality().hash(timestamp) ^
       const DeepCollectionEquality().hash(commentCount) ^
       const DeepCollectionEquality().hash(likedCount) ^
-      const DeepCollectionEquality().hash(readCount);
+      const DeepCollectionEquality().hash(readCount) ^
+      const DeepCollectionEquality().hash(deletedByAuthor);
 
   @JsonKey(ignore: true)
   @override
@@ -335,7 +358,8 @@ abstract class _Post extends Post {
       @TimestampConverter() DateTime? timestamp,
       int commentCount,
       int likedCount,
-      int readCount}) = _$_Post;
+      int readCount,
+      bool deletedByAuthor}) = _$_Post;
   const _Post._() : super._();
 
   factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
@@ -359,6 +383,8 @@ abstract class _Post extends Post {
   int get likedCount => throw _privateConstructorUsedError;
   @override
   int get readCount => throw _privateConstructorUsedError;
+  @override
+  bool get deletedByAuthor => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$PostCopyWith<_Post> get copyWith => throw _privateConstructorUsedError;
