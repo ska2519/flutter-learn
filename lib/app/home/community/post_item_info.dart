@@ -115,16 +115,24 @@ class PostItemInfo extends HookWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(post.title, style: Theme.of(context).textTheme.subtitle2),
+              Text(
+                  post.deletedByAuthor
+                      ? LocaleKeys.deletedByAuthor.tr()
+                      : post.title,
+                  style: Theme.of(context).textTheme.subtitle2),
               const SizedBox(height: defaultPadding),
               if (selectableText)
                 SelectableText(
-                  post.content,
+                  post.deletedByAuthor
+                      ? LocaleKeys.deletedByAuthor.tr()
+                      : post.content,
                   style: Theme.of(context).textTheme.bodyText2,
                 )
               else
                 Text(
-                  post.content,
+                  post.deletedByAuthor
+                      ? LocaleKeys.deletedByAuthor.tr()
+                      : post.content,
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
             ],
