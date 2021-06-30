@@ -1,6 +1,7 @@
 {
   "projects": {
-    "default": "flutter-learn-0225"
+    "default": "flutter-learn-0225",
+    "debug": "flutter-learn-dev"
   },
   "targets": {
     "flutter-learn-0225": {

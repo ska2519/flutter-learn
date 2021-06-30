@@ -20,6 +20,7 @@ class Post with _$Post {
     @Default(0) int commentCount,
     @Default(0) int likedCount,
     @Default(0) int readCount,
+    @Default(false) bool deletedByAuthor,
   }) = _Post;
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
