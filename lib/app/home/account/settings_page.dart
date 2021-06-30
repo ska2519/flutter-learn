@@ -51,7 +51,7 @@ class SettingsPage extends HookWidget {
   Future<void> _deleteAccount(BuildContext context, AppUser appUser) async {
     final auth = context.read(authServiceProvider);
     await auth.deleteUser(appUser);
-    // await auth.signOut();
+    await auth.signOut();
   }
 
   Future<void> _confirmDeleteAccount(
