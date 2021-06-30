@@ -70,5 +70,6 @@
   "deletedUser": "Withdrawn member",
   "myReadPosts": "My read posts",
   "myLikedPosts": "My liked posts",
-  "appInfo": "App Info"
+  "appInfo": "App Info",
+  "deletedByAuthor": "Deleted by author"
 }
