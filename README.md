@@ -40,9 +40,9 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 
 ## 앱 기능 구현
 
-- [x] 영문 버전
+- [x] 다중 언어 지원 - 영문 버전 적용
 
-- [x] 화면 사이즈에 따른 위젯 조정
+- [x] 화면 사이즈에 따른 위젯 사이즈 변경
 - [x] 네비게이션 바
   - [x] Desktop 사이즈 시 SideMenu로 변경
 
@@ -56,7 +56,8 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
     - [x] 댓글 수정
     - [x] 대댓글 작성
     - [x] 대댓글 좋아요
-
+  - [x] 삭제 유저 글 삭제 시 댓글 남아 있으면 작성자 삭제 안내
+ 
 - [x] 회원가입 & 로그인
   - [x] Email 로 가입
   - [x] Google 계정으로 가입
@@ -72,11 +73,11 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
   - [x] 읽은 게시글
 
 ## 구현 예정
-    - [ ] SideMenu 클릭 시 화면 변경
   - [ ] 카테고리
   - [ ] 태그
     - [ ] 태그 추천
 - [ ] 유튜브
+- [ ] SideMenu 클릭 시 화면 변경
 
 ## Web 기능 구현
 - [x] Route
@@ -86,6 +87,10 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 - [ ] 잘못된 주소 처리
 
 ## Firebase 기능 구현
+- [x] 개발, 출시 프로젝트 분리
+  - [x] 개발 Firestore Database
+  - [x] 개발 Firebase Functions
+  
 - [x] Firebase Authentication
   - [x] Anonymous Login
   - [x] Email Login
@@ -93,7 +98,7 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
   - [x] Apple Login
     
 - [x] Firebase Crashlytics
-  - Android, iOS 크래쉬 리포트 확인
+  - [x] Android, iOS 크래쉬 리포트 확인
 
 - [x] Firestore Database
   - [x] Firestore 데이터 구조 설계
@@ -104,12 +109,16 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
   - [x] GitHub에 자동 빌드 설정 및 배포
   
 - [x] Firebase Functions
-  - [x] 글 읽은 유저 수 카운트 증가
-  - [x] 댓글 추가 삭제 시 댓글 카운트 업데이트
+  - [x] 유저 가입, 탈퇴 시 카운트
+  - [x] 포스트 추가, 삭제 시 카운트
+  - [x] 글 읽은 유저 수 카운트
+  - [x] 댓글 추가, 삭제 시 총 댓글 카운트
 
+- [x] Cloud Firestore 세분화 된 규칙
 
-- [ ] Cloud Firestore 세분화 된 규칙
-
+##  CI/CD Codemagic 적용
+- [x] Build for Android
+- [x] Build for iOS
 ## 앱 구조
 
 이 앱은 단일 Dart 코드베이스에서 Android, iOS 및 웹에서 실행하기 위해 만들어졌습니다.  

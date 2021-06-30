@@ -73,5 +73,6 @@ abstract class  LocaleKeys {
   static const myReadPosts = 'myReadPosts';
   static const myLikedPosts = 'myLikedPosts';
   static const appInfo = 'appInfo';
+  static const deletedByAuthor = 'deletedByAuthor';
 
 }

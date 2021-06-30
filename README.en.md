@@ -39,22 +39,23 @@ Use the **Profile** page to update the currently selected profile.
 **Combining Flutter, Firebase, and Riverpod to create reusable, multi-platform apps.**
 ## Implement app features
 
-- [x] English version
+- [x] Multi-language support - Korean version applied
 
-- [x] Widget adjustment according to screen size
+- [x] Widget size change according to screen size
 - [x] navigation bar
   - [x] Changed to SideMenu in desktop size
 
 - [x] community
-  - [x] Write 
-  - [x] Delete
-  - [x] Edit
-  - [x] Like
+  - [x] Write Post
+  - [x] Delete Post
+  - [x] Edit Post
+  - [x] Like Post
   - [x] Comment
-    - [x] Like comment
-    - [x] Edit comment
     - [x] Write a comment
+    - [x] Edit comment
+    - [x] Like comment
     - [x] Likes comments
+  - [x] When a user's post is deleted, if there are comments left, show message of "author deleted"
 
 - [x] Register & Login
   - [x] Sign up with Email
@@ -70,13 +71,12 @@ Use the **Profile** page to update the currently selected profile.
   - [x] My liked posts
   - [x] My read posts 
 
-## Coming soon
-    - [ ] Changes the screen when clicking SideMenu
+## Coming soon 
   - [ ] category
   - [ ] tag
     - [ ] tag recommendation
 - [ ] Youtube
-
+ - [ ] Changes the screen when clicking SideMenu
 ## Implement web function
 - [x] Route
 - [x] Favicon
@@ -85,6 +85,10 @@ Use the **Profile** page to update the currently selected profile.
 - [ ] Invalid address handling
 
 ## Implement Firebase Features
+- [x] Separation of development and release projects
+  - [x] Development Firestore Database
+  - [x] Development Firebase Functions
+  
 - [x] Firebase Authentication
   - [x] Anonymous Login
   - [x] Email Login
@@ -92,22 +96,28 @@ Use the **Profile** page to update the currently selected profile.
   - [x] Apple Login
     
 - [x] Firebase Crashlytics
-  - Check Android and iOS crash reports
+  - [x] Check Android and iOS crash reports
 
 - [x] Firestore Database
   - [x] Firestore data structure design
-  - Apply [x] Firestore Collection Group Queries
+  - [x] Firestore Collection Group Queries
   
 - [x] Firebase Hosting
   - [x] Hosting Website Deployment
   - [x] Setting up and deploying automatic builds to GitHub
   
 - [x] Firebase Functions
-  - [x] increase the number of users who read the article
-  - [x] Update comment count when adding or deleting comments
+  - [x] Count when joining or leaving a user
+  - [x] Count when adding or deleting posts
+  - [x] Count the number of users who read the article
+  - [x] Count the number of comment in post when adding or deleting comments
+  - [x] Total comments count when adding or deleting comments
 
+- [x] Cloud Firestore fine-grained rules
 
-- [ ] Cloud Firestore fine-grained rules
+## Apply CI/CD Codemagic
+- [x] Build for Android
+- [x] Build for iOS
 ## App Structure
 
 *This app is built to run on Android, iOS and the web on a single Dart codebase. To make this possible, the **highly reusable** architecture has been designed.*
