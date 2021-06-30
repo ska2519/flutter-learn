@@ -4,90 +4,63 @@ import * as admin from 'firebase-admin';
 admin.initializeApp();
 const db = admin.firestore();
 
-// const postSnap = await postRef.get();
-// const postData = postSnap.data();
-// await postRef.update({commentCount: postData?.commentCount + 1});
-// export const createdUserRecord = functions.auth.user().onCreate((user, context) => {
-//     // const userRef = db.doc('users/' + user.uid);
-//     const userRef = db.doc('users/${user.uid}');
-
-//     return userRef.set({
-//         name: user.displayName,
-//         createdAt: context.timestamp,
-//         nickName: 'bubba',
-//     });
-// });
+const increment = admin.firestore.FieldValue.increment(1);
+const decrement = admin.firestore.FieldValue.increment(-1);
 
 export const increaseUserCount = functions.firestore.document('users/{uid}').onCreate(async (snap, context) => {
     const countRef = db.doc('count/user');
-    try {
-        await countRef.update({userCount: admin.firestore.FieldValue.increment(1)});
-    } catch (error) {
-        console.log('failed increaseUserCount');
-    }
+    countRef.update({userCount: increment});
 });
 
-export const decreaseUserCount = functions.firestore.document('users/{uid}').onDelete(async (snap, context) => {
-    const countRef = db.doc('count/user');
-    try {
-        await countRef.update({userCount: admin.firestore.FieldValue.increment(-1)});
-    } catch (error) {
-        console.log('failed decreaseUserCount');
-    }
-});
+export const decreaseUserCount = functions.firestore.document('users/{uid}').onUpdate(async (change, context) => {
+    const newValue = change.after.data();
 
-export const increaseCommentCount = functions.firestore.document('posts/{postId}/comments/{commentId}').onCreate(async (snap, context) => {
-    const postId = snap.get('postId');
-    const postRef = db.doc('posts/' + postId);
-    const countRef = db.doc('count/comment');
-    try {
-        await postRef.update({commentCount: admin.firestore.FieldValue.increment(1)});
-        await countRef.update({commentCount: admin.firestore.FieldValue.increment(1)});
-    } catch (error) {
-        console.log('failed increaseCommentCount');
-    }
-});
-
-export const decreaseCommentCount = functions.firestore.document('posts/{postId}/comments/{commentId}').onDelete(async (snap, context) => {
-    const postId = snap.get('postId');
-    const postRef = db.doc('posts/' + postId);
-    const countRef = db.doc('count/comment');
-    try {
-        await postRef.update({commentCount: admin.firestore.FieldValue.increment(-1)});
-        await countRef.update({commentCount: admin.firestore.FieldValue.increment(-1)});
-    } catch (error) {
-        console.log('failed decreaseCommentCount');
-    }
-});
-
-export const increaseReadUserCount = functions.firestore.document('posts/{postId}/readUsers/{userId}').onCreate(async (snap, context) => {
-    const postId = snap.get('postId');
-    const postRef = db.doc('posts/' + postId);
-    try {
-        await postRef.update({readCount: admin.firestore.FieldValue.increment(1)});
-    } catch (error) {
-        console.log('failed increaseReadUserCount');
+    if (newValue.deletedUser == true) {
+        const countRef = db.doc('count/user');
+        countRef.update({userCount: decrement});
     }
 });
 
 export const increasePostCount = functions.firestore.document('posts/{postId}').onCreate(async (snap, context) => {
     const countRef = db.doc('count/post');
-    try {
-        await countRef.update({postCount: admin.firestore.FieldValue.increment(1)});
-    } catch (error) {
-        console.log('failed increasePostCount');
-    }
+    countRef.update({postCount: increment});
 });
 
-export const decreasePosCount = functions.firestore.document('posts/{postId}').onDelete(async (snap, context) => {
+export const decreasePostCount = functions.firestore.document('posts/{postId}').onDelete(async (snap, context) => {
     const countRef = db.doc('count/post');
-    try {
-        await countRef.update({postCount: admin.firestore.FieldValue.increment(-1)});
-    } catch (error) {
-        console.log('failed decreaseCommentCount');
-    }
+    countRef.update({postCount: decrement});
 });
-// export const addPostId = functions.firestore
-//     .document('posts/{postId}')
-//     .onCreate(async (snap, _) => await snap.ref.update({id: snap.id}));
+
+export const increaseCommentCount = functions.firestore.document('posts/{postId}/comments/{commentId}').onCreate(async (snap, context) => {
+    const batch = db.batch();
+
+    const postId = snap.get('postId');
+    const postRef = db.doc('posts/' + postId);
+    batch.update(postRef, {commentCount: increment});
+
+    const countRef = db.doc('count/comment');
+    batch.update(countRef, {commentCount: increment});
+
+    await batch.commit();
+});
+
+export const decreaseCommentCount = functions.firestore.document('posts/{postId}/comments/{commentId}').onDelete(async (snap, context) => {
+    const batch = db.batch();
+
+    const postId = snap.get('postId');
+    const postRef = db.doc('posts/' + postId);
+    batch.update(postRef, {commentCount: decrement});
+
+    const countRef = db.doc('count/comment');
+    batch.update(countRef, {commentCount: decrement});
+
+    await batch.commit();
+});
+
+export const increaseReadUserCount = functions.firestore.document('posts/{postId}/readUsers/{userId}').onCreate(async (snap, context) => {
+    const postId = snap.get('postId');
+    const postRef = db.doc('posts/' + postId);
+    postRef.update({readCount: increment});
+});
+
 

@@ -19,6 +19,7 @@ _$_Post _$_$_PostFromJson(Map json) {
     commentCount: json['commentCount'] as int? ?? 0,
     likedCount: json['likedCount'] as int? ?? 0,
     readCount: json['readCount'] as int? ?? 0,
+    deletedByAuthor: json['deletedByAuthor'] as bool? ?? false,
   );
 }
 
@@ -32,4 +33,5 @@ Map<String, dynamic> _$_$_PostToJson(_$_Post instance) => <String, dynamic>{
       'commentCount': instance.commentCount,
       'likedCount': instance.likedCount,
       'readCount': instance.readCount,
+      'deletedByAuthor': instance.deletedByAuthor,
     };
