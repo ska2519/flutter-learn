@@ -17,9 +17,9 @@ import 'package:flutter_learn/secret_keys.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 
 final _userIds = [
-  adminAppUserId, // ska2519@gmail.com / Ska Lee
-  'hxlcRL8wzrRlqAd1GrbMhgziMkL2', // skaleevn@gmail.com / 리처드 파인만
-  'mPoIDbC6wZe6srRUdT3OPvB9vlt2', // deletedUser
+  debugAdminUid,
+  // releaseAdminUid, // ska2519@gmail.com / Ska Lee
+  // 'sPGSy6SVI1UYCH1F9C0b0JPrDMk2', // skaleevn@gmail.com / 리처드 파인만
   // 'sQz4zvSVQpRKteDOOe26CXpxLcl1',
   // 'bAfJLNN3gFTvZrcwFqYNQ4RXPmD3',
 ];
