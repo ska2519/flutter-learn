@@ -13,7 +13,7 @@ export {increaseCommentCount} from './firestore';
 export {decreaseCommentCount} from './firestore';
 export {increaseReadUserCount} from './firestore';
 export {increasePostCount} from './firestore';
-export {decreasePosCount} from './firestore';
+export {decreasePostCount} from './firestore';
 // export {addPostId} from './firestore';
 // export {createdUserRecord} from './firestore';
 // export {resizeAvatar} from './storage';
