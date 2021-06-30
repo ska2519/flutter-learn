@@ -70,5 +70,6 @@
   "deletedUser": "탈퇴한 회원",
   "myReadPosts": "읽은 게시글",
   "myLikedPosts": "좋아요 한 게시글",
-  "appInfo": "앱 정보"
+  "appInfo": "앱 정보",
+  "deletedByAuthor": "작성자가 삭제하였습니다"
 }
