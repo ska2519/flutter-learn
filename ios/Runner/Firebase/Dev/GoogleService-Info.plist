@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>163290319108-dea440n7lf3gmdh39lehtap44jbqac7n.apps.googleusercontent.com</string>
+	<string>874778751078-l0oc2q02f3pnmnnttbcnsm8rs6jj1dja.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.163290319108-dea440n7lf3gmdh39lehtap44jbqac7n</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>163290319108-8r43afvm4gi6a4n3s2hkue5k48gh5vs1.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.874778751078-l0oc2q02f3pnmnnttbcnsm8rs6jj1dja</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDv6KQ0G4Q13N3YsTGVB2RbfvYV87paIF4</string>
+	<string>AIzaSyArIC8AGo5eiVWXiMItHvsTm6MaA63DzPs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>163290319108</string>
+	<string>874778751078</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>dev.flutter-learn.flutterLearn</string>
 	<key>PROJECT_ID</key>
-	<string>flutter-learn-0225</string>
+	<string>flutter-learn-dev</string>
 	<key>STORAGE_BUCKET</key>
-	<string>flutter-learn-0225.appspot.com</string>
+	<string>flutter-learn-dev.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:163290319108:ios:a6c1112e9f5d9268376851</string>
+	<string>1:874778751078:ios:dc7846e32f16b22bc9bda7</string>
 </dict>
 </plist>

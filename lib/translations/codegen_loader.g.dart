@@ -86,7 +86,8 @@ class CodegenLoader extends AssetLoader{
   "deletedUser": "Withdrawn member",
   "myReadPosts": "My read posts",
   "myLikedPosts": "My liked posts",
-  "appInfo": "App Info"
+  "appInfo": "App Info",
+  "deletedByAuthor": "Deleted by author"
 };
 static const Map<String,dynamic> ko = {
   "community": "커뮤니티",
@@ -160,7 +161,8 @@ static const Map<String,dynamic> ko = {
   "deletedUser": "탈퇴한 회원",
   "myReadPosts": "읽은 게시글",
   "myLikedPosts": "좋아요 한 게시글",
-  "appInfo": "앱 정보"
+  "appInfo": "앱 정보",
+  "deletedByAuthor": "작성자가 삭제하였습니다"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ko": ko};
 }

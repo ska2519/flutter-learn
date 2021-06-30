@@ -36,18 +36,9 @@ class _HomePageState extends State<HomePage> {
   ];
   int _selectedIndex = 0;
 
-  /// analytics Test
-  String _message = '';
-
-  void setMessage(String message) {
-    setState(() {
-      _message = message;
-    });
-  }
-
-  Future<void> _sendAnalyticsEvent() async {
+  Future<void> _sendAnalyticsEvent(String eventName) async {
     await widget.analytics.logEvent(
-      name: 'test_event',
+      name: eventName,
       parameters: <String, dynamic>{
         'string': 'string',
         'int': 42,
@@ -56,7 +47,7 @@ class _HomePageState extends State<HomePage> {
         'bool': true,
       },
     );
-    setMessage('logEvent succeeded');
+    print('logEvent succeeded');
   }
 
   Future<void> setPostsBatch(List<Post> posts) async {
@@ -69,6 +60,7 @@ class _HomePageState extends State<HomePage> {
   void _submitMockPosts() {
     final posts = List.generate(10, (_) => Post.random());
     setPostsBatch(posts);
+    _sendAnalyticsEvent('_submitMockPosts');
   }
 
   @override
@@ -76,19 +68,20 @@ class _HomePageState extends State<HomePage> {
     final appUser = useProvider(appUserStreamProvider).data?.value;
     print('HomePage appUser: $appUser');
     return Scaffold(
-      floatingActionButton: appUser?.id == adminAppUserId
-          ? FloatingActionButton(
-              mini: true,
-              onPressed: _submitMockPosts,
-              child: Text(
-                LocaleKeys.test.tr(),
-                style: Theme.of(context)
-                    .textTheme
-                    .caption!
-                    .copyWith(color: Colors.white),
-              ),
-            )
-          : null,
+      floatingActionButton:
+          appUser?.id == debugAdminUid || appUser?.id == releaseAdminUid
+              ? FloatingActionButton(
+                  mini: true,
+                  onPressed: _submitMockPosts,
+                  child: Text(
+                    LocaleKeys.test.tr(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .caption!
+                        .copyWith(color: Colors.white),
+                  ),
+                )
+              : null,
       key: context.read(menuControllerProvider).scaffoldKey,
       drawer: Responsive.isDesktop(context) ? const SideMenu() : null,
       body: Responsive.isDesktop(context)
