@@ -209,10 +209,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   void _deletePost(Post post) {
+    final database = context.read(databaseProvider);
     try {
-      final database = context.read(databaseProvider);
-      database.deletePost(post.id);
-      Navigator.pop(context);
+      if (post.commentCount > 0) {
+        database.updatePost(post.copyWith(deletedByAuthor: true));
+      } else {
+        database.deletePost(post.id);
+        Navigator.pop(context);
+      }
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
@@ -271,7 +275,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
         data: (post) => FutureBuilder(
           future: _checkReadUsers,
           builder: (context, snapshot) => Scaffold(
-            floatingActionButton: appUser?.id == adminAppUserId
+            floatingActionButton: appUser?.id == debugAdminUid ||
+                    appUser?.id == releaseAdminUid
                 ? Padding(
                     padding: const EdgeInsets.only(bottom: defaultPadding * 6),
                     child: FloatingActionButton(
