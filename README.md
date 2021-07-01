@@ -40,11 +40,11 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 
 ## 앱 기능 구현
 
-- [x] 다중 언어 지원 - 영문 버전 적용
+- [x] 다중 언어 지원 - 영문 버전
 
-- [x] 화면 사이즈에 따른 위젯 사이즈 변경
+- [x] 화면 사이즈에 따른 위젯 사이즈 조정
 - [x] 네비게이션 바
-  - [x] Desktop 사이즈 시 SideMenu로 변경
+  - [x] Desktop 사이즈 시 SideMenu 적용
 
 - [x] 커뮤니티
   - [x] 글 쓰기
@@ -84,6 +84,7 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 - [x] Favicon
 - [x] Title
 - [x] Web App Icon
+- [x] 로딩 스크린
 - [ ] 잘못된 주소 처리
 
 ## Firebase 기능 구현

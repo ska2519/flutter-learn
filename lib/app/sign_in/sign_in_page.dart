@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_button.dart';
-import 'package:flutter_learn/app/sign_in/sign_in_view_model.dart';
+import 'package:flutter_learn/app/sign_in/sign_view_model.dart';
 import 'package:flutter_learn/app/sign_in/social_sign_in_button.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/constants/constants.dart';
@@ -17,8 +17,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final signInModelProvider = ChangeNotifierProvider<SignInViewModel>(
-    (ref) => SignInViewModel(auth: ref.watch(authServiceProvider)));
+final signModelProvider = ChangeNotifierProvider<SignViewModel>(
+    (ref) => SignViewModel(auth: ref.watch(authServiceProvider)));
 
 class SignInPage extends HookWidget {
   static Future<void> show(BuildContext context) async {
@@ -28,16 +28,11 @@ class SignInPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final signInModel = useProvider(signInModelProvider);
+    final signModel = useProvider(signModelProvider);
     final appUser = useProvider(appUserStreamProvider).data?.value;
-    if (appUser != null) {
-      print('SignInPage appUser: $appUser');
-      WidgetsBinding.instance!
-          .addPostFrameCallback((_) => Navigator.pop(context));
-    }
 
-    return ProviderListener<SignInViewModel>(
-      provider: signInModelProvider,
+    return ProviderListener<SignViewModel>(
+      provider: signModelProvider,
       onChange: (context, model) async {
         if (model.error != null) {
           await showExceptionAlertDialog(
@@ -46,9 +41,16 @@ class SignInPage extends HookWidget {
             exception: model.error,
           );
         }
+        if (model.isLoading == false) {
+          if (appUser != null) {
+            print('SignInPage appUser: $appUser');
+            WidgetsBinding.instance!
+                .addPostFrameCallback((_) => Navigator.pop(context));
+          }
+        }
       },
       child: SignInPageContents(
-        viewModel: signInModel,
+        viewModel: signModel,
         title: LocaleKeys.signInPageTitle.tr(),
       ),
     );
@@ -57,7 +59,7 @@ class SignInPage extends HookWidget {
 
 class SignInPageContents extends StatelessWidget {
   const SignInPageContents({required this.viewModel, required this.title});
-  final SignInViewModel viewModel;
+  final SignViewModel viewModel;
   final String title;
 
   Future<void> _showEmailPasswordSignInPage(BuildContext context) async {
