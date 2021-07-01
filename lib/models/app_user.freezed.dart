@@ -25,13 +25,15 @@ class _$AppUserTearOff {
       String? email,
       String? photoURL,
       String? displayName,
-      bool deletedUser = false}) {
+      bool deletedUser = false,
+      int point = 0}) {
     return _AppUser(
       id: id,
       email: email,
       photoURL: photoURL,
       displayName: displayName,
       deletedUser: deletedUser,
+      point: point,
     );
   }
 
@@ -50,6 +52,7 @@ mixin _$AppUser {
   String? get photoURL => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   bool get deletedUser => throw _privateConstructorUsedError;
+  int get point => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -65,7 +68,8 @@ abstract class $AppUserCopyWith<$Res> {
       String? email,
       String? photoURL,
       String? displayName,
-      bool deletedUser});
+      bool deletedUser,
+      int point});
 }
 
 /// @nodoc
@@ -83,6 +87,7 @@ class _$AppUserCopyWithImpl<$Res> implements $AppUserCopyWith<$Res> {
     Object? photoURL = freezed,
     Object? displayName = freezed,
     Object? deletedUser = freezed,
+    Object? point = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -105,6 +110,10 @@ class _$AppUserCopyWithImpl<$Res> implements $AppUserCopyWith<$Res> {
           ? _value.deletedUser
           : deletedUser // ignore: cast_nullable_to_non_nullable
               as bool,
+      point: point == freezed
+          ? _value.point
+          : point // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -119,7 +128,8 @@ abstract class _$AppUserCopyWith<$Res> implements $AppUserCopyWith<$Res> {
       String? email,
       String? photoURL,
       String? displayName,
-      bool deletedUser});
+      bool deletedUser,
+      int point});
 }
 
 /// @nodoc
@@ -138,6 +148,7 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
     Object? photoURL = freezed,
     Object? displayName = freezed,
     Object? deletedUser = freezed,
+    Object? point = freezed,
   }) {
     return _then(_AppUser(
       id: id == freezed
@@ -160,6 +171,10 @@ class __$AppUserCopyWithImpl<$Res> extends _$AppUserCopyWithImpl<$Res>
           ? _value.deletedUser
           : deletedUser // ignore: cast_nullable_to_non_nullable
               as bool,
+      point: point == freezed
+          ? _value.point
+          : point // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -172,7 +187,8 @@ class _$_AppUser implements _AppUser {
       this.email,
       this.photoURL,
       this.displayName,
-      this.deletedUser = false});
+      this.deletedUser = false,
+      this.point = 0});
 
   factory _$_AppUser.fromJson(Map<String, dynamic> json) =>
       _$_$_AppUserFromJson(json);
@@ -188,10 +204,13 @@ class _$_AppUser implements _AppUser {
   @JsonKey(defaultValue: false)
   @override
   final bool deletedUser;
+  @JsonKey(defaultValue: 0)
+  @override
+  final int point;
 
   @override
   String toString() {
-    return 'AppUser(id: $id, email: $email, photoURL: $photoURL, displayName: $displayName, deletedUser: $deletedUser)';
+    return 'AppUser(id: $id, email: $email, photoURL: $photoURL, displayName: $displayName, deletedUser: $deletedUser, point: $point)';
   }
 
   @override
@@ -210,7 +229,9 @@ class _$_AppUser implements _AppUser {
                     .equals(other.displayName, displayName)) &&
             (identical(other.deletedUser, deletedUser) ||
                 const DeepCollectionEquality()
-                    .equals(other.deletedUser, deletedUser)));
+                    .equals(other.deletedUser, deletedUser)) &&
+            (identical(other.point, point) ||
+                const DeepCollectionEquality().equals(other.point, point)));
   }
 
   @override
@@ -220,7 +241,8 @@ class _$_AppUser implements _AppUser {
       const DeepCollectionEquality().hash(email) ^
       const DeepCollectionEquality().hash(photoURL) ^
       const DeepCollectionEquality().hash(displayName) ^
-      const DeepCollectionEquality().hash(deletedUser);
+      const DeepCollectionEquality().hash(deletedUser) ^
+      const DeepCollectionEquality().hash(point);
 
   @JsonKey(ignore: true)
   @override
@@ -239,7 +261,8 @@ abstract class _AppUser implements AppUser {
       String? email,
       String? photoURL,
       String? displayName,
-      bool deletedUser}) = _$_AppUser;
+      bool deletedUser,
+      int point}) = _$_AppUser;
 
   factory _AppUser.fromJson(Map<String, dynamic> json) = _$_AppUser.fromJson;
 
@@ -253,6 +276,8 @@ abstract class _AppUser implements AppUser {
   String? get displayName => throw _privateConstructorUsedError;
   @override
   bool get deletedUser => throw _privateConstructorUsedError;
+  @override
+  int get point => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$AppUserCopyWith<_AppUser> get copyWith =>
