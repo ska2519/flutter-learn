@@ -11,6 +11,8 @@ class AppUser with _$AppUser {
     String? photoURL,
     String? displayName,
     @Default(false) bool deletedUser,
+    @Default(0) int point,
+    // @Default(0) int updatedDisplayName,
     // @TimestampConverter() DateTime? timestamp,
   }) = _AppUser;
 

@@ -20,10 +20,21 @@ import 'firestore_database.dart';
 final authServiceProvider =
     Provider<AuthBase>((ref) => FirebaseAuthService(ref.read));
 
-final appUserStreamProvider = StreamProvider<AppUser?>((ref) async* {
-  final authService = ref.watch(authServiceProvider);
-  // yield* authService.idTokenChanges;
-  yield* authService.onAuthStateChanged;
+final userStreamProvider = StreamProvider.autoDispose<User?>((ref) {
+  final authService = ref.read(authServiceProvider);
+  return authService.idTokenChanges;
+});
+
+final appUserStreamProvider = StreamProvider.autoDispose<AppUser?>((ref) {
+  final userAsyncValue = ref.watch(userStreamProvider);
+  final database = ref.read(databaseProvider);
+  return userAsyncValue.when(
+    data: (user) => user?.isAnonymous == true
+        ? Stream<AppUser?>.empty()
+        : database.appUserStream(user),
+    loading: () => Stream<AppUser?>.empty(),
+    error: (_, __) => Stream<AppUser?>.empty(),
+  );
 });
 
 class FirebaseAuthService implements AuthBase {
@@ -39,19 +50,26 @@ class FirebaseAuthService implements AuthBase {
   );
 
   @override
-  Stream<AppUser?> get onAuthStateChanged =>
-      _firebaseAuth.authStateChanges().asyncMap(
-            (user) async => user != null
-                ? await userFromFirebase(user)
-                : await signInAnonymously(),
-          );
+  Future<User?> get currentUser async => _firebaseAuth.currentUser;
 
-  // @override
-  // Stream<AppUser?> get idTokenChanges =>
-  //     _firebaseAuth.idTokenChanges().asyncMap((user) async {
-  //       print('idTokenChanges: ${idTokenChanges.last}');
-  //       return user != null ? await userFromFirebase(user) : null;
-  //     });
+  @override
+  Future<AppUser?> get currentAppUser async =>
+      userFromFirebase(_firebaseAuth.currentUser);
+
+  @override
+  Future<AppUser?> userFromFirebase(User? user) async {
+    return user == null || user.isAnonymous ? null : await fetchUser(user);
+  }
+
+  @override
+  Stream<User?> get onAuthStateChanged => _firebaseAuth
+      .authStateChanges()
+      .asyncMap((User? user) async => user ?? await signInAnonymously());
+
+  @override
+  Stream<User?> get idTokenChanges => _firebaseAuth
+      .idTokenChanges()
+      .asyncMap((User? user) async => user ?? await signInAnonymously());
 
   @override
   Future<AppUser?> createUser(User user) async {
@@ -94,11 +112,6 @@ class FirebaseAuthService implements AuthBase {
             'The user must reauthenticate before this operation can be executed.');
       }
     }
-  }
-
-  @override
-  Future<AppUser?> userFromFirebase(User? user) async {
-    return user == null || user.isAnonymous ? null : await fetchUser(user);
   }
 
   @override
@@ -247,21 +260,16 @@ class FirebaseAuthService implements AuthBase {
   }
 
   @override
-  Future<AppUser?> currentUser() async =>
-      userFromFirebase(_firebaseAuth.currentUser);
-
-  @override
   Future<void> signOut() async {
     await googleSignIn.signOut();
     return _firebaseAuth.signOut();
   }
 
   @override
-  Future<AppUser?> signInAnonymously() async {
+  Future<User?> signInAnonymously() async {
     final UserCredential userCredential =
         await _firebaseAuth.signInAnonymously();
-    print('userCredential: $userCredential');
-    return userFromFirebase(userCredential.user);
+    return userCredential.user;
   }
 
   @override
