@@ -13,6 +13,7 @@ _$_AppUser _$_$_AppUserFromJson(Map json) {
     photoURL: json['photoURL'] as String?,
     displayName: json['displayName'] as String?,
     deletedUser: json['deletedUser'] as bool? ?? false,
+    point: json['point'] as int? ?? 0,
   );
 }
 
@@ -23,4 +24,5 @@ Map<String, dynamic> _$_$_AppUserToJson(_$_AppUser instance) =>
       'photoURL': instance.photoURL,
       'displayName': instance.displayName,
       'deletedUser': instance.deletedUser,
+      'point': instance.point,
     };
