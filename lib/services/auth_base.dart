@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_learn/models/app_user.dart';
 
 abstract class AuthBase {
-  Future<AppUser?> currentUser();
-  Future<AppUser?> signInAnonymously();
+  Future<User?> get currentUser;
+  Future<AppUser?> get currentAppUser;
+  Future<User?> signInAnonymously();
   Future<AppUser?> signInWithEmailAndPassword(String email, String password);
   Future<AppUser?> createUserWithEmailAndPassword(
       String email, String password);
@@ -27,7 +28,7 @@ abstract class AuthBase {
   Future<AppUser?> fetchUser(User user);
   Future<void> deleteUser(AppUser appUser);
   Future<AppUser?> userFromFirebase(User? user);
-  Stream<AppUser?> get onAuthStateChanged;
-  // Stream<AppUser?> get idTokenChanges;
+  Stream<User?> get onAuthStateChanged;
+  Stream<User?> get idTokenChanges;
   void dispose();
 }
