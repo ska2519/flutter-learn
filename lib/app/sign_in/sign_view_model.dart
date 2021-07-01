@@ -2,21 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/services/auth_base.dart';
 
-class SignInViewModel with ChangeNotifier {
-  SignInViewModel({required this.auth});
+class SignViewModel with ChangeNotifier {
+  SignViewModel({required this.auth});
   final AuthBase auth;
   bool isLoading = false;
   dynamic error;
 
-  Future<void> _signIn(Future<AppUser?> Function() signInMethod) async {
+  Future<void> _sign(Future Function() signMethod) async {
     try {
       error = null;
       isLoading = true;
       notifyListeners();
-      await signInMethod();
+      await signMethod();
     } catch (e) {
       error = e;
       rethrow;
@@ -31,10 +30,14 @@ class SignInViewModel with ChangeNotifier {
   // }
 
   Future<void> signInWithGoogle() async {
-    await _signIn(auth.signInWithGoogle);
+    await _sign(auth.signInWithGoogle);
   }
 
   Future<void> signInWithApple() async {
-    await _signIn(auth.signInWithApple);
+    await _sign(auth.signInWithApple);
+  }
+
+  Future<void> signOut() async {
+    await _sign(auth.signOut);
   }
 }
