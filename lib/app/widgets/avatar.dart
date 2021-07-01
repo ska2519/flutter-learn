@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,40 +22,41 @@ class Avatar extends StatelessWidget {
     return Container(
       decoration: _borderDecoration(),
       child: CircleAvatar(
-        radius: radius,
-        backgroundColor:
-            Colors.primaries[Random().nextInt(Colors.primaries.length)],
-        child: photoUrl != null
-            ? CachedNetworkImage(
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
+          radius: radius,
+          backgroundImage: AssetImage('assets/icons/dash_icon_512.png'),
+          child: photoUrl != null
+              ? CachedNetworkImage(
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                placeholder: (context, url) => const SizedBox(),
-                imageUrl: photoUrl!,
-              )
-            : displayName != null
-                ? FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      displayName!.substring(0, 1).toUpperCase(),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2!
-                          .copyWith(color: Colors.white),
-                    ),
-                  )
-                : null,
-        // Image.asset(
-        //     'assets/icons/camera_button_icon.png',
-        //     fit: BoxFit.cover,
-        //   ),
-      ),
+                  placeholder: (context, url) => const SizedBox(),
+                  imageUrl: photoUrl!,
+                )
+              : const SizedBox()
+
+          // displayName != null
+          //     ? FittedBox(
+          //         fit: BoxFit.scaleDown,
+          //         child: Text(
+          //           displayName!.substring(0, 1).toUpperCase(),
+          //           style: Theme.of(context)
+          //               .textTheme
+          //               .headline2!
+          //               .copyWith(color: Colors.white),
+          //         ),
+          //       )
+          //     : null,
+          // Image.asset(
+          //     'assets/icons/camera_button_icon.png',
+          //     fit: BoxFit.cover,
+          //   ),
+          ),
     );
   }
 

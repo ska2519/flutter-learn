@@ -50,7 +50,6 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
     final appUser = useProvider(appUserStreamProvider).data?.value;
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -124,14 +123,19 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Widget _buildUserInfo(AppUser? appUser, BuildContext context) {
+    final database = context.read(databaseProvider);
+    final appUser = useProvider(appUserStreamProvider).data?.value;
     return Column(
       children: [
-        Avatar(
-          photoUrl: appUser?.photoURL,
-          displayName: appUser?.displayName,
-          radius: 50,
-          borderColor: Colors.black54,
-          borderWidth: 1.0,
+        GestureDetector(
+          onTap: () => appUser == null ? SignInPage.show(context) : {},
+          child: Avatar(
+            photoUrl: appUser?.photoURL,
+            displayName: appUser?.displayName,
+            radius: 50,
+            borderColor: Colors.black54,
+            borderWidth: 1.0,
+          ),
         ),
         const SizedBox(height: defaultPadding),
         TextButton(
@@ -140,7 +144,6 @@ class _AccountPageState extends State<AccountPage> {
               : displayNameUpdateDialog(context, appUser).then(
                   (value) {
                     if (value == true) {
-                      final database = context.read(databaseProvider);
                       database.updateAppUser(
                         appUser.copyWith(displayName: _displayName),
                       );
