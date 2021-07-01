@@ -21,9 +21,9 @@ final databaseProvider = Provider<FirestoreDatabase>((ref) {
 class FirestoreDatabase {
   final _service = FirestoreService.instance;
 
-  Stream<AppUser?> appUserStream(AppUser? appUser) => appUser != null
+  Stream<AppUser?> appUserStream(User? user) => user != null
       ? _service.documentStream(
-          path: FirestorePath.appUser(appUser.id!),
+          path: FirestorePath.appUser(user.uid),
           builder: (data, documentId) =>
               data == null ? null : AppUser.fromJson(data))
       : Stream<AppUser?>.empty();
