@@ -74,5 +74,8 @@ abstract class  LocaleKeys {
   static const myLikedPosts = 'myLikedPosts';
   static const appInfo = 'appInfo';
   static const deletedByAuthor = 'deletedByAuthor';
+  static const changeProfileImage = 'changeProfileImage';
+  static const defaultProfileImage = 'defaultProfileImage';
+  static const addProfileImage = 'addProfileImage';
 
 }

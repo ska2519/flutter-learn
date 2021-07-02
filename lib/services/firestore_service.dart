@@ -9,16 +9,16 @@ class FirestoreService {
     required Map<String, dynamic> data,
     bool merge = false,
   }) async {
-    final reference = FirebaseFirestore.instance.doc(path);
-    await reference.set(data, SetOptions(merge: merge));
+    final ref = FirebaseFirestore.instance.doc(path);
+    await ref.set(data, SetOptions(merge: merge));
   }
 
   Future<DocumentReference<Map<String, dynamic>>> addData({
     required String path,
     required Map<String, dynamic> data,
   }) async {
-    final reference = FirebaseFirestore.instance.collection(path);
-    return reference.add(data);
+    final ref = FirebaseFirestore.instance.collection(path);
+    return ref.add(data);
   }
 
   Future<List<T>> getCollection<T>({
@@ -65,8 +65,8 @@ class FirestoreService {
   }
 
   Future<void> deleteData({required String path}) async {
-    final reference = FirebaseFirestore.instance.doc(path);
-    await reference.delete();
+    final ref = FirebaseFirestore.instance.doc(path);
+    await ref.delete();
   }
 
   Stream<List<T>> collectionGroupStream<T>({
@@ -121,7 +121,7 @@ class FirestoreService {
     required String path,
     required T Function(Map<String, dynamic>? data, String documentID) builder,
   }) async {
-    final DocumentReference reference = FirebaseFirestore.instance.doc(path);
+    final reference = FirebaseFirestore.instance.doc(path);
     final DocumentSnapshot snapshot = await reference.get();
     final data = snapshot.data() as Map<String, dynamic>?;
     return builder(data, snapshot.id);
@@ -131,8 +131,8 @@ class FirestoreService {
     required String path,
     required T Function(Map<String, dynamic>? data, String documentID) builder,
   }) {
-    final DocumentReference reference = FirebaseFirestore.instance.doc(path);
-    final Stream<DocumentSnapshot> snapshots = reference.snapshots();
+    final ref = FirebaseFirestore.instance.doc(path);
+    final Stream<DocumentSnapshot> snapshots = ref.snapshots();
     return snapshots.map((snapshot) =>
         builder(snapshot.data() as Map<String, dynamic>?, snapshot.id));
   }
