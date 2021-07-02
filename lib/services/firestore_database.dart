@@ -8,7 +8,7 @@ import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/models/post_liked.dart';
 import 'package:flutter_learn/models/read_post.dart';
 import 'package:flutter_learn/models/values.dart';
-import 'package:flutter_learn/services/firestore_path.dart';
+import 'package:flutter_learn/services/firebase_path.dart';
 import 'package:flutter_learn/services/firestore_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -23,7 +23,7 @@ class FirestoreDatabase {
 
   Stream<AppUser?> appUserStream(User? user) => user != null
       ? _service.documentStream(
-          path: FirestorePath.appUser(user.uid),
+          path: FirebasePath.appUser(user.uid),
           builder: (data, documentId) =>
               data == null ? null : AppUser.fromJson(data))
       : Stream<AppUser?>.empty();
@@ -32,16 +32,16 @@ class FirestoreDatabase {
     return uid == null
         ? null
         : _service.getDoc(
-            path: FirestorePath.appUser(uid),
+            path: FirebasePath.appUser(uid),
             builder: (data, documentId) =>
                 data == null ? null : AppUser.fromJson(data));
   }
 
   Future<void> deleteAppUser(String uid) =>
-      _service.deleteData(path: FirestorePath.appUser(uid));
+      _service.deleteData(path: FirebasePath.appUser(uid));
 
   Future<void> setAppUser(User user) async => _service.setData(
-        path: FirestorePath.appUser(user.uid),
+        path: FirebasePath.appUser(user.uid),
         data: AppUser(
           id: user.uid,
           email: user.email,
@@ -51,81 +51,81 @@ class FirestoreDatabase {
         ).toJson(),
       );
   Future<Post?> getPost(String postId) async => _service.getDoc(
-      path: FirestorePath.post(postId),
+      path: FirebasePath.post(postId),
       builder: (data, documentId) => data == null ? null : Post.fromJson(data));
 
   Future<void> updateAppUser(AppUser appUser) async => _service.updateDoc(
-        path: FirestorePath.appUser(appUser.id!),
+        path: FirebasePath.appUser(appUser.id!),
         data: appUser.toJson(),
       );
 
   Future<void> setPost(Post post) {
     return _service.setData(
-        path: FirestorePath.post(post.id), data: post.toJson());
+        path: FirebasePath.post(post.id), data: post.toJson());
   }
 
   Future<void> updatePost(Post post) => _service.updateDoc(
-        path: FirestorePath.post(post.id),
+        path: FirebasePath.post(post.id),
         data: post.toJson(),
       );
   Future<void> setComment(Comment comment) => _service.setData(
-        path: FirestorePath.comment(comment.postId, comment.id!),
+        path: FirebasePath.comment(comment.postId, comment.id!),
         data: comment.toJson(),
       );
   Future<DocumentReference<Map<String, dynamic>>> addComment(Comment comment) =>
       _service.addData(
-        path: FirestorePath.comments(comment.postId),
+        path: FirebasePath.comments(comment.postId),
         data: comment.toJson(),
       );
   Future<void> setReadUser(ReadPost readPost) async => _service.setData(
-        path: FirestorePath.postReadUser(readPost.postId, readPost.userId),
+        path: FirebasePath.postReadUser(readPost.postId, readPost.userId),
         data: readPost.toJson(),
       );
   Future<void> setPostLiked(PostLiked likedPost) async => _service.setData(
-        path: FirestorePath.postLikedUser(likedPost.postId, likedPost.userId),
+        path: FirebasePath.postLikedUser(likedPost.postId, likedPost.userId),
         data: likedPost.toJson(),
       );
 
   Future<void> updateComment(Comment comment) => _service.updateDoc(
-        path: FirestorePath.comment(comment.postId, comment.id!),
+        path: FirebasePath.comment(comment.postId, comment.id!),
         data: comment.toJson(),
       );
   Future<void> transactionDelComment(Comment comment, Post post) =>
       _service.setDelTransaction(
-        deletePath: FirestorePath.comment(comment.postId, comment.id!),
-        updatePath: FirestorePath.post(comment.postId),
+        deletePath: FirebasePath.comment(comment.postId, comment.id!),
+        updatePath: FirebasePath.post(comment.postId),
         updateData: post.toJson(),
       );
   Future<void> transactionDelPostLiked(String userId, Post post) =>
       _service.setDelTransaction(
-        deletePath: FirestorePath.postLikedUser(post.id, userId),
-        updatePath: FirestorePath.post(post.id),
+        deletePath: FirebasePath.postLikedUser(post.id, userId),
+        updatePath: FirebasePath.post(post.id),
         updateData: post.toJson(),
       );
   Future<void> deleteComment(Comment comment) => _service.deleteData(
-      path: FirestorePath.comment(comment.postId, comment.id!));
+      path: FirebasePath.comment(comment.postId, comment.id!));
 
   Future<void> deletePost(String postId) =>
-      _service.deleteData(path: FirestorePath.post(postId));
+      _service.deleteData(path: FirebasePath.post(postId));
 
   Future<List<String>> getPostReadUsers(String postId) async =>
       _service.getCollection(
-          path: FirestorePath.postReadUsers(postId),
+          path: FirebasePath.postReadUsers(postId),
           builder: (data, documentId) => documentId);
 
   // data!['id'] = documentId;
   Stream<List<Post?>> postsStream() => _service.collectionStream(
-      path: FirestorePath.posts(),
+      path: FirebasePath.posts(),
       queryBuilder: (query) => query.orderBy('timestamp', descending: true),
       builder: (data, documentId) => data != null ? Post.fromJson(data) : null);
 
   Stream<Post> postStream(String postId) => _service.documentStream(
-      path: FirestorePath.post(postId),
+      path: FirebasePath.post(postId),
       builder: (data, documentId) => Post.fromJson(data!));
 
   Stream<List<Comment>> topLevelCommentsStream(String postId) =>
       _service.collectionStream<Comment>(
-        path: FirestorePath.comments(postId),
+        path: FirebasePath.comments(postId),
         queryBuilder: (query) => query.where('level', isEqualTo: 0),
         builder: (data, documentId) => Comment.fromJson(data!),
         sort: (lhs, rhs) => rhs.timestamp!.compareTo(lhs.timestamp!),
@@ -134,7 +134,7 @@ class FirestoreDatabase {
   /// 1단계 하위 레벨만 isLessThanOrEqualTo로 솔팅 가능
   Stream<List<Comment>> childCommentsStream(Comment comment) =>
       _service.collectionStream<Comment>(
-        path: FirestorePath.comments(comment.postId),
+        path: FirebasePath.comments(comment.postId),
         queryBuilder: (query) => query
             .where('parent', isGreaterThanOrEqualTo: comment.id)
             .where('parent', isLessThanOrEqualTo: '${comment.id}~'),
@@ -145,13 +145,13 @@ class FirestoreDatabase {
 
   Stream<List<PostLiked>> postLikedStream(String postId) =>
       _service.collectionStream<PostLiked>(
-        path: FirestorePath.postLiked(postId),
+        path: FirebasePath.postLiked(postId),
         queryBuilder: (query) => query.orderBy('timestamp', descending: true),
         builder: (data, documentId) => PostLiked.fromJson(data!),
       );
   Stream<List<Post>> userPostsStream(String userId) =>
       _service.collectionStream<Post>(
-        path: FirestorePath.posts(),
+        path: FirebasePath.posts(),
         queryBuilder: (query) => query
             .where('userId', isEqualTo: userId)
             .orderBy('timestamp', descending: true),
@@ -159,7 +159,7 @@ class FirestoreDatabase {
       );
   Stream<List<Comment>> userCommentsStream(String? userId) =>
       _service.collectionGroupStream<Comment>(
-        path: FirestorePath.collectionGroupComments(),
+        path: FirebasePath.collectionGroupComments(),
         queryBuilder: (query) => query
             .where('userId', isEqualTo: userId)
             .orderBy('timestamp', descending: true),
@@ -167,14 +167,14 @@ class FirestoreDatabase {
       );
   Stream<List<PostLiked>> userLikedPostsStream(String? userId) =>
       _service.collectionGroupStream<PostLiked>(
-        path: FirestorePath.collectionGroupLikedUsers(),
+        path: FirebasePath.collectionGroupLikedUsers(),
         queryBuilder: (query) => query.where('userId', isEqualTo: userId),
         builder: (data, documentId) => PostLiked.fromJson(data!),
         sort: (lhs, rhs) => rhs.timestamp!.compareTo(lhs.timestamp!),
       );
   Stream<List<ReadPost>> userReadPostsStream(String? userId) =>
       _service.collectionGroupStream<ReadPost>(
-        path: FirestorePath.collectionGroupReadUsers(),
+        path: FirebasePath.collectionGroupReadUsers(),
         queryBuilder: (query) => query
             .where('userId', isEqualTo: userId)
             .orderBy('timestamp', descending: true),
