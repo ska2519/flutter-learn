@@ -14,6 +14,8 @@ export {decreaseCommentCount} from './firestore';
 export {increaseReadUserCount} from './firestore';
 export {increasePostCount} from './firestore';
 export {decreasePostCount} from './firestore';
+
+export {resizeAvatar} from './storage';
 // export {addPostId} from './firestore';
 // export {createdUserRecord} from './firestore';
 // export {resizeAvatar} from './storage';
