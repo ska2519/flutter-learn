@@ -9,7 +9,7 @@ Future<bool?> showAlertDialog({
   String? title,
   required Widget child,
   String? cancelActionText,
-  required String defaultActionText,
+  String? defaultActionText,
 }) async {
   if (kIsWeb || !Platform.isIOS) {
     return showDialog(
@@ -23,10 +23,11 @@ Future<bool?> showAlertDialog({
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(cancelActionText),
             ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(defaultActionText),
-          ),
+          if (defaultActionText != null)
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(defaultActionText),
+            ),
         ],
       ),
     );
@@ -48,10 +49,11 @@ Future<bool?> showAlertDialog({
             onPressed: () => Navigator.of(context).pop(false),
             child: Text(cancelActionText),
           ),
-        CupertinoDialogAction(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: Text(defaultActionText),
-        ),
+        if (defaultActionText != null)
+          CupertinoDialogAction(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(defaultActionText),
+          ),
       ],
     ),
   );
