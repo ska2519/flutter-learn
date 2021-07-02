@@ -3,7 +3,7 @@ description: Flutter Learn.
 
 publish_to: 'none'
 
-version: 0.1.4
+version: 0.1.5
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -17,6 +17,7 @@ dependencies:
   duration: ^3.0.6
   easy_localization: ^3.0.0
   equatable: ^2.0.2
+  file_picker: ^3.0.3
   firebase_analytics: ^8.1.2
   firebase_auth: ^1.2.0
   firebase_core: ^1.2.0
@@ -31,6 +32,8 @@ dependencies:
   google_sign_in: ^5.0.4
   hooks_riverpod: ^0.14.0+4
   image: ^3.0.2
+  image_cropper: ^1.4.1
+  image_picker: ^0.7.4
   intl: ^0.17.0
   lint: ^1.5.3
   package_info_plus: ^1.0.3
