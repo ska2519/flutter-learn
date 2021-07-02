@@ -1,22 +1,25 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:flutter_learn/app/home/account/my_posts_page.dart';
 import 'package:flutter_learn/app/home/account/settings_page.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/avatar.dart';
+import 'package:flutter_learn/app/widgets/loading_indicator.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
+import 'package:flutter_learn/services/firebase_storage.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'liked_posts_page.dart';
 import 'menu_list_item.dart';
 
@@ -29,8 +32,10 @@ class AccountPage extends StatefulHookWidget {
 
 class _AccountPageState extends State<AccountPage> {
   String _displayName = '';
+  File? profileImageFile;
 
-  Future<bool?> displayNameUpdateDialog(BuildContext context, AppUser appUser) {
+  Future<bool?> _updateDisplayNameDialog(
+      BuildContext context, AppUser appUser) {
     return showAlertDialog(
       context: context,
       title: LocaleKeys.my_profile.tr(),
@@ -128,7 +133,9 @@ class _AccountPageState extends State<AccountPage> {
     return Column(
       children: [
         GestureDetector(
-          onTap: () => appUser == null ? SignInPage.show(context) : {},
+          onTap: () => appUser == null
+              ? SignInPage.show(context)
+              : _updateProfileImageDialog(appUser),
           child: Avatar(
             photoUrl: appUser?.photoURL,
             displayName: appUser?.displayName,
@@ -141,7 +148,7 @@ class _AccountPageState extends State<AccountPage> {
         TextButton(
           onPressed: () => appUser == null
               ? SignInPage.show(context)
-              : displayNameUpdateDialog(context, appUser).then(
+              : _updateDisplayNameDialog(context, appUser).then(
                   (value) {
                     if (value == true) {
                       database.updateAppUser(
@@ -160,5 +167,52 @@ class _AccountPageState extends State<AccountPage> {
         const SizedBox(height: defaultPadding),
       ],
     );
+  }
+
+  Future? _updateProfileImageDialog(AppUser appUser) async {
+    return showAlertDialog(
+      context: context,
+      title: LocaleKeys.changeProfileImage.tr(),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextButton(
+              onPressed: () => updateProfileImage(appUser),
+              child: Text(LocaleKeys.addProfileImage.tr())),
+          TextButton(
+              onPressed: () => setDefaultProfileImage(appUser),
+              child: Text(LocaleKeys.defaultProfileImage.tr())),
+        ],
+      ),
+      cancelActionText: LocaleKeys.cancel.tr(),
+    );
+  }
+
+  Future<void> setDefaultProfileImage(AppUser appUser) async {
+    final database = context.read(databaseProvider);
+    await database.updateAppUser(appUser.copyWith(photoURL: null));
+    Navigator.pop(context);
+  }
+
+  Future<void> updateProfileImage(AppUser appUser) async {
+    final ImagePicker _picker = ImagePicker();
+    try {
+      final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        final dialogKey = GlobalKey<State>();
+        loadingIndicator(context, dialogKey);
+        final storage = context.read(storageProvider);
+        final database = context.read(databaseProvider);
+        await storage.uploadProfileImage(
+            userId: appUser.id!, filePath: pickedFile.path);
+        final newPhotoURL =
+            await storage.profileDownloadURL(userId: appUser.id!);
+        await database.updateAppUser(appUser.copyWith(photoURL: newPhotoURL));
+        Navigator.of(dialogKey.currentContext!, rootNavigator: true).pop();
+        Navigator.pop(context);
+      }
+    } catch (error) {
+      print('error: $error');
+    }
   }
 }
