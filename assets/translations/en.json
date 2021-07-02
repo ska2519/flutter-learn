@@ -71,5 +71,8 @@
   "myReadPosts": "My read posts",
   "myLikedPosts": "My liked posts",
   "appInfo": "App Info",
-  "deletedByAuthor": "Deleted by author"
+  "deletedByAuthor": "Deleted by author",
+  "changeProfileImage": "Change profile image",
+  "defaultProfileImage": "Default profile image",
+  "addProfileImage": "Add profile image"
 }
