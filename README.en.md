@@ -39,7 +39,7 @@ Use the **Profile** page to update the currently selected profile.
 **Combining Flutter, Firebase, and Riverpod to create reusable, multi-platform apps.**
 ## Implement app features
 
-- [x] Multi-language support - Korean version applied
+- [x] Multi-language support - Korean version
 
 - [x] Widget size change according to screen size
 - [x] navigation bar
@@ -71,6 +71,8 @@ Use the **Profile** page to update the currently selected profile.
   - [x] My liked posts
   - [x] My read posts 
 
+- [x] Shimmer Loading Animation
+- [x] Splash Screen
 ## Coming soon 
   - [ ] category
   - [ ] tag
