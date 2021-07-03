@@ -12,17 +12,23 @@ import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 import 'format.dart';
 
-class PostUserInfo extends HookWidget {
-  const PostUserInfo({
-    Key? key,
-    required this.post,
-  }) : super(key: key);
+final postsStreamProvider = StreamProvider.autoDispose<List<Post?>>((ref) {
+  final database = ref.watch(databaseProvider);
+  return database.postsStream();
+});
+final isLoadingProvider = StateProvider<bool>((ref) => true);
 
+class PostUserInfo extends HookWidget {
   final Post post;
+  const PostUserInfo({required this.post});
 
   @override
   Widget build(BuildContext context) {
     final database = useProvider(databaseProvider);
+    final isLoading = useProvider(isLoadingProvider);
+    useMemoized(() => WidgetsBinding.instance!
+        .addPostFrameCallback((_) => isLoading.state = false));
+
     return FutureBuilder<AppUser?>(
       future: database.getAppUser(post.userId),
       builder: (context, snapshot) {
