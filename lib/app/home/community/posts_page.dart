@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_learn/app/home/community/search_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
@@ -30,7 +31,7 @@ final postsStreamProvider = StreamProvider.autoDispose<List<Post?>>((ref) {
 });
 
 class PostsPage extends HookWidget {
-  const PostsPage({Key? key}) : super(key: key);
+  const PostsPage();
   static Future<void> show(BuildContext context) async {
     await Navigator.of(context, rootNavigator: true)
         .pushNamed(AppRoutes.postsPage);
@@ -50,18 +51,7 @@ class PostsPage extends HookWidget {
           onRefresh: () async => context.refresh(postsStreamProvider),
         ),
         postsAsyncValue.when(
-          loading: () => SliverToBoxAdapter(
-              child: const Center(child: CircularProgressIndicator())),
-
-          //     SliverList(
-          //   delegate: SliverChildBuilderDelegate(
-          //     (context, index) => Padding(
-          //       padding: const EdgeInsets.all(defaultPadding),
-          //       child: _buildShimmer(context),
-          //     ),
-          //     childCount: 5,
-          //   ),
-          // ),
+          loading: () => const SliverToBoxAdapter(),
           error: (_, __) => SliverToBoxAdapter(
             child: EmptyContent(
               title: LocaleKeys.somethingWentWrong.tr(),
@@ -80,7 +70,6 @@ class PostsPage extends HookWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(defaultPadding),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               PostUserInfo(post: post!),
                               PostItemInfo(post: post),
@@ -115,10 +104,10 @@ class PostsPageSliverAppBar extends StatelessWidget {
       expandedHeight: 120.0,
       floating: true,
       actions: [
-        // IconButton(
-        //   icon: Icon(Icons.search),
-        //   onPressed: () {},
-        // ),
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () => SearchPage.show(context),
+        ),
         IconButton(
           icon: Icon(Icons.create),
           onPressed: () => appUser == null
