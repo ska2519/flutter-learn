@@ -6,6 +6,7 @@ import 'package:flutter_learn/app/home/account/settings_page.dart';
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
 import 'package:flutter_learn/app/home/community/post_detail_page.dart';
 import 'package:flutter_learn/app/home/community/posts_page.dart';
+import 'package:flutter_learn/app/home/community/search_page.dart';
 import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/youtube_screen.dart';
 import 'package:flutter_learn/app/home/home_page.dart';
@@ -28,6 +29,7 @@ class AppRoutes {
   static const settingsPage = '/settings-page';
   static const myPostsPage = '/my-posts-page';
   static const myLikedPostsPage = '/my-liked-posts-page';
+  static const searchPage = 'search-page';
 }
 
 class AppRouter {
@@ -104,6 +106,13 @@ class AppRouter {
           settings: settings,
           maintainState: false,
           // fullscreenDialog: true,
+        );
+      case AppRoutes.searchPage:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => SearchPage(),
+          settings: settings,
+          maintainState: false,
+          fullscreenDialog: true,
         );
       case AppRoutes.communityScreen:
         return MaterialPageRoute<dynamic>(
