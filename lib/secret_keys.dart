@@ -1,2 +1,2 @@
 const releaseAdminUid = '8iWpn2anXhYgnU5EoIFIl4ypU0c2';
-const debugAdminUid = 'bJk8pa2723fJ9rFn43vQIPv60yp1';
+const debugAdminUid = '9VoOQ2nwiMdVJSQeFFnnKAUkwKV2';
