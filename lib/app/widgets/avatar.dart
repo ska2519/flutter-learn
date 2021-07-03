@@ -22,41 +22,49 @@ class Avatar extends StatelessWidget {
     return Container(
       decoration: _borderDecoration(),
       child: CircleAvatar(
-          radius: radius,
-          backgroundImage: AssetImage('assets/icons/dash_icon_512.png'),
-          child: photoUrl != null
-              ? CachedNetworkImage(
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                      ),
+        backgroundColor: Colors.transparent,
+        radius: radius,
+        child: photoUrl != null
+            ? CachedNetworkImage(
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  placeholder: (context, url) => const SizedBox(),
-                  imageUrl: photoUrl!,
-                )
-              : const SizedBox()
+                ),
+                placeholder: (context, url) => const SizedBox(),
+                imageUrl: photoUrl!,
+              )
+            : Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: AssetImage('assets/icons/dash_icon_512.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
 
-          // displayName != null
-          //     ? FittedBox(
-          //         fit: BoxFit.scaleDown,
-          //         child: Text(
-          //           displayName!.substring(0, 1).toUpperCase(),
-          //           style: Theme.of(context)
-          //               .textTheme
-          //               .headline2!
-          //               .copyWith(color: Colors.white),
-          //         ),
-          //       )
-          //     : null,
-          // Image.asset(
-          //     'assets/icons/camera_button_icon.png',
-          //     fit: BoxFit.cover,
-          //   ),
-          ),
+        // displayName != null
+        //     ? FittedBox(
+        //         fit: BoxFit.scaleDown,
+        //         child: Text(
+        //           displayName!.substring(0, 1).toUpperCase(),
+        //           style: Theme.of(context)
+        //               .textTheme
+        //               .headline2!
+        //               .copyWith(color: Colors.white),
+        //         ),
+        //       )
+        //     : null,
+        // Image.asset(
+        //     'assets/icons/camera_button_icon.png',
+        //     fit: BoxFit.cover,
+        //   ),
+      ),
     );
   }
 
