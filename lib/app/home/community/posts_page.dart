@@ -50,7 +50,18 @@ class PostsPage extends HookWidget {
           onRefresh: () async => context.refresh(postsStreamProvider),
         ),
         postsAsyncValue.when(
-          loading: () => SliverToBoxAdapter(),
+          loading: () => SliverToBoxAdapter(
+              child: const Center(child: CircularProgressIndicator())),
+
+          //     SliverList(
+          //   delegate: SliverChildBuilderDelegate(
+          //     (context, index) => Padding(
+          //       padding: const EdgeInsets.all(defaultPadding),
+          //       child: _buildShimmer(context),
+          //     ),
+          //     childCount: 5,
+          //   ),
+          // ),
           error: (_, __) => SliverToBoxAdapter(
             child: EmptyContent(
               title: LocaleKeys.somethingWentWrong.tr(),
@@ -69,6 +80,7 @@ class PostsPage extends HookWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(defaultPadding),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               PostUserInfo(post: post!),
                               PostItemInfo(post: post),
