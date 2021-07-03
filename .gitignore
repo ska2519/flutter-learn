@@ -1,6 +1,7 @@
 **/seceret_keys.dart
 service-account.json
 lib/services/
+lib/app/home/youtube/
 # Miscellaneous
 *.class
 *.log
