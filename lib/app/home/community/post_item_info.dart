@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_learn/app/widgets/shimmer_widget.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
@@ -18,6 +19,7 @@ import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 import 'post_detail_page.dart';
+import 'post_user_info.dart';
 
 final postLikedStreamProvider =
     StreamProvider.autoDispose.family<List<PostLiked>, String>((ref, postId) {
@@ -106,74 +108,115 @@ class PostItemInfo extends HookWidget {
     final appUser = useProvider(appUserStreamProvider).data?.value;
     final postLikedAsyncValue = useProvider(postLikedStreamProvider(post.id));
     final routeName = ModalRoute.of(context)!.settings.name;
+    final isLoading = useProvider(isLoadingProvider);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: defaultPadding),
-          child: Column(
+    return isLoading.state
+        ? _buildShimmer(context)
+        : Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                  post.deletedByAuthor
-                      ? LocaleKeys.deletedByAuthor.tr()
-                      : post.title,
-                  style: Theme.of(context).textTheme.subtitle2),
-              const SizedBox(height: defaultPadding),
-              if (selectableText)
-                SelectableText(
-                  post.deletedByAuthor
-                      ? LocaleKeys.deletedByAuthor.tr()
-                      : post.content,
-                  style: Theme.of(context).textTheme.bodyText2,
-                )
-              else
-                Text(
-                  post.deletedByAuthor
-                      ? LocaleKeys.deletedByAuthor.tr()
-                      : post.content,
-                  style: Theme.of(context).textTheme.bodyText2,
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: defaultPadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                        post.deletedByAuthor
+                            ? LocaleKeys.deletedByAuthor.tr()
+                            : post.title,
+                        style: Theme.of(context).textTheme.subtitle2),
+                    const SizedBox(height: defaultPadding),
+                    if (selectableText)
+                      SelectableText(
+                        post.deletedByAuthor
+                            ? LocaleKeys.deletedByAuthor.tr()
+                            : post.content,
+                        style: Theme.of(context).textTheme.bodyText2,
+                      )
+                    else
+                      Text(
+                        post.deletedByAuthor
+                            ? LocaleKeys.deletedByAuthor.tr()
+                            : post.content,
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                  ],
                 ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            postLikedAsyncValue.when(
-              loading: () => Center(child: const CupertinoActivityIndicator()),
-              error: (_, __) => EmptyContent(
-                title: LocaleKeys.somethingWentWrong.tr(),
-                message: LocaleKeys.cantLoadDataRightNow.tr(),
               ),
-              data: (postLiked) {
-                final userLiked =
-                    postLiked.any((element) => element.userId == appUser?.id);
-                return InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: () => appUser == null
-                      ? SignInPage.show(context)
-                      : _likePost(context, userLiked, appUser),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: defaultPadding),
-                    child: SizedBox(
-                      width: defaultPadding * 7,
+              Row(
+                children: [
+                  postLikedAsyncValue.when(
+                    loading: () =>
+                        Center(child: const CupertinoActivityIndicator()),
+                    error: (_, __) => EmptyContent(
+                      title: LocaleKeys.somethingWentWrong.tr(),
+                      message: LocaleKeys.cantLoadDataRightNow.tr(),
+                    ),
+                    data: (postLiked) {
+                      final userLiked = postLiked
+                          .any((element) => element.userId == appUser?.id);
+                      return InkWell(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () => appUser == null
+                            ? SignInPage.show(context)
+                            : _likePost(context, userLiked, appUser),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: defaultPadding),
+                          child: SizedBox(
+                            width: defaultPadding * 7,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  userLiked
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: userLiked ? Colors.red : Colors.grey,
+                                  size: 19,
+                                ),
+                                const SizedBox(width: 3),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 4),
+                                  child: Text(
+                                    postLiked.isNotEmpty
+                                        ? postLiked.length.toString()
+                                        : LocaleKeys.like.tr(),
+                                    style: Theme.of(context).textTheme.caption,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: routeName != AppRoutes.postDetailPage
+                        ? post.commentCount == 0
+                            ? () => tapEmptyComment(context, post.id)
+                            : null
+                        : null,
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: defaultPadding),
                       child: Row(
                         children: [
                           Icon(
-                            userLiked ? Icons.favorite : Icons.favorite_border,
-                            color: userLiked ? Colors.red : Colors.grey,
-                            size: 19,
+                            Icons.mode_comment_outlined,
+                            color: Colors.grey,
+                            size: 18.3,
                           ),
-                          const SizedBox(width: 3),
+                          const SizedBox(width: 5),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
                             child: Text(
-                              postLiked.isNotEmpty
-                                  ? postLiked.length.toString()
-                                  : LocaleKeys.like.tr(),
+                              post.commentCount > 0
+                                  ? post.commentCount.toString()
+                                  : LocaleKeys.comment.tr(),
                               style: Theme.of(context).textTheme.caption,
                             ),
                           ),
@@ -181,44 +224,42 @@ class PostItemInfo extends HookWidget {
                       ),
                     ),
                   ),
-                );
-              },
-            ),
-            InkWell(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: routeName != AppRoutes.postDetailPage
-                  ? post.commentCount == 0
-                      ? () => tapEmptyComment(context, post.id)
-                      : null
-                  : null,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.mode_comment_outlined,
-                      color: Colors.grey,
-                      size: 18.3,
-                    ),
-                    const SizedBox(width: 5),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text(
-                        post.commentCount > 0
-                            ? post.commentCount.toString()
-                            : LocaleKeys.comment.tr(),
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Spacer()
-          ],
-        )
-      ],
+                  Spacer()
+                ],
+              )
+            ],
+          );
+  }
+
+  Widget _buildShimmer(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return ListTile(
+      contentPadding: const EdgeInsets.all(0),
+      title: Row(
+        children: [
+          ShimmerWidget.circular(width: 28, height: 28),
+          SizedBox(width: defaultPadding),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ShimmerWidget.rectangular(width: 80, height: 10),
+              SizedBox(height: 4),
+              ShimmerWidget.rectangular(width: 50, height: 8),
+            ],
+          ),
+        ],
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: defaultPadding),
+          ShimmerWidget.rectangular(width: size.width / 2, height: 12),
+          SizedBox(height: defaultPadding),
+          ShimmerWidget.rectangular(width: size.width * 0.88, height: 11),
+          SizedBox(height: 4),
+          ShimmerWidget.rectangular(width: size.width * 0.88, height: 11),
+        ],
+      ),
     );
   }
 }
