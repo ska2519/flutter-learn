@@ -172,14 +172,13 @@ class _AccountPageState extends State<AccountPage> {
   Future? _updateProfileImageDialog(AppUser appUser) async {
     return showAlertDialog(
       context: context,
-      title: LocaleKeys.changeProfileImage.tr(),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TextButton(
+          ElevatedButton(
               onPressed: () => updateProfileImage(appUser),
-              child: Text(LocaleKeys.addProfileImage.tr())),
-          TextButton(
+              child: Text(LocaleKeys.changeProfileImage.tr())),
+          ElevatedButton(
               onPressed: () => setDefaultProfileImage(appUser),
               child: Text(LocaleKeys.defaultProfileImage.tr())),
         ],
