@@ -72,6 +72,8 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
   - [x] 좋아요 한 게시글
   - [x] 읽은 게시글
 
+ - [x] Shimmer Loading Animation
+ - [x] Splash Screen
 ## 구현 예정
   - [ ] 카테고리
   - [ ] 태그
@@ -99,15 +101,15 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
   - [x] Apple Login
     
 - [x] Firebase Crashlytics
-  - [x] Android, iOS 크래쉬 리포트 확인
+  - [x] Android, iOS 크래쉬 리포트
 
 - [x] Firestore Database
   - [x] Firestore 데이터 구조 설계
-  - [x] Firestore Collection Group Queries 적용  
+  - [x] Firestore Collection Group Queries
   
 - [x] Firebase Hosting
-  - [x] 호스팅 웹사이트 배포
-  - [x] GitHub에 자동 빌드 설정 및 배포
+  - [x] 호스팅 웹사이트 
+  - [x] GitHub Actions 웹사이트 빌드 & 배포
   
 - [x] Firebase Functions
   - [x] 유저 가입, 탈퇴 시 카운트
