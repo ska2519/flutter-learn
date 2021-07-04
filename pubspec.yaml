@@ -3,7 +3,7 @@ description: Flutter Learn.
 
 publish_to: 'none'
 
-version: 0.1.5
+version: 0.1.6
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -61,7 +61,7 @@ dev_dependencies:
   test: null
 
 flutter_native_splash:
-  color: "#428eff"
+  color: "#ffffff"
   color_dark: "#428eff"
   image: assets/images/firebase_dash_splash.png
   android: true

@@ -20,11 +20,13 @@ class CommentListItem extends HookWidget {
     this.menuIconTap,
     this.replyIconTap,
     this.myComments,
+    this.selectableText = false,
   });
   final Comment comment;
   final VoidCallback? menuIconTap;
   final VoidCallback? replyIconTap;
   final bool? myComments;
+  final bool selectableText;
 
   Future<void> _likeComment(BuildContext context, Comment comment) async {
     final appUser = context.read(appUserStreamProvider).data?.value;
@@ -51,7 +53,7 @@ class CommentListItem extends HookWidget {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(width: comment.level! * defaultPadding * 2),
+              SizedBox(width: comment.level * defaultPadding * 2),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: Avatar(
@@ -74,13 +76,26 @@ class CommentListItem extends HookWidget {
                           .overline!
                           .copyWith(color: Colors.black54),
                     ),
-                    SelectableText(
-                      comment.text,
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption!
-                          .copyWith(color: Colors.black87),
-                    ),
+                    if (selectableText)
+                      SelectableText(
+                        comment.private
+                            ? LocaleKeys.noticePrivateComment.tr()
+                            : comment.text,
+                        style: Theme.of(context)
+                            .textTheme
+                            .caption!
+                            .copyWith(color: Colors.black87),
+                      )
+                    else
+                      Text(
+                        comment.private
+                            ? LocaleKeys.noticePrivateComment.tr()
+                            : comment.text,
+                        style: Theme.of(context)
+                            .textTheme
+                            .caption!
+                            .copyWith(color: Colors.black87),
+                      ),
                     Row(
                       children: [
                         Text(
@@ -120,7 +135,7 @@ class CommentListItem extends HookWidget {
                               ),
                               const SizedBox(width: defaultPadding),
                               // 1레벨 댓글만 가능
-                              if (comment.level! > 0)
+                              if (comment.level > 0)
                                 const SizedBox()
                               else
                                 InkWell(
