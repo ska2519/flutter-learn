@@ -31,7 +31,6 @@ class ChildCommentListItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('topLevelComment: $topLevelComment');
     final childCommentsAsyncValue =
         useProvider(childCommentsStreamProvider(topLevelComment));
     return childCommentsAsyncValue.when(

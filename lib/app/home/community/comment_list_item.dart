@@ -43,7 +43,6 @@ class CommentListItem extends HookWidget {
   Widget build(BuildContext context) {
     final database = useProvider(databaseProvider);
     final appUser = useProvider(appUserStreamProvider).data?.value;
-    print('comment $comment');
     return FutureBuilder<AppUser?>(
       // key: Key('comment-${comment.id}'),
       future: database.getAppUser(comment.userId),

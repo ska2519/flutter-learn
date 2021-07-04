@@ -12,10 +12,6 @@ import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 import 'format.dart';
 
-final postsStreamProvider = StreamProvider.autoDispose<List<Post?>>((ref) {
-  final database = ref.watch(databaseProvider);
-  return database.postsStream();
-});
 final isLoadingProvider = StateProvider<bool>((ref) => true);
 
 class PostUserInfo extends HookWidget {
