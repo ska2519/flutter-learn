@@ -117,6 +117,7 @@ Use the **Profile** page to update the currently selected profile.
 
 - [x] Cloud Firestore fine-grained rules
 
+- [x] Setting algolia Extension for search term function
 ## Apply CI/CD Codemagic
 - [x] Build for Android
 - [x] Build for iOS
