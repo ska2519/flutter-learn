@@ -526,11 +526,13 @@ class ReplyParentComment extends StatelessWidget {
           ),
           const SizedBox(width: defaultPadding),
           Expanded(
-            child: Text(parentComment!.text,
-                style: Theme.of(context)
-                    .textTheme
-                    .caption!
-                    .copyWith(color: Colors.white)),
+            child: Text(
+              parentComment!.text,
+              style: Theme.of(context)
+                  .textTheme
+                  .caption!
+                  .copyWith(color: Colors.white),
+            ),
           ),
         ],
       ),
