@@ -41,6 +41,11 @@ export const increaseCommentCount = functions.firestore.document('posts/{postId}
     const countRef = db.doc('count/comment');
     batch.update(countRef, {commentCount: increment});
 
+    const parent = snap.get('parent');
+    if (parent != null) {
+        const parentRef = db.doc('posts/' + postId + '/comments/' + parent);
+        batch.update(parentRef, {childCount: increment});
+    }
     await batch.commit();
 });
 
@@ -54,6 +59,11 @@ export const decreaseCommentCount = functions.firestore.document('posts/{postId}
     const countRef = db.doc('count/comment');
     batch.update(countRef, {commentCount: decrement});
 
+    const parent = snap.get('parent');
+    if (parent != null) {
+        const parentRef = db.doc('posts/' + postId + '/comments/' + parent);
+        batch.update(parentRef, {childCount: decrement});
+    }
     await batch.commit();
 });
 
@@ -62,5 +72,4 @@ export const increaseReadUserCount = functions.firestore.document('posts/{postId
     const postRef = db.doc('posts/' + postId);
     postRef.update({readCount: increment});
 });
-
 

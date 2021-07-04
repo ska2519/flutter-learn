@@ -90,7 +90,12 @@ class CodegenLoader extends AssetLoader{
   "deletedByAuthor": "Deleted by author",
   "changeProfileImage": "Change profile image",
   "defaultProfileImage": "Default profile image",
-  "addProfileImage": "Add profile image"
+  "addProfileImage": "Add profile image",
+  "changeToPublic": "Change to public",
+  "privateComment": "Private comment (nested comment)",
+  "noticePrivateComment": "Private comment",
+  "privatePost": "Private post (have a comment)",
+  "noticePrivatePost": "Private post"
 };
 static const Map<String,dynamic> ko = {
   "community": "커뮤니티",
@@ -168,7 +173,12 @@ static const Map<String,dynamic> ko = {
   "deletedByAuthor": "작성자가 삭제하였습니다",
   "changeProfileImage": "프로필 이미지 변경",
   "defaultProfileImage": "기본 프로필 이미지",
-  "addProfileImage": "프로필 이미지 추가"
+  "addProfileImage": "프로필 이미지 추가",
+  "changeToPublic": "공개로 변경",
+  "privateComment": "비공개로 변경 (대댓글이 있습니다)",
+  "noticePrivateComment": "비공개 댓글입니다",
+  "privatePost": "비공개로 변경 (댓글이 있습니다)",
+  "noticePrivatePost": "비공개 글입니다"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ko": ko};
 }
