@@ -57,12 +57,10 @@ class PostDetailPage extends StatefulHookWidget {
 }
 
 class _PostDetailPageState extends State<PostDetailPage> {
-  static final GlobalKey _commentFieldKey = GlobalKey();
   late TextEditingController _textEditingController;
   late FocusNode focusNode;
   late String postId;
   Comment? editComment, parentComment;
-  String _commentText = '';
   bool autoFocus = false;
   late Future _checkReadUsers;
 
@@ -112,16 +110,27 @@ class _PostDetailPageState extends State<PostDetailPage> {
               Navigator.pop(context);
               _editComment(comment);
             },
-            child: Text(LocaleKeys.edit.tr()),
+            child: Text(
+              comment.private
+                  ? LocaleKeys.changeToPublic.tr()
+                  : LocaleKeys.edit.tr(),
+            ),
           ),
-          CupertinoActionSheetAction(
-            onPressed: () {
-              _deleteComment(comment, post);
-              Navigator.pop(context);
-            },
-            isDestructiveAction: true,
-            child: Text(LocaleKeys.delete.tr()),
-          )
+          if (comment.private)
+            const SizedBox()
+          else
+            CupertinoActionSheetAction(
+              onPressed: () {
+                _deleteComment(comment, post);
+                Navigator.pop(context);
+              },
+              isDestructiveAction: true,
+              child: Text(
+                comment.childCount > 0
+                    ? LocaleKeys.privateComment.tr()
+                    : LocaleKeys.delete.tr(),
+              ),
+            )
         ],
         cancelButton: CupertinoActionSheetAction(
           onPressed: () => Navigator.pop(context),
@@ -139,16 +148,18 @@ class _PostDetailPageState extends State<PostDetailPage> {
     return Comment(
       id: commentId,
       postId: postId,
-      text: _commentText,
+      text: _textEditingController.text,
       userId: appUser!.id!,
       timestamp: editComment != null ? editComment!.timestamp : now,
+      childCount: editComment?.childCount ?? 0,
+      likedUsers: editComment?.likedUsers ?? {},
       level: editComment != null
           ? editComment!.level
           : parentComment != null
-              ? parentComment!.level! + 1
+              ? parentComment!.level + 1
               : 0,
       parent: parentComment != null
-          ? '${parentComment?.parent}${parentComment?.id}'
+          ? '${parentComment?.parent ?? ''}${parentComment?.id}'
           : '',
     );
   }
@@ -158,7 +169,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     parentComment = comment;
   }
 
-  Future<void> _submitComment() async {
+  void _submitComment() {
     try {
       final database = context.read(databaseProvider);
       final comment = _commentFromState();
@@ -167,9 +178,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
         return;
       }
       if (editComment == null) {
-        await database.setComment(comment);
+        database.setComment(comment);
       } else {
-        await database.updateComment(comment);
+        database.updateComment(comment);
       }
       editComment = null;
       parentComment = null;
@@ -212,7 +223,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     final database = context.read(databaseProvider);
     try {
       if (post.commentCount > 0) {
-        database.updatePost(post.copyWith(deletedByAuthor: true));
+        database.updatePost(post.copyWith(private: true));
       } else {
         database.deletePost(post.id);
         Navigator.pop(context);
@@ -237,7 +248,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void _deleteComment(Comment comment, Post post) {
     try {
       final database = context.read(databaseProvider);
-      database.deleteComment(comment);
+      if (comment.childCount > 0) {
+        print('here1');
+        database.updateComment(comment.copyWith(private: true));
+      } else {
+        print('here2');
+        database.deleteComment(comment);
+      }
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
@@ -435,7 +452,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
                             color: Colors.white,
                             padding: const EdgeInsets.all(defaultPadding),
                             child: CupertinoTextField(
-                              key: _commentFieldKey,
                               autofocus: autoFocus,
                               // ignore: avoid_bool_literals_in_conditional_expressions
                               enabled: appUser == null ? false : true,
@@ -447,8 +463,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
                               maxLength: 500,
                               expands: true,
                               textInputAction: TextInputAction.newline,
-                              onChanged: (commentText) =>
-                                  _commentText = commentText,
                               suffix: TextButton(
                                 onPressed: () {
                                   _submitComment();
@@ -483,16 +497,27 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 Navigator.pop(context);
                 await EditPostPage.show(context, post: post);
               },
-              child: Text(LocaleKeys.edit.tr()),
+              child: Text(
+                post.commentCount > 0
+                    ? LocaleKeys.changeToPublic.tr()
+                    : LocaleKeys.edit.tr(),
+              ),
             ),
-            CupertinoActionSheetAction(
-              onPressed: () {
-                _deletePost(post);
-                Navigator.pop(context);
-              },
-              isDestructiveAction: true,
-              child: Text(LocaleKeys.delete.tr()),
-            )
+            if (post.private)
+              const SizedBox()
+            else
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  _deletePost(post);
+                  Navigator.pop(context);
+                },
+                isDestructiveAction: true,
+                child: Text(
+                  post.commentCount > 0
+                      ? LocaleKeys.privatePost.tr()
+                      : LocaleKeys.delete.tr(),
+                ),
+              )
           ],
           cancelButton: CupertinoActionSheetAction(
             onPressed: () => Navigator.pop(context),
