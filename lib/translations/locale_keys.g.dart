@@ -77,5 +77,10 @@ abstract class  LocaleKeys {
   static const changeProfileImage = 'changeProfileImage';
   static const defaultProfileImage = 'defaultProfileImage';
   static const addProfileImage = 'addProfileImage';
+  static const changeToPublic = 'changeToPublic';
+  static const privateComment = 'privateComment';
+  static const noticePrivateComment = 'noticePrivateComment';
+  static const privatePost = 'privatePost';
+  static const noticePrivatePost = 'noticePrivatePost';
 
 }

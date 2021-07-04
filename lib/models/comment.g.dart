@@ -20,7 +20,9 @@ _$_Comment _$_$_CommentFromJson(Map json) {
             .toSet() ??
         {},
     level: json['level'] as int? ?? 0,
-    parent: json['parent'] as String? ?? '',
+    parent: json['parent'] as String?,
+    private: json['private'] as bool? ?? false,
+    childCount: json['childCount'] as int? ?? 0,
   );
 }
 
@@ -34,4 +36,6 @@ Map<String, dynamic> _$_$_CommentToJson(_$_Comment instance) =>
       'likedUsers': instance.likedUsers.toList(),
       'level': instance.level,
       'parent': instance.parent,
+      'private': instance.private,
+      'childCount': instance.childCount,
     };
