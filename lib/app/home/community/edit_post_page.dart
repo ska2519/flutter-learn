@@ -44,13 +44,13 @@ class _EditPostPageState extends State<EditPostPage> {
     final appUser = context.read(appUserStreamProvider).data?.value;
     final currentDate = documentIdFromCurrentDate().substring(0, 19);
     final postId = post?.id ?? '$currentDate:${appUser?.id}';
-    final displayName = appUser?.displayName;
+    final userDisplayName = appUser?.displayName;
     final now = DateTime.now();
     final timestamp = post?.timestamp ?? now;
     return Post(
       id: postId,
       userId: appUser!.id!,
-      displayName: displayName!,
+      userDisplayName: userDisplayName,
       title: _title,
       content: _content,
       timestamp: timestamp,
