@@ -119,6 +119,7 @@ Flutter 와 Firebase Firestore로 다중 플랫폼 커뮤니티 앱을 빌드합
 
 - [x] Cloud Firestore 세분화 된 규칙
 
+- [x] algolia 확장프로그램으로 글 검색 구현
 ##  CI/CD Codemagic 적용
 - [x] Build for Android
 - [x] Build for iOS
