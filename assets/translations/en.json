@@ -74,5 +74,10 @@
   "deletedByAuthor": "Deleted by author",
   "changeProfileImage": "Change profile image",
   "defaultProfileImage": "Default profile image",
-  "addProfileImage": "Add profile image"
+  "addProfileImage": "Add profile image",
+  "changeToPublic": "Change to public",
+  "privateComment": "Private comment (nested comment)",
+  "noticePrivateComment": "Private comment",
+  "privatePost": "Private post (have a comment)",
+  "noticePrivatePost": "Private post"
 }
