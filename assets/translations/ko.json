@@ -79,5 +79,6 @@
   "privateComment": "비공개로 변경 (대댓글이 있습니다)",
   "noticePrivateComment": "비공개 댓글입니다",
   "privatePost": "비공개로 변경 (댓글이 있습니다)",
-  "noticePrivatePost": "비공개 글입니다"
+  "noticePrivatePost": "비공개 글입니다",
+  "enterSearchTerm": "검색어를 입력해주세요 🙃"
 }

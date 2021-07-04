@@ -13,7 +13,6 @@ class Post with _$Post {
   const factory Post({
     required String id,
     required String userId,
-    required String displayName,
     required String title,
     required String content,
     @TimestampConverter() DateTime? timestamp,
@@ -21,6 +20,8 @@ class Post with _$Post {
     @Default(0) int likedCount,
     @Default(0) int readCount,
     @Default(false) bool private,
+    String? userDisplayName,
+    String? userPhotoURL,
   }) = _Post;
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
@@ -29,7 +30,7 @@ class Post with _$Post {
     return _$_Post(
       id: getRandomIds(),
       userId: getRandomUserIds(),
-      displayName: getRandomDisplayName(),
+      // displayName: getRandomDisplayName(),
       title: getRandomTitle(),
       content: getRandomContent(),
       timestamp: getRandomTimestamp(),
