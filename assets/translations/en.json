@@ -79,5 +79,6 @@
   "privateComment": "Private comment (nested comment)",
   "noticePrivateComment": "Private comment",
   "privatePost": "Private post (have a comment)",
-  "noticePrivatePost": "Private post"
+  "noticePrivatePost": "Private post",
+  "enterSearchTerm": "Enter a search term 🙃"
 }
