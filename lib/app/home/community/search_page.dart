@@ -1,5 +1,4 @@
 import 'package:algolia/algolia.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/community/post_detail_page.dart';
@@ -10,6 +9,8 @@ import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/algolia_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 final _searchTermProvider = StateProvider<String>((ref) => '');
 
@@ -52,10 +53,10 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     final searchTerm = useProvider(_searchTermProvider);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        elevation: 1.0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: Icon(
@@ -64,10 +65,20 @@ class _SearchPageState extends State<SearchPage> {
             size: 20,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () => _textEditingController.clear(),
+            icon: Icon(
+              Icons.cancel_outlined,
+              color: flutterPrimaryColor,
+              size: 20,
+            ),
+          ),
+        ],
         title: TextField(
           autofocus: true,
           controller: _textEditingController,
-          onChanged: (val) => setState(() => searchTerm.state = val),
+          onChanged: (val) => searchTerm.state = val,
           style: TextStyle(color: Colors.black, fontSize: 20),
           decoration: InputDecoration(
             border: InputBorder.none,
@@ -75,17 +86,12 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
-          stream: Stream.fromFuture(_operation(searchTerm.state)),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return const SizedBox();
-              default:
-                if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
+      body: _textEditingController.text.isEmpty
+          ? Center(child: Text(LocaleKeys.enterSearchTerm.tr()))
+          : SingleChildScrollView(
+              child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
+                stream: Stream.fromFuture(_operation(searchTerm.state)),
+                builder: (context, snapshot) {
                   final List<AlgoliaObjectSnapshot>? currSearchStuff =
                       snapshot.data;
                   return CustomScrollView(
@@ -97,8 +103,6 @@ class _SearchPageState extends State<SearchPage> {
                             final post = Post(
                               title:
                                   currSearchStuff?[i].data['title'] as String,
-                              displayName: currSearchStuff?[i]
-                                  .data['displayName'] as String,
                               content:
                                   currSearchStuff?[i].data['content'] as String,
                               userId:
@@ -107,6 +111,8 @@ class _SearchPageState extends State<SearchPage> {
                               timestamp: DateTime.parse(
                                 currSearchStuff?[i].data['timestamp'] as String,
                               ),
+                              commentCount: currSearchStuff?[i]
+                                  .data['commentCount'] as int,
                             );
                             if (searchTerm.state.isNotEmpty) {
                               return Padding(
@@ -131,11 +137,9 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                     ],
                   );
-                }
-            }
-          },
-        ),
-      ),
+                },
+              ),
+            ),
     );
   }
 }
