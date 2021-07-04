@@ -1,13 +1,19 @@
 import 'package:algolia/algolia.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_learn/app/home/community/post_detail_page.dart';
 import 'package:flutter_learn/app/home/community/post_item_info.dart';
 import 'package:flutter_learn/app/home/community/post_user_info.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/algolia_service.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SearchPage extends StatefulWidget {
+final _searchTermProvider = StateProvider<String>((ref) => '');
+
+class SearchPage extends StatefulHookWidget {
   const SearchPage();
   static Future<void> show(BuildContext context) async {
     await Navigator.of(context, rootNavigator: true)
@@ -19,19 +25,34 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  late TextEditingController _textEditingController;
   final Algolia _algoliaApp = AlgoliaService.algolia;
-  String _searchTerm = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = TextEditingController();
+    final searchTerm = context.read(_searchTermProvider);
+    _textEditingController.text = searchTerm.state;
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
 
   Future<List<AlgoliaObjectSnapshot>> _operation(String input) async {
     final AlgoliaQuery query = _algoliaApp.instance.index('posts').query(input);
     final AlgoliaQuerySnapshot querySnap = await query.getObjects();
-    print('Hits count: $querySnap');
     final List<AlgoliaObjectSnapshot> results = querySnap.hits;
     return results;
   }
 
   @override
   Widget build(BuildContext context) {
+    final searchTerm = useProvider(_searchTermProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -45,7 +66,8 @@ class _SearchPageState extends State<SearchPage> {
         ),
         title: TextField(
           autofocus: true,
-          onChanged: (val) => setState(() => _searchTerm = val),
+          controller: _textEditingController,
+          onChanged: (val) => setState(() => searchTerm.state = val),
           style: TextStyle(color: Colors.black, fontSize: 20),
           decoration: InputDecoration(
             border: InputBorder.none,
@@ -55,9 +77,8 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: SingleChildScrollView(
         child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
-          stream: Stream.fromFuture(_operation(_searchTerm)),
+          stream: Stream.fromFuture(_operation(searchTerm.state)),
           builder: (context, snapshot) {
-            final List<AlgoliaObjectSnapshot>? currSearchStuff = snapshot.data;
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return const SizedBox();
@@ -65,43 +86,45 @@ class _SearchPageState extends State<SearchPage> {
                 if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
+                  final List<AlgoliaObjectSnapshot>? currSearchStuff =
+                      snapshot.data;
                   return CustomScrollView(
                     shrinkWrap: true,
                     slivers: [
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
-                          (context, index) {
+                          (context, i) {
                             final post = Post(
-                              title: currSearchStuff?[index].data['title']
-                                  as String,
-                              displayName: currSearchStuff?[index]
+                              title:
+                                  currSearchStuff?[i].data['title'] as String,
+                              displayName: currSearchStuff?[i]
                                   .data['displayName'] as String,
-                              content: currSearchStuff?[index].data['content']
-                                  as String,
-                              userId: currSearchStuff?[index].data['userId']
-                                  as String,
-                              id: currSearchStuff?[index].data['id'] as String,
+                              content:
+                                  currSearchStuff?[i].data['content'] as String,
+                              userId:
+                                  currSearchStuff?[i].data['userId'] as String,
+                              id: currSearchStuff?[i].data['id'] as String,
+                              timestamp: DateTime.parse(
+                                currSearchStuff?[i].data['timestamp'] as String,
+                              ),
                             );
-                            return _searchTerm.isNotEmpty
-                                ? Padding(
-                                    padding:
-                                        const EdgeInsets.all(defaultPadding),
-                                    child: Column(
-                                      children: [
-                                        // PostUserInfo(post: post),
-                                        PostItemInfo(post: post),
-                                      ],
-                                    ),
-                                  )
-                                // ? DisplaySearchResult(
-                                //     artDes: currSearchStuff![index]
-                                //         .data['title'] as String,
-                                //     artistName: currSearchStuff[index]
-                                //         .data["content"] as String,
-                                //     genre: currSearchStuff[index]
-                                //         .data["displayName"] as String,
-                                //   )
-                                : const SizedBox();
+                            if (searchTerm.state.isNotEmpty) {
+                              return Padding(
+                                padding: const EdgeInsets.all(defaultPadding),
+                                child: GestureDetector(
+                                  onTap: () => PostDetailPage.show(context,
+                                      postId: post.id),
+                                  child: Column(
+                                    children: [
+                                      PostUserInfo(post: post),
+                                      PostItemInfo(post: post),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
                           },
                           childCount: currSearchStuff?.length ?? 0,
                         ),
