@@ -99,7 +99,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     }
   }
 
-  Future<void> commentHorizPopup(
+  Future<void> editOrDeleteCommentPopup(
       BuildContext context, Comment comment, Post post) {
     return showCupertinoModalPopup(
       context: context,
@@ -116,7 +116,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                   : LocaleKeys.edit.tr(),
             ),
           ),
-          if (comment.private)
+          if (comment.private && comment.childCount > 0)
             const SizedBox()
           else
             CupertinoActionSheetAction(
@@ -158,9 +158,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           : parentComment != null
               ? parentComment!.level + 1
               : 0,
-      parent: parentComment != null
-          ? '${parentComment?.parent ?? ''}${parentComment?.id}'
-          : '',
+      parent: parentComment != null ? parentComment!.id : null,
     );
   }
 
@@ -249,10 +247,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
     try {
       final database = context.read(databaseProvider);
       if (comment.childCount > 0) {
-        print('here1');
         database.updateComment(comment.copyWith(private: true));
       } else {
-        print('here2');
         database.deleteComment(comment);
       }
     } catch (e) {
@@ -373,7 +369,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                 shrinkWrap: true,
                                 itemCount: comments.length,
                                 itemBuilder: (context, i) {
-                                  print('comments[i]: ${comments[i].id}');
                                   return Padding(
                                     padding: const EdgeInsets.fromLTRB(
                                       defaultPadding * 2,
@@ -385,15 +380,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                       children: [
                                         CommentListItem(
                                           comment: comments[i],
-                                          menuIconTap: () => commentHorizPopup(
-                                              context, comments[i], post),
+                                          menuIconTap: () =>
+                                              editOrDeleteCommentPopup(
+                                                  context, comments[i], post),
                                           replyIconTap: () =>
                                               _replyComment(comments[i]),
                                         ),
                                         ChildCommentListItem(
                                           topLevelComment: comments[i],
                                           menuIconTap: (Comment childComment) =>
-                                              commentHorizPopup(
+                                              editOrDeleteCommentPopup(
                                                   context, childComment, post),
                                           replyIconTap:
                                               (Comment childComment) =>
@@ -416,32 +412,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (parentComment != null)
-                          Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: flutterPrimaryColor,
-                                  width: 2,
-                                ),
-                                color: flutterAccentColor,
-                              ),
-                              padding: const EdgeInsets.all(defaultPadding),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.reply,
-                                    color: Colors.white,
-                                    size: 17,
-                                  ),
-                                  const SizedBox(width: defaultPadding),
-                                  Expanded(
-                                    child: Text(parentComment!.text,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .overline!
-                                            .copyWith(color: Colors.white)),
-                                  ),
-                                ],
-                              ))
+                          ReplyParentComment(parentComment: parentComment)
                         else
                           const SizedBox(),
                         InkWell(
@@ -525,6 +496,46 @@ class _PostDetailPageState extends State<PostDetailPage> {
           ),
         ),
       );
+}
+
+class ReplyParentComment extends StatelessWidget {
+  const ReplyParentComment({
+    Key? key,
+    required this.parentComment,
+  }) : super(key: key);
+
+  final Comment? parentComment;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: flutterPrimaryColor,
+          width: 2,
+        ),
+        color: flutterAccentColor,
+      ),
+      padding: const EdgeInsets.all(defaultPadding),
+      child: Row(
+        children: [
+          Icon(
+            Icons.reply,
+            color: Colors.white,
+            size: 17,
+          ),
+          const SizedBox(width: defaultPadding),
+          Expanded(
+            child: Text(parentComment!.text,
+                style: Theme.of(context)
+                    .textTheme
+                    .caption!
+                    .copyWith(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class PostDetailAppBarTitle extends StatelessWidget {
