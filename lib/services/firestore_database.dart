@@ -168,9 +168,11 @@ class FirestoreDatabase {
   Stream<List<PostLiked>> userLikedPostsStream(String? userId) =>
       _service.collectionGroupStream<PostLiked>(
         path: FirebasePath.collectionGroupLikedUsers(),
-        queryBuilder: (query) => query.where('userId', isEqualTo: userId),
+        queryBuilder: (query) => query
+            .where('userId', isEqualTo: userId)
+            .orderBy('timestamp', descending: true),
         builder: (data, documentId) => PostLiked.fromJson(data!),
-        sort: (lhs, rhs) => rhs.timestamp!.compareTo(lhs.timestamp!),
+        // sort: (lhs, rhs) => rhs.timestamp!.compareTo(lhs.timestamp!),
       );
   Stream<List<ReadPost>> userReadPostsStream(String? userId) =>
       _service.collectionGroupStream<ReadPost>(
