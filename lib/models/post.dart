@@ -30,7 +30,7 @@ class Post with _$Post {
     return _$_Post(
       id: getRandomIds(),
       userId: getRandomUserIds(),
-      // displayName: getRandomDisplayName(),
+      userDisplayName: getRandomDisplayName(),
       title: getRandomTitle(),
       content: getRandomContent(),
       timestamp: getRandomTimestamp(),
