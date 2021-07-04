@@ -23,18 +23,18 @@ class _$PostTearOff {
   _Post call(
       {required String id,
       required String userId,
-      required String displayName,
       required String title,
       required String content,
       @TimestampConverter() DateTime? timestamp,
       int commentCount = 0,
       int likedCount = 0,
       int readCount = 0,
-      bool private = false}) {
+      bool private = false,
+      String? userDisplayName,
+      String? userPhotoURL}) {
     return _Post(
       id: id,
       userId: userId,
-      displayName: displayName,
       title: title,
       content: content,
       timestamp: timestamp,
@@ -42,6 +42,8 @@ class _$PostTearOff {
       likedCount: likedCount,
       readCount: readCount,
       private: private,
+      userDisplayName: userDisplayName,
+      userPhotoURL: userPhotoURL,
     );
   }
 
@@ -57,7 +59,6 @@ const $Post = _$PostTearOff();
 mixin _$Post {
   String get id => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
-  String get displayName => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   @TimestampConverter()
@@ -66,6 +67,8 @@ mixin _$Post {
   int get likedCount => throw _privateConstructorUsedError;
   int get readCount => throw _privateConstructorUsedError;
   bool get private => throw _privateConstructorUsedError;
+  String? get userDisplayName => throw _privateConstructorUsedError;
+  String? get userPhotoURL => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -79,14 +82,15 @@ abstract class $PostCopyWith<$Res> {
   $Res call(
       {String id,
       String userId,
-      String displayName,
       String title,
       String content,
       @TimestampConverter() DateTime? timestamp,
       int commentCount,
       int likedCount,
       int readCount,
-      bool private});
+      bool private,
+      String? userDisplayName,
+      String? userPhotoURL});
 }
 
 /// @nodoc
@@ -101,7 +105,6 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? userId = freezed,
-    Object? displayName = freezed,
     Object? title = freezed,
     Object? content = freezed,
     Object? timestamp = freezed,
@@ -109,6 +112,8 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
     Object? likedCount = freezed,
     Object? readCount = freezed,
     Object? private = freezed,
+    Object? userDisplayName = freezed,
+    Object? userPhotoURL = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -118,10 +123,6 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      displayName: displayName == freezed
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
       title: title == freezed
           ? _value.title
@@ -151,6 +152,14 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.private
           : private // ignore: cast_nullable_to_non_nullable
               as bool,
+      userDisplayName: userDisplayName == freezed
+          ? _value.userDisplayName
+          : userDisplayName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userPhotoURL: userPhotoURL == freezed
+          ? _value.userPhotoURL
+          : userPhotoURL // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -163,14 +172,15 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
   $Res call(
       {String id,
       String userId,
-      String displayName,
       String title,
       String content,
       @TimestampConverter() DateTime? timestamp,
       int commentCount,
       int likedCount,
       int readCount,
-      bool private});
+      bool private,
+      String? userDisplayName,
+      String? userPhotoURL});
 }
 
 /// @nodoc
@@ -186,7 +196,6 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? userId = freezed,
-    Object? displayName = freezed,
     Object? title = freezed,
     Object? content = freezed,
     Object? timestamp = freezed,
@@ -194,6 +203,8 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
     Object? likedCount = freezed,
     Object? readCount = freezed,
     Object? private = freezed,
+    Object? userDisplayName = freezed,
+    Object? userPhotoURL = freezed,
   }) {
     return _then(_Post(
       id: id == freezed
@@ -203,10 +214,6 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      displayName: displayName == freezed
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
       title: title == freezed
           ? _value.title
@@ -236,6 +243,14 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.private
           : private // ignore: cast_nullable_to_non_nullable
               as bool,
+      userDisplayName: userDisplayName == freezed
+          ? _value.userDisplayName
+          : userDisplayName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userPhotoURL: userPhotoURL == freezed
+          ? _value.userPhotoURL
+          : userPhotoURL // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -246,14 +261,15 @@ class _$_Post extends _Post {
   const _$_Post(
       {required this.id,
       required this.userId,
-      required this.displayName,
       required this.title,
       required this.content,
       @TimestampConverter() this.timestamp,
       this.commentCount = 0,
       this.likedCount = 0,
       this.readCount = 0,
-      this.private = false})
+      this.private = false,
+      this.userDisplayName,
+      this.userPhotoURL})
       : super._();
 
   factory _$_Post.fromJson(Map<String, dynamic> json) =>
@@ -263,8 +279,6 @@ class _$_Post extends _Post {
   final String id;
   @override
   final String userId;
-  @override
-  final String displayName;
   @override
   final String title;
   @override
@@ -284,10 +298,14 @@ class _$_Post extends _Post {
   @JsonKey(defaultValue: false)
   @override
   final bool private;
+  @override
+  final String? userDisplayName;
+  @override
+  final String? userPhotoURL;
 
   @override
   String toString() {
-    return 'Post(id: $id, userId: $userId, displayName: $displayName, title: $title, content: $content, timestamp: $timestamp, commentCount: $commentCount, likedCount: $likedCount, readCount: $readCount, private: $private)';
+    return 'Post(id: $id, userId: $userId, title: $title, content: $content, timestamp: $timestamp, commentCount: $commentCount, likedCount: $likedCount, readCount: $readCount, private: $private, userDisplayName: $userDisplayName, userPhotoURL: $userPhotoURL)';
   }
 
   @override
@@ -298,9 +316,6 @@ class _$_Post extends _Post {
                 const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.userId, userId) ||
                 const DeepCollectionEquality().equals(other.userId, userId)) &&
-            (identical(other.displayName, displayName) ||
-                const DeepCollectionEquality()
-                    .equals(other.displayName, displayName)) &&
             (identical(other.title, title) ||
                 const DeepCollectionEquality().equals(other.title, title)) &&
             (identical(other.content, content) ||
@@ -319,7 +334,14 @@ class _$_Post extends _Post {
                 const DeepCollectionEquality()
                     .equals(other.readCount, readCount)) &&
             (identical(other.private, private) ||
-                const DeepCollectionEquality().equals(other.private, private)));
+                const DeepCollectionEquality()
+                    .equals(other.private, private)) &&
+            (identical(other.userDisplayName, userDisplayName) ||
+                const DeepCollectionEquality()
+                    .equals(other.userDisplayName, userDisplayName)) &&
+            (identical(other.userPhotoURL, userPhotoURL) ||
+                const DeepCollectionEquality()
+                    .equals(other.userPhotoURL, userPhotoURL)));
   }
 
   @override
@@ -327,14 +349,15 @@ class _$_Post extends _Post {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(userId) ^
-      const DeepCollectionEquality().hash(displayName) ^
       const DeepCollectionEquality().hash(title) ^
       const DeepCollectionEquality().hash(content) ^
       const DeepCollectionEquality().hash(timestamp) ^
       const DeepCollectionEquality().hash(commentCount) ^
       const DeepCollectionEquality().hash(likedCount) ^
       const DeepCollectionEquality().hash(readCount) ^
-      const DeepCollectionEquality().hash(private);
+      const DeepCollectionEquality().hash(private) ^
+      const DeepCollectionEquality().hash(userDisplayName) ^
+      const DeepCollectionEquality().hash(userPhotoURL);
 
   @JsonKey(ignore: true)
   @override
@@ -351,14 +374,15 @@ abstract class _Post extends Post {
   const factory _Post(
       {required String id,
       required String userId,
-      required String displayName,
       required String title,
       required String content,
       @TimestampConverter() DateTime? timestamp,
       int commentCount,
       int likedCount,
       int readCount,
-      bool private}) = _$_Post;
+      bool private,
+      String? userDisplayName,
+      String? userPhotoURL}) = _$_Post;
   const _Post._() : super._();
 
   factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
@@ -367,8 +391,6 @@ abstract class _Post extends Post {
   String get id => throw _privateConstructorUsedError;
   @override
   String get userId => throw _privateConstructorUsedError;
-  @override
-  String get displayName => throw _privateConstructorUsedError;
   @override
   String get title => throw _privateConstructorUsedError;
   @override
@@ -384,6 +406,10 @@ abstract class _Post extends Post {
   int get readCount => throw _privateConstructorUsedError;
   @override
   bool get private => throw _privateConstructorUsedError;
+  @override
+  String? get userDisplayName => throw _privateConstructorUsedError;
+  @override
+  String? get userPhotoURL => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$PostCopyWith<_Post> get copyWith => throw _privateConstructorUsedError;
