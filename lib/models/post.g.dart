@@ -10,7 +10,6 @@ _$_Post _$_$_PostFromJson(Map json) {
   return _$_Post(
     id: json['id'] as String,
     userId: json['userId'] as String,
-    displayName: json['displayName'] as String,
     title: json['title'] as String,
     content: json['content'] as String,
     timestamp: json['timestamp'] == null
@@ -20,13 +19,14 @@ _$_Post _$_$_PostFromJson(Map json) {
     likedCount: json['likedCount'] as int? ?? 0,
     readCount: json['readCount'] as int? ?? 0,
     private: json['private'] as bool? ?? false,
+    userDisplayName: json['userDisplayName'] as String?,
+    userPhotoURL: json['userPhotoURL'] as String?,
   );
 }
 
 Map<String, dynamic> _$_$_PostToJson(_$_Post instance) => <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,
-      'displayName': instance.displayName,
       'title': instance.title,
       'content': instance.content,
       'timestamp': instance.timestamp?.toIso8601String(),
@@ -34,4 +34,6 @@ Map<String, dynamic> _$_$_PostToJson(_$_Post instance) => <String, dynamic>{
       'likedCount': instance.likedCount,
       'readCount': instance.readCount,
       'private': instance.private,
+      'userDisplayName': instance.userDisplayName,
+      'userPhotoURL': instance.userPhotoURL,
     };
