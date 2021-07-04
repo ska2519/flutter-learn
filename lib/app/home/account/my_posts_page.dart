@@ -52,13 +52,6 @@ class MyPostsPage extends HookWidget {
       initialIndex: tabIndex,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            LocaleKeys.myPosts.tr(),
-            style: Theme.of(context)
-                .textTheme
-                .headline6!
-                .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
-          ),
           bottom: _buildTabBar(),
         ),
         body: TabBarView(
