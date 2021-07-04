@@ -18,8 +18,10 @@ class Comment with _$Comment {
     required String userId,
     @TimestampConverter() DateTime? timestamp,
     @Default({}) Set<String> likedUsers,
-    @Default(0) int? level,
-    @Default('') String? parent,
+    @Default(0) int level,
+    @Default(null) String? parent,
+    @Default(false) bool private,
+    @Default(0) int childCount,
   }) = _Comment;
 
   void likeComment(AppUser appUser) {
