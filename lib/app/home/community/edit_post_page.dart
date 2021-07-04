@@ -30,10 +30,12 @@ class EditPostPage extends StatefulWidget {
 class _EditPostPageState extends State<EditPostPage> {
   late String _title;
   late String _content;
+  late Post? post;
 
   @override
   void initState() {
     super.initState();
+    post = widget.post;
     _title = widget.post?.title ?? '';
     _content = widget.post?.content ?? '';
   }
@@ -41,17 +43,20 @@ class _EditPostPageState extends State<EditPostPage> {
   Post _postFromState() {
     final appUser = context.read(appUserStreamProvider).data?.value;
     final currentDate = documentIdFromCurrentDate().substring(0, 19);
-    final postId = widget.post?.id ?? '$currentDate:${appUser?.id}';
-    final displayName = appUser?.displayName ?? '랜덤 아이디';
+    final postId = post?.id ?? '$currentDate:${appUser?.id}';
+    final displayName = appUser?.displayName;
     final now = DateTime.now();
-    final timestamp = widget.post?.timestamp ?? now;
+    final timestamp = post?.timestamp ?? now;
     return Post(
       id: postId,
       userId: appUser!.id!,
-      displayName: displayName,
+      displayName: displayName!,
       title: _title,
       content: _content,
       timestamp: timestamp,
+      commentCount: post?.commentCount ?? 0,
+      likedCount: post?.likedCount ?? 0,
+      readCount: post?.readCount ?? 0,
     );
   }
 
