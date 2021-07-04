@@ -27,8 +27,10 @@ class _$CommentTearOff {
       required String userId,
       @TimestampConverter() DateTime? timestamp,
       Set<String> likedUsers = const {},
-      int? level = 0,
-      String? parent = ''}) {
+      int level = 0,
+      String? parent = null,
+      bool private = false,
+      int childCount = 0}) {
     return _Comment(
       id: id,
       text: text,
@@ -38,6 +40,8 @@ class _$CommentTearOff {
       likedUsers: likedUsers,
       level: level,
       parent: parent,
+      private: private,
+      childCount: childCount,
     );
   }
 
@@ -58,8 +62,10 @@ mixin _$Comment {
   @TimestampConverter()
   DateTime? get timestamp => throw _privateConstructorUsedError;
   Set<String> get likedUsers => throw _privateConstructorUsedError;
-  int? get level => throw _privateConstructorUsedError;
+  int get level => throw _privateConstructorUsedError;
   String? get parent => throw _privateConstructorUsedError;
+  bool get private => throw _privateConstructorUsedError;
+  int get childCount => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -77,8 +83,10 @@ abstract class $CommentCopyWith<$Res> {
       String userId,
       @TimestampConverter() DateTime? timestamp,
       Set<String> likedUsers,
-      int? level,
-      String? parent});
+      int level,
+      String? parent,
+      bool private,
+      int childCount});
 }
 
 /// @nodoc
@@ -99,6 +107,8 @@ class _$CommentCopyWithImpl<$Res> implements $CommentCopyWith<$Res> {
     Object? likedUsers = freezed,
     Object? level = freezed,
     Object? parent = freezed,
+    Object? private = freezed,
+    Object? childCount = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -128,11 +138,19 @@ class _$CommentCopyWithImpl<$Res> implements $CommentCopyWith<$Res> {
       level: level == freezed
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       parent: parent == freezed
           ? _value.parent
           : parent // ignore: cast_nullable_to_non_nullable
               as String?,
+      private: private == freezed
+          ? _value.private
+          : private // ignore: cast_nullable_to_non_nullable
+              as bool,
+      childCount: childCount == freezed
+          ? _value.childCount
+          : childCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -149,8 +167,10 @@ abstract class _$CommentCopyWith<$Res> implements $CommentCopyWith<$Res> {
       String userId,
       @TimestampConverter() DateTime? timestamp,
       Set<String> likedUsers,
-      int? level,
-      String? parent});
+      int level,
+      String? parent,
+      bool private,
+      int childCount});
 }
 
 /// @nodoc
@@ -172,6 +192,8 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
     Object? likedUsers = freezed,
     Object? level = freezed,
     Object? parent = freezed,
+    Object? private = freezed,
+    Object? childCount = freezed,
   }) {
     return _then(_Comment(
       id: id == freezed
@@ -201,11 +223,19 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
       level: level == freezed
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       parent: parent == freezed
           ? _value.parent
           : parent // ignore: cast_nullable_to_non_nullable
               as String?,
+      private: private == freezed
+          ? _value.private
+          : private // ignore: cast_nullable_to_non_nullable
+              as bool,
+      childCount: childCount == freezed
+          ? _value.childCount
+          : childCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -221,7 +251,9 @@ class _$_Comment extends _Comment {
       @TimestampConverter() this.timestamp,
       this.likedUsers = const {},
       this.level = 0,
-      this.parent = ''})
+      this.parent = null,
+      this.private = false,
+      this.childCount = 0})
       : super._();
 
   factory _$_Comment.fromJson(Map<String, dynamic> json) =>
@@ -243,14 +275,20 @@ class _$_Comment extends _Comment {
   final Set<String> likedUsers;
   @JsonKey(defaultValue: 0)
   @override
-  final int? level;
-  @JsonKey(defaultValue: '')
+  final int level;
+  @JsonKey(defaultValue: null)
   @override
   final String? parent;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool private;
+  @JsonKey(defaultValue: 0)
+  @override
+  final int childCount;
 
   @override
   String toString() {
-    return 'Comment(id: $id, text: $text, postId: $postId, userId: $userId, timestamp: $timestamp, likedUsers: $likedUsers, level: $level, parent: $parent)';
+    return 'Comment(id: $id, text: $text, postId: $postId, userId: $userId, timestamp: $timestamp, likedUsers: $likedUsers, level: $level, parent: $parent, private: $private, childCount: $childCount)';
   }
 
   @override
@@ -274,7 +312,13 @@ class _$_Comment extends _Comment {
             (identical(other.level, level) ||
                 const DeepCollectionEquality().equals(other.level, level)) &&
             (identical(other.parent, parent) ||
-                const DeepCollectionEquality().equals(other.parent, parent)));
+                const DeepCollectionEquality().equals(other.parent, parent)) &&
+            (identical(other.private, private) ||
+                const DeepCollectionEquality()
+                    .equals(other.private, private)) &&
+            (identical(other.childCount, childCount) ||
+                const DeepCollectionEquality()
+                    .equals(other.childCount, childCount)));
   }
 
   @override
@@ -287,7 +331,9 @@ class _$_Comment extends _Comment {
       const DeepCollectionEquality().hash(timestamp) ^
       const DeepCollectionEquality().hash(likedUsers) ^
       const DeepCollectionEquality().hash(level) ^
-      const DeepCollectionEquality().hash(parent);
+      const DeepCollectionEquality().hash(parent) ^
+      const DeepCollectionEquality().hash(private) ^
+      const DeepCollectionEquality().hash(childCount);
 
   @JsonKey(ignore: true)
   @override
@@ -308,8 +354,10 @@ abstract class _Comment extends Comment {
       required String userId,
       @TimestampConverter() DateTime? timestamp,
       Set<String> likedUsers,
-      int? level,
-      String? parent}) = _$_Comment;
+      int level,
+      String? parent,
+      bool private,
+      int childCount}) = _$_Comment;
   const _Comment._() : super._();
 
   factory _Comment.fromJson(Map<String, dynamic> json) = _$_Comment.fromJson;
@@ -328,9 +376,13 @@ abstract class _Comment extends Comment {
   @override
   Set<String> get likedUsers => throw _privateConstructorUsedError;
   @override
-  int? get level => throw _privateConstructorUsedError;
+  int get level => throw _privateConstructorUsedError;
   @override
   String? get parent => throw _privateConstructorUsedError;
+  @override
+  bool get private => throw _privateConstructorUsedError;
+  @override
+  int get childCount => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$CommentCopyWith<_Comment> get copyWith =>
