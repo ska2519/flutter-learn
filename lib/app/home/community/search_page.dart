@@ -1,4 +1,5 @@
 import 'package:algolia/algolia.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/community/post_detail_page.dart';
@@ -44,7 +45,9 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<List<AlgoliaObjectSnapshot>> _operation(String input) async {
-    final AlgoliaQuery query = _algoliaApp.instance.index('posts').query(input);
+    final AlgoliaQuery query = _algoliaApp.instance
+        .index(kReleaseMode ? 'Flutter Learn Posts' : 'posts')
+        .query(input);
     final AlgoliaQuerySnapshot querySnap = await query.getObjects();
     final List<AlgoliaObjectSnapshot> results = querySnap.hits;
     return results;
