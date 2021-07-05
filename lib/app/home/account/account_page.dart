@@ -58,7 +58,7 @@ class _AccountPageState extends State<AccountPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        actions: <Widget>[
+        actions: [
           Padding(
             padding: const EdgeInsets.all(defaultPadding),
             child: ElevatedButton(
