@@ -42,9 +42,8 @@ class _PackageInfoPageState extends State<PackageInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(LocaleKeys.appInfo.tr()),
-      ),
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: Text(LocaleKeys.appInfo.tr())),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
