@@ -5,9 +5,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutter_learn/app/home/community/comment_list_item.dart';
-import 'package:flutter_learn/app/widgets/list_items_builder.dart';
 import 'package:flutter_learn/app/home/community/post_detail_page.dart';
 import 'package:flutter_learn/app/home/community/post_list_item.dart';
+import 'package:flutter_learn/app/widgets/list_items_builder.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/comment.dart';
 import 'package:flutter_learn/models/post.dart';

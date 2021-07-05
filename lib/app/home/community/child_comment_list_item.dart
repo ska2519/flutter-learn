@@ -1,12 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/models/comment.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 import 'comment_list_item.dart';
 

@@ -46,7 +46,7 @@ class _PackageInfoPageState extends State<PackageInfoPage> {
       appBar: AppBar(title: Text(LocaleKeys.appInfo.tr())),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        children: [
           _infoTile('App name', _packageInfo.appName),
           _infoTile('Package name', _packageInfo.packageName),
           _infoTile('App version', _packageInfo.version),
