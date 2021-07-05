@@ -50,14 +50,12 @@ android {
 
     signingConfigs {
        release {
-           algoliaIndex keystoreProperties['algoliaRelasesIndex']
            if (System.getenv()["CI"]) { // CI=true is exported by Codemagic
                 storeFile file(System.getenv()["FCI_KEYSTORE_PATH"])
                 storePassword System.getenv()["FCI_KEYSTORE_PASSWORD"]
                 keyAlias System.getenv()["FCI_KEY_ALIAS"]
                 keyPassword System.getenv()["FCI_KEY_PASSWORD"]
             } else {
-                algoliaIndex keystoreProperties['algoliaDebugIndex']
            keyAlias keystoreProperties['keyAlias']
            keyPassword keystoreProperties['keyPassword']
            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
@@ -67,7 +65,6 @@ android {
    }
    buildTypes {
        release {
-           minifyEnabled true
            signingConfig signingConfigs.release
            ndk {
                 debugSymbolLevel 'SYMBOL_TABLE'
