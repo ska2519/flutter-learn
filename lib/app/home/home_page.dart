@@ -68,6 +68,7 @@ class _HomePageState extends State<HomePage> {
     final appUser = useProvider(appUserStreamProvider).data?.value;
     print('HomePage appUser: $appUser');
     return Scaffold(
+      backgroundColor: Colors.white,
       floatingActionButton:
           appUser?.id == debugAdminUid || appUser?.id == releaseAdminUid
               ? FloatingActionButton(
@@ -86,10 +87,11 @@ class _HomePageState extends State<HomePage> {
       drawer: Responsive.isDesktop(context) ? const SideMenu() : null,
       body: Responsive.isDesktop(context)
           ? CommunityScreen()
-          : IndexedStack(
-              index: _selectedIndex,
-              children: _screens,
-            ),
+          : _screens[_selectedIndex],
+      // IndexedStack(
+      //     index: _selectedIndex,
+      //     children: _screens,
+      //   ),
       bottomNavigationBar: Responsive.isDesktop(context)
           ? const SizedBox()
           : BottomNavigationBar(
