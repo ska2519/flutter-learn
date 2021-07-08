@@ -8,6 +8,10 @@ const Color flutterInfoColor = Color(0xFF17A2B8);
 const Color flutterBodyTextColor = Color(0xFF4A4A4A);
 const Color flutterButtonHoverColor = Color(0xFF168AFD);
 
+const Color firebasePrimaryColor = Color(0xFFFFCA28); // Amber 400
+const Color firebaseAccentColor = Color(0xFFFFA000); // Amber 700
+const Color firebaseOrangeColor = Color(0xFFF57C00); // Orange 700
+
 ///lightBlue[800]
 const Color primaryColor = Color(0xFF0277BD);
 
