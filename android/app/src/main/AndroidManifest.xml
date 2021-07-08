@@ -2,6 +2,7 @@
     package="dev.flutterlearn.flutter_learn">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    
 
    <application
         android:label="플러터 런"
