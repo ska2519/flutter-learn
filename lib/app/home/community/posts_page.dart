@@ -101,15 +101,23 @@ class PostsPageSliverAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       pinned: true,
-      expandedHeight: 120.0,
+      expandedHeight: 90 + (defaultPadding * 2),
       floating: true,
+      backgroundColor: Colors.white,
+      elevation: 1.0,
       actions: [
         IconButton(
-          icon: Icon(Icons.search),
+          icon: Icon(
+            Icons.search,
+            color: flutterPrimaryColor,
+          ),
           onPressed: () => SearchPage.show(context),
         ),
         IconButton(
-          icon: Icon(Icons.create),
+          icon: Icon(
+            Icons.create,
+            color: flutterPrimaryColor,
+          ),
           onPressed: () => appUser == null
               ? SignInPage.show(context)
               : EditPostPage.show(context),
@@ -119,14 +127,15 @@ class PostsPageSliverAppBar extends StatelessWidget {
         centerTitle: false,
         titlePadding: EdgeInsetsDirectional.only(
           start: defaultPadding,
-          bottom: defaultPadding,
+          bottom: 16,
         ),
         title: Text(
-          '😎   ${LocaleKeys.community.tr()}',
-          style: Theme.of(context)
-              .textTheme
-              .subtitle1!
-              .copyWith(color: Colors.white),
+          '😎 ${LocaleKeys.community.tr()}',
+          style: Theme.of(context).textTheme.headline6!.copyWith(
+                color: flutterPrimaryColor,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.3,
+              ),
         ),
       ),
     );
