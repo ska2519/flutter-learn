@@ -7,6 +7,7 @@ import 'package:flutter_learn/models/comment.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/models/post_liked.dart';
 import 'package:flutter_learn/models/read_post.dart';
+import 'package:flutter_learn/models/tag.dart';
 import 'package:flutter_learn/models/values.dart';
 import 'package:flutter_learn/services/firebase_path.dart';
 import 'package:flutter_learn/services/firestore_service.dart';
@@ -112,6 +113,12 @@ class FirestoreDatabase {
       _service.getCollection(
           path: FirebasePath.postReadUsers(postId),
           builder: (data, documentId) => documentId);
+
+  Future<List<Tag?>> getTags() async => _service.getCollection(
+        path: FirebasePath.tags(),
+        queryBuilder: (query) => query.orderBy('level', descending: true),
+        builder: (data, documentId) => data != null ? Tag.fromJson(data) : null,
+      );
 
   // data!['id'] = documentId;
   Stream<List<Post?>> postsStream() => _service.collectionStream(
