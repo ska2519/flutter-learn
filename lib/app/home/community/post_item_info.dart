@@ -145,27 +145,42 @@ class PostItemInfo extends HookWidget {
               ),
               Row(
                 children: [
-                  postLikedAsyncValue.when(
-                    loading: () =>
-                        Center(child: const CupertinoActivityIndicator()),
-                    error: (_, __) => EmptyContent(
-                      title: LocaleKeys.somethingWentWrong.tr(),
-                      message: LocaleKeys.cantLoadDataRightNow.tr(),
-                    ),
-                    data: (postLiked) {
-                      final userLiked = postLiked
-                          .any((element) => element.userId == appUser?.id);
-                      return InkWell(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () => appUser == null
-                            ? SignInPage.show(context)
-                            : _likePost(context, userLiked, appUser),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: defaultPadding),
-                          child: SizedBox(
-                            width: defaultPadding * 7,
+                  SizedBox(
+                    width: defaultPadding * 7,
+                    child: postLikedAsyncValue.when(
+                      loading: () => Row(
+                        children: [
+                          Icon(
+                            Icons.favorite_border,
+                            color: Colors.grey,
+                            size: 19,
+                          ),
+                          const SizedBox(width: 3),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Text(
+                              LocaleKeys.like.tr(),
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                          ),
+                        ],
+                      ),
+                      error: (_, __) => EmptyContent(
+                        title: LocaleKeys.somethingWentWrong.tr(),
+                        message: LocaleKeys.cantLoadDataRightNow.tr(),
+                      ),
+                      data: (postLiked) {
+                        final userLiked = postLiked
+                            .any((element) => element.userId == appUser?.id);
+                        return InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () => appUser == null
+                              ? SignInPage.show(context)
+                              : _likePost(context, userLiked, appUser),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: defaultPadding),
                             child: Row(
                               children: [
                                 Icon(
@@ -188,9 +203,9 @@ class PostItemInfo extends HookWidget {
                               ],
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                   InkWell(
                     splashColor: Colors.transparent,
