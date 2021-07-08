@@ -17,4 +17,5 @@ class FirebasePath {
       'posts/$postId/likedUsers/$userId';
 
   static String profileImages(String userId) => 'profileImages/$userId';
+  static String tags() => 'tags';
 }
