@@ -120,7 +120,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
           ),
           onPressed: () => appUser == null
               ? SignInPage.show(context)
-              : EditPostPage.show(context),
+              : EditPostPage.show(context, autoFocus: true),
         )
       ],
       flexibleSpace: FlexibleSpaceBar(
