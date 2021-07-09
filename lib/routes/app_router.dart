@@ -70,8 +70,14 @@ class AppRouter {
           maintainState: false,
         );
       case AppRoutes.editPostPage:
+        final mapArgs = args as Map<String, dynamic>?;
+        final post = mapArgs!['post'] as Post?;
+        final autoFocus = mapArgs['autoFocus'] as bool?;
         return MaterialPageRoute<dynamic>(
-          builder: (_) => EditPostPage(post: args as Post?),
+          builder: (_) => EditPostPage(
+            post: post,
+            autoFocus: autoFocus,
+          ),
           settings: settings,
           //fullscreenDialog: true, // iOS 아래서 나옴
           maintainState: false,
