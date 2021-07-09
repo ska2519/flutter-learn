@@ -116,7 +116,7 @@ class FirestoreDatabase {
 
   Future<List<Tag?>> getTags() async => _service.getCollection(
         path: FirebasePath.tags(),
-        queryBuilder: (query) => query.orderBy('level', descending: true),
+        // queryBuilder: (query) => query.orderBy('level', descending: true),
         builder: (data, documentId) => data != null ? Tag.fromJson(data) : null,
       );
 
