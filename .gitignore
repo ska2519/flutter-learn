@@ -3,7 +3,8 @@ codemagic.yaml
 service-account.json
 # lib/services/
 test/
-lib/app/home/youtube/
+# lib/app/home/youtube/
+
 # Miscellaneous
 *.class
 *.log

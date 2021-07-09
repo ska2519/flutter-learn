@@ -10,10 +10,12 @@ import 'package:flutter_learn/app/home/community/search_page.dart';
 import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/youtube_screen.dart';
 import 'package:flutter_learn/app/home/home_page.dart';
+import 'package:flutter_learn/app/home/youtube/youtube_play_page.dart';
 import 'package:flutter_learn/app/sign_in/email/email_password_sign_in_page.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/main.dart';
 import 'package:flutter_learn/models/post.dart';
+import 'package:flutter_learn/models/youtube_playlist_items.dart';
 import 'package:flutter_learn/services/auth_base.dart';
 
 class AppRoutes {
@@ -30,6 +32,7 @@ class AppRoutes {
   static const myPostsPage = '/my-posts-page';
   static const myLikedPostsPage = '/my-liked-posts-page';
   static const searchPage = 'search-page';
+  static const youTubePlayPage = 'you-tube-play-page';
 }
 
 class AppRouter {
@@ -119,6 +122,12 @@ class AppRouter {
           settings: settings,
           maintainState: false,
           fullscreenDialog: true,
+        );
+      case AppRoutes.youTubePlayPage:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => YouTubePlayPage(item: args! as Item),
+          settings: settings,
+          maintainState: false,
         );
       case AppRoutes.communityScreen:
         return MaterialPageRoute<dynamic>(
