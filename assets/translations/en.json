@@ -80,5 +80,7 @@
   "noticePrivateComment": "Private comment",
   "privatePost": "Private post (have a comment)",
   "noticePrivatePost": "Private post",
-  "enterSearchTerm": "Enter a search term 🙃"
+  "enterSearchTerm": "Enter a search term 🙃",
+  "save": "Save",
+  "share": "Share"
 }
