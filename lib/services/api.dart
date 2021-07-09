@@ -10,16 +10,32 @@ class API {
   static const String youTubePath = 'https://www.googleapis.com/youtube/v3/';
 
   String get playlistItemsPath => '${youTubePath}playlistItems';
-  static const playlistItemsListPart = 'id,snippet,contentDetails,status';
+  String get channelPath => '${youTubePath}channels';
+  String get videoPath => '${youTubePath}videos';
 
-  Map<String, dynamic> playlistItemsParam({
-    required String playListId,
-    String? pageToken,
-  }) =>
+  static const playlistItemsPart = 'id,snippet,contentDetails,status';
+  static const channelPart = 'snippet, brandingSettings, statistics';
+  static const videoPart =
+      'snippet, contentDetails, player, statistics, status';
+
+  Map<String, dynamic> playlistItemsParam(
+          {required String playListId, String? pageToken}) =>
       {
         'playlistId': playListId,
         'key': youTubeAPIAndroidKey,
-        'part': playlistItemsListPart,
+        'part': playlistItemsPart,
         'pageToken': pageToken,
+      };
+
+  Map<String, dynamic> channelParam({required String channelId}) => {
+        'id': channelId,
+        'key': youTubeAPIAndroidKey,
+        'part': channelPart,
+      };
+
+  Map<String, dynamic> videoParam({required String videoId}) => {
+        'id': videoId,
+        'key': youTubeAPIAndroidKey,
+        'part': videoPart,
       };
 }

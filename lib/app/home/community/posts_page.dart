@@ -42,25 +42,23 @@ class PostsPage extends HookWidget {
     final appUser = useProvider(appUserStreamProvider).data?.value;
     final postsAsyncValue = useProvider(postsStreamProvider);
     print('PostsPage build');
-    return CustomScrollView(
-      physics:
-          const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-      slivers: [
-        PostsPageSliverAppBar(appUser: appUser),
-        CupertinoSliverRefreshControl(
-          onRefresh: () async => context.refresh(postsStreamProvider),
-        ),
-        postsAsyncValue.when(
-          loading: () => const SliverToBoxAdapter(),
-          error: (_, __) => SliverToBoxAdapter(
-            child: EmptyContent(
-              title: LocaleKeys.somethingWentWrong.tr(),
-              message: LocaleKeys.cantLoadDataRightNow.tr(),
-            ),
-          ),
-          data: (items) => items.isEmpty
-              ? SliverToBoxAdapter(child: const EmptyContent())
-              : SliverList(
+    return postsAsyncValue.when(
+      loading: () => const SizedBox(),
+      error: (_, __) => EmptyContent(
+        title: LocaleKeys.somethingWentWrong.tr(),
+        message: LocaleKeys.cantLoadDataRightNow.tr(),
+      ),
+      data: (items) => items.isEmpty
+          ? const EmptyContent()
+          : CustomScrollView(
+              physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              slivers: [
+                PostsPageSliverAppBar(appUser: appUser),
+                CupertinoSliverRefreshControl(
+                  onRefresh: () async => context.refresh(postsStreamProvider),
+                ),
+                SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final post = items[index];
@@ -83,8 +81,8 @@ class PostsPage extends HookWidget {
                     childCount: items.length,
                   ),
                 ),
-        ),
-      ],
+              ],
+            ),
     );
   }
 }
@@ -130,7 +128,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
           bottom: 16,
         ),
         title: Text(
-          '😎 ${LocaleKeys.community.tr()}',
+          LocaleKeys.community.tr(),
           style: Theme.of(context).textTheme.headline6!.copyWith(
                 color: flutterPrimaryColor,
                 fontWeight: FontWeight.bold,
