@@ -8,16 +8,15 @@ part of 'youtube_playlist_items.dart';
 
 _$_PlaylistItems _$_$_PlaylistItemsFromJson(Map json) {
   return _$_PlaylistItems(
-    kind: json['kind'] as String?,
-    etag: json['etag'] as String?,
+    kind: json['kind'] as String,
+    etag: json['etag'] as String,
     nextPageToken: json['nextPageToken'] as String?,
     prevPageToken: json['prevPageToken'] as String?,
-    items: (json['items'] as List<dynamic>?)
-        ?.map((e) => Item.fromJson(Map<String, dynamic>.from(e as Map)))
+    items: (json['items'] as List<dynamic>)
+        .map((e) => Item.fromJson(Map<String, dynamic>.from(e as Map)))
         .toList(),
-    pageInfo: json['pageInfo'] == null
-        ? null
-        : PageInfo.fromJson(Map<String, dynamic>.from(json['pageInfo'] as Map)),
+    pageInfo:
+        PageInfo.fromJson(Map<String, dynamic>.from(json['pageInfo'] as Map)),
   );
 }
 
@@ -27,8 +26,8 @@ Map<String, dynamic> _$_$_PlaylistItemsToJson(_$_PlaylistItems instance) =>
       'etag': instance.etag,
       'nextPageToken': instance.nextPageToken,
       'prevPageToken': instance.prevPageToken,
-      'items': instance.items?.map((e) => e.toJson()).toList(),
-      'pageInfo': instance.pageInfo?.toJson(),
+      'items': instance.items.map((e) => e.toJson()).toList(),
+      'pageInfo': instance.pageInfo.toJson(),
     };
 
 _$_Item _$_$_ItemFromJson(Map json) {
