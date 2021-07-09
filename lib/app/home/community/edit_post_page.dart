@@ -13,13 +13,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pedantic/pedantic.dart';
 
 class EditPostPage extends StatefulWidget {
-  const EditPostPage({this.post});
+  const EditPostPage({this.post, this.autoFocus});
   final Post? post;
+  final bool? autoFocus;
 
-  static Future<dynamic> show(BuildContext context, {Post? post}) async {
+  static Future<dynamic> show(BuildContext context,
+      {Post? post, bool? autoFocus}) async {
     await Navigator.of(context, rootNavigator: true).pushNamed(
       AppRoutes.editPostPage,
-      arguments: post,
+      arguments: {'post': post, 'autoFocus': autoFocus},
     );
   }
 
@@ -31,6 +33,7 @@ class _EditPostPageState extends State<EditPostPage> {
   late String _title;
   late String _content;
   late Post? post;
+  late bool autoFocus = false;
 
   @override
   void initState() {
@@ -38,6 +41,7 @@ class _EditPostPageState extends State<EditPostPage> {
     post = widget.post;
     _title = widget.post?.title ?? '';
     _content = widget.post?.content ?? '';
+    if (widget.autoFocus != null) autoFocus = widget.autoFocus!;
   }
 
   Post _postFromState() {
@@ -121,37 +125,40 @@ class _EditPostPageState extends State<EditPostPage> {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(defaultPadding * 2),
-        child: Column(
-          children: [
-            TextField(
-              controller: TextEditingController(text: _title),
-              onChanged: (title) => _title = title,
-              decoration: InputDecoration(
-                hintText: LocaleKeys.title.tr(),
-                hintStyle: Theme.of(context).textTheme.button!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black38,
-                    ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(defaultPadding * 2),
+          child: Column(
+            children: [
+              TextField(
+                autofocus: autoFocus,
+                controller: TextEditingController(text: _title),
+                onChanged: (title) => _title = title,
+                decoration: InputDecoration(
+                  hintText: LocaleKeys.title.tr(),
+                  hintStyle: Theme.of(context).textTheme.button!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black38,
+                      ),
+                ),
               ),
-            ),
-            TextField(
-              controller: TextEditingController(text: _content),
-              onChanged: (content) => _content = content,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintMaxLines: 5,
-                hintText: LocaleKeys.shareQuestionsExperiences.tr(),
-                hintStyle: Theme.of(context)
-                    .textTheme
-                    .bodyText2!
-                    .copyWith(color: Colors.black38),
+              TextField(
+                controller: TextEditingController(text: _content),
+                onChanged: (content) => _content = content,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintMaxLines: 5,
+                  hintText: LocaleKeys.shareQuestionsExperiences.tr(),
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText2!
+                      .copyWith(color: Colors.black38),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
