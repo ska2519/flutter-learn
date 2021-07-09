@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/storage_details.dart';
-import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
+import 'package:flutter_learn/app/home/youtube/playlist_page.dart';
 import 'package:flutter_learn/constants/constants.dart';
 
 class YouTubeScreen extends StatelessWidget {
@@ -18,7 +18,7 @@ class YouTubeScreen extends StatelessWidget {
             Expanded(
               // It takes 5/6 part of the screen
               flex: 5,
-              child: YouTubePage(),
+              child: PlaylistPage(),
             ),
             const SizedBox(width: defaultPadding),
             const Expanded(
