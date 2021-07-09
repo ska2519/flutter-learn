@@ -1,4 +1,6 @@
+import 'package:flutter_learn/models/youtube_channel.dart';
 import 'package:flutter_learn/models/youtube_playlist_items.dart';
+import 'package:flutter_learn/models/youtube_video.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'api.dart';
@@ -15,7 +17,7 @@ class YouTubeService {
   final APIService apiService;
   final API api;
 
-  Future<PlaylistItems> fetchPlaylistItemsList(
+  Future<PlaylistItems> fetchPlaylistItems(
       {required String playListId, String? pageToken}) async {
     final playlistItemsData = await apiService.getData(
       api.playlistItemsPath,
@@ -34,5 +36,17 @@ class YouTubeService {
     // }).toList();
 
     return playlistItems;
+  }
+
+  Future<Channel> fetchYouTubeChannel({required String channelId}) async {
+    final youTubeChannelData = await apiService.getData(api.channelPath,
+        params: api.channelParam(channelId: channelId));
+    return Channel.fromJson(youTubeChannelData as Map<String, dynamic>);
+  }
+
+  Future<YouTubeVideo> fetchYouTubeVideo({required String videoId}) async {
+    final youTubeVideoData = await apiService.getData(api.videoPath,
+        params: api.videoParam(videoId: videoId));
+    return YouTubeVideo.fromJson(youTubeVideoData as Map<String, dynamic>);
   }
 }
