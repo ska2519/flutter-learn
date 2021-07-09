@@ -96,7 +96,9 @@ class CodegenLoader extends AssetLoader{
   "noticePrivateComment": "Private comment",
   "privatePost": "Private post (have a comment)",
   "noticePrivatePost": "Private post",
-  "enterSearchTerm": "Enter a search term 🙃"
+  "enterSearchTerm": "Enter a search term 🙃",
+  "save": "Save",
+  "share": "Share"
 };
 static const Map<String,dynamic> ko = {
   "community": "커뮤니티",
@@ -180,7 +182,9 @@ static const Map<String,dynamic> ko = {
   "noticePrivateComment": "비공개 댓글입니다",
   "privatePost": "비공개로 변경 (댓글이 있습니다)",
   "noticePrivatePost": "비공개 글입니다",
-  "enterSearchTerm": "검색어를 입력해주세요 🙃"
+  "enterSearchTerm": "검색어를 입력해주세요 🙃",
+  "save": "저장",
+  "share": "공유"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ko": ko};
 }

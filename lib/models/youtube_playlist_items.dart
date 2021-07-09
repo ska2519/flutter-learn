@@ -16,12 +16,12 @@ String playlistItemsToJson(PlaylistItems data) => json.encode(data.toJson());
 @freezed
 class PlaylistItems with _$PlaylistItems {
   const factory PlaylistItems({
-    String? kind,
-    String? etag,
+    required String kind,
+    required String etag,
     String? nextPageToken,
     String? prevPageToken,
-    List<Item>? items,
-    PageInfo? pageInfo,
+    required List<Item> items,
+    required PageInfo pageInfo,
   }) = _PlaylistItems;
 
   factory PlaylistItems.fromJson(Map<String, dynamic> json) =>

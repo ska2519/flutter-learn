@@ -21,6 +21,8 @@ final signModelProvider = ChangeNotifierProvider<SignViewModel>(
     (ref) => SignViewModel(auth: ref.watch(authServiceProvider)));
 
 class SignInPage extends HookWidget {
+  const SignInPage({Key? key}) : super(key: key);
+
   static Future<void> show(BuildContext context) async {
     await Navigator.of(context, rootNavigator: true)
         .pushNamed(AppRoutes.signInPage);
@@ -46,6 +48,8 @@ class SignInPage extends HookWidget {
             print('SignInPage appUser: $appUser');
             WidgetsBinding.instance!
                 .addPostFrameCallback((_) => Navigator.pop(context));
+            // final dialogKey = GlobalKey<State>();
+            // Navigator.of(key.currentContext!, rootNavigator: true).pop();
           }
         }
       },
