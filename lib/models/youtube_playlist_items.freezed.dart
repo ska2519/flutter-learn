@@ -21,12 +21,12 @@ class _$PlaylistItemsTearOff {
   const _$PlaylistItemsTearOff();
 
   _PlaylistItems call(
-      {String? kind,
-      String? etag,
+      {required String kind,
+      required String etag,
       String? nextPageToken,
       String? prevPageToken,
-      List<Item>? items,
-      PageInfo? pageInfo}) {
+      required List<Item> items,
+      required PageInfo pageInfo}) {
     return _PlaylistItems(
       kind: kind,
       etag: etag,
@@ -47,12 +47,12 @@ const $PlaylistItems = _$PlaylistItemsTearOff();
 
 /// @nodoc
 mixin _$PlaylistItems {
-  String? get kind => throw _privateConstructorUsedError;
-  String? get etag => throw _privateConstructorUsedError;
+  String get kind => throw _privateConstructorUsedError;
+  String get etag => throw _privateConstructorUsedError;
   String? get nextPageToken => throw _privateConstructorUsedError;
   String? get prevPageToken => throw _privateConstructorUsedError;
-  List<Item>? get items => throw _privateConstructorUsedError;
-  PageInfo? get pageInfo => throw _privateConstructorUsedError;
+  List<Item> get items => throw _privateConstructorUsedError;
+  PageInfo get pageInfo => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -66,14 +66,14 @@ abstract class $PlaylistItemsCopyWith<$Res> {
           PlaylistItems value, $Res Function(PlaylistItems) then) =
       _$PlaylistItemsCopyWithImpl<$Res>;
   $Res call(
-      {String? kind,
-      String? etag,
+      {String kind,
+      String etag,
       String? nextPageToken,
       String? prevPageToken,
-      List<Item>? items,
-      PageInfo? pageInfo});
+      List<Item> items,
+      PageInfo pageInfo});
 
-  $PageInfoCopyWith<$Res>? get pageInfo;
+  $PageInfoCopyWith<$Res> get pageInfo;
 }
 
 /// @nodoc
@@ -98,11 +98,11 @@ class _$PlaylistItemsCopyWithImpl<$Res>
       kind: kind == freezed
           ? _value.kind
           : kind // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       etag: etag == freezed
           ? _value.etag
           : etag // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       nextPageToken: nextPageToken == freezed
           ? _value.nextPageToken
           : nextPageToken // ignore: cast_nullable_to_non_nullable
@@ -114,21 +114,17 @@ class _$PlaylistItemsCopyWithImpl<$Res>
       items: items == freezed
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
-              as List<Item>?,
+              as List<Item>,
       pageInfo: pageInfo == freezed
           ? _value.pageInfo
           : pageInfo // ignore: cast_nullable_to_non_nullable
-              as PageInfo?,
+              as PageInfo,
     ));
   }
 
   @override
-  $PageInfoCopyWith<$Res>? get pageInfo {
-    if (_value.pageInfo == null) {
-      return null;
-    }
-
-    return $PageInfoCopyWith<$Res>(_value.pageInfo!, (value) {
+  $PageInfoCopyWith<$Res> get pageInfo {
+    return $PageInfoCopyWith<$Res>(_value.pageInfo, (value) {
       return _then(_value.copyWith(pageInfo: value));
     });
   }
@@ -142,15 +138,15 @@ abstract class _$PlaylistItemsCopyWith<$Res>
       __$PlaylistItemsCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? kind,
-      String? etag,
+      {String kind,
+      String etag,
       String? nextPageToken,
       String? prevPageToken,
-      List<Item>? items,
-      PageInfo? pageInfo});
+      List<Item> items,
+      PageInfo pageInfo});
 
   @override
-  $PageInfoCopyWith<$Res>? get pageInfo;
+  $PageInfoCopyWith<$Res> get pageInfo;
 }
 
 /// @nodoc
@@ -177,11 +173,11 @@ class __$PlaylistItemsCopyWithImpl<$Res>
       kind: kind == freezed
           ? _value.kind
           : kind // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       etag: etag == freezed
           ? _value.etag
           : etag // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       nextPageToken: nextPageToken == freezed
           ? _value.nextPageToken
           : nextPageToken // ignore: cast_nullable_to_non_nullable
@@ -193,11 +189,11 @@ class __$PlaylistItemsCopyWithImpl<$Res>
       items: items == freezed
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
-              as List<Item>?,
+              as List<Item>,
       pageInfo: pageInfo == freezed
           ? _value.pageInfo
           : pageInfo // ignore: cast_nullable_to_non_nullable
-              as PageInfo?,
+              as PageInfo,
     ));
   }
 }
@@ -206,28 +202,28 @@ class __$PlaylistItemsCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_PlaylistItems implements _PlaylistItems {
   const _$_PlaylistItems(
-      {this.kind,
-      this.etag,
+      {required this.kind,
+      required this.etag,
       this.nextPageToken,
       this.prevPageToken,
-      this.items,
-      this.pageInfo});
+      required this.items,
+      required this.pageInfo});
 
   factory _$_PlaylistItems.fromJson(Map<String, dynamic> json) =>
       _$_$_PlaylistItemsFromJson(json);
 
   @override
-  final String? kind;
+  final String kind;
   @override
-  final String? etag;
+  final String etag;
   @override
   final String? nextPageToken;
   @override
   final String? prevPageToken;
   @override
-  final List<Item>? items;
+  final List<Item> items;
   @override
-  final PageInfo? pageInfo;
+  final PageInfo pageInfo;
 
   @override
   String toString() {
@@ -278,28 +274,28 @@ class _$_PlaylistItems implements _PlaylistItems {
 
 abstract class _PlaylistItems implements PlaylistItems {
   const factory _PlaylistItems(
-      {String? kind,
-      String? etag,
+      {required String kind,
+      required String etag,
       String? nextPageToken,
       String? prevPageToken,
-      List<Item>? items,
-      PageInfo? pageInfo}) = _$_PlaylistItems;
+      required List<Item> items,
+      required PageInfo pageInfo}) = _$_PlaylistItems;
 
   factory _PlaylistItems.fromJson(Map<String, dynamic> json) =
       _$_PlaylistItems.fromJson;
 
   @override
-  String? get kind => throw _privateConstructorUsedError;
+  String get kind => throw _privateConstructorUsedError;
   @override
-  String? get etag => throw _privateConstructorUsedError;
+  String get etag => throw _privateConstructorUsedError;
   @override
   String? get nextPageToken => throw _privateConstructorUsedError;
   @override
   String? get prevPageToken => throw _privateConstructorUsedError;
   @override
-  List<Item>? get items => throw _privateConstructorUsedError;
+  List<Item> get items => throw _privateConstructorUsedError;
   @override
-  PageInfo? get pageInfo => throw _privateConstructorUsedError;
+  PageInfo get pageInfo => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$PlaylistItemsCopyWith<_PlaylistItems> get copyWith =>
