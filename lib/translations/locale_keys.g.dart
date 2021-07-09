@@ -83,5 +83,7 @@ abstract class  LocaleKeys {
   static const privatePost = 'privatePost';
   static const noticePrivatePost = 'noticePrivatePost';
   static const enterSearchTerm = 'enterSearchTerm';
+  static const save = 'save';
+  static const share = 'share';
 
 }
