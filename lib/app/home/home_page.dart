@@ -8,7 +8,7 @@ import 'package:flutter_learn/app/home/community/posts_page.dart';
 import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/side_menu.dart';
 import 'package:flutter_learn/app/home/tab_item.dart';
-import 'package:flutter_learn/app/home/youtube/playlist_page.dart';
+import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
 import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/responsive.dart';
 import 'package:flutter_learn/controllers/menu_controller.dart';
@@ -68,7 +68,6 @@ class _HomePageState extends State<HomePage> {
     final appUser = useProvider(appUserStreamProvider).data?.value;
     print('HomePage appUser: $appUser');
     return Scaffold(
-      backgroundColor: Colors.white,
       floatingActionButton:
           appUser?.id == debugAdminUid || appUser?.id == releaseAdminUid
               ? FloatingActionButton(
