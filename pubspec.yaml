@@ -13,7 +13,7 @@ dependencies:
     sdk: flutter
   algolia: ^1.0.1
   cached_network_image: ^3.0.0
-  cloud_firestore: ^2.2.0
+  cloud_firestore: ^2.3.0
   cupertino_icons: ^1.0.2
   dio: ^4.0.0
   duration: ^3.0.6
@@ -21,10 +21,10 @@ dependencies:
   equatable: ^2.0.2
   file_picker: ^3.0.3
   firebase_analytics: ^8.1.2
-  firebase_auth: ^1.2.0
-  firebase_core: ^1.2.0
-  firebase_crashlytics: ^2.0.6
-  firebase_messaging: ^10.0.0
+  firebase_auth: ^2.0.0
+  firebase_core: ^1.3.0
+  firebase_crashlytics: ^2.0.7
+  firebase_messaging: ^10.0.3
   firebase_storage: ^9.0.0
   fl_chart: ^0.36.1
   flex_color_scheme: ^3.0.0
