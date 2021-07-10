@@ -31,7 +31,7 @@ class SignInPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final signModel = useProvider(signModelProvider);
-    final appUser = useProvider(appUserStreamProvider).data?.value;
+    final appUser = useProvider(appUserStreamProvider);
 
     return ProviderListener<SignViewModel>(
       provider: signModelProvider,
@@ -44,13 +44,11 @@ class SignInPage extends HookWidget {
           );
         }
         if (model.isLoading == false) {
-          if (appUser != null) {
-            print('SignInPage appUser: $appUser');
-            WidgetsBinding.instance!
-                .addPostFrameCallback((_) => Navigator.pop(context));
-            // final dialogKey = GlobalKey<State>();
-            // Navigator.of(key.currentContext!, rootNavigator: true).pop();
-          }
+          appUser.when(
+            loading: () => null,
+            error: (error, stackTrace) => null,
+            data: (value) => Navigator.pop(context),
+          );
         }
       },
       child: SignInPageContents(
