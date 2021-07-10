@@ -99,23 +99,15 @@ class PostsPageSliverAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       pinned: true,
-      expandedHeight: 90 + (defaultPadding * 2),
       floating: true,
-      backgroundColor: Colors.white,
-      elevation: 1.0,
+      expandedHeight: 90 + (defaultPadding * 2),
       actions: [
         IconButton(
-          icon: Icon(
-            Icons.search,
-            color: flutterPrimaryColor,
-          ),
+          icon: Icon(Icons.search),
           onPressed: () => SearchPage.show(context),
         ),
         IconButton(
-          icon: Icon(
-            Icons.create,
-            color: flutterPrimaryColor,
-          ),
+          icon: Icon(Icons.create),
           onPressed: () => appUser == null
               ? SignInPage.show(context)
               : EditPostPage.show(context, autoFocus: true),
