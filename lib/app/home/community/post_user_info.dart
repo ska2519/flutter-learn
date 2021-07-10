@@ -10,7 +10,7 @@ import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 
-import 'format.dart';
+import 'package:flutter_learn/utils/format.dart';
 
 final isLoadingProvider = StateProvider<bool>((ref) => true);
 
@@ -52,7 +52,7 @@ class PostUserInfo extends HookWidget {
                         .copyWith(color: Colors.black87),
                   ),
                   Text(
-                    Format.duration(post.timestamp!),
+                    duration(post.timestamp!),
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ],
