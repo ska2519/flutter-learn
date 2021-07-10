@@ -7,7 +7,7 @@ class SocialSignInButton extends CustomElevatedButton {
     required String svgAssetName,
     required String text,
     required TextStyle textStyle,
-    Color? color,
+    Color? color = Colors.white,
     required VoidCallback? onPressed,
     Color? textColor = Colors.black87,
     double borderRadius = 6,

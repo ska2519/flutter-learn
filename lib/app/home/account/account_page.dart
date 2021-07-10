@@ -56,7 +56,6 @@ class _AccountPageState extends State<AccountPage> {
     final _size = MediaQuery.of(context).size;
     final appUser = useProvider(appUserStreamProvider).data?.value;
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         actions: [
           Padding(
@@ -66,10 +65,7 @@ class _AccountPageState extends State<AccountPage> {
                   ? SettingsPage.show(context)
                   : SignInPage.show(context),
               child: appUser != null
-                  ? Icon(
-                      Icons.settings_outlined,
-                      color: Colors.white,
-                    )
+                  ? Icon(Icons.settings_outlined)
                   : Text(
                       LocaleKeys.signIn.tr(),
                       style: Theme.of(context)
@@ -161,7 +157,6 @@ class _AccountPageState extends State<AccountPage> {
             appUser == null
                 ? LocaleKeys.requiredSignIn.tr()
                 : appUser.displayName ?? LocaleKeys.makeAUsername.tr(),
-            style: const TextStyle(color: Colors.white),
           ),
         ),
         const SizedBox(height: defaultPadding),

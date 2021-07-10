@@ -85,5 +85,8 @@ abstract class  LocaleKeys {
   static const enterSearchTerm = 'enterSearchTerm';
   static const save = 'save';
   static const share = 'share';
+  static const subscribers = 'subscribers';
+  static const SUBSCRIBE = 'SUBSCRIBE';
+  static const views = 'views';
 
 }

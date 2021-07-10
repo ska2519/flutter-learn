@@ -47,11 +47,11 @@ class MyPostsPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final tabIndex = useMemoized(() => initialIndex);
+
     return DefaultTabController(
       length: 2,
       initialIndex: tabIndex,
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(bottom: _buildTabBar()),
         body: TabBarView(
           children: [
@@ -96,7 +96,7 @@ class MyPostsPage extends HookWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.note_alt_outlined),
-              SizedBox(width: defaultPadding),
+              const SizedBox(width: defaultPadding),
               Text(LocaleKeys.myPosts.tr()),
             ],
           ),
@@ -106,7 +106,7 @@ class MyPostsPage extends HookWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.reply_all),
-              SizedBox(width: defaultPadding),
+              const SizedBox(width: defaultPadding),
               Text(LocaleKeys.myComments.tr()),
             ],
           ),

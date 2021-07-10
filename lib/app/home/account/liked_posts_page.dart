@@ -52,7 +52,6 @@ class LikedPostsPage extends HookWidget {
       length: 2,
       initialIndex: tabIndex,
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(bottom: _buildTabBar()),
         body: TabBarView(
           children: [
