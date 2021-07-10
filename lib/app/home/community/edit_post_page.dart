@@ -105,22 +105,13 @@ class _EditPostPageState extends State<EditPostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          LocaleKeys.writePost.tr(),
-          style: Theme.of(context)
-              .textTheme
-              .subtitle1!
-              .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
+        title: Text(LocaleKeys.writePost.tr()),
         actions: [
           TextButton(
             onPressed: () => _newPost(context, _title, _content),
             child: Text(
               LocaleKeys.post.tr(),
-              style: Theme.of(context)
-                  .textTheme
-                  .button!
-                  .copyWith(color: Colors.white),
+              style: TextStyle(color: youTubeColor),
             ),
           )
         ],

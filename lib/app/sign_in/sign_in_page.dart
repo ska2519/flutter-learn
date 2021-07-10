@@ -79,8 +79,6 @@ class SignInPageContents extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(_size.height * 0.2),
         child: AppBar(
-          backgroundColor: Colors.transparent,
-          iconTheme: IconThemeData(color: flutterPrimaryColor),
           elevation: 0.0,
           flexibleSpace: Padding(
             padding: const EdgeInsets.all(33),
@@ -137,7 +135,6 @@ class SignInPageContents extends StatelessWidget {
               SignInButton(
                 text: LocaleKeys.signInWithEmail.tr(),
                 textStyle: TextStyle(fontWeight: FontWeight.w500),
-                color: Colors.white,
                 onPressed: viewModel.isLoading
                     ? null
                     : () => _showEmailPasswordSignInPage(context),
@@ -148,7 +145,6 @@ class SignInPageContents extends StatelessWidget {
                   svgAssetName: 'assets/icons/btn_apple_white.svg',
                   text: LocaleKeys.signInWithApple.tr(),
                   textStyle: TextStyle(fontWeight: FontWeight.w500),
-                  color: Colors.white,
                   onPressed:
                       viewModel.isLoading ? null : viewModel.signInWithApple,
                 ),
@@ -157,7 +153,6 @@ class SignInPageContents extends StatelessWidget {
                 svgAssetName: 'assets/icons/google_logo.svg',
                 text: LocaleKeys.signInWithGoogle.tr(),
                 textStyle: TextStyle(fontWeight: FontWeight.w500),
-                color: Colors.white,
                 onPressed:
                     viewModel.isLoading ? null : viewModel.signInWithGoogle,
               ),
