@@ -82,5 +82,8 @@
   "noticePrivatePost": "Private post",
   "enterSearchTerm": "Enter a search term 🙃",
   "save": "Save",
-  "share": "Share"
+  "share": "Share",
+  "subscribers": "subscribers",
+  "SUBSCRIBE": "SUBSCRIBE",
+  "views": "views"
 }

@@ -287,7 +287,7 @@ PODS:
     - Firebase/Analytics (= 8.0.0)
     - firebase_core
     - Flutter
-  - firebase_auth (1.4.1):
+  - firebase_auth (2.0.0):
     - Firebase/Auth (= 8.0.0)
     - firebase_core
     - Flutter
@@ -491,6 +491,8 @@ PODS:
     - FMDB (>= 2.7.5)
   - SwiftyGif (5.4.0)
   - TOCropViewController (2.6.0)
+  - url_launcher (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
@@ -511,6 +513,7 @@ DEPENDENCIES:
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
 SPEC REPOS:
   trunk:
@@ -583,6 +586,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
+  url_launcher:
+    :path: ".symlinks/plugins/url_launcher/ios"
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
@@ -594,7 +599,7 @@ SPEC CHECKSUMS:
   file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
   Firebase: 73c3e3b216ec1ecbc54d2ffdd4670c65c749edb1
   firebase_analytics: 5e1820ff8ca6cc984fd4d1dedd2dd45965b91535
-  firebase_auth: 6532658f5a4f76be32cd5e7518753ebedd4544d2
+  firebase_auth: 1e633b05c508081a0876749432ac742075b3f4f3
   firebase_core: cda81ae37eda6df2bc2d16027fda527987c4bd33
   firebase_crashlytics: 19eca4f6f262e11e3f6306d16cbb3f643b828ce1
   firebase_messaging: 861664166bbdd527cb40396d4a381f0a1c39f61d
@@ -634,6 +639,7 @@ SPEC CHECKSUMS:
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftyGif: 5d4af95df24caf1c570dbbcb32a3b8a0763bc6d7
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
+  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
 PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
 
