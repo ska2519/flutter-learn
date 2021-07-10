@@ -58,7 +58,6 @@ class _SearchPageState extends State<SearchPage> {
     final searchTerm = useProvider(_searchTermProvider);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 1.0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
