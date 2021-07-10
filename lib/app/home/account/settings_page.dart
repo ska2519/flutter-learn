@@ -98,15 +98,8 @@ class SettingsPage extends HookWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text(
-            '설정',
-            style: Theme.of(context)
-                .textTheme
-                .headline6!
-                .copyWith(fontWeight: FontWeight.bold, color: Colors.white),
-          ),
+          title: Text(LocaleKeys.settings.tr()),
         ),
         body: signModel.isLoading
             ? Center(child: const CupertinoActivityIndicator())

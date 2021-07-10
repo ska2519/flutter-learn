@@ -13,7 +13,7 @@ import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 
-import 'format.dart';
+import '../../../utils/format.dart';
 
 class CommentListItem extends HookWidget {
   const CommentListItem({
@@ -70,7 +70,7 @@ class CommentListItem extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${commentUser.deletedUser ? LocaleKeys.deletedUser.tr() : commentUser.displayName!} • ${Format.duration(comment.timestamp!)}',
+                      '${commentUser.deletedUser ? LocaleKeys.deletedUser.tr() : commentUser.displayName!} • ${duration(comment.timestamp!)}',
                       style: Theme.of(context)
                           .textTheme
                           .overline!
