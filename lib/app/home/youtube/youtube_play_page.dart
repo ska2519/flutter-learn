@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_learn/app/home/community/format.dart';
+import 'package:flutter_learn/utils/format.dart';
 import 'package:flutter_learn/app/widgets/avatar.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/youtube_channel.dart' as ch;
 import 'package:flutter_learn/models/youtube_playlist_items.dart';
 import 'package:flutter_learn/models/youtube_video.dart' as uv;
 import 'package:flutter_learn/routes/app_router.dart';
+import 'package:flutter_learn/services/url_launcher.dart';
 import 'package:flutter_learn/services/youtube_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import 'youtube_player.dart';
+
 final channelProvider =
-    FutureProvider.family<ch.Channel, Item>((ref, item) async {
+    FutureProvider.autoDispose.family<ch.Channel, Item>((ref, item) async {
   final youTubeService = ref.read(youTubeServiceProvider);
   return youTubeService.fetchYouTubeChannel(
       channelId: item.snippet.videoOwnerChannelId);
 });
 final youTubeVideoProvider =
-    FutureProvider.family<uv.YouTubeVideo, Item>((ref, item) async {
+    FutureProvider.autoDispose.family<uv.YouTubeVideo, Item>((ref, item) async {
   final youTubeService = ref.read(youTubeServiceProvider);
   return youTubeService.fetchYouTubeVideo(videoId: item.contentDetails.videoId);
 });
@@ -38,6 +42,9 @@ class YouTubePlayPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final channelAsyncValue = useProvider(channelProvider(item));
+    final youTubeVideoAsyncValue = useProvider(youTubeVideoProvider(item));
+
     final _youTubeController = useState(YoutubePlayerController(
       initialVideoId: item.contentDetails.videoId,
       flags: YoutubePlayerFlags(
@@ -46,43 +53,21 @@ class YouTubePlayPage extends HookWidget {
         forceHD: true,
       ),
     ));
+    final videoUrl =
+        'https://www.youtube.com/watch?v=${item.contentDetails.videoId}';
 
-    final channelAsyncValue = useProvider(channelProvider(item));
-    final youTubeVideoAsyncValue = useProvider(youTubeVideoProvider(item));
-    return SafeArea(
-      child: Scaffold(
+    return YoutubePlayerBuilder(
+      onExitFullScreen: () =>
+          SystemChrome.setPreferredOrientations(DeviceOrientation.values),
+      player: youTubePlayer(_youTubeController, item),
+      builder: (context, player) => Scaffold(
+        appBar: AppBar(
+          title: Text('tags'),
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              YoutubePlayer(
-                key: ObjectKey(_youTubeController.value),
-                controller: _youTubeController.value,
-                showVideoProgressIndicator: true,
-                actionsPadding: EdgeInsets.symmetric(
-                    horizontal: defaultPadding * 2, vertical: 3),
-                bottomActions: [
-                  CurrentPosition(),
-                  const SizedBox(width: defaultPadding),
-                  ProgressBar(isExpanded: true),
-                  const SizedBox(width: defaultPadding),
-                  RemainingDuration(),
-                  FullScreenButton(),
-                  PlaybackSpeedButton(),
-                ],
-                onEnded: (data) => _youTubeController.value.pause(),
-                topActions: [
-                  Expanded(
-                    child: Text(
-                      item.snippet.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
+              player,
               youTubeVideoAsyncValue.when(
                 loading: () => const SizedBox(),
                 error: (_, __) => const SizedBox(),
@@ -99,20 +84,21 @@ class YouTubePlayPage extends HookWidget {
                         ),
                         SizedBox(height: defaultPadding),
                         Text(
-                            '조회수 ${uvVideo.statistics.viewCount} 명  •  ${Format.duration(uvVideo.snippet.publishedAt)}',
-                            style: Theme.of(context).textTheme.caption),
+                          '${LocaleKeys.views.tr()} ${stringWithComma(uvVideo.statistics.viewCount)}  •  ${DateFormat('yyyy. M. d').format(uvVideo.snippet.publishedAt)}',
+                          style: Theme.of(context).textTheme.caption,
+                        ),
                         const SizedBox(height: defaultPadding * 2),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             PlayerIconButton(
-                              onPressed: () {},
+                              onPressed: () => launchYouTube(videoUrl),
                               buttonText: uvVideo.statistics.likeCount,
                               icon: Icon(Icons.thumb_up_outlined, size: 22),
                             ),
                             PlayerIconButton(
-                              onPressed: () {},
-                              buttonText: uvVideo.statistics.likeCount,
+                              onPressed: () => launchYouTube(videoUrl),
+                              buttonText: uvVideo.statistics.dislikeCount,
                               icon: Icon(Icons.thumb_down_outlined, size: 22),
                             ),
                             PlayerIconButton(
@@ -121,7 +107,7 @@ class YouTubePlayPage extends HookWidget {
                               icon: Icon(Icons.archive_outlined, size: 22),
                             ),
                             PlayerIconButton(
-                              onPressed: () {},
+                              onPressed: () => launchYouTube(videoUrl),
                               buttonText: LocaleKeys.share.tr(),
                               icon: Icon(Icons.share_outlined, size: 22),
                             ),
@@ -131,32 +117,7 @@ class YouTubePlayPage extends HookWidget {
                         channelAsyncValue.when(
                           loading: () => const SizedBox(),
                           error: (_, __) => const SizedBox(),
-                          data: (channel) {
-                            final chItem = channel.items[0];
-                            return Row(
-                              children: [
-                                Avatar(
-                                  radius: 18,
-                                  photoUrl: chItem.snippet.thumbnails
-                                          .thumbnailsDefault?.url ??
-                                      chItem.snippet.thumbnails.medium?.url ??
-                                      chItem.snippet.thumbnails.high!.url,
-                                ),
-                                SizedBox(width: defaultPadding),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(item.snippet.videoOwnerChannelTitle),
-                                    Text(
-                                        '${chItem.statistics.subscriberCount} 명',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption),
-                                  ],
-                                ),
-                              ],
-                            );
-                          },
+                          data: (channel) => ChannelInfo(channel: channel),
                         ),
                         Divider(height: defaultPadding * 3),
                         SelectableText(item.snippet.description),
@@ -167,6 +128,53 @@ class YouTubePlayPage extends HookWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ChannelInfo extends StatelessWidget {
+  const ChannelInfo({
+    Key? key,
+    required this.channel,
+  }) : super(key: key);
+  final ch.Channel channel;
+
+  @override
+  Widget build(BuildContext context) {
+    final chItem = channel.items[0];
+    final channelUrl = 'https://www.youtube.com/channel/${chItem.id}';
+    return Padding(
+      padding: const EdgeInsets.only(right: defaultPadding),
+      child: InkWell(
+        onTap: () => launchYouTube(channelUrl),
+        child: Row(
+          children: [
+            Avatar(
+              radius: 18,
+              photoUrl: chItem.snippet.thumbnails.thumbnailsDefault?.url ??
+                  chItem.snippet.thumbnails.medium?.url ??
+                  chItem.snippet.thumbnails.high!.url,
+            ),
+            SizedBox(width: defaultPadding),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(chItem.snippet.title),
+                Text(
+                  '${chItem.statistics.subscriberCount != null ? stringWithComma(chItem.statistics.subscriberCount!) : ''} ${LocaleKeys.subscribers.tr()}',
+                  style: Theme.of(context).textTheme.caption,
+                ),
+              ],
+            ),
+            Spacer(),
+            Text(
+              LocaleKeys.SUBSCRIBE.tr(),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: subscribeColor),
+            )
+          ],
         ),
       ),
     );
