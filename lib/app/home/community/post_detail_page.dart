@@ -2,6 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
+
 import 'package:flutter_learn/app/home/community/child_comment_list_item.dart';
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
 import 'package:flutter_learn/app/home/community/post_item_info.dart';
@@ -19,11 +22,9 @@ import 'package:flutter_learn/secret_keys.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pedantic/pedantic.dart';
+import 'package:flutter_learn/utils/format.dart';
 
 import 'comment_list_item.dart';
-import 'format.dart';
 import 'post_item_info.dart';
 
 final topLevelCommentsStreamProvider =
@@ -306,17 +307,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
                   )
                 : null,
             appBar: AppBar(
-              backgroundColor: Colors.transparent,
               elevation: 0,
               titleSpacing: 0,
               title: PostDetailAppBarTitle(post: post),
               leading: IconButton(
                 onPressed: () => Navigator.pop(context),
-                icon: Icon(
-                  Icons.arrow_back_ios_new,
-                  color: flutterPrimaryColor,
-                  size: 20,
-                ),
+                icon: Icon(Icons.arrow_back_ios_new, size: 20),
               ),
               actions: [
                 // IconButton(
@@ -324,7 +320,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 //   icon: Icon(
                 //     Icons.notifications_off_outlined,
                 //     color: flutterPrimaryColor,
-                //     size: 20,
                 //   ),
                 //   onPressed: () {},
                 // ),
@@ -332,8 +327,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                   IconButton(
                     padding: EdgeInsets.all(0),
                     constraints: BoxConstraints.tight(Size(25, 17)),
-                    icon: Icon(Icons.more_horiz,
-                        color: flutterPrimaryColor, size: 20),
+                    icon: Icon(Icons.more_horiz),
                     onPressed: () => editOrDeletePostPopup(context, post),
                   )
                 else
@@ -569,8 +563,8 @@ class PostDetailAppBarTitle extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     Text(
-                      Format.duration(post.timestamp!),
-                      style: Theme.of(context).textTheme.overline,
+                      duration(post.timestamp!),
+                      style: Theme.of(context).textTheme.caption,
                     )
                   ],
                 ),

@@ -10,8 +10,8 @@ import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/translations/codegen_loader.g.dart';
 
-import 'app/home/community/format.dart';
 import 'constants/constants.dart';
+import 'utils/format.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,28 +36,44 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = context.read(authServiceProvider);
-    Format.getLocale(context);
+    getLocale(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '플러터 런 - Flutter Learn',
-      theme:
-          // FlexColorScheme.light(scheme: FlexScheme.mandyRed).toTheme,
-          // The Mandy red, dark theme.
-          // darkTheme: FlexColorScheme.dark(scheme: FlexScheme.mandyRed).toTheme,
-          // Use dark or light theme based on system setting.
-          // themeMode: ThemeMode.system,
-          ThemeData(
+      theme: ThemeData(
         brightness: Brightness.light,
+        scaffoldBackgroundColor: Colors.white,
         primaryColor: flutterPrimaryColor,
         accentColor: flutterAccentColor,
-        appBarTheme: AppBarTheme(
-          // textTheme:
-          //     TextTheme(headline6: TextStyle(fontWeight: FontWeight.bold)),
-          // titleTextStyle: TextStyle(color: Colors.white),
-          iconTheme: IconThemeData(color: Colors.white),
-        ),
+        iconTheme: IconThemeData(color: flutterPrimaryColor, size: 20),
+        primaryIconTheme: IconThemeData(color: flutterPrimaryColor, size: 20),
         textTheme: TextTheme(),
-        fontFamily: 'NotoSansKR',
+        fontFamily: 'NotoSans',
+        appBarTheme: AppBarTheme(
+          elevation: 1.0,
+          centerTitle: false,
+          backgroundColor: Colors.white,
+          titleSpacing: 0,
+          actionsIconTheme: IconThemeData(color: flutterPrimaryColor, size: 20),
+          iconTheme: IconThemeData(color: flutterPrimaryColor, size: 20),
+          textTheme: TextTheme(
+            headline6: TextStyle(color: flutterPrimaryColor, fontSize: 18),
+          ),
+        ),
+        tabBarTheme: TabBarTheme(
+          indicatorSize: TabBarIndicatorSize.label,
+          labelColor: flutterPrimaryColor,
+        ),
+        chipTheme: ChipThemeData(
+          brightness: Brightness.light,
+          padding: const EdgeInsets.all(4),
+          backgroundColor: Colors.transparent,
+          selectedColor: Colors.transparent,
+          secondarySelectedColor: Colors.transparent,
+          disabledColor: Colors.transparent,
+          labelStyle: TextStyle(),
+          secondaryLabelStyle: TextStyle(),
+        ),
       ),
       navigatorObservers: <NavigatorObserver>[observer],
       localizationsDelegates: context.localizationDelegates,
