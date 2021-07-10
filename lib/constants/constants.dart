@@ -11,6 +11,8 @@ const Color flutterButtonHoverColor = Color(0xFF168AFD);
 const Color firebasePrimaryColor = Color(0xFFFFCA28); // Amber 400
 const Color firebaseAccentColor = Color(0xFFFFA000); // Amber 700
 const Color firebaseOrangeColor = Color(0xFFF57C00); // Orange 700
+const Color youTubeColor = Color(0xFFFF0000); // Orange 700
+const Color subscribeColor = Color(0xFFC4320B); // Orange 700
 
 ///lightBlue[800]
 const Color primaryColor = Color(0xFF0277BD);
