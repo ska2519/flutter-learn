@@ -3,7 +3,7 @@ description: Flutter Learn.
 
 publish_to: 'none'
 
-version: 0.1.12
+version: 0.1.13
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -34,13 +34,11 @@ dependencies:
   google_sign_in: ^5.0.4
   hooks_riverpod: ^0.14.0+4
   image: ^3.0.2
-  image_cropper: ^1.4.1
   image_picker: ^0.7.4
   intl: ^0.17.0
   lint: ^1.5.3
   package_info_plus: ^1.0.3
   pedantic: ^1.11.0
-  pixel_perfect: ^1.1.0
   shimmer: ^2.0.0
   sign_in_with_apple: ^3.0.0
   url_launcher: ^6.0.9
