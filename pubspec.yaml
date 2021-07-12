@@ -84,41 +84,30 @@ flutter:
     - assets/pixel_perfect/
     - assets/translations/
 
-  fonts:
-    - family: NotoSans
-      fonts:
-        - asset: fonts/NotoSans-Regular.ttf
-          weight: 400
-        - asset: fonts/NotoSans-Italic.ttf
-          style: italic
-        - asset: fonts/NotoSans-Bold.ttf
-          weight: 700
-        - asset: fonts/NotoSans-BoldItalic.ttf
-          style: italic
-
-    - family: Roboto
-      fonts:
-        - asset: fonts/Roboto-Thin.ttf
-          weight: 100
-        - asset: fonts/Roboto-ThinItalic.ttf
-          style: italic
-        - asset: fonts/Roboto-Light.ttf
-          weight: 300
-        - asset: fonts/Roboto-LightItalic.ttf
-          style: italic
-        - asset: fonts/Roboto-Regular.ttf
-          weight: 400
-        - asset: fonts/Roboto-Italic.ttf
-          style: italic
-        - asset: fonts/Roboto-Medium.ttf
-          weight: 500
-        - asset: fonts/Roboto-MediumItalic.ttf
-          style: italic
-        - asset: fonts/Roboto-Bold.ttf
-          weight: 700
-        - asset: fonts/Roboto-BoldItalic.ttf
-          style: italic
-        - asset: fonts/Roboto-Black.ttf
-          weight: 900
-        - asset: fonts/Roboto-BlackItalic.ttf
-          style: italic
+  # fonts:
+    # - family: Roboto
+    #   fonts:
+    #     - asset: fonts/Roboto-Thin.ttf
+    #       weight: 100
+    #     - asset: fonts/Roboto-ThinItalic.ttf
+    #       style: italic
+    #     - asset: fonts/Roboto-Light.ttf
+    #       weight: 300
+    #     - asset: fonts/Roboto-LightItalic.ttf
+    #       style: italic
+    #     - asset: fonts/Roboto-Regular.ttf
+    #       weight: 400
+    #     - asset: fonts/Roboto-Italic.ttf
+    #       style: italic
+    #     - asset: fonts/Roboto-Medium.ttf
+    #       weight: 500
+    #     - asset: fonts/Roboto-MediumItalic.ttf
+    #       style: italic
+    #     - asset: fonts/Roboto-Bold.ttf
+    #       weight: 700
+    #     - asset: fonts/Roboto-BoldItalic.ttf
+    #       style: italic
+    #     - asset: fonts/Roboto-Black.ttf
+    #       weight: 900
+    #     - asset: fonts/Roboto-BlackItalic.ttf
+    #       style: italic
