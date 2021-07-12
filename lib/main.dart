@@ -3,10 +3,12 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutter_learn/app/home/home_page.dart';
 import 'package:flutter_learn/routes/app_router.dart';
+import 'package:flutter_learn/services/auth_base.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/translations/codegen_loader.g.dart';
 
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = context.read(authServiceProvider);
+    final AuthBase auth = context.read(authServiceProvider);
     getLocale(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -47,8 +49,8 @@ class MyApp extends StatelessWidget {
         accentColor: flutterAccentColor,
         iconTheme: IconThemeData(color: flutterPrimaryColor, size: 20),
         primaryIconTheme: IconThemeData(color: flutterPrimaryColor, size: 20),
-        textTheme: TextTheme(),
-        fontFamily: 'NotoSans',
+        textTheme: GoogleFonts.latoTextTheme(),
+        fontFamily: 'roboto',
         appBarTheme: AppBarTheme(
           elevation: 1.0,
           centerTitle: false,

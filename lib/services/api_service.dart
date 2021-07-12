@@ -7,8 +7,8 @@ final apiServiceProvider = Provider<APIService>((ref) => APIService(ref.read));
 final dioProvider = Provider<Dio>((ref) => Dio());
 
 class APIService {
-  final Reader _read;
   APIService(this._read);
+  final Reader _read;
 
   Future<dynamic> getData(
     String path, {
