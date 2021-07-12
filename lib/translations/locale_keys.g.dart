@@ -88,5 +88,6 @@ abstract class  LocaleKeys {
   static const subscribers = 'subscribers';
   static const SUBSCRIBE = 'SUBSCRIBE';
   static const views = 'views';
+  static const openSourceLicenses = 'openSourceLicenses';
 
 }
