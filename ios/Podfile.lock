@@ -462,9 +462,6 @@ PODS:
     - AppAuth/Core (~> 1.4)
     - GTMSessionFetcher/Core (~> 1.5)
   - GTMSessionFetcher/Core (1.6.1)
-  - image_cropper (0.0.4):
-    - Flutter
-    - TOCropViewController (~> 2.6.0)
   - image_picker (0.0.1):
     - Flutter
   - leveldb-library (1.22.1)
@@ -490,7 +487,6 @@ PODS:
     - Flutter
     - FMDB (>= 2.7.5)
   - SwiftyGif (5.4.0)
-  - TOCropViewController (2.6.0)
   - url_launcher (0.0.1):
     - Flutter
 
@@ -506,7 +502,6 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
-  - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -547,7 +542,6 @@ SPEC REPOS:
     - PromisesObjC
     - SDWebImage
     - SwiftyGif
-    - TOCropViewController
 
 EXTERNAL SOURCES:
   cloud_firestore:
@@ -572,8 +566,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
   google_sign_in:
     :path: ".symlinks/plugins/google_sign_in/ios"
-  image_cropper:
-    :path: ".symlinks/plugins/image_cropper/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   package_info_plus:
@@ -625,7 +617,6 @@ SPEC CHECKSUMS:
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 36689134877faeb055b27dfa4ccc9ceaa42e029e
-  image_cropper: f1668dd8d2cad2d357955caad15a40547856edcb
   image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
@@ -638,7 +629,6 @@ SPEC CHECKSUMS:
   sign_in_with_apple: 34f3f5456a45fd7ac5fb42905e2ad31dae061b4a
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftyGif: 5d4af95df24caf1c570dbbcb32a3b8a0763bc6d7
-  TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
 PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
