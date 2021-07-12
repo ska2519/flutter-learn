@@ -1,7 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_learn/utils/format.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
 import 'package:flutter_learn/app/widgets/avatar.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/youtube_channel.dart' as ch;
@@ -10,12 +13,9 @@ import 'package:flutter_learn/models/youtube_video.dart' as uv;
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/url_launcher.dart';
 import 'package:flutter_learn/services/youtube_service.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-import 'package:easy_localization/easy_localization.dart';
-
-import 'youtube_player.dart';
+import 'package:flutter_learn/utils/format.dart';
+import 'package:numeral/numeral.dart';
 
 final channelProvider =
     FutureProvider.autoDispose.family<ch.Channel, Item>((ref, item) async {
@@ -44,85 +44,94 @@ class YouTubePlayPage extends HookWidget {
   Widget build(BuildContext context) {
     final channelAsyncValue = useProvider(channelProvider(item));
     final youTubeVideoAsyncValue = useProvider(youTubeVideoProvider(item));
-
+    const player = YoutubePlayerIFrame();
     final _youTubeController = useState(YoutubePlayerController(
       initialVideoId: item.contentDetails.videoId,
-      flags: YoutubePlayerFlags(
-        captionLanguage: 'kr',
-        controlsVisibleAtStart: true,
-        forceHD: true,
-      ),
+      params: YoutubePlayerParams(showFullscreenButton: true),
     ));
+
+    useEffect(() {
+      _youTubeController.value.onEnterFullscreen = () {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
+      };
+    });
+
     final videoUrl =
         'https://www.youtube.com/watch?v=${item.contentDetails.videoId}';
 
-    return YoutubePlayerBuilder(
-      onExitFullScreen: () =>
-          SystemChrome.setPreferredOrientations(DeviceOrientation.values),
-      player: youTubePlayer(_youTubeController, item),
-      builder: (context, player) => Scaffold(
+    return YoutubePlayerControllerProvider(
+      controller: _youTubeController.value,
+      child: Scaffold(
         appBar: AppBar(
           title: Text('tags'),
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              player,
               youTubeVideoAsyncValue.when(
                 loading: () => const SizedBox(),
                 error: (_, __) => const SizedBox(),
                 data: (video) {
                   final uvVideo = video.items[0];
-                  return Padding(
-                    padding: const EdgeInsets.all(defaultPadding),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          item.snippet.title,
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                        SizedBox(height: defaultPadding),
-                        Text(
-                          '${LocaleKeys.views.tr()} ${stringWithComma(uvVideo.statistics.viewCount)}  •  ${DateFormat('yyyy. M. d').format(uvVideo.snippet.publishedAt)}',
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                        const SizedBox(height: defaultPadding * 2),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      player,
+                      Padding(
+                        padding: const EdgeInsets.all(defaultPadding),
+                        child: Column(
                           children: [
-                            PlayerIconButton(
-                              onPressed: () => launchYouTube(videoUrl),
-                              buttonText: uvVideo.statistics.likeCount,
-                              icon: Icon(Icons.thumb_up_outlined, size: 22),
+                            Text(
+                              item.snippet.title,
+                              style: Theme.of(context).textTheme.subtitle1,
                             ),
-                            PlayerIconButton(
-                              onPressed: () => launchYouTube(videoUrl),
-                              buttonText: uvVideo.statistics.dislikeCount,
-                              icon: Icon(Icons.thumb_down_outlined, size: 22),
+                            SizedBox(height: defaultPadding),
+                            Text(
+                              '${LocaleKeys.views.tr()} ${stringWithComma(uvVideo.statistics.viewCount)}  •  ${DateFormat('yyyy. M. d').format(uvVideo.snippet.publishedAt)}',
+                              style: Theme.of(context).textTheme.caption,
                             ),
-                            PlayerIconButton(
-                              onPressed: () {},
-                              buttonText: LocaleKeys.save.tr(),
-                              icon: Icon(Icons.archive_outlined, size: 22),
+                            const SizedBox(height: defaultPadding * 2),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                PlayerIconButton(
+                                  onPressed: () => launchYouTube(videoUrl),
+                                  buttonText: uvVideo.statistics.likeCount,
+                                  icon: Icon(Icons.thumb_up_outlined, size: 22),
+                                ),
+                                PlayerIconButton(
+                                  onPressed: () => launchYouTube(videoUrl),
+                                  buttonText: uvVideo.statistics.dislikeCount,
+                                  icon:
+                                      Icon(Icons.thumb_down_outlined, size: 22),
+                                ),
+                                PlayerIconButton(
+                                  onPressed: () {},
+                                  buttonText: LocaleKeys.save.tr(),
+                                  icon: Icon(Icons.archive_outlined, size: 22),
+                                ),
+                                PlayerIconButton(
+                                  onPressed: () => launchYouTube(videoUrl),
+                                  buttonText: LocaleKeys.share.tr(),
+                                  icon: Icon(Icons.share_outlined, size: 22),
+                                ),
+                              ],
                             ),
-                            PlayerIconButton(
-                              onPressed: () => launchYouTube(videoUrl),
-                              buttonText: LocaleKeys.share.tr(),
-                              icon: Icon(Icons.share_outlined, size: 22),
+                            Divider(height: defaultPadding * 3),
+                            channelAsyncValue.when(
+                              loading: () => const SizedBox(),
+                              error: (_, __) => const SizedBox(),
+                              data: (channel) => ChannelInfo(channel: channel),
                             ),
+                            Divider(height: defaultPadding * 3),
+                            SelectableText(item.snippet.description),
                           ],
                         ),
-                        Divider(height: defaultPadding * 3),
-                        channelAsyncValue.when(
-                          loading: () => const SizedBox(),
-                          error: (_, __) => const SizedBox(),
-                          data: (channel) => ChannelInfo(channel: channel),
-                        ),
-                        Divider(height: defaultPadding * 3),
-                        SelectableText(item.snippet.description),
-                      ],
-                    ),
+                      ),
+                    ],
                   );
                 },
               ),
@@ -145,35 +154,49 @@ class ChannelInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final chItem = channel.items[0];
     final channelUrl = 'https://www.youtube.com/channel/${chItem.id}';
+    final Size _size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.only(right: defaultPadding),
       child: InkWell(
         onTap: () => launchYouTube(channelUrl),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Avatar(
-              radius: 18,
-              photoUrl: chItem.snippet.thumbnails.thumbnailsDefault?.url ??
-                  chItem.snippet.thumbnails.medium?.url ??
-                  chItem.snippet.thumbnails.high!.url,
-            ),
-            SizedBox(width: defaultPadding),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
-                Text(chItem.snippet.title),
-                Text(
-                  '${chItem.statistics.subscriberCount != null ? stringWithComma(chItem.statistics.subscriberCount!) : ''} ${LocaleKeys.subscribers.tr()}',
-                  style: Theme.of(context).textTheme.caption,
+                Avatar(
+                  radius: 18,
+                  photoUrl: chItem.snippet.thumbnails.thumbnailsDefault?.url ??
+                      chItem.snippet.thumbnails.medium?.url ??
+                      chItem.snippet.thumbnails.high!.url,
+                ),
+                SizedBox(width: defaultPadding),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: _size.width * 0.6,
+                      child: Text(
+                        chItem.snippet.title,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(
+                      '${chItem.statistics.subscriberCount != null ?
+                          // stringWithComma(chItem.statistics.subscriberCount!)
+                          Numeral(int.parse(chItem.statistics.subscriberCount!)).value() : ''} ${LocaleKeys.subscribers.tr()}',
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                  ],
                 ),
               ],
             ),
-            Spacer(),
             Text(
               LocaleKeys.SUBSCRIBE.tr(),
+              maxLines: 1,
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: subscribeColor),
-            )
+            ),
           ],
         ),
       ),
