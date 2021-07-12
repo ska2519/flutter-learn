@@ -43,7 +43,7 @@ final loadFilterProvider = StateProvider((ref) => playListLoadFilter.changeTag);
 final playlistProvider = StateProvider<PlaylistItems?>((ref) => null);
 
 final playlistLoadProvider =
-    FutureProvider.family<PlaylistItems, Tag>((ref, tag) async {
+    FutureProvider.family<PlaylistItems?, Tag>((ref, tag) async {
   final youTubeService = ref.read(youTubeServiceProvider);
   final playlist = ref.read(playlistProvider).state;
   final youTubeControllers = ref.read(youTubeControllersProvider).state;
@@ -71,14 +71,11 @@ final playlistLoadProvider =
         prevPageToken: morePlaylist.prevPageToken,
         nextPageToken: morePlaylist.nextPageToken,
       );
-      print(
-          'playlistProvider ${ref.read(playlistProvider).state?.pageInfo.totalResults}');
       ref.read(youTubeControllersProvider).state = youTubeControllers
         ..addAll(morePlaylist.items
             .map((item) => youtubePlayerController(item))
             .toList());
-      print(
-          'ref.read(youTubeControllersProvider).state: ${ref.read(youTubeControllersProvider).state.length}');
+
       ref.read(isLoadingProvider).state = false;
       return ref.read(playlistProvider).state!;
   }
@@ -176,60 +173,61 @@ class _PlaylistPageState extends State<PlaylistPage> {
                       itemCount: tags.length,
                       itemBuilder: (context, i) {
                         final tag = tags[i]!;
-                        return FilterChip(
-                          label: Text(
-                            tag.name,
-                            style: TextStyle(
-                              color: tag.color != null
-                                  ? Color(int.parse(tag.color!))
-                                  : Colors.black,
-                              fontWeight: selectedIndex == i
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                            ),
-                          ),
-                          onSelected: (bool selected) async {
-                            if (selectedIndex == i) return;
-                            selectedIndex = i;
+                        return tag.playlistId!.isEmpty
+                            ? const SizedBox()
+                            : FilterChip(
+                                label: Text(
+                                  tag.name,
+                                  style: TextStyle(
+                                    color: tag.color != null
+                                        ? Color(int.parse(tag.color!))
+                                        : Colors.black,
+                                    fontWeight: selectedIndex == i
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                  ),
+                                ),
+                                onSelected: (bool selected) async {
+                                  if (selectedIndex == i) return;
+                                  selectedIndex = i;
 
-                            final scrollPosition =
-                                scrollController.position.pixels.toInt();
-                            print('scrollPosition: $scrollPosition');
+                                  final scrollPosition =
+                                      scrollController.position.pixels.toInt();
 
-                            scrollController.animateTo(0,
-                                duration:
-                                    Duration(microseconds: scrollPosition),
-                                curve: Curves.easeOut);
-                            if (mounted) {
-                              context.read(loadFilterProvider).state =
-                                  playListLoadFilter.changeTag;
-                              context.read(
-                                  playlistLoadProvider(tags[selectedIndex]!));
-                            }
-                          },
-                          selected: selectedIndex == i ? true : false,
-                          avatar: Image.asset(tag.image != null
-                              ? 'assets/icons/${tag.image}'
-                              : 'assets/icons/dino_icon.png'),
-                          shape: StadiumBorder(
-                            side: BorderSide(
-                              color: tag.color != null
-                                  ? Color(int.parse(tag.color!))
-                                  : Colors.black,
-                            ),
-                          ),
-                          backgroundColor: Colors.transparent,
-                          selectedColor: Colors.transparent,
-                          checkmarkColor: tag.color != null
-                              ? Color(int.parse(tag.color!))
-                              : Colors.black,
-                        );
+                                  scrollController.animateTo(0,
+                                      duration: Duration(
+                                          microseconds: scrollPosition),
+                                      curve: Curves.easeOut);
+                                  if (mounted) {
+                                    context.read(loadFilterProvider).state =
+                                        playListLoadFilter.changeTag;
+                                    context.read(playlistLoadProvider(
+                                        tags[selectedIndex]!));
+                                  }
+                                },
+                                selected: selectedIndex == i ? true : false,
+                                avatar: Image.asset(tag.image != null
+                                    ? 'assets/icons/${tag.image}'
+                                    : 'assets/icons/dino_icon.png'),
+                                shape: StadiumBorder(
+                                  side: BorderSide(
+                                    color: tag.color != null
+                                        ? Color(int.parse(tag.color!))
+                                        : Colors.black,
+                                  ),
+                                ),
+                                backgroundColor: Colors.transparent,
+                                selectedColor: Colors.transparent,
+                                checkmarkColor: tag.color != null
+                                    ? Color(int.parse(tag.color!))
+                                    : Colors.black,
+                              );
                       },
                     ),
                   ),
                 ),
               ),
-              SliverToBoxAdapter(child: SizedBox(height: defaultPadding)),
+              SliverToBoxAdapter(child: const SizedBox(height: defaultPadding)),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, i) {
@@ -280,35 +278,6 @@ class _PlaylistPageState extends State<PlaylistPage> {
         fit: BoxFit.cover,
         height: 200,
       );
-
-  // YoutubePlayer(
-  //   key: ObjectKey(youTubeControllers[i]),
-  //   controller: youTubeControllers[i],
-  //   actionsPadding:
-  //       EdgeInsets.symmetric(horizontal: defaultPadding * 2, vertical: 3),
-  //   bottomActions: [
-  //     CurrentPosition(),
-  //     const SizedBox(width: defaultPadding),
-  //     ProgressBar(isExpanded: true),
-  //     const SizedBox(width: defaultPadding),
-  //     RemainingDuration(),
-  //     FullScreenButton(),
-  //     PlaybackSpeedButton(),
-  //   ],
-  //   onEnded: (data) => youTubeControllers[i].pause(),
-  //   topActions: [
-  //     Expanded(
-  //       child: Text(
-  //         playlistItemsList!.items[i].snippet.title,
-  //         style: const TextStyle(
-  //           color: Colors.white,
-  //           fontSize: 15,
-  //         ),
-  //         overflow: TextOverflow.ellipsis,
-  //       ),
-  //     ),
-  //   ],
-  // );
 }
 
 YoutubePlayerController youtubePlayerController(Item item) {
