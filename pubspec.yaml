@@ -43,8 +43,9 @@ dependencies:
   sign_in_with_apple: ^3.0.0
   url_launcher: ^6.0.9
   uuid: ^3.0.4
-  youtube_player_flutter: ^8.0.0
-
+  youtube_player_iframe: ^2.1.0
+  numeral: ^1.2.4
+  
 dependency_overrides: null
 
 dev_dependencies:

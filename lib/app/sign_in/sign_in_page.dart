@@ -11,7 +11,9 @@ import 'package:flutter_learn/app/sign_in/social_sign_in_button.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/routes/app_router.dart';
+import 'package:flutter_learn/services/auth_base.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
+import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,7 +33,8 @@ class SignInPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final signModel = useProvider(signModelProvider);
-    final appUser = useProvider(appUserStreamProvider);
+    final database = useProvider(databaseProvider);
+    final auth = useProvider(authServiceProvider);
 
     return ProviderListener<SignViewModel>(
       provider: signModelProvider,
@@ -44,11 +47,10 @@ class SignInPage extends HookWidget {
           );
         }
         if (model.isLoading == false) {
-          appUser.when(
-            loading: () => null,
-            error: (error, stackTrace) => null,
-            data: (value) => Navigator.pop(context),
-          );
+          auth.currentUser.then((user) async {
+            final appUser = await database.getAppUser(user?.uid);
+            if (appUser != null) Navigator.pop(context);
+          });
         }
       },
       child: SignInPageContents(
