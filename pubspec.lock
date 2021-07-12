@@ -609,13 +609,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
-  image_cropper:
-    dependency: "direct main"
-    description:
-      name: image_cropper
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.4.1"
   image_picker:
     dependency: "direct main"
     description:
@@ -840,13 +833,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
-  pixel_perfect:
-    dependency: "direct main"
-    description:
-      name: pixel_perfect
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
   platform:
     dependency: transitive
     description:
