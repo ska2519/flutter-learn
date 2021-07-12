@@ -101,7 +101,8 @@ class CodegenLoader extends AssetLoader{
   "share": "Share",
   "subscribers": "subscribers",
   "SUBSCRIBE": "SUBSCRIBE",
-  "views": "views"
+  "views": "views",
+  "openSourceLicenses": "Open source licenses"
 };
 static const Map<String,dynamic> ko = {
   "community": "커뮤니티",
@@ -190,7 +191,8 @@ static const Map<String,dynamic> ko = {
   "share": "공유",
   "subscribers": "구독자",
   "SUBSCRIBE": "구독",
-  "views": "조회수"
+  "views": "조회수",
+  "openSourceLicenses": "오픈소스 라이선스"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ko": ko};
 }
