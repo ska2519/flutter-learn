@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_learn/constants/constants.dart';
 
 class CloudStorageInfo {
-  final String svgSrc, title, totalStorage;
-  final int numOfFiles, percentage;
-  final Color color;
-
   CloudStorageInfo({
     required this.svgSrc,
     required this.title,
@@ -15,6 +11,9 @@ class CloudStorageInfo {
     required this.percentage,
     required this.color,
   });
+  final String svgSrc, title, totalStorage;
+  final int numOfFiles, percentage;
+  final Color color;
 }
 
 List demoMyFiles = [
