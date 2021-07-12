@@ -4,19 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
 import 'package:flutter_learn/app/home/youtube/youtube_play_page.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
+import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/tag.dart';
 import 'package:flutter_learn/models/youtube_playlist_items.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/services/youtube_service.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-
-const iconPath = 'assets/icons/';
-const imagePath = 'assets/pixel_perfect/';
 
 final youTubeTagsProvider = FutureProvider<List<Tag?>>((ref) async {
   final database = ref.read(databaseProvider);
@@ -206,9 +204,11 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   }
                                 },
                                 selected: selectedIndex == i ? true : false,
-                                avatar: Image.asset(tag.image != null
-                                    ? 'assets/icons/${tag.image}'
-                                    : 'assets/icons/dino_icon.png'),
+                                avatar: Image.asset(
+                                  tag.image != null
+                                      ? 'assets/icons/${tag.image}'
+                                      : 'assets/icons/dino_icon.png',
+                                ),
                                 shape: StadiumBorder(
                                   side: BorderSide(
                                     color: tag.color != null
@@ -280,14 +280,12 @@ class _PlaylistPageState extends State<PlaylistPage> {
       );
 }
 
-YoutubePlayerController youtubePlayerController(Item item) {
-  return YoutubePlayerController(
-    initialVideoId: item.contentDetails.videoId,
-    flags: YoutubePlayerFlags(
-      autoPlay: false,
-      captionLanguage: 'kr',
-      controlsVisibleAtStart: true,
-      forceHD: true,
-    ),
-  );
-}
+YoutubePlayerController youtubePlayerController(Item item) =>
+    YoutubePlayerController(
+      initialVideoId: item.contentDetails.videoId,
+      params: YoutubePlayerParams(
+        startAt: Duration(seconds: 30),
+        showFullscreenButton: true,
+        captionLanguage: 'kr',
+      ),
+    );
