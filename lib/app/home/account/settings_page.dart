@@ -15,6 +15,7 @@ import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 
+import 'license_page.dart';
 import 'menu_list_item.dart';
 import 'package_info_page.dart';
 
@@ -119,10 +120,15 @@ class SettingsPage extends HookWidget {
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PackageInfoPage(),
-                        )),
+                            builder: (context) => LicenseSimplePage())),
+                    title: LocaleKeys.openSourceLicenses.tr(),
+                  ),
+                  MenuListItem(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PackageInfoPage())),
                     title: LocaleKeys.appInfo.tr(),
-                    icon: Icons.settings_outlined,
                   ),
                 ],
               ),
