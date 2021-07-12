@@ -38,8 +38,8 @@ final appUserStreamProvider = StreamProvider.autoDispose<AppUser?>((ref) {
 });
 
 class FirebaseAuthService implements AuthBase {
-  final Reader _read;
   FirebaseAuthService(this._read);
+  final Reader _read;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: [
