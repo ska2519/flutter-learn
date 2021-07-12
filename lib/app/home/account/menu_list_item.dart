@@ -9,12 +9,14 @@ class MenuListItem extends HookWidget {
   const MenuListItem({
     Key? key,
     required this.onTap,
-    required this.icon,
     required this.title,
+    this.icon,
   }) : super(key: key);
+
   final VoidCallback onTap;
-  final IconData icon;
+  final IconData? icon;
   final String title;
+
   @override
   Widget build(BuildContext context) {
     final appUser = useProvider(appUserStreamProvider).data?.value;
@@ -31,7 +33,7 @@ class MenuListItem extends HookWidget {
           ),
           child: Row(
             children: [
-              Icon(icon, color: Colors.black54),
+              if (icon != null) Icon(icon, color: Colors.black54),
               SizedBox(width: defaultPadding),
               Text(
                 title,
