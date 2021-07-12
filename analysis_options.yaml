@@ -7,6 +7,28 @@ analyzer:
 
 linter:
   rules:
+    # Use parameter order as in json response
+    always_put_required_named_parameters_first: false
+
+    # Util classes are awesome !
+    avoid_classes_with_only_static_members: false
+
+    # Make constructors the first thing in every class
+    sort_constructors_first: true
+
+    # The new tabs vs. spaces. Choose wisely
+    prefer_single_quoters: true
+    prefer_double_quoters: true
+
+    # Good packages document everything
+    public_member_api_docs: false
+
+    # Blindly follow the Flutter code style, which prefers types everywhere
+    always_specify_types: false
+
+    # Back to the 80s
+    lines_longer_than_80_chars: false
+
     sort_pub_dependencies: false
     prefer_const_constructors: false
     prefer_const_literals_to_create_immutables: false
