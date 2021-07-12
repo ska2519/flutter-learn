@@ -147,11 +147,10 @@ class _SearchPageState extends State<SearchPage> {
 }
 
 class DisplaySearchResult extends StatelessWidget {
+  const DisplaySearchResult({this.artistName, this.artDes, this.genre});
   final String? artDes;
   final String? artistName;
   final String? genre;
-
-  const DisplaySearchResult({this.artistName, this.artDes, this.genre});
 
   @override
   Widget build(BuildContext context) {
