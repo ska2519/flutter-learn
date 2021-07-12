@@ -47,6 +47,21 @@
 	<dict>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+		<key>www.youtube.com</key>
+			<dict>
+				<!-- add this key to enable subdomains such as sub.youtube.com -->
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<!-- add this key to allow standard HTTP requests, thus negating the ATS -->
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<!-- add this key to specify the minimum TLS version to accept -->
+				<key>NSTemporaryExceptionMinimumTLSVersion</key>
+				<string>TLSv1.1</string>
+			</dict>
+		</dict>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Get profile picture from Photo Library</string>
