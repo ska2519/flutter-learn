@@ -15,8 +15,6 @@ class EmailPasswordSignInPage extends StatefulWidget {
   const EmailPasswordSignInPage(
       {Key? key, required this.model, this.onSignedIn})
       : super(key: key);
-  final EmailPasswordSignInModel model;
-  final VoidCallback? onSignedIn;
 
   factory EmailPasswordSignInPage.withAuthBase(AuthBase auth,
       {VoidCallback? onSignedIn}) {
@@ -25,6 +23,9 @@ class EmailPasswordSignInPage extends StatefulWidget {
       onSignedIn: onSignedIn,
     );
   }
+
+  final EmailPasswordSignInModel model;
+  final VoidCallback? onSignedIn;
 
   @override
   _EmailPasswordSignInPageState createState() =>

@@ -44,7 +44,7 @@ class _AccountPageState extends State<AccountPage> {
         controller: TextEditingController(
             text: _displayName = appUser.displayName ?? ''),
         decoration: InputDecoration(hintText: LocaleKeys.writeNameYouWant.tr()),
-        onChanged: (displayName) => _displayName = displayName,
+        onChanged: (String displayName) => _displayName = displayName,
       ),
       cancelActionText: LocaleKeys.cancel.tr(),
       defaultActionText: LocaleKeys.ok.tr(),
@@ -53,8 +53,8 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _size = MediaQuery.of(context).size;
-    final appUser = useProvider(appUserStreamProvider).data?.value;
+    final Size _size = MediaQuery.of(context).size;
+    final AppUser? appUser = useProvider(appUserStreamProvider).data?.value;
     return Scaffold(
       appBar: AppBar(
         actions: [
