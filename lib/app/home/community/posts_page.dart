@@ -21,8 +21,8 @@ import 'package:flutter_learn/translations/locale_keys.g.dart';
 import 'post_item_info.dart';
 import 'post_user_info.dart';
 
-const iconPath = 'assets/icons/';
-const imagePath = 'assets/pixel_perfect/';
+// const iconPath = 'assets/icons/';
+// const imagePath = 'assets/pixel_perfect/';
 //assetPath: '${imagePath}Screenshot_1620879287-393x830.png',
 
 final postsStreamProvider = StreamProvider.autoDispose<List<Post?>>((ref) {
