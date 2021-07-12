@@ -90,57 +90,54 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: _textEditingController.text.isEmpty
           ? Center(child: Text(LocaleKeys.enterSearchTerm.tr()))
-          : SingleChildScrollView(
-              child: StreamBuilder<List<AlgoliaObjectSnapshot>>(
-                stream: Stream.fromFuture(_operation(searchTerm.state)),
-                builder: (context, snapshot) {
-                  final List<AlgoliaObjectSnapshot>? currSearchStuff =
-                      snapshot.data;
-                  return CustomScrollView(
-                    shrinkWrap: true,
-                    slivers: [
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, i) {
-                            final post = Post(
-                              title:
-                                  currSearchStuff?[i].data['title'] as String,
-                              content:
-                                  currSearchStuff?[i].data['content'] as String,
-                              userId:
-                                  currSearchStuff?[i].data['userId'] as String,
-                              id: currSearchStuff?[i].data['id'] as String,
-                              timestamp: DateTime.parse(
-                                currSearchStuff?[i].data['timestamp'] as String,
-                              ),
-                              commentCount: currSearchStuff?[i]
-                                  .data['commentCount'] as int,
-                            );
-                            if (searchTerm.state.isNotEmpty) {
-                              return Padding(
-                                padding: const EdgeInsets.all(defaultPadding),
-                                child: GestureDetector(
-                                  onTap: () => PostDetailPage.show(context,
-                                      postId: post.id),
-                                  child: Column(
-                                    children: [
-                                      PostUserInfo(post: post),
-                                      PostItemInfo(post: post),
-                                    ],
-                                  ),
+          : StreamBuilder<List<AlgoliaObjectSnapshot>>(
+              stream: Stream.fromFuture(_operation(searchTerm.state)),
+              builder: (context, snapshot) {
+                final List<AlgoliaObjectSnapshot>? currSearchStuff =
+                    snapshot.data;
+                return CustomScrollView(
+                  shrinkWrap: true,
+                  slivers: [
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, i) {
+                          final post = Post(
+                            title: currSearchStuff?[i].data['title'] as String,
+                            content:
+                                currSearchStuff?[i].data['content'] as String,
+                            userId:
+                                currSearchStuff?[i].data['userId'] as String,
+                            id: currSearchStuff?[i].data['id'] as String,
+                            timestamp: DateTime.parse(
+                              currSearchStuff?[i].data['timestamp'] as String,
+                            ),
+                            commentCount:
+                                currSearchStuff?[i].data['commentCount'] as int,
+                          );
+                          if (searchTerm.state.isNotEmpty) {
+                            return Padding(
+                              padding: const EdgeInsets.all(defaultPadding),
+                              child: GestureDetector(
+                                onTap: () => PostDetailPage.show(context,
+                                    postId: post.id),
+                                child: Column(
+                                  children: [
+                                    PostUserInfo(post: post),
+                                    PostItemInfo(post: post),
+                                  ],
                                 ),
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
-                          },
-                          childCount: currSearchStuff?.length ?? 0,
-                        ),
+                              ),
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                        childCount: currSearchStuff?.length ?? 0,
                       ),
-                    ],
-                  );
-                },
-              ),
+                    ),
+                  ],
+                );
+              },
             ),
     );
   }
