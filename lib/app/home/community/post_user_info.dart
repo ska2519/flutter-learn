@@ -15,8 +15,8 @@ import 'package:flutter_learn/utils/format.dart';
 final isLoadingProvider = StateProvider<bool>((ref) => true);
 
 class PostUserInfo extends HookWidget {
-  final Post post;
   const PostUserInfo({required this.post});
+  final Post post;
 
   @override
   Widget build(BuildContext context) {

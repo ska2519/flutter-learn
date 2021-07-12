@@ -24,14 +24,6 @@ class Comment with _$Comment {
     @Default(0) int childCount,
   }) = _Comment;
 
-  void likeComment(AppUser appUser) {
-    if (likedUsers.contains(appUser.id)) {
-      likedUsers.remove(appUser.id);
-    } else {
-      likedUsers.add(appUser.id!);
-    }
-  }
-
   factory Comment.fromJson(Map<String, dynamic> json) =>
       _$CommentFromJson(json);
 
@@ -43,5 +35,12 @@ class Comment with _$Comment {
       userId: getRandomUserIds(),
       timestamp: getRandomTimestamp(),
     );
+  }
+  void likeComment(AppUser appUser) {
+    if (likedUsers.contains(appUser.id)) {
+      likedUsers.remove(appUser.id);
+    } else {
+      likedUsers.add(appUser.id!);
+    }
   }
 }
