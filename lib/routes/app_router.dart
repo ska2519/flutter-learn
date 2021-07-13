@@ -124,8 +124,14 @@ class AppRouter {
           fullscreenDialog: true,
         );
       case AppRoutes.youTubePlayPage:
+        final mapArgs = args as Map<String, dynamic>?;
+        final item = mapArgs!['item'] as Item;
+        final tag = mapArgs['tag'] as String;
         return MaterialPageRoute<dynamic>(
-          builder: (_) => YouTubePlayPage(item: args! as Item),
+          builder: (_) => YouTubePlayPage(
+            item: item,
+            tag: tag,
+          ),
           settings: settings,
           maintainState: false,
         );
