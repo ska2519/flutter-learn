@@ -53,6 +53,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> setPostsBatch(List<Post> posts) async {
     final database = context.read(databaseProvider);
     for (final post in posts) {
+      await Future.delayed(Duration(milliseconds: 100));
       await database.setPost(post);
     }
   }
