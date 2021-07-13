@@ -146,6 +146,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     final now = DateTime.now();
     final currentDate = documentIdFromCurrentDate().substring(0, 19);
     final commentId = editComment?.id ?? '$currentDate:${appUser!.id}';
+    print('parentComment: $parentComment');
     return Comment(
       id: commentId,
       postId: postId,
@@ -159,7 +160,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
           : parentComment != null
               ? parentComment!.level + 1
               : 0,
-      parent: parentComment != null ? parentComment!.id : null,
+      parent: editComment != null
+          ? editComment?.parent
+          : parentComment != null
+              ? parentComment!.id
+              : null,
     );
   }
 
@@ -463,7 +468,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 await EditPostPage.show(context, post: post);
               },
               child: Text(
-                post.commentCount > 0
+                post.private
                     ? LocaleKeys.changeToPublic.tr()
                     : LocaleKeys.edit.tr(),
               ),

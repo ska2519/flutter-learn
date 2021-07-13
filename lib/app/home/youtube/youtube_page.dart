@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_learn/utils/format.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -20,20 +21,15 @@ final youTubeTagsProvider = FutureProvider<List<Tag?>>((ref) async {
   final database = ref.read(databaseProvider);
   late final List<Tag?> youTubeTags = [];
   final totalTags = await database.getTags();
-  for (final tag in totalTags) {
-    print('totalTags: ${tag!.name}');
-  }
   totalTags
-      .map(
-        (tag) => tag!.youTube == true && tag.playlistId != null
-            ? youTubeTags.add(tag)
-            : null,
-      )
+      .map((tag) => tag.youTube == true && tag.playlistId != null
+          ? youTubeTags.add(tag)
+          : null)
       .toList();
   youTubeTags.sort((a, b) => b!.level.compareTo(a!.level));
-  print('youTubeTags: $youTubeTags');
   return youTubeTags;
 });
+
 final isLoadingProvider = StateProvider<bool>((ref) => false);
 enum playListLoadFilter { changeTag, loadMore }
 final loadFilterProvider = StateProvider((ref) => playListLoadFilter.changeTag);
@@ -51,6 +47,7 @@ final playlistLoadProvider =
     case playListLoadFilter.changeTag:
       final playlist =
           await youTubeService.fetchPlaylistItems(playListId: tag.playlistId!);
+
       final youTubeControllers =
           playlist.items.map((item) => youtubePlayerController(item)).toList();
 
@@ -142,7 +139,8 @@ class _PlaylistPageState extends State<PlaylistPage> {
               SliverAppBar(
                 pinned: true,
                 floating: true,
-                expandedHeight: 90 + (defaultPadding * 6),
+                expandedHeight: 90 + (defaultPadding * 5),
+                collapsedHeight: 60,
                 flexibleSpace: FlexibleSpaceBar(
                   centerTitle: false,
                   titlePadding: EdgeInsetsDirectional.only(
@@ -159,7 +157,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                   ),
                 ),
                 bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(50),
+                  preferredSize: const Size.fromHeight(30),
                   child: Container(
                     padding: const EdgeInsets.all(defaultPadding),
                     height: 50,
@@ -235,14 +233,15 @@ class _PlaylistPageState extends State<PlaylistPage> {
                     return Padding(
                       padding: const EdgeInsets.all(defaultPadding),
                       child: GestureDetector(
-                        onTap: () => YouTubePlayPage.show(context, item: item),
+                        onTap: () => YouTubePlayPage.show(context,
+                            item: item, tag: tags[selectedIndex]!.name),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             ClipRRect(
                               borderRadius:
                                   BorderRadius.circular(defaultPadding),
-                              child: thumbnail(item.snippet),
+                              child: thumbnail(item.snippet.thumbnails),
                             ),
                             SizedBox(height: defaultPadding),
                             Text(item.snippet.title),
@@ -269,12 +268,8 @@ class _PlaylistPageState extends State<PlaylistPage> {
     );
   }
 
-  CachedNetworkImage thumbnail(Snippet snippet) => CachedNetworkImage(
-        imageUrl: snippet.thumbnails.standard?.url ??
-            snippet.thumbnails.high?.url ??
-            snippet.thumbnails.maxres?.url ??
-            snippet.thumbnails.medium?.url ??
-            snippet.thumbnails.dflt!.url,
+  CachedNetworkImage thumbnail(Thumbnails thumbnails) => CachedNetworkImage(
+        imageUrl: getVideoThumbnail(thumbnails),
         fit: BoxFit.cover,
         height: 200,
       );
