@@ -18,4 +18,5 @@ class FirebasePath {
 
   static String profileImages(String userId) => 'profileImages/$userId';
   static String tags() => 'tags';
+  static String video(String videoId) => 'videos/$videoId';
 }
