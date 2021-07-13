@@ -31,7 +31,8 @@ class _$PostTearOff {
       int readCount = 0,
       bool private = false,
       String? userDisplayName,
-      String? userPhotoURL}) {
+      String? userPhotoURL,
+      List<String> tags = const []}) {
     return _Post(
       id: id,
       userId: userId,
@@ -44,6 +45,7 @@ class _$PostTearOff {
       private: private,
       userDisplayName: userDisplayName,
       userPhotoURL: userPhotoURL,
+      tags: tags,
     );
   }
 
@@ -69,6 +71,7 @@ mixin _$Post {
   bool get private => throw _privateConstructorUsedError;
   String? get userDisplayName => throw _privateConstructorUsedError;
   String? get userPhotoURL => throw _privateConstructorUsedError;
+  List<String> get tags => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -90,7 +93,8 @@ abstract class $PostCopyWith<$Res> {
       int readCount,
       bool private,
       String? userDisplayName,
-      String? userPhotoURL});
+      String? userPhotoURL,
+      List<String> tags});
 }
 
 /// @nodoc
@@ -114,6 +118,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
     Object? private = freezed,
     Object? userDisplayName = freezed,
     Object? userPhotoURL = freezed,
+    Object? tags = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -160,6 +165,10 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.userPhotoURL
           : userPhotoURL // ignore: cast_nullable_to_non_nullable
               as String?,
+      tags: tags == freezed
+          ? _value.tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -180,7 +189,8 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       int readCount,
       bool private,
       String? userDisplayName,
-      String? userPhotoURL});
+      String? userPhotoURL,
+      List<String> tags});
 }
 
 /// @nodoc
@@ -205,6 +215,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
     Object? private = freezed,
     Object? userDisplayName = freezed,
     Object? userPhotoURL = freezed,
+    Object? tags = freezed,
   }) {
     return _then(_Post(
       id: id == freezed
@@ -251,6 +262,10 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.userPhotoURL
           : userPhotoURL // ignore: cast_nullable_to_non_nullable
               as String?,
+      tags: tags == freezed
+          ? _value.tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -269,7 +284,8 @@ class _$_Post extends _Post {
       this.readCount = 0,
       this.private = false,
       this.userDisplayName,
-      this.userPhotoURL})
+      this.userPhotoURL,
+      this.tags = const []})
       : super._();
 
   factory _$_Post.fromJson(Map<String, dynamic> json) =>
@@ -302,10 +318,13 @@ class _$_Post extends _Post {
   final String? userDisplayName;
   @override
   final String? userPhotoURL;
+  @JsonKey(defaultValue: const [])
+  @override
+  final List<String> tags;
 
   @override
   String toString() {
-    return 'Post(id: $id, userId: $userId, title: $title, content: $content, timestamp: $timestamp, commentCount: $commentCount, likedCount: $likedCount, readCount: $readCount, private: $private, userDisplayName: $userDisplayName, userPhotoURL: $userPhotoURL)';
+    return 'Post(id: $id, userId: $userId, title: $title, content: $content, timestamp: $timestamp, commentCount: $commentCount, likedCount: $likedCount, readCount: $readCount, private: $private, userDisplayName: $userDisplayName, userPhotoURL: $userPhotoURL, tags: $tags)';
   }
 
   @override
@@ -341,7 +360,9 @@ class _$_Post extends _Post {
                     .equals(other.userDisplayName, userDisplayName)) &&
             (identical(other.userPhotoURL, userPhotoURL) ||
                 const DeepCollectionEquality()
-                    .equals(other.userPhotoURL, userPhotoURL)));
+                    .equals(other.userPhotoURL, userPhotoURL)) &&
+            (identical(other.tags, tags) ||
+                const DeepCollectionEquality().equals(other.tags, tags)));
   }
 
   @override
@@ -357,7 +378,8 @@ class _$_Post extends _Post {
       const DeepCollectionEquality().hash(readCount) ^
       const DeepCollectionEquality().hash(private) ^
       const DeepCollectionEquality().hash(userDisplayName) ^
-      const DeepCollectionEquality().hash(userPhotoURL);
+      const DeepCollectionEquality().hash(userPhotoURL) ^
+      const DeepCollectionEquality().hash(tags);
 
   @JsonKey(ignore: true)
   @override
@@ -382,7 +404,8 @@ abstract class _Post extends Post {
       int readCount,
       bool private,
       String? userDisplayName,
-      String? userPhotoURL}) = _$_Post;
+      String? userPhotoURL,
+      List<String> tags}) = _$_Post;
   const _Post._() : super._();
 
   factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
@@ -410,6 +433,8 @@ abstract class _Post extends Post {
   String? get userDisplayName => throw _privateConstructorUsedError;
   @override
   String? get userPhotoURL => throw _privateConstructorUsedError;
+  @override
+  List<String> get tags => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$PostCopyWith<_Post> get copyWith => throw _privateConstructorUsedError;
