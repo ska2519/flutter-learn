@@ -22,6 +22,7 @@ class Post with _$Post {
     @Default(false) bool private,
     String? userDisplayName,
     String? userPhotoURL,
+    @Default([]) List<String> tags,
   }) = _Post;
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
@@ -34,6 +35,7 @@ class Post with _$Post {
       title: getRandomTitle(),
       content: getRandomContent(),
       timestamp: getRandomTimestamp(),
+      tags: getRandomTags(),
     );
   }
 }

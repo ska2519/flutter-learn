@@ -2,7 +2,9 @@ import 'package:duration/duration.dart';
 import 'package:duration/locale.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_learn/models/youtube_playlist_items.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:flutter_learn/models/youtube_channel.dart' as ch;
 
 late String locale;
 void getLocale(BuildContext context) => locale = context.locale.toString();
@@ -31,4 +33,18 @@ String stringWithComma(String param) {
   return NumberFormat('###,###,###,###')
       .format(int.parse(param))
       .replaceAll(' ', '');
+}
+
+String getVideoThumbnail(Thumbnails thumbnails) {
+  return thumbnails.standard?.url ??
+      thumbnails.high?.url ??
+      thumbnails.maxres?.url ??
+      thumbnails.medium?.url ??
+      thumbnails.dflt!.url;
+}
+
+String getChannelThumbnail(ch.Thumbnails thumbnails) {
+  return thumbnails.thumbnailsDefault?.url ??
+      thumbnails.medium?.url ??
+      thumbnails.high!.url;
 }

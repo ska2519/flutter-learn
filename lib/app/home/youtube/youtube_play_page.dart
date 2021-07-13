@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_learn/models/video.dart';
+import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -30,14 +32,44 @@ final youTubeVideoProvider =
 });
 
 class YouTubePlayPage extends HookWidget {
-  const YouTubePlayPage({required this.item});
+  const YouTubePlayPage({required this.item, required this.tag});
   final Item item;
+  final String tag;
 
-  static Future<void> show(BuildContext context, {required Item item}) async {
+  static Future<void> show(BuildContext context,
+      {required Item item, required String tag}) async {
     await Navigator.of(context, rootNavigator: true).pushNamed(
       AppRoutes.youTubePlayPage,
-      arguments: item,
+      arguments: {'item': item, 'tag': tag},
     );
+  }
+
+  Future<Video?> getVideo(String videoId) async {
+    final database = ProviderContainer().read(databaseProvider);
+    return database.getVideo(videoId);
+  }
+
+  Future<void> updateVideo(Video video) async {
+    final database = ProviderContainer().read(databaseProvider);
+    database.setVideo(video.copyWith());
+  }
+
+  Future<void> createVideo(Item video, ch.Channel channel) async {
+    final database = ProviderContainer().read(databaseProvider);
+
+    final chItem = channel.items[0];
+    final channelUrl = 'https://www.youtube.com/channel/${chItem.id}';
+
+    final videoInfo = Video(
+      id: item.contentDetails.videoId,
+      title: video.snippet.title,
+      thumbnail: getVideoThumbnail(video.snippet.thumbnails),
+      channelTitle: chItem.snippet.title,
+      channelUrl: channelUrl,
+      channelThumbnail: getChannelThumbnail(chItem.snippet.thumbnails),
+      tags: {tag},
+    );
+    await database.setVideo(videoInfo);
   }
 
   @override
@@ -122,10 +154,18 @@ class YouTubePlayPage extends HookWidget {
                             ),
                             Divider(height: defaultPadding * 3),
                             channelAsyncValue.when(
-                              loading: () => const SizedBox(),
-                              error: (_, __) => const SizedBox(),
-                              data: (channel) => ChannelInfo(channel: channel),
-                            ),
+                                loading: () => const SizedBox(),
+                                error: (_, __) => const SizedBox(),
+                                data: (channel) {
+                                  getVideo(item.contentDetails.videoId)
+                                      .then((video) {
+                                    video == null
+                                        ? createVideo(item, channel)
+                                        : updateVideo(video);
+                                  });
+
+                                  return ChannelInfo(channel: channel);
+                                }),
                             Divider(height: defaultPadding * 3),
                             SelectableText(item.snippet.description),
                           ],
@@ -166,9 +206,7 @@ class ChannelInfo extends StatelessWidget {
               children: [
                 Avatar(
                   radius: 18,
-                  photoUrl: chItem.snippet.thumbnails.thumbnailsDefault?.url ??
-                      chItem.snippet.thumbnails.medium?.url ??
-                      chItem.snippet.thumbnails.high!.url,
+                  photoUrl: getChannelThumbnail(chItem.snippet.thumbnails),
                 ),
                 SizedBox(width: defaultPadding),
                 Column(

@@ -9,9 +9,11 @@ import 'package:flutter_learn/models/post_liked.dart';
 import 'package:flutter_learn/models/read_post.dart';
 import 'package:flutter_learn/models/tag.dart';
 import 'package:flutter_learn/models/values.dart';
+import 'package:flutter_learn/models/video.dart';
 import 'package:flutter_learn/services/firebase_path.dart';
 import 'package:flutter_learn/services/firestore_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:collection/collection.dart';
 
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 
@@ -22,21 +24,34 @@ final databaseProvider = Provider<FirestoreDatabase>((ref) {
 class FirestoreDatabase {
   final _service = FirestoreService.instance;
 
+  dynamic contains(List<String> tags, dynamic e) {
+    // for (final tag in tags) {
+    // print('postTags.first: ${postTags.first}');
+    print('tags: $tags');
+    return e.contains(tags.map((tag) => tag));
+    // return tags.every((tag) {
+    //   return tag.contains(postTags.first);
+    // });
+    // }
+  }
+
+  final Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
+
   Stream<AppUser?> appUserStream(User? user) => user != null
       ? _service.documentStream(
           path: FirebasePath.appUser(user.uid),
           builder: (data, documentId) =>
-              data == null ? null : AppUser.fromJson(data))
+              data == null ? null : AppUser.fromJson(data),
+        )
       : Stream<AppUser?>.empty();
 
-  Future<AppUser?> getAppUser(String? uid) async {
-    return uid == null
-        ? null
-        : _service.getDoc(
-            path: FirebasePath.appUser(uid),
-            builder: (data, documentId) =>
-                data == null ? null : AppUser.fromJson(data));
-  }
+  Future<AppUser?> getAppUser(String? uid) async => uid == null
+      ? null
+      : _service.getDoc(
+          path: FirebasePath.appUser(uid),
+          builder: (data, documentId) =>
+              data == null ? null : AppUser.fromJson(data),
+        );
 
   Future<void> deleteAppUser(String uid) =>
       _service.deleteData(path: FirebasePath.appUser(uid));
@@ -114,18 +129,23 @@ class FirestoreDatabase {
           path: FirebasePath.postReadUsers(postId),
           builder: (data, documentId) => documentId);
 
-  Future<List<Tag?>> getTags() async => _service.getCollection(
-        path: FirebasePath.tags(),
-        // queryBuilder: (query) => query.orderBy('level', descending: true),
-        builder: (data, documentId) => data != null ? Tag.fromJson(data) : null,
+  Future<List<Tag>> getTags() async => _service.getCollection(
+      path: FirebasePath.tags(),
+      builder: (data, documentId) => Tag.fromJson(data!));
+
+  Stream<List<Post?>> postsStream({List<String>? tags}) =>
+      _service.collectionStream(
+        path: FirebasePath.posts(),
+        queryBuilder: (query) => query.orderBy('timestamp', descending: true),
+        builder: (data, documentId) =>
+            data != null ? Post.fromJson(data) : null,
+        unOrdDeepEq: tags!.isNotEmpty
+            ? (Post? post) => contains(post!.tags, tags)
+            : null,
+        // unOrdDeepEq:
+        //     tags != null ? (Post? lhs) => unOrdDeepEq(lhs?.tags, tags) : null,
       );
-
-  // data!['id'] = documentId;
-  Stream<List<Post?>> postsStream() => _service.collectionStream(
-      path: FirebasePath.posts(),
-      queryBuilder: (query) => query.orderBy('timestamp', descending: true),
-      builder: (data, documentId) => data != null ? Post.fromJson(data) : null);
-
+//  final Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
   Stream<Post> postStream(String postId) => _service.documentStream(
       path: FirebasePath.post(postId),
       builder: (data, documentId) => Post.fromJson(data!));
@@ -188,6 +208,18 @@ class FirestoreDatabase {
             .where('userId', isEqualTo: userId)
             .orderBy('timestamp', descending: true),
         builder: (data, documentId) => ReadPost.fromJson(data!),
+      );
+  Future<void> setVideo(Video video) {
+    return _service.setData(
+      path: FirebasePath.video(video.id),
+      data: video.toJson(),
+    );
+  }
+
+  Future<Video?> getVideo(String videoId) async => _service.getDoc(
+        path: FirebasePath.video(videoId),
+        builder: (data, documentId) =>
+            data != null ? Video.fromJson(data) : null,
       );
 
   // Future<List<String>> getPostLikedUsers(String postId) async =>
