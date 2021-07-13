@@ -11,7 +11,6 @@ import 'package:flutter_learn/app/sign_in/social_sign_in_button.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/routes/app_router.dart';
-import 'package:flutter_learn/services/auth_base.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';

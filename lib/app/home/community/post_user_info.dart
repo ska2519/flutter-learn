@@ -59,8 +59,8 @@ class PostUserInfo extends HookWidget {
               ),
               Spacer(),
               Text(
-                LocaleKeys.tag.tr(),
-                style: Theme.of(context).textTheme.overline,
+                '${post.tags}',
+                style: Theme.of(context).textTheme.caption,
               ),
             ],
           );

@@ -139,6 +139,8 @@ class PostItemInfo extends HookWidget {
                             ? LocaleKeys.noticePrivatePost.tr()
                             : post.content,
                         style: Theme.of(context).textTheme.bodyText2,
+                        maxLines: 5,
+                        overflow: TextOverflow.ellipsis,
                       ),
                   ],
                 ),

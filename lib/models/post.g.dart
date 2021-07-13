@@ -21,6 +21,8 @@ _$_Post _$_$_PostFromJson(Map json) {
     private: json['private'] as bool? ?? false,
     userDisplayName: json['userDisplayName'] as String?,
     userPhotoURL: json['userPhotoURL'] as String?,
+    tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+        [],
   );
 }
 
@@ -36,4 +38,5 @@ Map<String, dynamic> _$_$_PostToJson(_$_Post instance) => <String, dynamic>{
       'private': instance.private,
       'userDisplayName': instance.userDisplayName,
       'userPhotoURL': instance.userPhotoURL,
+      'tags': instance.tags,
     };
