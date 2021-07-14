@@ -31,11 +31,11 @@ class PostUserInfo extends HookWidget {
         if (snapshot.hasData) {
           late final postUser = snapshot.data;
           return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Avatar(
                 photoUrl: postUser!.deletedUser ? null : postUser.photoURL,
-                displayName: postUser.deletedUser ? 'D' : postUser.displayName,
+                displayName: postUser.deletedUser ? null : postUser.displayName,
                 radius: 14,
               ),
               const SizedBox(width: defaultPadding),
@@ -57,10 +57,18 @@ class PostUserInfo extends HookWidget {
                   ),
                 ],
               ),
-              Spacer(),
-              Text(
-                '${post.tags}',
-                style: Theme.of(context).textTheme.caption,
+              SizedBox(width: defaultPadding),
+              Expanded(
+                child: Text(
+                  post.tags.isEmpty ? '' : post.tags.toString(),
+                  textAlign: TextAlign.right,
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption!
+                      .copyWith(color: firebaseOrangeColor),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           );

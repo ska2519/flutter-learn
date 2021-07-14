@@ -89,5 +89,8 @@ abstract class  LocaleKeys {
   static const SUBSCRIBE = 'SUBSCRIBE';
   static const views = 'views';
   static const openSourceLicenses = 'openSourceLicenses';
+  static const tagLengthValidate = 'tagLengthValidate';
+  static const tagWriteNotice = 'tagWriteNotice';
+  static const tagsLengthValidate = 'tagsLengthValidate';
 
 }
