@@ -86,5 +86,8 @@
   "subscribers": "subscribers",
   "SUBSCRIBE": "SUBSCRIBE",
   "views": "views",
-  "openSourceLicenses": "Open source licenses"
+  "openSourceLicenses": "Open source licenses",
+  "tagLengthValidate": "Please enter between 2 and 15 characters",
+  "tagWriteNotice": "Please write tags",
+  "tagsLengthValidate": "Up to 7 tags can be entered"
 }
