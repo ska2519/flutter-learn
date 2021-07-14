@@ -328,6 +328,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 //   ),
                 //   onPressed: () {},
                 // ),
+
                 if (post.userId == appUser?.id)
                   IconButton(
                     padding: EdgeInsets.all(0),
@@ -554,17 +555,17 @@ class PostDetailAppBarTitle extends StatelessWidget {
           return Row(
             children: [
               Avatar(
-                photoUrl: postUser?.photoURL,
-                displayName: postUser?.displayName,
+                photoUrl: postUser!.deletedUser ? null : postUser.photoURL,
+                displayName: postUser.deletedUser ? null : postUser.displayName,
                 radius: 19,
               ),
               const SizedBox(width: defaultPadding),
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      postUser!.displayName!,
+                      postUser.displayName!,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     Text(
@@ -574,6 +575,19 @@ class PostDetailAppBarTitle extends StatelessWidget {
                   ],
                 ),
               ),
+              Expanded(
+                child: Text(
+                  post.tags.isEmpty ? '' : post.tags.toString(),
+                  textAlign: TextAlign.right,
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption!
+                      .copyWith(color: firebaseOrangeColor),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: defaultPadding),
             ],
           );
         }
