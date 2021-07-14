@@ -133,135 +133,139 @@ class _PlaylistPageState extends State<PlaylistPage> {
             }
             return false;
           },
-          child: CustomScrollView(
-            controller: scrollController,
-            slivers: [
-              SliverAppBar(
-                pinned: true,
-                floating: true,
-                expandedHeight: 90 + (defaultPadding * 5),
-                collapsedHeight: 60,
-                flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: false,
-                  titlePadding: EdgeInsetsDirectional.only(
-                    start: defaultPadding,
-                    bottom: defaultPadding * 6,
+          child: SafeArea(
+            child: CustomScrollView(
+              controller: scrollController,
+              slivers: [
+                SliverAppBar(
+                  pinned: true,
+                  floating: true,
+                  expandedHeight: 90 + (defaultPadding * 2),
+                  collapsedHeight: 60,
+                  flexibleSpace: FlexibleSpaceBar(
+                    centerTitle: false,
+                    titlePadding: EdgeInsetsDirectional.only(
+                      start: defaultPadding * 2,
+                      bottom: defaultPadding * 6,
+                    ),
+                    title: Text(
+                      LocaleKeys.youTube.tr(),
+                      style: Theme.of(context).textTheme.headline6!.copyWith(
+                            color: flutterPrimaryColor,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.1,
+                          ),
+                    ),
                   ),
-                  title: Text(
-                    LocaleKeys.youTube.tr(),
-                    style: Theme.of(context).textTheme.headline6!.copyWith(
-                          color: flutterPrimaryColor,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.1,
-                        ),
-                  ),
-                ),
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(30),
-                  child: Container(
-                    padding: const EdgeInsets.all(defaultPadding),
-                    height: 50,
-                    color: Colors.white,
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) =>
-                          SizedBox(width: defaultPadding * 1.2),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: tags.length,
-                      itemBuilder: (context, i) {
-                        final tag = tags[i]!;
-                        return tag.playlistId!.isEmpty
-                            ? const SizedBox()
-                            : FilterChip(
-                                label: Text(
-                                  tag.name,
-                                  style: TextStyle(
-                                    color: tag.color != null
-                                        ? Color(int.parse(tag.color!))
-                                        : Colors.black,
-                                    fontWeight: selectedIndex == i
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
+                  bottom: PreferredSize(
+                    preferredSize: const Size.fromHeight(-10),
+                    child: Container(
+                      padding: const EdgeInsets.all(defaultPadding),
+                      height: 50,
+                      color: Colors.white,
+                      child: ListView.separated(
+                        separatorBuilder: (context, index) =>
+                            SizedBox(width: defaultPadding * 1.2),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: tags.length,
+                        itemBuilder: (context, i) {
+                          final tag = tags[i]!;
+                          return tag.playlistId!.isEmpty
+                              ? const SizedBox()
+                              : FilterChip(
+                                  label: Text(
+                                    tag.name,
+                                    style: TextStyle(
+                                      color: tag.color != null
+                                          ? Color(int.parse(tag.color!))
+                                          : Colors.black,
+                                      fontWeight: selectedIndex == i
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                    ),
                                   ),
-                                ),
-                                onSelected: (bool selected) async {
-                                  if (selectedIndex == i) return;
-                                  selectedIndex = i;
+                                  onSelected: (bool selected) async {
+                                    if (selectedIndex == i) return;
+                                    selectedIndex = i;
 
-                                  final scrollPosition =
-                                      scrollController.position.pixels.toInt();
+                                    final scrollPosition = scrollController
+                                        .position.pixels
+                                        .toInt();
 
-                                  scrollController.animateTo(0,
-                                      duration: Duration(
-                                          microseconds: scrollPosition),
-                                      curve: Curves.easeOut);
-                                  if (mounted) {
-                                    context.read(loadFilterProvider).state =
-                                        playListLoadFilter.changeTag;
-                                    context.read(playlistLoadProvider(
-                                        tags[selectedIndex]!));
-                                  }
-                                },
-                                selected: selectedIndex == i ? true : false,
-                                avatar: Image.asset(
-                                  tag.image != null
-                                      ? 'assets/icons/${tag.image}'
-                                      : 'assets/icons/dino_icon.png',
-                                ),
-                                shape: StadiumBorder(
-                                  side: BorderSide(
-                                    color: tag.color != null
-                                        ? Color(int.parse(tag.color!))
-                                        : Colors.black,
+                                    scrollController.animateTo(0,
+                                        duration: Duration(
+                                            microseconds: scrollPosition),
+                                        curve: Curves.easeOut);
+                                    if (mounted) {
+                                      context.read(loadFilterProvider).state =
+                                          playListLoadFilter.changeTag;
+                                      context.read(playlistLoadProvider(
+                                          tags[selectedIndex]!));
+                                    }
+                                  },
+                                  selected: selectedIndex == i ? true : false,
+                                  avatar: Image.asset(
+                                    tag.image != null
+                                        ? 'assets/icons/${tag.image}'
+                                        : 'assets/icons/dino_icon.png',
                                   ),
-                                ),
-                                backgroundColor: Colors.transparent,
-                                selectedColor: Colors.transparent,
-                                checkmarkColor: tag.color != null
-                                    ? Color(int.parse(tag.color!))
-                                    : Colors.black,
-                              );
-                      },
+                                  shape: StadiumBorder(
+                                    side: BorderSide(
+                                      color: tag.color != null
+                                          ? Color(int.parse(tag.color!))
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.transparent,
+                                  selectedColor: Colors.transparent,
+                                  checkmarkColor: tag.color != null
+                                      ? Color(int.parse(tag.color!))
+                                      : Colors.black,
+                                );
+                        },
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SliverToBoxAdapter(child: const SizedBox(height: defaultPadding)),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, i) {
-                    final item = playlists!.items[i];
-                    return Padding(
-                      padding: const EdgeInsets.all(defaultPadding),
-                      child: GestureDetector(
-                        onTap: () => YouTubePlayPage.show(context,
-                            item: item, tag: tags[selectedIndex]!.name),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            ClipRRect(
-                              borderRadius:
-                                  BorderRadius.circular(defaultPadding),
-                              child: thumbnail(item.snippet.thumbnails),
-                            ),
-                            SizedBox(height: defaultPadding),
-                            Text(item.snippet.title),
-                            SizedBox(height: defaultPadding / 2),
-                            Text(
-                              item.snippet.videoOwnerChannelTitle,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .caption!
-                                  .copyWith(),
-                            )
-                          ],
+                SliverToBoxAdapter(
+                    child: const SizedBox(height: defaultPadding)),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, i) {
+                      final item = playlists!.items[i];
+                      return Padding(
+                        padding: const EdgeInsets.all(defaultPadding),
+                        child: GestureDetector(
+                          onTap: () => YouTubePlayPage.show(context,
+                              item: item, tag: tags[selectedIndex]!.name),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(defaultPadding),
+                                child: thumbnail(item.snippet.thumbnails),
+                              ),
+                              SizedBox(height: defaultPadding),
+                              Text(item.snippet.title),
+                              SizedBox(height: defaultPadding / 2),
+                              Text(
+                                item.snippet.videoOwnerChannelTitle,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption!
+                                    .copyWith(),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  childCount: youTubeControllers.length,
+                      );
+                    },
+                    childCount: youTubeControllers.length,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
