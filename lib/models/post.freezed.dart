@@ -32,7 +32,7 @@ class _$PostTearOff {
       bool private = false,
       String? userDisplayName,
       String? userPhotoURL,
-      List<String> tags = const []}) {
+      Set<String> tags = const {}}) {
     return _Post(
       id: id,
       userId: userId,
@@ -71,7 +71,7 @@ mixin _$Post {
   bool get private => throw _privateConstructorUsedError;
   String? get userDisplayName => throw _privateConstructorUsedError;
   String? get userPhotoURL => throw _privateConstructorUsedError;
-  List<String> get tags => throw _privateConstructorUsedError;
+  Set<String> get tags => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -94,7 +94,7 @@ abstract class $PostCopyWith<$Res> {
       bool private,
       String? userDisplayName,
       String? userPhotoURL,
-      List<String> tags});
+      Set<String> tags});
 }
 
 /// @nodoc
@@ -168,7 +168,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
       tags: tags == freezed
           ? _value.tags
           : tags // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as Set<String>,
     ));
   }
 }
@@ -190,7 +190,7 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       bool private,
       String? userDisplayName,
       String? userPhotoURL,
-      List<String> tags});
+      Set<String> tags});
 }
 
 /// @nodoc
@@ -265,7 +265,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
       tags: tags == freezed
           ? _value.tags
           : tags // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as Set<String>,
     ));
   }
 }
@@ -285,7 +285,7 @@ class _$_Post extends _Post {
       this.private = false,
       this.userDisplayName,
       this.userPhotoURL,
-      this.tags = const []})
+      this.tags = const {}})
       : super._();
 
   factory _$_Post.fromJson(Map<String, dynamic> json) =>
@@ -318,9 +318,9 @@ class _$_Post extends _Post {
   final String? userDisplayName;
   @override
   final String? userPhotoURL;
-  @JsonKey(defaultValue: const [])
+  @JsonKey(defaultValue: const {})
   @override
-  final List<String> tags;
+  final Set<String> tags;
 
   @override
   String toString() {
@@ -405,7 +405,7 @@ abstract class _Post extends Post {
       bool private,
       String? userDisplayName,
       String? userPhotoURL,
-      List<String> tags}) = _$_Post;
+      Set<String> tags}) = _$_Post;
   const _Post._() : super._();
 
   factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
@@ -434,7 +434,7 @@ abstract class _Post extends Post {
   @override
   String? get userPhotoURL => throw _privateConstructorUsedError;
   @override
-  List<String> get tags => throw _privateConstructorUsedError;
+  Set<String> get tags => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$PostCopyWith<_Post> get copyWith => throw _privateConstructorUsedError;
