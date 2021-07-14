@@ -98,7 +98,8 @@ class FirestoreService {
     required T Function(Map<String, dynamic>? data, String documentID) builder,
     Query Function(Query query)? queryBuilder,
     int Function(T lhs, T rhs)? sort,
-    Function(T lhs)? unOrdDeepEq,
+    Function(T result)? unOrdDeepEq,
+    Function(T result)? containsAll,
   }) {
     Query query = FirebaseFirestore.instance.collection(path);
     if (queryBuilder != null) {
@@ -107,25 +108,28 @@ class FirestoreService {
     final Stream<QuerySnapshot> snapshots = query.snapshots();
     return snapshots.map((snapshot) {
       final result = snapshot.docs
-          .map((snapshot) => builder(
-                snapshot.data() as Map<String, dynamic>?,
-                snapshot.id,
-              ))
+          .map((snapshot) =>
+              builder(snapshot.data() as Map<String, dynamic>?, snapshot.id))
           .where((value) => value != null)
           .toList();
 
       if (sort != null) result.sort(sort);
-      // tags.map((e) => post!.tags.contains(e)).toList();
 
       if (unOrdDeepEq != null) {
         final orderResult = <T>[];
         result.map((e) {
-          print('e: $e');
           if (unOrdDeepEq(e) == true) orderResult.add(e);
-          // if (unOrdDeepEq(e) == true) orderResult.add(e);
         }).toList();
         return orderResult;
       }
+      if (containsAll != null) {
+        final containsResult = <T>[];
+        result.map((e) {
+          if (containsAll(e) == true) containsResult.add(e);
+        }).toList();
+        return containsResult;
+      }
+
       return result;
     });
   }
