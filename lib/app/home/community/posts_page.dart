@@ -29,9 +29,12 @@ final selectedTagsProvider = StateProvider<Set<Tag>>((ref) => {});
 final tagsProvider = FutureProvider<List<Tag>>((ref) async {
   final database = ref.read(databaseProvider);
   final totalTags = await database.getTags();
-  totalTags.sort((a, b) => b.level.compareTo(a.level));
-  totalTags.sort((a, b) => b.count.compareTo(a.count));
-  return totalTags;
+  late final List<Tag> postsTags = [];
+
+  totalTags.map((tag) => tag.level > 50 ? postsTags.add(tag) : null).toList();
+  postsTags.sort((a, b) => b.level.compareTo(a.level));
+  postsTags.sort((a, b) => b.count.compareTo(a.count));
+  return postsTags;
 });
 final postsStreamProvider =
     StreamProvider.family.autoDispose<List<Post?>, List<Tag?>?>((ref, tags) {
@@ -42,7 +45,6 @@ final postsStreamProvider =
   for (final tag in selectedTags) {
     stringTags.add(tag.name);
   }
-  print('stringTags: $stringTags /  ${stringTags.isEmpty}');
   return database.postsStream(tags: stringTags);
 });
 
@@ -141,7 +143,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       floating: true,
-      expandedHeight: 90 + (defaultPadding * 2),
+      expandedHeight: 90 + (defaultPadding * 5),
       collapsedHeight: 60,
       actions: [
         IconButton(
@@ -158,7 +160,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: false,
         titlePadding: EdgeInsetsDirectional.only(
-          start: defaultPadding * 2,
+          start: defaultPadding,
           bottom: defaultPadding * 6,
         ),
         title: Text(
@@ -211,7 +213,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
                 avatar: Image.asset(
                   tag.image != null
                       ? 'assets/icons/${tag.image}'
-                      : 'assets/icons/dino_icon.png',
+                      : 'assets/icons/dino_icon_180.png',
                 ),
                 shape: StadiumBorder(
                   side: BorderSide(
