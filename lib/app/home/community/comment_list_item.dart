@@ -60,7 +60,7 @@ class CommentListItem extends HookWidget {
                   photoUrl:
                       commentUser!.deletedUser ? null : commentUser.photoURL,
                   displayName:
-                      commentUser.deletedUser ? 'D' : commentUser.displayName,
+                      commentUser.deletedUser ? null : commentUser.displayName,
                   radius: 14,
                 ),
               ),
