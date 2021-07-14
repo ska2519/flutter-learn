@@ -24,11 +24,7 @@ final databaseProvider = Provider<FirestoreDatabase>((ref) {
 class FirestoreDatabase {
   final _service = FirestoreService.instance;
 
-  bool containsAll(Set<String> e, Set<String> tags) {
-    print('tags: $tags / e.containsAll(tags): ${e.containsAll(tags)}');
-    return e.containsAll(tags);
-  }
-
+  bool containsAll(Set<String> e, Set<String> tags) => e.containsAll(tags);
   final Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
 
   Stream<AppUser?> appUserStream(User? user) => user != null
