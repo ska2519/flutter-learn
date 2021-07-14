@@ -95,7 +95,9 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: Responsive.isDesktop(context)
           ? const SizedBox()
           : BottomNavigationBar(
+              backgroundColor: Colors.white,
               currentIndex: _selectedIndex,
+              elevation: 1.0,
               key: const Key(Keys.bottomNavigationBar),
               items: [
                 _buildItem(TabItem.community),
