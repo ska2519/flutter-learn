@@ -102,7 +102,10 @@ class CodegenLoader extends AssetLoader{
   "subscribers": "subscribers",
   "SUBSCRIBE": "SUBSCRIBE",
   "views": "views",
-  "openSourceLicenses": "Open source licenses"
+  "openSourceLicenses": "Open source licenses",
+  "tagLengthValidate": "Please enter between 2 and 15 characters",
+  "tagWriteNotice": "Please write tags",
+  "tagsLengthValidate": "Up to 7 tags can be entered"
 };
 static const Map<String,dynamic> ko = {
   "community": "커뮤니티",
@@ -192,7 +195,10 @@ static const Map<String,dynamic> ko = {
   "subscribers": "구독자",
   "SUBSCRIBE": "구독",
   "views": "조회수",
-  "openSourceLicenses": "오픈소스 라이선스"
+  "openSourceLicenses": "오픈소스 라이선스",
+  "tagLengthValidate": "2 ~ 15글자 사이로 입력해주세요",
+  "tagWriteNotice": "태그를 입력해주세요",
+  "tagsLengthValidate": "태그는 최대 10개까지 입력 가능해요"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ko": ko};
 }
