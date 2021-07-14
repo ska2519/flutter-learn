@@ -25,9 +25,7 @@ import 'post_user_info.dart';
 // const iconPath = 'assets/icons/';
 // const imagePath = 'assets/pixel_perfect/';
 //assetPath: '${imagePath}Screenshot_1620879287-393x830.png',
-final selectedTagsProvider = StateProvider<List<Tag>>((ref) {
-  return [];
-});
+final selectedTagsProvider = StateProvider<Set<Tag>>((ref) => {});
 final tagsProvider = FutureProvider<List<Tag>>((ref) async {
   final database = ref.read(databaseProvider);
   final totalTags = await database.getTags();
@@ -39,12 +37,12 @@ final postsStreamProvider =
     StreamProvider.family.autoDispose<List<Post?>, List<Tag?>?>((ref, tags) {
   final database = ref.watch(databaseProvider);
   final selectedTags = ref.watch(selectedTagsProvider).state;
-  final List<String> stringTags = [];
+  final Set<String> stringTags = {};
 
   for (final tag in selectedTags) {
     stringTags.add(tag.name);
   }
-  print('stringTags: $stringTags');
+  print('stringTags: $stringTags /  ${stringTags.isEmpty}');
   return database.postsStream(tags: stringTags);
 });
 
@@ -70,53 +68,56 @@ class PostsPage extends HookWidget {
       ),
       data: (tags) {
         final postsAsyncValue = useProvider(postsStreamProvider(null));
-        return CustomScrollView(
-          physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
-          slivers: [
-            PostsPageSliverAppBar(
-              appUser: appUser,
-              tags: tags,
-              selectedIndexList: selectedIndex,
-            ),
-            CupertinoSliverRefreshControl(
-              onRefresh: () async => context.refresh(postsStreamProvider(tags)),
-            ),
-            postsAsyncValue.when(
-              loading: () => SliverToBoxAdapter(child: const SizedBox()),
-              error: (_, __) => SliverToBoxAdapter(
-                child: EmptyContent(
-                  title: LocaleKeys.somethingWentWrong.tr(),
-                  message: LocaleKeys.cantLoadDataRightNow.tr(),
-                ),
+        return SafeArea(
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
+            slivers: [
+              PostsPageSliverAppBar(
+                appUser: appUser,
+                tags: tags,
+                selectedIndexList: selectedIndex,
               ),
-              data: (items) => items.isEmpty
-                  ? SliverToBoxAdapter(child: const EmptyContent())
-                  : SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final post = items[index];
-                          return InkWell(
-                            onTap: () =>
-                                PostDetailPage.show(context, postId: post!.id),
-                            child: Padding(
-                              padding: const EdgeInsets.all(defaultPadding),
-                              child: Column(
-                                children: [
-                                  PostUserInfo(post: post!),
-                                  PostItemInfo(post: post),
-                                  const SizedBox(height: defaultPadding),
-                                  const Divider(height: 0.5)
-                                ],
+              CupertinoSliverRefreshControl(
+                onRefresh: () async =>
+                    context.refresh(postsStreamProvider(tags)),
+              ),
+              postsAsyncValue.when(
+                loading: () => SliverToBoxAdapter(child: const SizedBox()),
+                error: (_, __) => SliverToBoxAdapter(
+                  child: EmptyContent(
+                    title: LocaleKeys.somethingWentWrong.tr(),
+                    message: LocaleKeys.cantLoadDataRightNow.tr(),
+                  ),
+                ),
+                data: (items) => items.isEmpty
+                    ? SliverToBoxAdapter(child: const EmptyContent())
+                    : SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final post = items[index];
+                            return InkWell(
+                              onTap: () => PostDetailPage.show(context,
+                                  postId: post!.id),
+                              child: Padding(
+                                padding: const EdgeInsets.all(defaultPadding),
+                                child: Column(
+                                  children: [
+                                    PostUserInfo(post: post!),
+                                    PostItemInfo(post: post),
+                                    const SizedBox(height: defaultPadding),
+                                    const Divider(height: 0.5)
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        childCount: items.length,
+                            );
+                          },
+                          childCount: items.length,
+                        ),
                       ),
-                    ),
-            ),
-          ],
+              ),
+            ],
+          ),
         );
       },
     );
@@ -140,7 +141,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       floating: true,
-      expandedHeight: 90 + (defaultPadding * 7),
+      expandedHeight: 90 + (defaultPadding * 2),
       collapsedHeight: 60,
       actions: [
         IconButton(
@@ -157,8 +158,8 @@ class PostsPageSliverAppBar extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: false,
         titlePadding: EdgeInsetsDirectional.only(
-          start: defaultPadding,
-          bottom: defaultPadding * 7.8,
+          start: defaultPadding * 2,
+          bottom: defaultPadding * 6,
         ),
         title: Text(
           LocaleKeys.community.tr(),
@@ -170,7 +171,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
         ),
       ),
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
+        preferredSize: const Size.fromHeight(-10),
         child: Container(
           padding: const EdgeInsets.all(defaultPadding),
           height: 50,
@@ -181,7 +182,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: tags.length,
             itemBuilder: (context, i) {
-              final Tag tag = tags[i];
+              final tag = tags[i];
               return FilterChip(
                 label: Text(
                   tag.name,
@@ -200,7 +201,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
                   } else {
                     selectedIndexList.value.add(i);
                   }
-                  final selectedTags = <Tag>[];
+                  final selectedTags = <Tag>{};
                   for (final selectedIndex in selectedIndexList.value) {
                     selectedTags.add(tags[selectedIndex]);
                   }
