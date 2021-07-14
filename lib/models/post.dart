@@ -22,7 +22,7 @@ class Post with _$Post {
     @Default(false) bool private,
     String? userDisplayName,
     String? userPhotoURL,
-    @Default([]) List<String> tags,
+    @Default({}) Set<String> tags,
   }) = _Post;
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
