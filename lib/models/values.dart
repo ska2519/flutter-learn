@@ -170,7 +170,7 @@ DateTime getRandomTimestamp() {
   return now.subtract(Duration(seconds: random.nextInt(60 * 60)));
 }
 
-List<String> getRandomTags() {
+Set<String> getRandomTags() {
   final stringTags = [
     'flutter',
     'firebase',
@@ -180,7 +180,7 @@ List<String> getRandomTags() {
     'test'
   ];
   final randomNumber = random.nextInt(stringTags.length) + 1;
-  final randomList = <String>[];
+  final randomList = <String>{};
   for (var i = 0; i < randomNumber; i++) {
     // final tag = <String>{};
     randomList.add(stringTags[i]);

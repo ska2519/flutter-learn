@@ -24,15 +24,9 @@ final databaseProvider = Provider<FirestoreDatabase>((ref) {
 class FirestoreDatabase {
   final _service = FirestoreService.instance;
 
-  dynamic contains(List<String> tags, dynamic e) {
-    // for (final tag in tags) {
-    // print('postTags.first: ${postTags.first}');
-    print('tags: $tags');
-    return e.contains(tags.map((tag) => tag));
-    // return tags.every((tag) {
-    //   return tag.contains(postTags.first);
-    // });
-    // }
+  bool containsAll(Set<String> e, Set<String> tags) {
+    print('tags: $tags / e.containsAll(tags): ${e.containsAll(tags)}');
+    return e.containsAll(tags);
   }
 
   final Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
@@ -133,19 +127,19 @@ class FirestoreDatabase {
       path: FirebasePath.tags(),
       builder: (data, documentId) => Tag.fromJson(data!));
 
-  Stream<List<Post?>> postsStream({List<String>? tags}) =>
+  Stream<List<Post?>> postsStream({required Set<String> tags}) =>
       _service.collectionStream(
         path: FirebasePath.posts(),
         queryBuilder: (query) => query.orderBy('timestamp', descending: true),
         builder: (data, documentId) =>
             data != null ? Post.fromJson(data) : null,
-        unOrdDeepEq: tags!.isNotEmpty
-            ? (Post? post) => contains(post!.tags, tags)
+        containsAll: tags.isNotEmpty
+            ? (Post? post) => containsAll(post!.tags.toSet(), tags)
             : null,
         // unOrdDeepEq:
         //     tags != null ? (Post? lhs) => unOrdDeepEq(lhs?.tags, tags) : null,
       );
-//  final Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
+
   Stream<Post> postStream(String postId) => _service.documentStream(
       path: FirebasePath.post(postId),
       builder: (data, documentId) => Post.fromJson(data!));
