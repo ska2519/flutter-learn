@@ -19,14 +19,14 @@ import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 final youTubeTagsProvider = FutureProvider<List<Tag?>>((ref) async {
   final database = ref.read(databaseProvider);
-  late final List<Tag?> youTubeTags = [];
   final totalTags = await database.getTags();
+  late final List<Tag> youTubeTags = [];
   totalTags
       .map((tag) => tag.youTube == true && tag.playlistId != null
           ? youTubeTags.add(tag)
           : null)
       .toList();
-  youTubeTags.sort((a, b) => b!.level.compareTo(a!.level));
+  youTubeTags.sort((a, b) => b.level.compareTo(a.level));
   return youTubeTags;
 });
 
@@ -140,12 +140,12 @@ class _PlaylistPageState extends State<PlaylistPage> {
                 SliverAppBar(
                   pinned: true,
                   floating: true,
-                  expandedHeight: 90 + (defaultPadding * 2),
+                  expandedHeight: 90 + defaultPadding * 2,
                   collapsedHeight: 60,
                   flexibleSpace: FlexibleSpaceBar(
                     centerTitle: false,
                     titlePadding: EdgeInsetsDirectional.only(
-                      start: defaultPadding * 2,
+                      start: defaultPadding,
                       bottom: defaultPadding * 6,
                     ),
                     title: Text(
@@ -207,7 +207,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   avatar: Image.asset(
                                     tag.image != null
                                         ? 'assets/icons/${tag.image}'
-                                        : 'assets/icons/dino_icon.png',
+                                        : 'assets/icons/dino_icon_180.png',
                                   ),
                                   shape: StadiumBorder(
                                     side: BorderSide(
