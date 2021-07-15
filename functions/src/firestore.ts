@@ -21,7 +21,7 @@ export const decreaseUserCount = functions.firestore.document('users/{uid}').onU
     }
 });
 
-export const increaseTagsCount = functions.firestore.document('posts/{postId}').onCreate(async (snap, context) => {
+export const increasePostTagsCount = functions.firestore.document('posts/{postId}').onCreate(async (snap, context) => {
     const tags = snap.get('tags');
     const batch = db.batch();
 
@@ -32,7 +32,7 @@ export const increaseTagsCount = functions.firestore.document('posts/{postId}').
     await batch.commit();
 });
 
-export const decreaseTagsCount = functions.firestore.document('posts/{postId}').onDelete(async (snap, context) => {
+export const decreasePostTagsCount = functions.firestore.document('posts/{postId}').onDelete(async (snap, context) => {
     const tags = snap.get('tags');
     const batch = db.batch();
 
@@ -44,7 +44,7 @@ export const decreaseTagsCount = functions.firestore.document('posts/{postId}').
 });
 
 
-export const updateTagsCount = functions.firestore.document('posts/{postId}').onUpdate(async (change, context) => {
+export const updatePostTagsCount = functions.firestore.document('posts/{postId}').onUpdate(async (change, context) => {
     const oldValue = change.before.data();
     const newValue = change.after.data();
     const oldTags = oldValue.tags;
