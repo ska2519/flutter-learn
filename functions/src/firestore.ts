@@ -26,9 +26,8 @@ export const increaseTagsCount = functions.firestore.document('posts/{postId}').
     const batch = db.batch();
 
     for (let i = 0; i < tags.length; i++) {
-        console.log('tags[i]:' + tags[i]);
         const tagRef = db.doc('tags/' + tags[i]);
-        batch.update(tagRef, {count: increment});
+        batch.update(tagRef, {postCount: increment});
     }
     await batch.commit();
 });
@@ -38,19 +37,47 @@ export const decreaseTagsCount = functions.firestore.document('posts/{postId}').
     const batch = db.batch();
 
     for (let i = 0; i < tags.length; i++) {
-        console.log('tags[i]:' + tags[i]);
         const tagRef = db.doc('tags/' + tags[i]);
-        batch.update(tagRef, {count: decrement});
+        batch.update(tagRef, {postCount: decrement});
     }
     await batch.commit();
 });
+
+
 export const updateTagsCount = functions.firestore.document('posts/{postId}').onUpdate(async (change, context) => {
     const oldValue = change.before.data();
     const newValue = change.after.data();
-    const oldTags = oldValue.get('tags');
-    const newTags = newValue.get('tags');
-    console.log('oldTags:' + oldTags);
-    console.log('newTags:' + newTags);
+    const oldTags = oldValue.tags;
+    const newTags = newValue.tags;
+    const batch = db.batch();
+
+    /**
+     * Adds two numbers together.
+     * @param {List} otherArray The first list.
+     * @param {List} current The second list.
+     * @return {List} The sum of the two numbers.
+     */
+    function comparer(otherArray) {
+        return function(current) {
+            return otherArray.every(function(other) {
+                return other != current;
+            });
+        };
+    }
+
+    const onlyInOldTags = oldTags.filter(comparer(newTags)); // delete tags
+    const onlyInNewTags = newTags.filter(comparer(oldTags)); // add tags
+
+    for (let i = 0; i < onlyInOldTags.length; i++) {
+        const tagRef = db.doc('tags/' + onlyInOldTags[i]);
+        batch.update(tagRef, {postCount: decrement});
+    }
+
+    for (let i = 0; i < onlyInNewTags.length; i++) {
+        const tagRef = db.doc('tags/' + onlyInNewTags[i]);
+        batch.update(tagRef, {postCount: increment});
+    }
+    await batch.commit();
 });
 
 export const increasePostCount = functions.firestore.document('posts/{postId}').onCreate(async (snap, context) => {
