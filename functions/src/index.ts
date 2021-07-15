@@ -9,11 +9,18 @@
 // });
 export {increaseUserCount} from './firestore';
 export {decreaseUserCount} from './firestore';
+
 export {increaseCommentCount} from './firestore';
 export {decreaseCommentCount} from './firestore';
+
 export {increaseReadUserCount} from './firestore';
+
 export {increasePostCount} from './firestore';
 export {decreasePostCount} from './firestore';
+
+export {increaseTagsCount} from './firestore';
+export {decreaseTagsCount} from './firestore';
+export {updateTagsCount} from './firestore';
 
 export {resizeAvatar} from './storage';
 // export {addPostId} from './firestore';
