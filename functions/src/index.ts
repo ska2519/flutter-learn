@@ -18,9 +18,9 @@ export {increaseReadUserCount} from './firestore';
 export {increasePostCount} from './firestore';
 export {decreasePostCount} from './firestore';
 
-export {increaseTagsCount} from './firestore';
-export {decreaseTagsCount} from './firestore';
-export {updateTagsCount} from './firestore';
+export {increasePostTagsCount} from './firestore';
+export {decreasePostTagsCount} from './firestore';
+export {updatePostTagsCount} from './firestore';
 
 export {resizeAvatar} from './storage';
 // export {addPostId} from './firestore';
