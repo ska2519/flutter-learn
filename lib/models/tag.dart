@@ -16,5 +16,17 @@ class Tag with _$Tag {
     @Default(false) bool youTube,
   }) = _Tag;
 
-  factory Tag.fromJson(Map<String, dynamic> json) => _$TagFromJson(json);
+  factory Tag.fromJson(Map<String, dynamic> json) => _customFromJson(json);
+
+  static Tag _customFromJson(Map<String, dynamic> json) {
+    json['level'] =
+        json['level'] is double ? json['level'].toInt() : json['level'];
+    json['postCount'] = json['postCount'] is double
+        ? json['postCount'].toInt()
+        : json['postCount'];
+    json['videoCount'] = json['videoCount'] is double
+        ? json['videoCount'].toInt()
+        : json['videoCount'];
+    return _$TagFromJson(json);
+  }
 }
