@@ -1,5 +1,5 @@
 codemagic.yaml
-lib/seceret_keys.dart
+lib/secret_keys.dart
 service-account.json
 # lib/services/
 test/
