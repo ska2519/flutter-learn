@@ -34,7 +34,7 @@ final tagsProvider = FutureProvider<List<Tag>>((ref) async {
   totalTags
       .map(
         (tag) =>
-            tag.level > 50 && tag.postCount > 10 ? postsTags.add(tag) : null,
+            tag.level > 50 || tag.postCount > 10 ? postsTags.add(tag) : null,
       )
       .toList();
   postsTags.sort((a, b) => b.level.compareTo(a.level));
@@ -192,7 +192,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
               final tag = tags[i];
               return FilterChip(
                 label: Text(
-                  tag.name,
+                  '${tag.name} ${tag.postCount != 0 ? tag.postCount : ''}',
                   style: TextStyle(
                     color: tag.color != null
                         ? Color(int.parse(tag.color!))
