@@ -24,7 +24,8 @@ class _$TagTearOff {
       {required String name,
       String? playlistId,
       int level = 0,
-      int count = 0,
+      int postCount = 0,
+      int videoCount = 0,
       String? color,
       String? image,
       bool youTube = false}) {
@@ -32,7 +33,8 @@ class _$TagTearOff {
       name: name,
       playlistId: playlistId,
       level: level,
-      count: count,
+      postCount: postCount,
+      videoCount: videoCount,
       color: color,
       image: image,
       youTube: youTube,
@@ -52,7 +54,8 @@ mixin _$Tag {
   String get name => throw _privateConstructorUsedError;
   String? get playlistId => throw _privateConstructorUsedError;
   int get level => throw _privateConstructorUsedError;
-  int get count => throw _privateConstructorUsedError;
+  int get postCount => throw _privateConstructorUsedError;
+  int get videoCount => throw _privateConstructorUsedError;
   String? get color => throw _privateConstructorUsedError;
   String? get image => throw _privateConstructorUsedError;
   bool get youTube => throw _privateConstructorUsedError;
@@ -70,7 +73,8 @@ abstract class $TagCopyWith<$Res> {
       {String name,
       String? playlistId,
       int level,
-      int count,
+      int postCount,
+      int videoCount,
       String? color,
       String? image,
       bool youTube});
@@ -89,7 +93,8 @@ class _$TagCopyWithImpl<$Res> implements $TagCopyWith<$Res> {
     Object? name = freezed,
     Object? playlistId = freezed,
     Object? level = freezed,
-    Object? count = freezed,
+    Object? postCount = freezed,
+    Object? videoCount = freezed,
     Object? color = freezed,
     Object? image = freezed,
     Object? youTube = freezed,
@@ -107,9 +112,13 @@ class _$TagCopyWithImpl<$Res> implements $TagCopyWith<$Res> {
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
               as int,
-      count: count == freezed
-          ? _value.count
-          : count // ignore: cast_nullable_to_non_nullable
+      postCount: postCount == freezed
+          ? _value.postCount
+          : postCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      videoCount: videoCount == freezed
+          ? _value.videoCount
+          : videoCount // ignore: cast_nullable_to_non_nullable
               as int,
       color: color == freezed
           ? _value.color
@@ -136,7 +145,8 @@ abstract class _$TagCopyWith<$Res> implements $TagCopyWith<$Res> {
       {String name,
       String? playlistId,
       int level,
-      int count,
+      int postCount,
+      int videoCount,
       String? color,
       String? image,
       bool youTube});
@@ -156,7 +166,8 @@ class __$TagCopyWithImpl<$Res> extends _$TagCopyWithImpl<$Res>
     Object? name = freezed,
     Object? playlistId = freezed,
     Object? level = freezed,
-    Object? count = freezed,
+    Object? postCount = freezed,
+    Object? videoCount = freezed,
     Object? color = freezed,
     Object? image = freezed,
     Object? youTube = freezed,
@@ -174,9 +185,13 @@ class __$TagCopyWithImpl<$Res> extends _$TagCopyWithImpl<$Res>
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
               as int,
-      count: count == freezed
-          ? _value.count
-          : count // ignore: cast_nullable_to_non_nullable
+      postCount: postCount == freezed
+          ? _value.postCount
+          : postCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      videoCount: videoCount == freezed
+          ? _value.videoCount
+          : videoCount // ignore: cast_nullable_to_non_nullable
               as int,
       color: color == freezed
           ? _value.color
@@ -201,7 +216,8 @@ class _$_Tag implements _Tag {
       {required this.name,
       this.playlistId,
       this.level = 0,
-      this.count = 0,
+      this.postCount = 0,
+      this.videoCount = 0,
       this.color,
       this.image,
       this.youTube = false});
@@ -217,7 +233,10 @@ class _$_Tag implements _Tag {
   final int level;
   @JsonKey(defaultValue: 0)
   @override
-  final int count;
+  final int postCount;
+  @JsonKey(defaultValue: 0)
+  @override
+  final int videoCount;
   @override
   final String? color;
   @override
@@ -228,7 +247,7 @@ class _$_Tag implements _Tag {
 
   @override
   String toString() {
-    return 'Tag(name: $name, playlistId: $playlistId, level: $level, count: $count, color: $color, image: $image, youTube: $youTube)';
+    return 'Tag(name: $name, playlistId: $playlistId, level: $level, postCount: $postCount, videoCount: $videoCount, color: $color, image: $image, youTube: $youTube)';
   }
 
   @override
@@ -242,8 +261,12 @@ class _$_Tag implements _Tag {
                     .equals(other.playlistId, playlistId)) &&
             (identical(other.level, level) ||
                 const DeepCollectionEquality().equals(other.level, level)) &&
-            (identical(other.count, count) ||
-                const DeepCollectionEquality().equals(other.count, count)) &&
+            (identical(other.postCount, postCount) ||
+                const DeepCollectionEquality()
+                    .equals(other.postCount, postCount)) &&
+            (identical(other.videoCount, videoCount) ||
+                const DeepCollectionEquality()
+                    .equals(other.videoCount, videoCount)) &&
             (identical(other.color, color) ||
                 const DeepCollectionEquality().equals(other.color, color)) &&
             (identical(other.image, image) ||
@@ -258,7 +281,8 @@ class _$_Tag implements _Tag {
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(playlistId) ^
       const DeepCollectionEquality().hash(level) ^
-      const DeepCollectionEquality().hash(count) ^
+      const DeepCollectionEquality().hash(postCount) ^
+      const DeepCollectionEquality().hash(videoCount) ^
       const DeepCollectionEquality().hash(color) ^
       const DeepCollectionEquality().hash(image) ^
       const DeepCollectionEquality().hash(youTube);
@@ -279,7 +303,8 @@ abstract class _Tag implements Tag {
       {required String name,
       String? playlistId,
       int level,
-      int count,
+      int postCount,
+      int videoCount,
       String? color,
       String? image,
       bool youTube}) = _$_Tag;
@@ -293,7 +318,9 @@ abstract class _Tag implements Tag {
   @override
   int get level => throw _privateConstructorUsedError;
   @override
-  int get count => throw _privateConstructorUsedError;
+  int get postCount => throw _privateConstructorUsedError;
+  @override
+  int get videoCount => throw _privateConstructorUsedError;
   @override
   String? get color => throw _privateConstructorUsedError;
   @override

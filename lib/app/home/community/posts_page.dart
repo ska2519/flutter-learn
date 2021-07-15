@@ -31,9 +31,14 @@ final tagsProvider = FutureProvider<List<Tag>>((ref) async {
   final totalTags = await database.getTags();
   late final List<Tag> postsTags = [];
 
-  totalTags.map((tag) => tag.level > 50 ? postsTags.add(tag) : null).toList();
+  totalTags
+      .map(
+        (tag) =>
+            tag.level > 50 && tag.postCount > 10 ? postsTags.add(tag) : null,
+      )
+      .toList();
   postsTags.sort((a, b) => b.level.compareTo(a.level));
-  postsTags.sort((a, b) => b.count.compareTo(a.count));
+  postsTags.sort((a, b) => b.postCount.compareTo(a.postCount));
   return postsTags;
 });
 final postsStreamProvider =
