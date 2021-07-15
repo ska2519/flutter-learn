@@ -6,7 +6,6 @@ test/
 lib/app/home/youtube/youtube_page.dart
 lib/app/home/community/post_detail_page.dart
 lib/app/home/community/edit_post_page.dart
-lib/app/home/community/search_page.dart
 
 # Miscellaneous
 *.class
