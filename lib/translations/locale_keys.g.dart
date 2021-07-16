@@ -92,5 +92,12 @@ abstract class  LocaleKeys {
   static const tagLengthValidate = 'tagLengthValidate';
   static const tagWriteNotice = 'tagWriteNotice';
   static const tagsLengthValidate = 'tagsLengthValidate';
+  static const mentor = 'mentor';
+  static const foucs = 'foucs';
+  static const mindset = 'mindset';
+  static const learn = 'learn';
+  static const dev = 'dev';
+  static const nothingHere = 'nothingHere';
+  static const addANewItemToGetStarted = 'addANewItemToGetStarted';
 
 }

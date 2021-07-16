@@ -105,7 +105,14 @@ class CodegenLoader extends AssetLoader{
   "openSourceLicenses": "Open source licenses",
   "tagLengthValidate": "Please enter between 2 and 15 characters",
   "tagWriteNotice": "Please write tags",
-  "tagsLengthValidate": "Up to 7 tags can be entered"
+  "tagsLengthValidate": "Up to 7 tags can be entered",
+  "mentor": "mentor",
+  "foucs": "foucs",
+  "mindset": "mindset",
+  "learn": "learn",
+  "dev": "dev",
+  "nothingHere": "Nothaing here",
+  "addANewItemToGetStarted": "Add a new item"
 };
 static const Map<String,dynamic> ko = {
   "community": "커뮤니티",
@@ -198,7 +205,14 @@ static const Map<String,dynamic> ko = {
   "openSourceLicenses": "오픈소스 라이선스",
   "tagLengthValidate": "2 ~ 15글자 사이로 입력해주세요",
   "tagWriteNotice": "태그를 입력해주세요",
-  "tagsLengthValidate": "태그는 최대 10개까지 입력 가능해요"
+  "tagsLengthValidate": "태그는 최대 10개까지 입력 가능해요",
+  "mentor": "멘토",
+  "foucs": "집중",
+  "mindset": "태도",
+  "learn": "학습",
+  "dev": "개발",
+  "nothingHere": "아무것도 없어요",
+  "addANewItemToGetStarted": "새 항목을 추가해주세요"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ko": ko};
 }

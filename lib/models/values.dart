@@ -18,7 +18,9 @@ import 'package:flutter_learn/services/firestore_database.dart';
 
 final _userIds = [
   debugAdminUid,
-  // releaseAdminUid, // ska2519@gmail.com / Ska Lee
+  'OIpXqbwM65b20k7CnlhdjQybcdw1',
+  'ARvkbrxvEGhknZ4xkjSxfv7QJeX2',
+  'xuctF3EWJSQ9wmdglziA9ZW32cp2',
   // 'sPGSy6SVI1UYCH1F9C0b0JPrDMk2', // skaleevn@gmail.com / 리처드 파인만
   // 'sQz4zvSVQpRKteDOOe26CXpxLcl1',
   // 'bAfJLNN3gFTvZrcwFqYNQ4RXPmD3',
@@ -76,13 +78,13 @@ final _cities = [
   'Washington',
 ];
 
-final _categories = [
-  'Brunch',
-  'Burgers',
-  'Coffee',
-  'Deli',
-  'Dim Sum',
-  'Indian',
+final _titles = [
+  'Riverpod에서 statenotifier에서 Future 쓰는거랑 그냥 future provider쓰는거랑 차이?',
+  '플러터 중급강의 추천',
+  'firebase 애플 로그인 기능 구현 시 유료 애플 개발자 계정 필요유무?',
+  '플러터에서 tts 기능 구현?',
+  '파이어베이스에 컬랙션만 생성하기',
+  'VSCode에서 editor, terminal간 커서 이동 단축키 설정하기',
   'Italian',
   'Mediterranean',
   'Mexican',
@@ -158,7 +160,7 @@ String getRandomDisplayName() {
 }
 
 String getRandomTitle() {
-  return _categories[random.nextInt(_categories.length)];
+  return _titles[random.nextInt(_titles.length)];
 }
 
 String getRandomContent() {

@@ -89,5 +89,12 @@
   "openSourceLicenses": "Open source licenses",
   "tagLengthValidate": "Please enter between 2 and 15 characters",
   "tagWriteNotice": "Please write tags",
-  "tagsLengthValidate": "Up to 7 tags can be entered"
+  "tagsLengthValidate": "Up to 7 tags can be entered",
+  "mentor": "mentor",
+  "foucs": "foucs",
+  "mindset": "mindset",
+  "learn": "learn",
+  "dev": "dev",
+  "nothingHere": "Nothaing here",
+  "addANewItemToGetStarted": "Add a new item"
 }
