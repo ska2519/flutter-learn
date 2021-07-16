@@ -23,6 +23,7 @@ class Post with _$Post {
     String? userDisplayName,
     String? userPhotoURL,
     @Default({}) Set<String> tags,
+    @Default(false) bool notice,
   }) = _Post;
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);

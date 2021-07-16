@@ -23,6 +23,7 @@ _$_Post _$_$_PostFromJson(Map json) {
     userPhotoURL: json['userPhotoURL'] as String?,
     tags:
         (json['tags'] as List<dynamic>?)?.map((e) => e as String).toSet() ?? {},
+    notice: json['notice'] as bool? ?? false,
   );
 }
 
@@ -39,4 +40,5 @@ Map<String, dynamic> _$_$_PostToJson(_$_Post instance) => <String, dynamic>{
       'userDisplayName': instance.userDisplayName,
       'userPhotoURL': instance.userPhotoURL,
       'tags': instance.tags.toList(),
+      'notice': instance.notice,
     };

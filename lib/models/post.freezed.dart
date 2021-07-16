@@ -32,7 +32,8 @@ class _$PostTearOff {
       bool private = false,
       String? userDisplayName,
       String? userPhotoURL,
-      Set<String> tags = const {}}) {
+      Set<String> tags = const {},
+      bool notice = false}) {
     return _Post(
       id: id,
       userId: userId,
@@ -46,6 +47,7 @@ class _$PostTearOff {
       userDisplayName: userDisplayName,
       userPhotoURL: userPhotoURL,
       tags: tags,
+      notice: notice,
     );
   }
 
@@ -72,6 +74,7 @@ mixin _$Post {
   String? get userDisplayName => throw _privateConstructorUsedError;
   String? get userPhotoURL => throw _privateConstructorUsedError;
   Set<String> get tags => throw _privateConstructorUsedError;
+  bool get notice => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -94,7 +97,8 @@ abstract class $PostCopyWith<$Res> {
       bool private,
       String? userDisplayName,
       String? userPhotoURL,
-      Set<String> tags});
+      Set<String> tags,
+      bool notice});
 }
 
 /// @nodoc
@@ -119,6 +123,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
     Object? userDisplayName = freezed,
     Object? userPhotoURL = freezed,
     Object? tags = freezed,
+    Object? notice = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -169,6 +174,10 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
           ? _value.tags
           : tags // ignore: cast_nullable_to_non_nullable
               as Set<String>,
+      notice: notice == freezed
+          ? _value.notice
+          : notice // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -190,7 +199,8 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       bool private,
       String? userDisplayName,
       String? userPhotoURL,
-      Set<String> tags});
+      Set<String> tags,
+      bool notice});
 }
 
 /// @nodoc
@@ -216,6 +226,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
     Object? userDisplayName = freezed,
     Object? userPhotoURL = freezed,
     Object? tags = freezed,
+    Object? notice = freezed,
   }) {
     return _then(_Post(
       id: id == freezed
@@ -266,6 +277,10 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
           ? _value.tags
           : tags // ignore: cast_nullable_to_non_nullable
               as Set<String>,
+      notice: notice == freezed
+          ? _value.notice
+          : notice // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -285,7 +300,8 @@ class _$_Post extends _Post {
       this.private = false,
       this.userDisplayName,
       this.userPhotoURL,
-      this.tags = const {}})
+      this.tags = const {},
+      this.notice = false})
       : super._();
 
   factory _$_Post.fromJson(Map<String, dynamic> json) =>
@@ -321,10 +337,13 @@ class _$_Post extends _Post {
   @JsonKey(defaultValue: const {})
   @override
   final Set<String> tags;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool notice;
 
   @override
   String toString() {
-    return 'Post(id: $id, userId: $userId, title: $title, content: $content, timestamp: $timestamp, commentCount: $commentCount, likedCount: $likedCount, readCount: $readCount, private: $private, userDisplayName: $userDisplayName, userPhotoURL: $userPhotoURL, tags: $tags)';
+    return 'Post(id: $id, userId: $userId, title: $title, content: $content, timestamp: $timestamp, commentCount: $commentCount, likedCount: $likedCount, readCount: $readCount, private: $private, userDisplayName: $userDisplayName, userPhotoURL: $userPhotoURL, tags: $tags, notice: $notice)';
   }
 
   @override
@@ -362,7 +381,9 @@ class _$_Post extends _Post {
                 const DeepCollectionEquality()
                     .equals(other.userPhotoURL, userPhotoURL)) &&
             (identical(other.tags, tags) ||
-                const DeepCollectionEquality().equals(other.tags, tags)));
+                const DeepCollectionEquality().equals(other.tags, tags)) &&
+            (identical(other.notice, notice) ||
+                const DeepCollectionEquality().equals(other.notice, notice)));
   }
 
   @override
@@ -379,7 +400,8 @@ class _$_Post extends _Post {
       const DeepCollectionEquality().hash(private) ^
       const DeepCollectionEquality().hash(userDisplayName) ^
       const DeepCollectionEquality().hash(userPhotoURL) ^
-      const DeepCollectionEquality().hash(tags);
+      const DeepCollectionEquality().hash(tags) ^
+      const DeepCollectionEquality().hash(notice);
 
   @JsonKey(ignore: true)
   @override
@@ -405,7 +427,8 @@ abstract class _Post extends Post {
       bool private,
       String? userDisplayName,
       String? userPhotoURL,
-      Set<String> tags}) = _$_Post;
+      Set<String> tags,
+      bool notice}) = _$_Post;
   const _Post._() : super._();
 
   factory _Post.fromJson(Map<String, dynamic> json) = _$_Post.fromJson;
@@ -435,6 +458,8 @@ abstract class _Post extends Post {
   String? get userPhotoURL => throw _privateConstructorUsedError;
   @override
   Set<String> get tags => throw _privateConstructorUsedError;
+  @override
+  bool get notice => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$PostCopyWith<_Post> get copyWith => throw _privateConstructorUsedError;
