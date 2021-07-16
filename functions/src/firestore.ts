@@ -24,10 +24,17 @@ export const decreaseUserCount = functions.firestore.document('users/{uid}').onU
 export const increasePostTagsCount = functions.firestore.document('posts/{postId}').onCreate(async (snap, context) => {
     const tags = snap.get('tags');
     const batch = db.batch();
-
+    //  const tagRef = db.doc('tags/' + onlyInOldTags[i]);
     for (let i = 0; i < tags.length; i++) {
         const tagRef = db.doc('tags/' + tags[i]);
-        batch.update(tagRef, {postCount: increment});
+
+        await tagRef.get().then(function(doc) {
+            if (doc.exists) {
+                batch.update(tagRef, {postCount: increment});
+            } else {
+                batch.set(tagRef, {name: tags[i], postCount: 1, youTube: false});
+            }
+        });
     }
     await batch.commit();
 });

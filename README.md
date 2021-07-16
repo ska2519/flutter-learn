@@ -3,14 +3,18 @@
 Flutter와 Firebase Firestore, Cloud Functions으로 서버리스 다중 플랫폼 커뮤니티 앱을 빌드합니다.  
 
 **완성 된 앱은 Dart 코드베이스에서 Android, iOS 및 웹에서 실행됩니다.**  
-(Cloud Functions은 TypeScript 사용)
+(Cloud Functions은 TypeScript)
 
 이 프로젝트는 Flutter에서 [Riverpod](https://riverpod.dev) 상태 관리 기술을 사용하여 커뮤니티 앱을 ([로플리](https://www.lawfully.com/)에서 영감을 받음) 구현합니다.  
 
 이 프로젝트는 게시판 기능과 YouTube API를 사용해 영상을 재생하며  
-가입&로그인과 Firebase Firestore 데이터 저장, Cloud Functions으로 백엔드 기능을 포함합니다.  
+가입&로그인과 Firebase Firestore 데이터 저장, Cloud Functions으로 백엔드 기능을 포함합니다.
 
-*주소: [`https://flutter-learn.dev`](https://flutter-learn.dev)*
+## 개발 진행도 - 70%
+
+**Android 플러터 런 : [`구글 플레이 다운로드`](https://play.google.com/store/apps/details?id=dev.flutterlearn.flutter_learn)**
+
+**Website 플러터 런 : [`https://flutter-learn.dev`](https://flutter-learn.dev)**
 
 *Read this in other languages: [English](README.en.md)
 
@@ -162,16 +166,16 @@ Flutter와 Firebase Firestore, Cloud Functions으로 서버리스 다중 플랫�
 
 - [hooks_riverpod](https://riverpod.dev/) 기존 provider를 개선한 유연하고 간편한 상태관리 라이브러리
 - [freezed](https://pub.dev/packages/freezed) for app state and [json_annotation](https://pub.dev/packages/json_annotation) for data serialization
-- [firebase_auth](https://pub.dev/packages/firebase_auth) 비밀번호, 전화번호, 인기 ID 제공업체(예: Google, Facebook, Twitter 등)를 통한 회원 가입
+- [firebase_auth](https://pub.dev/packages/firebase_auth) 비밀번호, 전화번호, ID 제공업체(예: Google, Facebook, Twitter 등)를 통한 회원 가입
 - [cloud_firestore](https://pub.dev/packages/cloud_firestore) 유연하고 확장 가능한 NoSQL 클라우드 데이터베이스
-- [cloud_firestore](https://pub.dev/packages/cloud_firestore)Google의  Firebase Cloud Storage는 강력하고 단순하며 경제적인 객체 저장소 서비스
+- [cloud_firestore](https://pub.dev/packages/cloud_firestore)Google의 강력하고 단순하며 경제적인 객체 저장소 서비스
 - [firebase_crashlytics](https://pub.dev/packages/cloud_firestore) 오류 보고 솔루션으로 앱(iOS, Android) 문제에 대한 명확하고 활용 가능한 분석 정보를 확인
-- [algolia](https://www.algolia.com) Cloud functions을 결합하여 Firestore 글 검색 구현
+- [algolia](https://www.algolia.com) Cloud functions으로 결합하여 Firestore 글 검색 구현
 - [dio](https://pub.dev/packages/dio) for the API client
 - [youtube_player_iframe](https://pub.dev/packages/youtube_player_iframe) YouTube 동영상을 인라인으로 재생하거나 스트리밍 가능한 플러그인
 - [easy_localization](https://pub.dev/packages/easy_localization) 국제화 앱(영문, 한글판) 구현
-- [lint](https://pub.dev/packages/lint) Dart 및 Flutter 프로젝트에 대한 린트 규칙 - Effective Dart: Style Guide을 따릅니다.
-
+- [lint](https://pub.dev/packages/lint) Dart, Flutter 프로젝트에 대한 린트 규칙 - Effective Dart: Style Guide 적용
+- 
 사용하는 패키지 리스트
   - algolia: ^1.0.1
   - cached_network_image: ^3.0.0

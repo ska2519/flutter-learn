@@ -106,9 +106,7 @@ class SignInPageContents extends StatelessWidget {
 
   Widget _buildHeader() {
     if (viewModel.isLoading) {
-      return const Center(
-        child: CupertinoActivityIndicator(),
-      );
+      return const Center(child: CupertinoActivityIndicator());
     }
     return SvgPicture.asset(
       'assets/images/Group Chat-rafiki.svg',
