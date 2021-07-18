@@ -795,7 +795,7 @@ class _$SnippetTearOff {
       required String playlistId,
       required int position,
       required ResourceId resourceId,
-      required String videoOwnerChannelTitle,
+      String? videoOwnerChannelTitle,
       required String videoOwnerChannelId}) {
     return _Snippet(
       publishedAt: publishedAt,
@@ -831,7 +831,7 @@ mixin _$Snippet {
   String get playlistId => throw _privateConstructorUsedError;
   int get position => throw _privateConstructorUsedError;
   ResourceId get resourceId => throw _privateConstructorUsedError;
-  String get videoOwnerChannelTitle => throw _privateConstructorUsedError;
+  String? get videoOwnerChannelTitle => throw _privateConstructorUsedError;
   String get videoOwnerChannelId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -853,7 +853,7 @@ abstract class $SnippetCopyWith<$Res> {
       String playlistId,
       int position,
       ResourceId resourceId,
-      String videoOwnerChannelTitle,
+      String? videoOwnerChannelTitle,
       String videoOwnerChannelId});
 
   $ThumbnailsCopyWith<$Res> get thumbnails;
@@ -922,7 +922,7 @@ class _$SnippetCopyWithImpl<$Res> implements $SnippetCopyWith<$Res> {
       videoOwnerChannelTitle: videoOwnerChannelTitle == freezed
           ? _value.videoOwnerChannelTitle
           : videoOwnerChannelTitle // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       videoOwnerChannelId: videoOwnerChannelId == freezed
           ? _value.videoOwnerChannelId
           : videoOwnerChannelId // ignore: cast_nullable_to_non_nullable
@@ -960,7 +960,7 @@ abstract class _$SnippetCopyWith<$Res> implements $SnippetCopyWith<$Res> {
       String playlistId,
       int position,
       ResourceId resourceId,
-      String videoOwnerChannelTitle,
+      String? videoOwnerChannelTitle,
       String videoOwnerChannelId});
 
   @override
@@ -1032,7 +1032,7 @@ class __$SnippetCopyWithImpl<$Res> extends _$SnippetCopyWithImpl<$Res>
       videoOwnerChannelTitle: videoOwnerChannelTitle == freezed
           ? _value.videoOwnerChannelTitle
           : videoOwnerChannelTitle // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       videoOwnerChannelId: videoOwnerChannelId == freezed
           ? _value.videoOwnerChannelId
           : videoOwnerChannelId // ignore: cast_nullable_to_non_nullable
@@ -1054,7 +1054,7 @@ class _$_Snippet implements _Snippet {
       required this.playlistId,
       required this.position,
       required this.resourceId,
-      required this.videoOwnerChannelTitle,
+      this.videoOwnerChannelTitle,
       required this.videoOwnerChannelId});
 
   factory _$_Snippet.fromJson(Map<String, dynamic> json) =>
@@ -1079,7 +1079,7 @@ class _$_Snippet implements _Snippet {
   @override
   final ResourceId resourceId;
   @override
-  final String videoOwnerChannelTitle;
+  final String? videoOwnerChannelTitle;
   @override
   final String videoOwnerChannelId;
 
@@ -1163,7 +1163,7 @@ abstract class _Snippet implements Snippet {
       required String playlistId,
       required int position,
       required ResourceId resourceId,
-      required String videoOwnerChannelTitle,
+      String? videoOwnerChannelTitle,
       required String videoOwnerChannelId}) = _$_Snippet;
 
   factory _Snippet.fromJson(Map<String, dynamic> json) = _$_Snippet.fromJson;
@@ -1187,7 +1187,7 @@ abstract class _Snippet implements Snippet {
   @override
   ResourceId get resourceId => throw _privateConstructorUsedError;
   @override
-  String get videoOwnerChannelTitle => throw _privateConstructorUsedError;
+  String? get videoOwnerChannelTitle => throw _privateConstructorUsedError;
   @override
   String get videoOwnerChannelId => throw _privateConstructorUsedError;
   @override

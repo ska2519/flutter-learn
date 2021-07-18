@@ -17,6 +17,7 @@ class _LicenseSimplePageState extends State<LicenseSimplePage> {
     packageName: 'Unknown',
     version: 'Unknown',
     buildNumber: 'Unknown',
+    buildSignature: '',
   );
 
   @override

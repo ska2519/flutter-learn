@@ -17,6 +17,7 @@ class _PackageInfoPageState extends State<PackageInfoPage> {
     packageName: 'Unknown',
     version: 'Unknown',
     buildNumber: 'Unknown',
+    buildSignature: '',
   );
 
   @override

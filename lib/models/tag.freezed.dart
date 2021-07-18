@@ -28,7 +28,8 @@ class _$TagTearOff {
       int videoCount = 0,
       String? color,
       String? image,
-      bool youTube = false}) {
+      bool youTube = false,
+      String? imageUrl}) {
     return _Tag(
       name: name,
       playlistId: playlistId,
@@ -38,6 +39,7 @@ class _$TagTearOff {
       color: color,
       image: image,
       youTube: youTube,
+      imageUrl: imageUrl,
     );
   }
 
@@ -59,6 +61,7 @@ mixin _$Tag {
   String? get color => throw _privateConstructorUsedError;
   String? get image => throw _privateConstructorUsedError;
   bool get youTube => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -77,7 +80,8 @@ abstract class $TagCopyWith<$Res> {
       int videoCount,
       String? color,
       String? image,
-      bool youTube});
+      bool youTube,
+      String? imageUrl});
 }
 
 /// @nodoc
@@ -98,6 +102,7 @@ class _$TagCopyWithImpl<$Res> implements $TagCopyWith<$Res> {
     Object? color = freezed,
     Object? image = freezed,
     Object? youTube = freezed,
+    Object? imageUrl = freezed,
   }) {
     return _then(_value.copyWith(
       name: name == freezed
@@ -132,6 +137,10 @@ class _$TagCopyWithImpl<$Res> implements $TagCopyWith<$Res> {
           ? _value.youTube
           : youTube // ignore: cast_nullable_to_non_nullable
               as bool,
+      imageUrl: imageUrl == freezed
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -149,7 +158,8 @@ abstract class _$TagCopyWith<$Res> implements $TagCopyWith<$Res> {
       int videoCount,
       String? color,
       String? image,
-      bool youTube});
+      bool youTube,
+      String? imageUrl});
 }
 
 /// @nodoc
@@ -171,6 +181,7 @@ class __$TagCopyWithImpl<$Res> extends _$TagCopyWithImpl<$Res>
     Object? color = freezed,
     Object? image = freezed,
     Object? youTube = freezed,
+    Object? imageUrl = freezed,
   }) {
     return _then(_Tag(
       name: name == freezed
@@ -205,6 +216,10 @@ class __$TagCopyWithImpl<$Res> extends _$TagCopyWithImpl<$Res>
           ? _value.youTube
           : youTube // ignore: cast_nullable_to_non_nullable
               as bool,
+      imageUrl: imageUrl == freezed
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -220,7 +235,8 @@ class _$_Tag implements _Tag {
       this.videoCount = 0,
       this.color,
       this.image,
-      this.youTube = false});
+      this.youTube = false,
+      this.imageUrl});
 
   factory _$_Tag.fromJson(Map<String, dynamic> json) => _$_$_TagFromJson(json);
 
@@ -244,10 +260,12 @@ class _$_Tag implements _Tag {
   @JsonKey(defaultValue: false)
   @override
   final bool youTube;
+  @override
+  final String? imageUrl;
 
   @override
   String toString() {
-    return 'Tag(name: $name, playlistId: $playlistId, level: $level, postCount: $postCount, videoCount: $videoCount, color: $color, image: $image, youTube: $youTube)';
+    return 'Tag(name: $name, playlistId: $playlistId, level: $level, postCount: $postCount, videoCount: $videoCount, color: $color, image: $image, youTube: $youTube, imageUrl: $imageUrl)';
   }
 
   @override
@@ -272,7 +290,11 @@ class _$_Tag implements _Tag {
             (identical(other.image, image) ||
                 const DeepCollectionEquality().equals(other.image, image)) &&
             (identical(other.youTube, youTube) ||
-                const DeepCollectionEquality().equals(other.youTube, youTube)));
+                const DeepCollectionEquality()
+                    .equals(other.youTube, youTube)) &&
+            (identical(other.imageUrl, imageUrl) ||
+                const DeepCollectionEquality()
+                    .equals(other.imageUrl, imageUrl)));
   }
 
   @override
@@ -285,7 +307,8 @@ class _$_Tag implements _Tag {
       const DeepCollectionEquality().hash(videoCount) ^
       const DeepCollectionEquality().hash(color) ^
       const DeepCollectionEquality().hash(image) ^
-      const DeepCollectionEquality().hash(youTube);
+      const DeepCollectionEquality().hash(youTube) ^
+      const DeepCollectionEquality().hash(imageUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -307,7 +330,8 @@ abstract class _Tag implements Tag {
       int videoCount,
       String? color,
       String? image,
-      bool youTube}) = _$_Tag;
+      bool youTube,
+      String? imageUrl}) = _$_Tag;
 
   factory _Tag.fromJson(Map<String, dynamic> json) = _$_Tag.fromJson;
 
@@ -327,6 +351,8 @@ abstract class _Tag implements Tag {
   String? get image => throw _privateConstructorUsedError;
   @override
   bool get youTube => throw _privateConstructorUsedError;
+  @override
+  String? get imageUrl => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$TagCopyWith<_Tag> get copyWith => throw _privateConstructorUsedError;

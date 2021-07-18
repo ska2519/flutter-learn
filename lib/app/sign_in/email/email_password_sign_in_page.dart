@@ -9,15 +9,19 @@ import 'package:flutter_learn/app/widgets/alert_dialogs/show_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/buttons/form_submit_button.dart';
 import 'package:flutter_learn/services/auth_base.dart';
+import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class EmailPasswordSignInPage extends StatefulWidget {
   const EmailPasswordSignInPage(
       {Key? key, required this.model, this.onSignedIn})
       : super(key: key);
 
-  factory EmailPasswordSignInPage.withAuthBase(AuthBase auth,
-      {VoidCallback? onSignedIn}) {
+  factory EmailPasswordSignInPage.withAuthBase(
+    AuthBase auth, {
+    VoidCallback? onSignedIn,
+  }) {
     return EmailPasswordSignInPage(
       model: EmailPasswordSignInModel(auth: auth),
       onSignedIn: onSignedIn,
@@ -77,6 +81,7 @@ class _EmailPasswordSignInPageState extends State<EmailPasswordSignInPage> {
         } else {
           if (widget.onSignedIn != null) {
             widget.onSignedIn?.call();
+            Navigator.pop(context);
           }
         }
       }

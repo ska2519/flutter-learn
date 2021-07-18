@@ -14,6 +14,7 @@ class Tag with _$Tag {
     String? color,
     String? image,
     @Default(false) bool youTube,
+    String? imageUrl,
   }) = _Tag;
 
   factory Tag.fromJson(Map<String, dynamic> json) => _customFromJson(json);

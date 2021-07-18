@@ -13,6 +13,10 @@ class FirestoreStorage {
   Future<String> profileDownloadURL({required String userId}) async =>
       _storage.downloadURL(path: FirebasePath.profileImages(userId));
 
+  Future<String?> tagDownloadURL({String? tagIcon}) async => tagIcon != null
+      ? _storage.downloadURL(path: FirebasePath.tagIcon(tagIcon))
+      : null;
+
   Future<void> uploadProfileImage(
           {required String userId, required String filePath}) async =>
       _storage.uploadFile(

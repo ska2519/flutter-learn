@@ -32,7 +32,7 @@ export const increasePostTagsCount = functions.firestore.document('posts/{postId
             if (doc.exists) {
                 batch.update(tagRef, {postCount: increment});
             } else {
-                batch.set(tagRef, {name: tags[i], postCount: 1, youTube: false});
+                batch.set(tagRef, {name: tags[i], postCount: 1, youTube: false, level: 1});
             }
         });
     }
@@ -82,7 +82,13 @@ export const updatePostTagsCount = functions.firestore.document('posts/{postId}'
 
     for (let i = 0; i < onlyInNewTags.length; i++) {
         const tagRef = db.doc('tags/' + onlyInNewTags[i]);
-        batch.update(tagRef, {postCount: increment});
+        await tagRef.get().then(function(doc) {
+            if (doc.exists) {
+                batch.update(tagRef, {postCount: increment});
+            } else {
+                batch.set(tagRef, {name: onlyInNewTags[i], postCount: 1, youTube: false, level: 1});
+            }
+        });
     }
     await batch.commit();
 });

@@ -91,6 +91,7 @@ class AppTheme {
   // Allows the view to just make something "stronger" or "weaker" without worrying what the current theme brightness is
   //      color = theme.shift(someColor, .1); //-10% lum in dark mode, +10% in light mode
   Color shift(Color c, double amt) {
+    // ignore: parameter_assignments
     amt *= isDark ? -1 : 1;
     final hslc = HSLColor.fromColor(c); // Convert to HSL
     final double lightness =

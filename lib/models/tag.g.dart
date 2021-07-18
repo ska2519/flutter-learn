@@ -16,6 +16,7 @@ _$_Tag _$_$_TagFromJson(Map json) {
     color: json['color'] as String?,
     image: json['image'] as String?,
     youTube: json['youTube'] as bool? ?? false,
+    imageUrl: json['imageUrl'] as String?,
   );
 }
 
@@ -28,4 +29,5 @@ Map<String, dynamic> _$_$_TagToJson(_$_Tag instance) => <String, dynamic>{
       'color': instance.color,
       'image': instance.image,
       'youTube': instance.youTube,
+      'imageUrl': instance.imageUrl,
     };

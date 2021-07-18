@@ -78,7 +78,7 @@ _$_Snippet _$_$_SnippetFromJson(Map json) {
     position: json['position'] as int,
     resourceId: ResourceId.fromJson(
         Map<String, dynamic>.from(json['resourceId'] as Map)),
-    videoOwnerChannelTitle: json['videoOwnerChannelTitle'] as String,
+    videoOwnerChannelTitle: json['videoOwnerChannelTitle'] as String?,
     videoOwnerChannelId: json['videoOwnerChannelId'] as String,
   );
 }

@@ -123,6 +123,9 @@ class FirestoreDatabase {
       path: FirebasePath.tags(),
       builder: (data, documentId) => Tag.fromJson(data!));
 
+  Future<void> updateTag(Tag tag) async =>
+      _service.updateDoc(path: FirebasePath.tag(tag.name), data: tag.toJson());
+
   Stream<List<Post?>> postsStream({required Set<String> tags}) =>
       _service.collectionStream(
         path: FirebasePath.posts(),

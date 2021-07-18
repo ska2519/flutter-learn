@@ -65,7 +65,7 @@ class Snippet with _$Snippet {
     required String playlistId,
     required int position,
     required ResourceId resourceId,
-    required String videoOwnerChannelTitle,
+    String? videoOwnerChannelTitle,
     required String videoOwnerChannelId,
   }) = _Snippet;
 

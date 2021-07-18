@@ -16,7 +16,9 @@ class FirebasePath {
   static String postLikedUser(String postId, String userId) =>
       'posts/$postId/likedUsers/$userId';
 
-  static String profileImages(String userId) => 'profileImages/$userId';
   static String tags() => 'tags';
+  static String tag(String tag) => 'tags/$tag';
   static String video(String videoId) => 'videos/$videoId';
+  static String profileImages(String userId) => 'profileImages/$userId';
+  static String tagIcon(String icon) => 'icons/$icon';
 }
