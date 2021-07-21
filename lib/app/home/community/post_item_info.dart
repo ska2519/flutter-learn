@@ -110,142 +110,142 @@ class PostItemInfo extends HookWidget {
     final routeName = ModalRoute.of(context)!.settings.name;
     final isLoading = useProvider(isLoadingProvider);
 
-    return isLoading.state
-        ? _buildShimmer(context)
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+    if (isLoading.state) {
+      return _buildShimmer(context);
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: defaultPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  post.private ? LocaleKeys.noticePrivatePost.tr() : post.title,
+                  style: Theme.of(context).textTheme.subtitle2,
+                ),
+                const SizedBox(height: defaultPadding),
+                if (selectableText)
+                  SelectableText(
+                    post.private
+                        ? LocaleKeys.noticePrivatePost.tr()
+                        : post.content,
+                    style: Theme.of(context).textTheme.bodyText2,
+                  )
+                else
+                  Text(
+                    post.private
+                        ? LocaleKeys.noticePrivatePost.tr()
+                        : post.content,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.justify,
+                    maxLines: 4,
+                  ),
+              ],
+            ),
+          ),
+          Row(
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: defaultPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                        post.private
-                            ? LocaleKeys.noticePrivatePost.tr()
-                            : post.title,
-                        style: Theme.of(context).textTheme.subtitle2),
-                    const SizedBox(height: defaultPadding),
-                    if (selectableText)
-                      SelectableText(
-                        post.private
-                            ? LocaleKeys.noticePrivatePost.tr()
-                            : post.content,
-                        style: Theme.of(context).textTheme.bodyText2,
-                      )
-                    else
-                      Text(
-                        post.private
-                            ? LocaleKeys.noticePrivatePost.tr()
-                            : post.content,
-                        style: Theme.of(context).textTheme.bodyText2,
-                        maxLines: 5,
-                        overflow: TextOverflow.ellipsis,
+              SizedBox(
+                width: defaultPadding * 7,
+                child: postLikedAsyncValue.when(
+                  loading: () => Row(
+                    children: [
+                      Icon(
+                        Icons.favorite_border,
+                        color: Colors.grey,
+                        size: 19,
                       ),
-                  ],
+                      const SizedBox(width: 3),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Text(
+                          LocaleKeys.like.tr(),
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      ),
+                    ],
+                  ),
+                  error: (_, __) => EmptyContent(
+                    title: LocaleKeys.somethingWentWrong.tr(),
+                    message: LocaleKeys.cantLoadDataRightNow.tr(),
+                  ),
+                  data: (postLiked) {
+                    final userLiked = postLiked
+                        .any((element) => element.userId == appUser?.id);
+                    return InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () => appUser == null
+                          ? SignInPage.show(context)
+                          : _likePost(context, userLiked, appUser),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: defaultPadding),
+                        child: Row(
+                          children: [
+                            Icon(
+                              userLiked
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: userLiked ? Colors.red : Colors.grey,
+                              size: 19,
+                            ),
+                            const SizedBox(width: 3),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 4),
+                              child: Text(
+                                postLiked.isNotEmpty
+                                    ? postLiked.length.toString()
+                                    : LocaleKeys.like.tr(),
+                                style: Theme.of(context).textTheme.caption,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: defaultPadding * 7,
-                    child: postLikedAsyncValue.when(
-                      loading: () => Row(
-                        children: [
-                          Icon(
-                            Icons.favorite_border,
-                            color: Colors.grey,
-                            size: 19,
-                          ),
-                          const SizedBox(width: 3),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              LocaleKeys.like.tr(),
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ),
-                        ],
+              InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: routeName != AppRoutes.postDetailPage
+                    ? post.commentCount == 0
+                        ? () => tapEmptyComment(context, post.id)
+                        : null
+                    : null,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.mode_comment_outlined,
+                        color: Colors.grey,
+                        size: 18.3,
                       ),
-                      error: (_, __) => EmptyContent(
-                        title: LocaleKeys.somethingWentWrong.tr(),
-                        message: LocaleKeys.cantLoadDataRightNow.tr(),
+                      const SizedBox(width: 5),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Text(
+                          post.commentCount > 0
+                              ? post.commentCount.toString()
+                              : LocaleKeys.comment.tr(),
+                          style: Theme.of(context).textTheme.caption,
+                        ),
                       ),
-                      data: (postLiked) {
-                        final userLiked = postLiked
-                            .any((element) => element.userId == appUser?.id);
-                        return InkWell(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: () => appUser == null
-                              ? SignInPage.show(context)
-                              : _likePost(context, userLiked, appUser),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: defaultPadding),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  userLiked
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color: userLiked ? Colors.red : Colors.grey,
-                                  size: 19,
-                                ),
-                                const SizedBox(width: 3),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 4),
-                                  child: Text(
-                                    postLiked.isNotEmpty
-                                        ? postLiked.length.toString()
-                                        : LocaleKeys.like.tr(),
-                                    style: Theme.of(context).textTheme.caption,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    ],
                   ),
-                  InkWell(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: routeName != AppRoutes.postDetailPage
-                        ? post.commentCount == 0
-                            ? () => tapEmptyComment(context, post.id)
-                            : null
-                        : null,
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: defaultPadding),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.mode_comment_outlined,
-                            color: Colors.grey,
-                            size: 18.3,
-                          ),
-                          const SizedBox(width: 5),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              post.commentCount > 0
-                                  ? post.commentCount.toString()
-                                  : LocaleKeys.comment.tr(),
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Spacer()
-                ],
-              )
+                ),
+              ),
+              Spacer()
             ],
-          );
+          )
+        ],
+      );
+    }
   }
 
   Widget _buildShimmer(BuildContext context) {

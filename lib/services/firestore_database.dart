@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_learn/app/home/community/posts_page.dart';
 import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/models/comment.dart';
 import 'package:flutter_learn/models/post.dart';
@@ -24,8 +25,18 @@ final databaseProvider = Provider<FirestoreDatabase>((ref) {
 class FirestoreDatabase {
   final _service = FirestoreService.instance;
 
-  bool containsAll(Set<String> e, Set<String> tags) => e.containsAll(tags);
   final Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
+  bool containsAll(Set<String> e, Set<String> tags) => e.containsAll(tags);
+  bool countBiggerThanZero(Post post, StateController<sortType> filter) {
+    switch (filter.state) {
+      case sortType.likedCount:
+        return post.likedCount > 0;
+      case sortType.commentCount:
+        return post.commentCount > 0;
+      case sortType.readCount:
+        return post.readCount > 0;
+    }
+  }
 
   Stream<AppUser?> appUserStream(User? user) => user != null
       ? _service.documentStream(
@@ -125,6 +136,27 @@ class FirestoreDatabase {
 
   Future<void> updateTag(Tag tag) async =>
       _service.updateDoc(path: FirebasePath.tag(tag.name), data: tag.toJson());
+
+  Future<List<Post>> getPosts({
+    required String startDay,
+    required StateController<sortType> filter,
+  }) {
+    print('startDay: $startDay');
+    return _service.getCollection(
+      path: FirebasePath.posts(),
+      builder: (data, documentID) => Post.fromJson(data!),
+      queryBuilder: (query) => query.where(
+        'timestamp',
+        isGreaterThanOrEqualTo: startDay,
+      ),
+      sort: (lhs, rhs) => filter.state == sortType.likedCount
+          ? rhs.likedCount.compareTo(lhs.likedCount)
+          : filter.state == sortType.commentCount
+              ? rhs.commentCount.compareTo(lhs.commentCount)
+              : rhs.readCount.compareTo(lhs.readCount),
+      countBiggerThanZero: (post) => countBiggerThanZero(post, filter),
+    );
+  }
 
   Stream<List<Post?>> postsStream({required Set<String> tags}) =>
       _service.collectionStream(

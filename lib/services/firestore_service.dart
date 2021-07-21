@@ -26,11 +26,11 @@ class FirestoreService {
     required T Function(Map<String, dynamic>? data, String documentID) builder,
     Query Function(Query query)? queryBuilder,
     int Function(T lhs, T rhs)? sort,
+    Function(T result)? countBiggerThanZero,
   }) async {
     Query query = FirebaseFirestore.instance.collection(path);
-    if (queryBuilder != null) {
-      query = queryBuilder(query);
-    }
+    if (queryBuilder != null) query = queryBuilder(query);
+
     final QuerySnapshot snapshots = await query.get();
 
     final result = snapshots.docs
@@ -38,8 +38,15 @@ class FirestoreService {
             builder(doc.data() as Map<String, dynamic>?, doc.id))
         .where((value) => value != null)
         .toList();
-    if (sort != null) {
-      result.sort(sort);
+
+    if (sort != null) result.sort(sort);
+
+    if (countBiggerThanZero != null) {
+      final countResult = <T>[];
+      result.map((e) {
+        if (countBiggerThanZero(e) == true) countResult.add(e);
+      }).toList();
+      return countResult;
     }
     return result;
   }
@@ -76,9 +83,9 @@ class FirestoreService {
     int Function(T lhs, T rhs)? sort,
   }) {
     Query query = FirebaseFirestore.instance.collectionGroup(path);
-    if (queryBuilder != null) {
-      query = queryBuilder(query);
-    }
+
+    if (queryBuilder != null) query = queryBuilder(query);
+
     final Stream<QuerySnapshot> snapshots = query.snapshots();
     return snapshots.map((snapshot) {
       final result = snapshot.docs
@@ -129,7 +136,6 @@ class FirestoreService {
         }).toList();
         return containsResult;
       }
-
       return result;
     });
   }

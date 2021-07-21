@@ -98,6 +98,6 @@ abstract class  LocaleKeys {
   static const learn = 'learn';
   static const dev = 'dev';
   static const nothingHere = 'nothingHere';
-  static const addANewItemToGetStarted = 'addANewItemToGetStarted';
+  static const addANewItem = 'addANewItem';
 
 }

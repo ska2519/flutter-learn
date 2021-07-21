@@ -84,8 +84,8 @@ class CodegenLoader extends AssetLoader{
   "deleteAccount": "Delete account",
   "deleteAccountAreYouSure": "Are you sure you want to Delete account?",
   "deletedUser": "Withdrawn member",
-  "myReadPosts": "My read posts",
-  "myLikedPosts": "My liked posts",
+  "myReadPosts": "Read posts",
+  "myLikedPosts": "Liked posts",
   "appInfo": "App Info",
   "deletedByAuthor": "Deleted by author",
   "changeProfileImage": "Change profile image",
@@ -112,7 +112,7 @@ class CodegenLoader extends AssetLoader{
   "learn": "learn",
   "dev": "dev",
   "nothingHere": "Nothaing here",
-  "addANewItemToGetStarted": "Add a new item"
+  "addANewItem": "Add a new item"
 };
 static const Map<String,dynamic> ko = {
   "community": "커뮤니티",
@@ -212,7 +212,7 @@ static const Map<String,dynamic> ko = {
   "learn": "학습",
   "dev": "개발",
   "nothingHere": "아무것도 없어요",
-  "addANewItemToGetStarted": "새 항목을 추가해주세요"
+  "addANewItem": "새 항목을 추가해주세요"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ko": ko};
 }

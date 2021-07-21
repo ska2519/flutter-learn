@@ -9,9 +9,7 @@ import 'package:flutter_learn/app/widgets/alert_dialogs/show_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/buttons/form_submit_button.dart';
 import 'package:flutter_learn/services/auth_base.dart';
-import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class EmailPasswordSignInPage extends StatefulWidget {
   const EmailPasswordSignInPage(

@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_learn/app/widgets/buttons/custom_elevated_button.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
@@ -18,7 +18,6 @@ import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/models/tag.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
-import 'package:flutter_learn/services/firebase_storage.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 
@@ -28,10 +27,27 @@ import 'post_user_info.dart';
 // const iconPath = 'assets/icons/';
 // const imagePath = 'assets/pixel_perfect/';
 //assetPath: '${imagePath}Screenshot_1620879287-393x830.png',
+enum sortType { likedCount, commentCount, readCount }
+final sortPostsFilter = StateProvider<sortType>((_) => sortType.likedCount);
+final postsFilterDays = StateProvider<int>((_) => 1);
+
+final sortPostsProvider = FutureProvider<List<Post?>>((ref) {
+  final database = ref.read(databaseProvider);
+  final filter = ref.watch(sortPostsFilter);
+  final filterDays = ref.watch(postsFilterDays);
+  final filterDurationDay =
+      DateTime.now().subtract(Duration(days: filterDays.state));
+  final dateFormatted =
+      DateFormat("yyyy-MM-ddTHH:mm:ss").format(filterDurationDay);
+
+  final sortPosts = database.getPosts(startDay: dateFormatted, filter: filter);
+  return sortPosts;
+});
+
 final selectedTagsProvider = StateProvider<Set<Tag>>((ref) => {});
+
 final tagsProvider = FutureProvider<List<Tag>>((ref) async {
   final database = ref.read(databaseProvider);
-  final storage = ref.read(storageProvider);
   late final List<Tag> postsTags = [];
   print('start totalTags');
   final totalTags = await database.getTags();
@@ -78,12 +94,10 @@ class PostsPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = useState(<int>[]);
-    final appUser = useProvider(appUserStreamProvider).data?.value;
     final tagsAsyncValue = useProvider(tagsProvider);
 
     print('PostsPage build');
     return tagsAsyncValue.when(
-      // loading: () => const SizedBox(),
       loading: () => const Center(child: CupertinoActivityIndicator()),
       error: (_, __) => EmptyContent(
         title: LocaleKeys.somethingWentWrong.tr(),
@@ -91,6 +105,10 @@ class PostsPage extends HookWidget {
       ),
       data: (tags) {
         final postsAsyncValue = useProvider(postsStreamProvider(null));
+        final sortPosts = useProvider(sortPostsProvider);
+        final filter = useProvider(sortPostsFilter);
+        final filterDays = useProvider(postsFilterDays);
+        final appUser = useProvider(appUserStreamProvider).data?.value;
         return SafeArea(
           child: CustomScrollView(
             physics: const BouncingScrollPhysics(
@@ -105,6 +123,15 @@ class PostsPage extends HookWidget {
                 onRefresh: () async =>
                     context.refresh(postsStreamProvider(tags)),
               ),
+              _buildPostFilter(filter, context, filterDays),
+              SliverToBoxAdapter(child: Divider()),
+              sortPosts.when(
+                loading: () => SliverToBoxAdapter(
+                    child: Center(child: const CupertinoActivityIndicator())),
+                error: (error, stackTrace) =>
+                    SliverToBoxAdapter(child: const SizedBox()),
+                data: (sortPosts) => _buildFilterPostLists(sortPosts),
+              ),
               postsAsyncValue.when(
                 loading: () => SliverToBoxAdapter(child: const SizedBox()),
                 error: (_, __) => SliverToBoxAdapter(
@@ -113,36 +140,190 @@ class PostsPage extends HookWidget {
                     message: LocaleKeys.cantLoadDataRightNow.tr(),
                   ),
                 ),
-                data: (items) => items.isEmpty
-                    ? SliverToBoxAdapter(child: const EmptyContent())
-                    : SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final post = items[index];
-                            return InkWell(
-                              onTap: () => PostDetailPage.show(context,
-                                  postId: post!.id),
-                              child: Padding(
-                                padding: const EdgeInsets.all(defaultPadding),
-                                child: Column(
-                                  children: [
-                                    PostUserInfo(post: post!),
-                                    PostItemInfo(post: post),
-                                    const SizedBox(height: defaultPadding),
-                                    const Divider(height: 0.5)
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                          childCount: items.length,
-                        ),
-                      ),
+                data: (items) {
+                  return items.isEmpty
+                      ? SliverToBoxAdapter(child: const EmptyContent())
+                      : _buildPostList(items);
+                },
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildPostList(List<Post?> items) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final post = items[index];
+          return InkWell(
+            onTap: () => PostDetailPage.show(context, postId: post!.id),
+            child: Padding(
+              padding: const EdgeInsets.all(defaultPadding),
+              child: Column(
+                children: [
+                  PostUserInfo(post: post!),
+                  PostItemInfo(post: post),
+                  const SizedBox(height: defaultPadding),
+                  const Divider(height: 0.5)
+                ],
+              ),
+            ),
+          );
+        },
+        childCount: items.length,
+      ),
+    );
+  }
+
+  Widget _buildFilterPostLists(List<Post?> sortPosts) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, i) {
+          if (sortPosts.isEmpty) return const SizedBox();
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: () =>
+                      PostDetailPage.show(context, postId: sortPosts[i]!.id),
+                  child: Row(
+                    children: [
+                      Text(' ${i + 1}. '),
+                      Expanded(
+                        child: Text(
+                          sortPosts[i]!.title,
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle2!
+                              .copyWith(fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Divider()
+              ],
+            ),
+          );
+        },
+        childCount: sortPosts.length < 5 ? sortPosts.length : 5,
+      ),
+    );
+  }
+
+  Widget _buildPostFilter(StateController<sortType> filter,
+      BuildContext context, StateController<int> filterDays) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+      sliver: SliverToBoxAdapter(
+        child: SizedBox(
+          height: 30,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                onPressed: () => filter.state = sortType.likedCount,
+                icon: Icon(
+                  filter.state == sortType.likedCount
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  color: filter.state == sortType.likedCount
+                      ? flutterAccentColor
+                      : Colors.grey,
+                  size: 19,
+                ),
+              ),
+              IconButton(
+                onPressed: () => filter.state = sortType.readCount,
+                icon: Icon(
+                  filter.state == sortType.readCount
+                      ? Icons.remove_red_eye_outlined
+                      : Icons.remove_red_eye_outlined,
+                  color: filter.state == sortType.readCount
+                      ? flutterAccentColor
+                      : Colors.grey,
+                  size: 19,
+                ),
+              ),
+              IconButton(
+                onPressed: () => filter.state = sortType.commentCount,
+                icon: Icon(
+                  filter.state == sortType.commentCount
+                      ? Icons.mode_comment_outlined
+                      : Icons.mode_comment_outlined,
+                  color: filter.state == sortType.commentCount
+                      ? flutterAccentColor
+                      : Colors.grey,
+                  size: 18.3,
+                ),
+              ),
+              ElevatedButton(
+                  onPressed: () => filterDaysPopup(context, filterDays),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    onPrimary: flutterAccentColor,
+                  ),
+                  child: Text(
+                    '최근 ${filterDays.state} 일',
+                    style: TextStyle(fontSize: 11),
+                  ))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<dynamic> filterDaysPopup(
+      BuildContext context, StateController<int> filterDays) {
+    return showCupertinoModalPopup(
+      context: context,
+      builder: (context) => CupertinoActionSheet(
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () {
+              filterDays.state = 1;
+              Navigator.pop(context);
+            },
+            child: Text(
+              '1일',
+              style: TextStyle(
+                color: filterDays.state == 1 ? Colors.red : flutterPrimaryColor,
+              ),
+            ),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              filterDays.state = 3;
+              Navigator.pop(context);
+            },
+            child: Text(
+              '3일',
+              style: TextStyle(
+                color: filterDays.state == 3 ? Colors.red : flutterPrimaryColor,
+              ),
+            ),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              filterDays.state = 7;
+              Navigator.pop(context);
+            },
+            child: Text(
+              '7일',
+              style: TextStyle(
+                color: filterDays.state == 7 ? Colors.red : flutterPrimaryColor,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -158,6 +339,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
   final AppUser? appUser;
   final List<Tag> tags;
   final ValueNotifier<List<int>> selectedIndexList;
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -193,17 +375,16 @@ class PostsPageSliverAppBar extends StatelessWidget {
         ),
       ),
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(-10),
+        preferredSize: const Size.fromHeight(-10), //-10
         child: Container(
           padding: const EdgeInsets.all(defaultPadding),
           height: 50,
-          color: Colors.white,
           child: Row(
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: defaultPadding),
                 child: InkWell(
-                  onTap: _resetFilter,
+                  onTap: () => _resetFilter(context),
                   child: Icon(Icons.highlight_off_outlined),
                 ),
               ),
@@ -241,7 +422,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
       onSelected: (bool selected) => _selectFilter(context, i),
       // ignore: avoid_bool_literals_in_conditional_expressions
       selected: selectedIndexList.value.contains(i) ? true : false,
-      avatar: newMethod(tag),
+      avatar: tagAvatar(tag),
       // ? tag.imageUrl != null
       //         ? CachedNetworkImage(imageUrl: tag.imageUrl!)
       //         : Image.asset('assets/icons/dino_icon_180.png'),
@@ -258,10 +439,10 @@ class PostsPageSliverAppBar extends StatelessWidget {
     );
   }
 
-  Widget newMethod(Tag tag) {
+  Widget tagAvatar(Tag tag) {
     if (tag.image != null) {
       final path = 'assets/icons/${tag.image}';
-      rootBundle.load(path).then((value) => print(value));
+      // rootBundle.load(path).then((value) => print(value));
       return Image.asset(path);
     } else {
       return tag.imageUrl != null
@@ -283,5 +464,8 @@ class PostsPageSliverAppBar extends StatelessWidget {
     context.read(selectedTagsProvider).state = selectedTags;
   }
 
-  void _resetFilter() => selectedIndexList.value = [];
+  void _resetFilter(BuildContext context) {
+    selectedIndexList.value = [];
+    context.read(selectedTagsProvider).state = {};
+  }
 }
