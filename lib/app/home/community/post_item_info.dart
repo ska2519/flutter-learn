@@ -189,12 +189,13 @@ class PostItemInfo extends HookWidget {
                               userLiked
                                   ? Icons.favorite
                                   : Icons.favorite_border,
-                              color: userLiked ? Colors.red : Colors.grey,
+                              color:
+                                  userLiked ? firebaseOrangeColor : Colors.grey,
                               size: 19,
                             ),
                             const SizedBox(width: 3),
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 4),
+                              padding: const EdgeInsets.only(bottom: 3),
                               child: Text(
                                 postLiked.isNotEmpty
                                     ? postLiked.length.toString()
@@ -228,7 +229,7 @@ class PostItemInfo extends HookWidget {
                       ),
                       const SizedBox(width: 5),
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 4),
+                        padding: const EdgeInsets.only(bottom: 3),
                         child: Text(
                           post.commentCount > 0
                               ? post.commentCount.toString()

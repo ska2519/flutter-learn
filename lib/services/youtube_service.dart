@@ -26,15 +26,12 @@ class YouTubeService {
         pageToken: pageToken,
       ),
     );
+
     final playlistItems =
         PlaylistItems.fromJson(playlistItemsData as Map<String, dynamic>);
 
-    // playlistItems.items.map((e) {
-    //   if (e.status.privacyStatus != 'public') {
-    //     playlistItems.items.removeAt(playlistItems.items.indexOf(e));
-    //   }
-    // }).toList();
-
+    playlistItems.items
+        .removeWhere((item) => item.status.privacyStatus == 'private');
     return playlistItems;
   }
 

@@ -610,8 +610,7 @@ ContentDetails _$ContentDetailsFromJson(Map<String, dynamic> json) {
 class _$ContentDetailsTearOff {
   const _$ContentDetailsTearOff();
 
-  _ContentDetails call(
-      {required String videoId, required DateTime videoPublishedAt}) {
+  _ContentDetails call({required String videoId, DateTime? videoPublishedAt}) {
     return _ContentDetails(
       videoId: videoId,
       videoPublishedAt: videoPublishedAt,
@@ -629,7 +628,7 @@ const $ContentDetails = _$ContentDetailsTearOff();
 /// @nodoc
 mixin _$ContentDetails {
   String get videoId => throw _privateConstructorUsedError;
-  DateTime get videoPublishedAt => throw _privateConstructorUsedError;
+  DateTime? get videoPublishedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -642,7 +641,7 @@ abstract class $ContentDetailsCopyWith<$Res> {
   factory $ContentDetailsCopyWith(
           ContentDetails value, $Res Function(ContentDetails) then) =
       _$ContentDetailsCopyWithImpl<$Res>;
-  $Res call({String videoId, DateTime videoPublishedAt});
+  $Res call({String videoId, DateTime? videoPublishedAt});
 }
 
 /// @nodoc
@@ -667,7 +666,7 @@ class _$ContentDetailsCopyWithImpl<$Res>
       videoPublishedAt: videoPublishedAt == freezed
           ? _value.videoPublishedAt
           : videoPublishedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
     ));
   }
 }
@@ -679,7 +678,7 @@ abstract class _$ContentDetailsCopyWith<$Res>
           _ContentDetails value, $Res Function(_ContentDetails) then) =
       __$ContentDetailsCopyWithImpl<$Res>;
   @override
-  $Res call({String videoId, DateTime videoPublishedAt});
+  $Res call({String videoId, DateTime? videoPublishedAt});
 }
 
 /// @nodoc
@@ -706,7 +705,7 @@ class __$ContentDetailsCopyWithImpl<$Res>
       videoPublishedAt: videoPublishedAt == freezed
           ? _value.videoPublishedAt
           : videoPublishedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
     ));
   }
 }
@@ -714,8 +713,7 @@ class __$ContentDetailsCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ContentDetails implements _ContentDetails {
-  const _$_ContentDetails(
-      {required this.videoId, required this.videoPublishedAt});
+  const _$_ContentDetails({required this.videoId, this.videoPublishedAt});
 
   factory _$_ContentDetails.fromJson(Map<String, dynamic> json) =>
       _$_$_ContentDetailsFromJson(json);
@@ -723,7 +721,7 @@ class _$_ContentDetails implements _ContentDetails {
   @override
   final String videoId;
   @override
-  final DateTime videoPublishedAt;
+  final DateTime? videoPublishedAt;
 
   @override
   String toString() {
@@ -762,7 +760,7 @@ class _$_ContentDetails implements _ContentDetails {
 abstract class _ContentDetails implements ContentDetails {
   const factory _ContentDetails(
       {required String videoId,
-      required DateTime videoPublishedAt}) = _$_ContentDetails;
+      DateTime? videoPublishedAt}) = _$_ContentDetails;
 
   factory _ContentDetails.fromJson(Map<String, dynamic> json) =
       _$_ContentDetails.fromJson;
@@ -770,7 +768,7 @@ abstract class _ContentDetails implements ContentDetails {
   @override
   String get videoId => throw _privateConstructorUsedError;
   @override
-  DateTime get videoPublishedAt => throw _privateConstructorUsedError;
+  DateTime? get videoPublishedAt => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$ContentDetailsCopyWith<_ContentDetails> get copyWith =>
@@ -796,7 +794,7 @@ class _$SnippetTearOff {
       required int position,
       required ResourceId resourceId,
       String? videoOwnerChannelTitle,
-      required String videoOwnerChannelId}) {
+      String? videoOwnerChannelId}) {
     return _Snippet(
       publishedAt: publishedAt,
       channelId: channelId,
@@ -832,7 +830,7 @@ mixin _$Snippet {
   int get position => throw _privateConstructorUsedError;
   ResourceId get resourceId => throw _privateConstructorUsedError;
   String? get videoOwnerChannelTitle => throw _privateConstructorUsedError;
-  String get videoOwnerChannelId => throw _privateConstructorUsedError;
+  String? get videoOwnerChannelId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -854,7 +852,7 @@ abstract class $SnippetCopyWith<$Res> {
       int position,
       ResourceId resourceId,
       String? videoOwnerChannelTitle,
-      String videoOwnerChannelId});
+      String? videoOwnerChannelId});
 
   $ThumbnailsCopyWith<$Res> get thumbnails;
   $ResourceIdCopyWith<$Res> get resourceId;
@@ -926,7 +924,7 @@ class _$SnippetCopyWithImpl<$Res> implements $SnippetCopyWith<$Res> {
       videoOwnerChannelId: videoOwnerChannelId == freezed
           ? _value.videoOwnerChannelId
           : videoOwnerChannelId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 
@@ -961,7 +959,7 @@ abstract class _$SnippetCopyWith<$Res> implements $SnippetCopyWith<$Res> {
       int position,
       ResourceId resourceId,
       String? videoOwnerChannelTitle,
-      String videoOwnerChannelId});
+      String? videoOwnerChannelId});
 
   @override
   $ThumbnailsCopyWith<$Res> get thumbnails;
@@ -1036,7 +1034,7 @@ class __$SnippetCopyWithImpl<$Res> extends _$SnippetCopyWithImpl<$Res>
       videoOwnerChannelId: videoOwnerChannelId == freezed
           ? _value.videoOwnerChannelId
           : videoOwnerChannelId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -1055,7 +1053,7 @@ class _$_Snippet implements _Snippet {
       required this.position,
       required this.resourceId,
       this.videoOwnerChannelTitle,
-      required this.videoOwnerChannelId});
+      this.videoOwnerChannelId});
 
   factory _$_Snippet.fromJson(Map<String, dynamic> json) =>
       _$_$_SnippetFromJson(json);
@@ -1081,7 +1079,7 @@ class _$_Snippet implements _Snippet {
   @override
   final String? videoOwnerChannelTitle;
   @override
-  final String videoOwnerChannelId;
+  final String? videoOwnerChannelId;
 
   @override
   String toString() {
@@ -1164,7 +1162,7 @@ abstract class _Snippet implements Snippet {
       required int position,
       required ResourceId resourceId,
       String? videoOwnerChannelTitle,
-      required String videoOwnerChannelId}) = _$_Snippet;
+      String? videoOwnerChannelId}) = _$_Snippet;
 
   factory _Snippet.fromJson(Map<String, dynamic> json) = _$_Snippet.fromJson;
 
@@ -1189,7 +1187,7 @@ abstract class _Snippet implements Snippet {
   @override
   String? get videoOwnerChannelTitle => throw _privateConstructorUsedError;
   @override
-  String get videoOwnerChannelId => throw _privateConstructorUsedError;
+  String? get videoOwnerChannelId => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$SnippetCopyWith<_Snippet> get copyWith =>

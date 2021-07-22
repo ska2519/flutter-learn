@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_learn/app/widgets/buttons/custom_elevated_button.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
@@ -49,9 +48,7 @@ final selectedTagsProvider = StateProvider<Set<Tag>>((ref) => {});
 final tagsProvider = FutureProvider<List<Tag>>((ref) async {
   final database = ref.read(databaseProvider);
   late final List<Tag> postsTags = [];
-  print('start totalTags');
   final totalTags = await database.getTags();
-  print('get totalTags: $totalTags');
   totalTags
       .map(
         (tag) => tag.postCount > 0 ? postsTags.add(tag) : null,
@@ -234,7 +231,7 @@ class PostsPage extends HookWidget {
                       ? Icons.favorite
                       : Icons.favorite_border,
                   color: filter.state == sortType.likedCount
-                      ? flutterAccentColor
+                      ? firebaseOrangeColor
                       : Colors.grey,
                   size: 19,
                 ),
@@ -246,7 +243,7 @@ class PostsPage extends HookWidget {
                       ? Icons.remove_red_eye_outlined
                       : Icons.remove_red_eye_outlined,
                   color: filter.state == sortType.readCount
-                      ? flutterAccentColor
+                      ? firebaseOrangeColor
                       : Colors.grey,
                   size: 19,
                 ),
@@ -258,7 +255,7 @@ class PostsPage extends HookWidget {
                       ? Icons.mode_comment_outlined
                       : Icons.mode_comment_outlined,
                   color: filter.state == sortType.commentCount
-                      ? flutterAccentColor
+                      ? firebaseOrangeColor
                       : Colors.grey,
                   size: 18.3,
                 ),
@@ -271,7 +268,7 @@ class PostsPage extends HookWidget {
                   ),
                   child: Text(
                     '최근 ${filterDays.state} 일',
-                    style: TextStyle(fontSize: 11),
+                    style: TextStyle(fontSize: 11, color: firebaseOrangeColor),
                   ))
             ],
           ),
@@ -294,7 +291,9 @@ class PostsPage extends HookWidget {
             child: Text(
               '1일',
               style: TextStyle(
-                color: filterDays.state == 1 ? Colors.red : flutterPrimaryColor,
+                color: filterDays.state == 1
+                    ? firebaseOrangeColor
+                    : flutterPrimaryColor,
               ),
             ),
           ),
@@ -306,7 +305,9 @@ class PostsPage extends HookWidget {
             child: Text(
               '3일',
               style: TextStyle(
-                color: filterDays.state == 3 ? Colors.red : flutterPrimaryColor,
+                color: filterDays.state == 3
+                    ? firebaseOrangeColor
+                    : flutterPrimaryColor,
               ),
             ),
           ),
@@ -318,7 +319,9 @@ class PostsPage extends HookWidget {
             child: Text(
               '7일',
               style: TextStyle(
-                color: filterDays.state == 7 ? Colors.red : flutterPrimaryColor,
+                color: filterDays.state == 7
+                    ? firebaseOrangeColor
+                    : flutterPrimaryColor,
               ),
             ),
           )
@@ -423,9 +426,6 @@ class PostsPageSliverAppBar extends StatelessWidget {
       // ignore: avoid_bool_literals_in_conditional_expressions
       selected: selectedIndexList.value.contains(i) ? true : false,
       avatar: tagAvatar(tag),
-      // ? tag.imageUrl != null
-      //         ? CachedNetworkImage(imageUrl: tag.imageUrl!)
-      //         : Image.asset('assets/icons/dino_icon_180.png'),
       shape: StadiumBorder(
         side: BorderSide(
           color:

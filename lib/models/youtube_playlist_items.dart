@@ -46,7 +46,7 @@ class Item with _$Item {
 class ContentDetails with _$ContentDetails {
   const factory ContentDetails({
     required String videoId,
-    required DateTime videoPublishedAt,
+    DateTime? videoPublishedAt,
   }) = _ContentDetails;
 
   factory ContentDetails.fromJson(Map<String, dynamic> json) =>
@@ -66,7 +66,7 @@ class Snippet with _$Snippet {
     required int position,
     required ResourceId resourceId,
     String? videoOwnerChannelTitle,
-    required String videoOwnerChannelId,
+    String? videoOwnerChannelId,
   }) = _Snippet;
 
   factory Snippet.fromJson(Map<String, dynamic> json) =>

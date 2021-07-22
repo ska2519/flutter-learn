@@ -141,7 +141,6 @@ class FirestoreDatabase {
     required String startDay,
     required StateController<sortType> filter,
   }) {
-    print('startDay: $startDay');
     return _service.getCollection(
       path: FirebasePath.posts(),
       builder: (data, documentID) => Post.fromJson(data!),

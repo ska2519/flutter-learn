@@ -55,7 +55,7 @@ class CommentListItem extends HookWidget {
             children: [
               SizedBox(width: comment.level * defaultPadding * 2),
               Padding(
-                padding: const EdgeInsets.only(top: 5),
+                padding: const EdgeInsets.only(top: 2),
                 child: Avatar(
                   photoUrl:
                       commentUser!.deletedUser ? null : commentUser.photoURL,
@@ -70,12 +70,13 @@ class CommentListItem extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${commentUser.deletedUser ? LocaleKeys.deletedUser.tr() : commentUser.displayName!} • ${duration(comment.timestamp!)}',
+                      '${commentUser.deletedUser ? LocaleKeys.deletedUser.tr() : commentUser.displayName!}  •  ${duration(comment.timestamp!)}',
                       style: Theme.of(context)
                           .textTheme
-                          .overline!
+                          .caption!
                           .copyWith(color: Colors.black54),
                     ),
+                    const SizedBox(height: 3),
                     if (selectableText)
                       SelectableText(
                         comment.private
@@ -102,10 +103,8 @@ class CommentListItem extends HookWidget {
                           comment.likedUsers.isNotEmpty
                               ? '좋아요 ${comment.likedUsers.length.toString()}개'
                               : '',
-                          style: Theme.of(context)
-                              .textTheme
-                              .overline!
-                              .copyWith(color: Colors.black54),
+                          style: TextStyle(
+                              fontSize: 10, color: firebaseOrangeColor),
                         ),
                         if (comment.likedUsers.isNotEmpty)
                           const SizedBox(width: defaultPadding)
@@ -170,7 +169,7 @@ class CommentListItem extends HookWidget {
                         ? Icons.favorite
                         : Icons.favorite_border,
                     color: comment.likedUsers.contains(appUser?.id)
-                        ? Colors.red
+                        ? firebaseOrangeColor
                         : Colors.grey,
                     size: 15,
                   ),

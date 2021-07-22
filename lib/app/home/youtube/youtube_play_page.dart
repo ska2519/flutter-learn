@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -23,7 +24,7 @@ final channelProvider =
     FutureProvider.autoDispose.family<ch.Channel, Item>((ref, item) async {
   final youTubeService = ref.read(youTubeServiceProvider);
   return youTubeService.fetchYouTubeChannel(
-      channelId: item.snippet.videoOwnerChannelId);
+      channelId: item.snippet.videoOwnerChannelId!);
 });
 final youTubeVideoProvider =
     FutureProvider.autoDispose.family<uv.YouTubeVideo, Item>((ref, item) async {
@@ -98,13 +99,19 @@ class YouTubePlayPage extends HookWidget {
       controller: _youTubeController.value,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('tags'),
+          // title: Text('tags'),
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back_ios_new, size: 20),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
               youTubeVideoAsyncValue.when(
-                loading: () => const SizedBox(),
+                loading: () => SizedBox(
+                    height: 200,
+                    child: const Center(child: CupertinoActivityIndicator())),
                 error: (_, __) => const SizedBox(),
                 data: (video) {
                   final uvVideo = video.items[0];
@@ -115,6 +122,7 @@ class YouTubePlayPage extends HookWidget {
                       Padding(
                         padding: const EdgeInsets.all(defaultPadding),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               item.snippet.title,
@@ -157,12 +165,12 @@ class YouTubePlayPage extends HookWidget {
                                 loading: () => const SizedBox(),
                                 error: (_, __) => const SizedBox(),
                                 data: (channel) {
-                                  getVideo(item.contentDetails.videoId)
-                                      .then((video) {
-                                    video == null
-                                        ? createVideo(item, channel)
-                                        : updateVideo(video);
-                                  });
+                                  // getVideo(item.contentDetails.videoId)
+                                  //     .then((video) {
+                                  //   video == null
+                                  //       ? createVideo(item, channel)
+                                  //       : updateVideo(video);
+                                  // });
 
                                   return ChannelInfo(channel: channel);
                                 }),
@@ -220,9 +228,7 @@ class ChannelInfo extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${chItem.statistics.subscriberCount != null ?
-                          // stringWithComma(chItem.statistics.subscriberCount!)
-                          Numeral(int.parse(chItem.statistics.subscriberCount!)).value() : ''} ${LocaleKeys.subscribers.tr()}',
+                      '${chItem.statistics.subscriberCount != null ? Numeral(int.parse(chItem.statistics.subscriberCount!)).value() : ''} ${LocaleKeys.subscribers.tr()}',
                       style: Theme.of(context).textTheme.caption,
                     ),
                   ],
@@ -231,7 +237,6 @@ class ChannelInfo extends StatelessWidget {
             ),
             Text(
               LocaleKeys.SUBSCRIBE.tr(),
-              maxLines: 1,
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: subscribeColor),
             ),

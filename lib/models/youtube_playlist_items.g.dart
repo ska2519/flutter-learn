@@ -55,14 +55,16 @@ Map<String, dynamic> _$_$_ItemToJson(_$_Item instance) => <String, dynamic>{
 _$_ContentDetails _$_$_ContentDetailsFromJson(Map json) {
   return _$_ContentDetails(
     videoId: json['videoId'] as String,
-    videoPublishedAt: DateTime.parse(json['videoPublishedAt'] as String),
+    videoPublishedAt: json['videoPublishedAt'] == null
+        ? null
+        : DateTime.parse(json['videoPublishedAt'] as String),
   );
 }
 
 Map<String, dynamic> _$_$_ContentDetailsToJson(_$_ContentDetails instance) =>
     <String, dynamic>{
       'videoId': instance.videoId,
-      'videoPublishedAt': instance.videoPublishedAt.toIso8601String(),
+      'videoPublishedAt': instance.videoPublishedAt?.toIso8601String(),
     };
 
 _$_Snippet _$_$_SnippetFromJson(Map json) {
@@ -79,7 +81,7 @@ _$_Snippet _$_$_SnippetFromJson(Map json) {
     resourceId: ResourceId.fromJson(
         Map<String, dynamic>.from(json['resourceId'] as Map)),
     videoOwnerChannelTitle: json['videoOwnerChannelTitle'] as String?,
-    videoOwnerChannelId: json['videoOwnerChannelId'] as String,
+    videoOwnerChannelId: json['videoOwnerChannelId'] as String?,
   );
 }
 
