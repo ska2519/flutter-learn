@@ -1,16 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:flutter_learn/app/widgets/avatar.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-
 import 'package:flutter_learn/utils/format.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final isLoadingProvider = StateProvider<bool>((ref) => true);
 

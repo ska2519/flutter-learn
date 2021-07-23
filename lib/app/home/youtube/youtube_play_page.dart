@@ -3,22 +3,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_learn/models/video.dart';
-import 'package:flutter_learn/services/firestore_database.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-
 import 'package:flutter_learn/app/widgets/avatar.dart';
 import 'package:flutter_learn/constants/constants.dart';
+import 'package:flutter_learn/models/video.dart';
 import 'package:flutter_learn/models/youtube_channel.dart' as ch;
 import 'package:flutter_learn/models/youtube_playlist_items.dart';
 import 'package:flutter_learn/models/youtube_video.dart' as uv;
 import 'package:flutter_learn/routes/app_router.dart';
+import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/services/url_launcher.dart';
 import 'package:flutter_learn/services/youtube_service.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 import 'package:flutter_learn/utils/format.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:numeral/numeral.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 final channelProvider =
     FutureProvider.autoDispose.family<ch.Channel, Item>((ref, item) async {

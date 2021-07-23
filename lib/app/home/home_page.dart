@@ -9,6 +9,7 @@ import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/side_menu.dart';
 import 'package:flutter_learn/app/home/tab_item.dart';
 import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
+import 'package:flutter_learn/app/top_level_providers.dart';
 import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/responsive.dart';
 import 'package:flutter_learn/controllers/menu_controller.dart';
@@ -67,6 +68,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final appUser = useProvider(appUserStreamProvider).data?.value;
+    final fcm = useProvider(fcmProvider);
     print('HomePage appUser: $appUser');
     return Scaffold(
       floatingActionButton:

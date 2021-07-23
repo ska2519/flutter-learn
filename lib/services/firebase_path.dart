@@ -21,4 +21,6 @@ class FirebasePath {
   static String video(String videoId) => 'videos/$videoId';
   static String profileImages(String userId) => 'profileImages/$userId';
   static String tagIcon(String icon) => 'icons/$icon';
+  static String tokens(String userId, String token) =>
+      'users/$userId/tokens/$token';
 }

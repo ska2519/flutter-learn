@@ -1,9 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 typedef ItemWidgetBuilder<T> = Widget Function(BuildContext context, T item);
 

@@ -1,8 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-
 import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class PackageInfoPage extends StatefulWidget {
   const PackageInfoPage({Key? key}) : super(key: key);

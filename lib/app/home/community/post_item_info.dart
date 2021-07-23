@@ -2,9 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pedantic/pedantic.dart';
-
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
@@ -17,6 +14,8 @@ import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
 
 import 'post_detail_page.dart';
 import 'post_user_info.dart';

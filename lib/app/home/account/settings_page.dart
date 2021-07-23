@@ -4,16 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/app/sign_in/sign_view_model.dart';
-import 'package:flutter_learn/app/widgets/loading_indicator.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pedantic/pedantic.dart';
-
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
+import 'package:flutter_learn/app/widgets/loading_indicator.dart';
 import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
 
 import 'license_page.dart';
 import 'menu_list_item.dart';

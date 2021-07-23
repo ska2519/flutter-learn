@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_learn/app/home/community/posts_page.dart';
 import 'package:flutter_learn/models/app_user.dart';
@@ -14,7 +16,6 @@ import 'package:flutter_learn/models/video.dart';
 import 'package:flutter_learn/services/firebase_path.dart';
 import 'package:flutter_learn/services/firestore_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:collection/collection.dart';
 
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 
@@ -245,6 +246,18 @@ class FirestoreDatabase {
         builder: (data, documentId) =>
             data != null ? Video.fromJson(data) : null,
       );
+
+  Future<void> setToken(String token) async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    return _service.setData(
+      path: FirebasePath.tokens(userId, token),
+      data: {
+        'token': token,
+        'createdAt': FieldValue.serverTimestamp(),
+        'platform': Platform.operatingSystem,
+      },
+    );
+  }
 
   // Future<List<String>> getPostLikedUsers(String postId) async =>
   //     _service.getCollection(

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:flutter_learn/app/home/community/post_item_info.dart';
 import 'package:flutter_learn/app/home/community/post_user_info.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class PostListItem extends HookWidget {
   const PostListItem({

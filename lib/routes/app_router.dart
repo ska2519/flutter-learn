@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_learn/app/home/account/account_page.dart';
 import 'package:flutter_learn/app/home/account/liked_posts_page.dart';
@@ -13,7 +15,6 @@ import 'package:flutter_learn/app/home/home_page.dart';
 import 'package:flutter_learn/app/home/youtube/youtube_play_page.dart';
 import 'package:flutter_learn/app/sign_in/email/email_password_sign_in_page.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
-import 'package:flutter_learn/main.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/models/youtube_playlist_items.dart';
 import 'package:flutter_learn/services/auth_base.dart';
@@ -100,10 +101,13 @@ class AppRouter {
           // maintainState: false,
         );
       case AppRoutes.homePage:
+        final mapArgs = args as Map<String, dynamic>?;
+        final analytics = mapArgs!['analytics'] as FirebaseAnalytics;
+        final observer = mapArgs['observer'] as FirebaseAnalyticsObserver;
         return MaterialPageRoute<dynamic>(
           builder: (_) => HomePage(
-            analytics: MyApp.analytics,
-            observer: MyApp.observer,
+            analytics: analytics,
+            observer: observer,
           ),
           //maintainState false = pop으로 돌아가면 위젯 rebuild
           // maintainState: false,

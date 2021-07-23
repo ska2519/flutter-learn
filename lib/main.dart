@@ -1,25 +1,36 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:flutter_learn/app/home/home_page.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/auth_base.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/translations/codegen_loader.g.dart';
-
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'constants/constants.dart';
 import 'utils/format.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('Handling a background message ${message.messageId}');
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await FirebaseAppCheck.instance
+      .activate(webRecaptchaSiteKey: 'recaptcha-v3-site-key');
+  await EasyLocalization.ensureInitialized();
 
   runApp(ProviderScope(
     child: EasyLocalization(
@@ -33,6 +44,8 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   static late FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);

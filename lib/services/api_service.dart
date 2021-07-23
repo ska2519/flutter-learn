@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final apiServiceProvider = Provider<APIService>((ref) => APIService(ref.read));
 final dioProvider = Provider<Dio>((ref) => Dio());
