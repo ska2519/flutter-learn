@@ -1,7 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
-admin.initializeApp();
 const db = admin.firestore();
 
 const increment = admin.firestore.FieldValue.increment(1);
@@ -145,3 +144,28 @@ export const increaseReadUserCount = functions.firestore.document('posts/{postId
     postRef.update({readCount: increment});
 });
 
+export const increasePostLikedCount = functions.firestore.document('posts/{postId}/postLiked/{likedUserId}').onCreate(async (snap, context) => {
+    const postId = snap.get('postId');
+    const postRef = db.doc('posts/' + postId);
+    postRef.update({likedCount: increment});
+});
+
+export const decreasePostLikedCount = functions.firestore.document('posts/{postId}/postLiked/{likedUserId}').onDelete(async (snap, context) => {
+    const postId = snap.get('postId');
+    const postRef = db.doc('posts/' + postId);
+    postRef.update({likedCount: decrement});
+});
+
+export const increaseCommentLikedCount = functions.firestore.document('posts/{postId}/comments/{commentId}/commentLiked/{likedUserId}').onCreate(async (snap, context) => {
+    const postId = snap.get('postId');
+    const commentId = snap.get('commentId');
+    const commentRef = db.doc('posts/' + postId + '/comments/' + commentId);
+    commentRef.update({likedCount: increment});
+});
+
+export const decreaseCommentLikedCount = functions.firestore.document('posts/{postId}/comments/{commentId}/commentLiked/{likedUserId}').onDelete(async (snap, context) => {
+    const postId = snap.get('postId');
+    const commentId = snap.get('commentId');
+    const commentRef = db.doc('posts/' + postId + '/comments/' + commentId);
+    commentRef.update({likedCount: decrement});
+});

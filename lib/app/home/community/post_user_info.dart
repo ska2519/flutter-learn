@@ -43,7 +43,7 @@ class PostUserInfo extends HookWidget {
                   Text(
                     postUser.deletedUser
                         ? LocaleKeys.deletedUser.tr()
-                        : postUser.displayName!,
+                        : postUser.displayName,
                     style: Theme.of(context)
                         .textTheme
                         .caption!

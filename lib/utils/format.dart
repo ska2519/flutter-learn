@@ -9,9 +9,9 @@ import 'package:flutter_learn/translations/locale_keys.g.dart';
 late String locale;
 void getLocale(BuildContext context) => locale = context.locale.toString();
 
-String duration(DateTime timestamp) {
+String duration(DateTime dateTime) {
   final now = DateTime.now();
-  final duration = Duration(seconds: now.difference(timestamp).inSeconds);
+  final duration = Duration(seconds: now.difference(dateTime).inSeconds);
   return '${printDuration(
     duration,
     locale: DurationLocale.fromLanguageCode(locale)!,

@@ -30,7 +30,7 @@ class _$PostTearOff {
       int likedCount = 0,
       int readCount = 0,
       bool private = false,
-      String? userDisplayName,
+      required String userDisplayName,
       String? userPhotoURL,
       Set<String> tags = const {},
       bool notice = false}) {
@@ -71,7 +71,7 @@ mixin _$Post {
   int get likedCount => throw _privateConstructorUsedError;
   int get readCount => throw _privateConstructorUsedError;
   bool get private => throw _privateConstructorUsedError;
-  String? get userDisplayName => throw _privateConstructorUsedError;
+  String get userDisplayName => throw _privateConstructorUsedError;
   String? get userPhotoURL => throw _privateConstructorUsedError;
   Set<String> get tags => throw _privateConstructorUsedError;
   bool get notice => throw _privateConstructorUsedError;
@@ -95,7 +95,7 @@ abstract class $PostCopyWith<$Res> {
       int likedCount,
       int readCount,
       bool private,
-      String? userDisplayName,
+      String userDisplayName,
       String? userPhotoURL,
       Set<String> tags,
       bool notice});
@@ -165,7 +165,7 @@ class _$PostCopyWithImpl<$Res> implements $PostCopyWith<$Res> {
       userDisplayName: userDisplayName == freezed
           ? _value.userDisplayName
           : userDisplayName // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       userPhotoURL: userPhotoURL == freezed
           ? _value.userPhotoURL
           : userPhotoURL // ignore: cast_nullable_to_non_nullable
@@ -197,7 +197,7 @@ abstract class _$PostCopyWith<$Res> implements $PostCopyWith<$Res> {
       int likedCount,
       int readCount,
       bool private,
-      String? userDisplayName,
+      String userDisplayName,
       String? userPhotoURL,
       Set<String> tags,
       bool notice});
@@ -268,7 +268,7 @@ class __$PostCopyWithImpl<$Res> extends _$PostCopyWithImpl<$Res>
       userDisplayName: userDisplayName == freezed
           ? _value.userDisplayName
           : userDisplayName // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       userPhotoURL: userPhotoURL == freezed
           ? _value.userPhotoURL
           : userPhotoURL // ignore: cast_nullable_to_non_nullable
@@ -298,7 +298,7 @@ class _$_Post extends _Post {
       this.likedCount = 0,
       this.readCount = 0,
       this.private = false,
-      this.userDisplayName,
+      required this.userDisplayName,
       this.userPhotoURL,
       this.tags = const {},
       this.notice = false})
@@ -331,7 +331,7 @@ class _$_Post extends _Post {
   @override
   final bool private;
   @override
-  final String? userDisplayName;
+  final String userDisplayName;
   @override
   final String? userPhotoURL;
   @JsonKey(defaultValue: const {})
@@ -425,7 +425,7 @@ abstract class _Post extends Post {
       int likedCount,
       int readCount,
       bool private,
-      String? userDisplayName,
+      required String userDisplayName,
       String? userPhotoURL,
       Set<String> tags,
       bool notice}) = _$_Post;
@@ -453,7 +453,7 @@ abstract class _Post extends Post {
   @override
   bool get private => throw _privateConstructorUsedError;
   @override
-  String? get userDisplayName => throw _privateConstructorUsedError;
+  String get userDisplayName => throw _privateConstructorUsedError;
   @override
   String? get userPhotoURL => throw _privateConstructorUsedError;
   @override

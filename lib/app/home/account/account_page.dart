@@ -41,8 +41,8 @@ class _AccountPageState extends State<AccountPage> {
       title: LocaleKeys.my_profile.tr(),
       child: TextField(
         maxLength: 8,
-        controller: TextEditingController(
-            text: _displayName = appUser.displayName ?? ''),
+        controller:
+            TextEditingController(text: _displayName = appUser.displayName),
         decoration: InputDecoration(hintText: LocaleKeys.writeNameYouWant.tr()),
         onChanged: (String displayName) => _displayName = displayName,
       ),
@@ -156,7 +156,7 @@ class _AccountPageState extends State<AccountPage> {
           child: Text(
             appUser == null
                 ? LocaleKeys.requiredSignIn.tr()
-                : appUser.displayName ?? LocaleKeys.makeAUsername.tr(),
+                : appUser.displayName,
           ),
         ),
         const SizedBox(height: defaultPadding),
@@ -198,9 +198,9 @@ class _AccountPageState extends State<AccountPage> {
         final storage = context.read(storageProvider);
         final database = context.read(databaseProvider);
         await storage.uploadProfileImage(
-            userId: appUser.id!, filePath: pickedFile.path);
+            userId: appUser.id, filePath: pickedFile.path);
         final newPhotoURL =
-            await storage.profileDownloadURL(userId: appUser.id!);
+            await storage.profileDownloadURL(userId: appUser.id);
         await database.updateAppUser(appUser.copyWith(photoURL: newPhotoURL));
         Navigator.of(dialogKey.currentContext!, rootNavigator: true).pop();
         Navigator.pop(context);

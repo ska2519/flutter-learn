@@ -4,17 +4,18 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/home/account/account_page.dart';
+import 'package:flutter_learn/app/home/community/post_detail_page.dart';
 import 'package:flutter_learn/app/home/community/posts_page.dart';
 import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/side_menu.dart';
 import 'package:flutter_learn/app/home/tab_item.dart';
 import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
-import 'package:flutter_learn/app/top_level_providers.dart';
 import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/responsive.dart';
 import 'package:flutter_learn/controllers/menu_controller.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/secret_keys.dart';
+import 'package:flutter_learn/services/fcm_service.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
@@ -66,9 +67,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    final fcm = context.read(fcmServiceProvider);
+    fcm.setupInteractedPostUpdate();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final appUser = useProvider(appUserStreamProvider).data?.value;
-    final fcm = useProvider(fcmProvider);
+    final fcmData = useProvider(fcmDataProvider).state;
+    useEffect(() {
+      print('fcmData: $fcmData');
+      if (fcmData != null && fcmData.keys.first == 'postId') {
+        final postId = fcmData.values.first.toString();
+        WidgetsBinding.instance!.addPostFrameCallback(
+            (_) => PostDetailPage.show(context, postId: postId));
+      }
+    });
     print('HomePage appUser: $appUser');
     return Scaffold(
       floatingActionButton:

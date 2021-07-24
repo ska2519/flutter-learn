@@ -109,10 +109,12 @@ class _SearchPageState extends State<SearchPage> {
                                 currSearchStuff?[i].data['userId'] as String,
                             id: currSearchStuff?[i].data['id'] as String,
                             timestamp: DateTime.parse(
-                              currSearchStuff?[i].data['timestamp'] as String,
+                              currSearchStuff?[i].data['createdAt'] as String,
                             ),
                             commentCount:
                                 currSearchStuff?[i].data['commentCount'] as int,
+                            userDisplayName: currSearchStuff?[i]
+                                .data['userDisplayName'] as String,
                           );
                           if (searchTerm.state.isNotEmpty) {
                             return Padding(

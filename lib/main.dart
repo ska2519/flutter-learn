@@ -21,13 +21,15 @@ import 'utils/format.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('Handling a background message ${message.messageId}');
+  print(
+      'fcm_Handling a background message ${message.notification} / ${message.data}');
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   await FirebaseAppCheck.instance
       .activate(webRecaptchaSiteKey: 'recaptcha-v3-site-key');
   await EasyLocalization.ensureInitialized();

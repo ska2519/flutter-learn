@@ -19,7 +19,7 @@ _$_Post _$_$_PostFromJson(Map json) {
     likedCount: json['likedCount'] as int? ?? 0,
     readCount: json['readCount'] as int? ?? 0,
     private: json['private'] as bool? ?? false,
-    userDisplayName: json['userDisplayName'] as String?,
+    userDisplayName: json['userDisplayName'] as String,
     userPhotoURL: json['userPhotoURL'] as String?,
     tags:
         (json['tags'] as List<dynamic>?)?.map((e) => e as String).toSet() ?? {},

@@ -39,7 +39,7 @@ class _LicenseSimplePageState extends State<LicenseSimplePage> {
       applicationName: LocaleKeys.flutterLearn.tr(),
       applicationIcon: Padding(
         padding: const EdgeInsets.all(defaultPadding),
-        child: Image.asset('assets/icons/dash_icon.png'),
+        child: Image.asset('assets/icons/dash_icon_180.png'),
       ),
       applicationVersion: _packageInfo.version,
       applicationLegalese: 'Copyright ${DateTime.now().year} Sk@',

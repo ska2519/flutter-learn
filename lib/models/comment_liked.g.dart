@@ -1,30 +1,34 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'post_liked.dart';
+part of 'comment_liked.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_PostLiked _$_$_PostLikedFromJson(Map json) {
-  return _$_PostLiked(
+_$_CommentLiked _$_$_CommentLikedFromJson(Map json) {
+  return _$_CommentLiked(
     userId: json['userId'] as String,
     userDisplayName: json['userDisplayName'] as String,
+    commentId: json['commentId'] as String,
+    commentUserId: json['commentUserId'] as String,
     postId: json['postId'] as String,
     postUserId: json['postUserId'] as String,
-    postTitle: json['postTitle'] as String,
+    commentText: json['commentText'] as String,
     timestamp: json['timestamp'] == null
         ? null
         : DateTime.parse(json['timestamp'] as String),
   );
 }
 
-Map<String, dynamic> _$_$_PostLikedToJson(_$_PostLiked instance) =>
+Map<String, dynamic> _$_$_CommentLikedToJson(_$_CommentLiked instance) =>
     <String, dynamic>{
       'userId': instance.userId,
       'userDisplayName': instance.userDisplayName,
+      'commentId': instance.commentId,
+      'commentUserId': instance.commentUserId,
       'postId': instance.postId,
       'postUserId': instance.postUserId,
-      'postTitle': instance.postTitle,
+      'commentText': instance.commentText,
       'timestamp': instance.timestamp?.toIso8601String(),
     };

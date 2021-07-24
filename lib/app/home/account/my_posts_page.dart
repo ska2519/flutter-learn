@@ -18,7 +18,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final userPostsStreamProvider = StreamProvider.autoDispose<List<Post>>((ref) {
   final database = ref.watch(databaseProvider);
   return ref.watch(appUserStreamProvider).when(
-        data: (appUser) => database.userPostsStream(appUser!.id!),
+        data: (appUser) => database.userPostsStream(appUser!.id),
         loading: () => Stream<List<Post>>.empty(),
         error: (error, stackTrace) => Stream<List<Post>>.empty(),
       );

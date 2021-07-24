@@ -35,61 +35,23 @@ class PostItemInfo extends HookWidget {
   final bool selectableText;
 
   Future<void> _likePost(
-      BuildContext context, bool userLiked, AppUser? appUser) async {
-    if (appUser == null) {
-      SignInPage.show(context);
-    } else {
-      _setPostLiked(context, userLiked, appUser);
-    }
-  }
-
-  Future<void> _setPostLiked(
       BuildContext context, bool userLiked, AppUser appUser) async {
     final database = context.read<FirestoreDatabase>(databaseProvider);
     try {
-      if (userLiked == false) {
+      if (!userLiked) {
         await database.setPostLiked(
           PostLiked(
             postId: post.id,
-            userId: appUser.id!,
+            postUserId: post.userId,
+            userId: appUser.id,
+            userDisplayName: appUser.displayName,
             timestamp: DateTime.now(),
+            postTitle: post.title,
           ),
         );
-        await _addLikedCount(context);
       } else {
-        await _deleteLikedCount(context, appUser);
+        await database.deletePostLiked(appUser.id, post);
       }
-    } catch (e) {
-      unawaited(showExceptionAlertDialog(
-        context: context,
-        title: LocaleKeys.operationFailed.tr(),
-        exception: e,
-      ));
-    }
-  }
-
-  Future<void> _addLikedCount(BuildContext context) async {
-    try {
-      final database = context.read(databaseProvider);
-      final nowPost = await database.getPost(post.id);
-      if (nowPost != null) {
-        await database
-            .updatePost(nowPost.copyWith(likedCount: nowPost.likedCount + 1));
-      }
-    } catch (e) {
-      unawaited(showExceptionAlertDialog(
-        context: context,
-        title: LocaleKeys.operationFailed.tr(),
-        exception: e,
-      ));
-    }
-  }
-
-  Future<void> _deleteLikedCount(BuildContext context, AppUser appUser) async {
-    try {
-      final database = context.read(databaseProvider);
-      await database.transactionDelPostLiked(
-          appUser.id!, post.copyWith(likedCount: post.likedCount - 1));
     } catch (e) {
       unawaited(showExceptionAlertDialog(
         context: context,
@@ -170,8 +132,8 @@ class PostItemInfo extends HookWidget {
                     title: LocaleKeys.somethingWentWrong.tr(),
                     message: LocaleKeys.cantLoadDataRightNow.tr(),
                   ),
-                  data: (postLiked) {
-                    final userLiked = postLiked
+                  data: (postLikedList) {
+                    final userLiked = postLikedList
                         .any((element) => element.userId == appUser?.id);
                     return InkWell(
                       splashColor: Colors.transparent,
@@ -196,8 +158,8 @@ class PostItemInfo extends HookWidget {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 3),
                               child: Text(
-                                postLiked.isNotEmpty
-                                    ? postLiked.length.toString()
+                                postLikedList.isNotEmpty
+                                    ? postLikedList.length.toString()
                                     : LocaleKeys.like.tr(),
                                 style: Theme.of(context).textTheme.caption,
                               ),

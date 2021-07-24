@@ -21,7 +21,7 @@ class Post with _$Post {
     @Default(0) int likedCount,
     @Default(0) int readCount,
     @Default(false) bool private,
-    String? userDisplayName,
+    required String userDisplayName,
     String? userPhotoURL,
     @Default({}) Set<String> tags,
     @Default(false) bool notice,

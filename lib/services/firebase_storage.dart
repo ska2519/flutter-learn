@@ -3,9 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'firebase_path.dart';
 
-final storageProvider = Provider<FirestoreStorage>((ref) {
-  return FirestoreStorage();
-});
+final storageProvider = Provider<FirestoreStorage>((ref) => FirestoreStorage());
 
 class FirestoreStorage {
   final _storage = StorageService.instance;

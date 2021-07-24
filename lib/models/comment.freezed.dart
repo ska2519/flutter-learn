@@ -21,25 +21,37 @@ class _$CommentTearOff {
   const _$CommentTearOff();
 
   _Comment call(
-      {String? id,
+      {required String id,
       required String text,
       required String postId,
+      required String postTitle,
       required String userId,
+      required String userDisplayName,
+      String? userPhotoURL,
+      required String postUserId,
       @TimestampConverter() DateTime? timestamp,
-      Set<String> likedUsers = const {},
+      int likedCount = 0,
       int level = 0,
-      String? parent = null,
+      String? parentCmt = null,
+      String? parentCmtUserId = null,
+      String? parentCmtText = null,
       bool private = false,
       int childCount = 0}) {
     return _Comment(
       id: id,
       text: text,
       postId: postId,
+      postTitle: postTitle,
       userId: userId,
+      userDisplayName: userDisplayName,
+      userPhotoURL: userPhotoURL,
+      postUserId: postUserId,
       timestamp: timestamp,
-      likedUsers: likedUsers,
+      likedCount: likedCount,
       level: level,
-      parent: parent,
+      parentCmt: parentCmt,
+      parentCmtUserId: parentCmtUserId,
+      parentCmtText: parentCmtText,
       private: private,
       childCount: childCount,
     );
@@ -55,15 +67,22 @@ const $Comment = _$CommentTearOff();
 
 /// @nodoc
 mixin _$Comment {
-  String? get id => throw _privateConstructorUsedError; //Parent? parent,
+  String get id => throw _privateConstructorUsedError;
   String get text => throw _privateConstructorUsedError;
   String get postId => throw _privateConstructorUsedError;
+  String get postTitle => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
+  String get userDisplayName => throw _privateConstructorUsedError;
+  String? get userPhotoURL => throw _privateConstructorUsedError;
+  String get postUserId => throw _privateConstructorUsedError;
   @TimestampConverter()
-  DateTime? get timestamp => throw _privateConstructorUsedError;
-  Set<String> get likedUsers => throw _privateConstructorUsedError;
+  DateTime? get timestamp =>
+      throw _privateConstructorUsedError; // @Default({}) Set<String> likedUsers,
+  int get likedCount => throw _privateConstructorUsedError;
   int get level => throw _privateConstructorUsedError;
-  String? get parent => throw _privateConstructorUsedError;
+  String? get parentCmt => throw _privateConstructorUsedError;
+  String? get parentCmtUserId => throw _privateConstructorUsedError;
+  String? get parentCmtText => throw _privateConstructorUsedError;
   bool get private => throw _privateConstructorUsedError;
   int get childCount => throw _privateConstructorUsedError;
 
@@ -77,14 +96,20 @@ abstract class $CommentCopyWith<$Res> {
   factory $CommentCopyWith(Comment value, $Res Function(Comment) then) =
       _$CommentCopyWithImpl<$Res>;
   $Res call(
-      {String? id,
+      {String id,
       String text,
       String postId,
+      String postTitle,
       String userId,
+      String userDisplayName,
+      String? userPhotoURL,
+      String postUserId,
       @TimestampConverter() DateTime? timestamp,
-      Set<String> likedUsers,
+      int likedCount,
       int level,
-      String? parent,
+      String? parentCmt,
+      String? parentCmtUserId,
+      String? parentCmtText,
       bool private,
       int childCount});
 }
@@ -102,11 +127,17 @@ class _$CommentCopyWithImpl<$Res> implements $CommentCopyWith<$Res> {
     Object? id = freezed,
     Object? text = freezed,
     Object? postId = freezed,
+    Object? postTitle = freezed,
     Object? userId = freezed,
+    Object? userDisplayName = freezed,
+    Object? userPhotoURL = freezed,
+    Object? postUserId = freezed,
     Object? timestamp = freezed,
-    Object? likedUsers = freezed,
+    Object? likedCount = freezed,
     Object? level = freezed,
-    Object? parent = freezed,
+    Object? parentCmt = freezed,
+    Object? parentCmtUserId = freezed,
+    Object? parentCmtText = freezed,
     Object? private = freezed,
     Object? childCount = freezed,
   }) {
@@ -114,7 +145,7 @@ class _$CommentCopyWithImpl<$Res> implements $CommentCopyWith<$Res> {
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       text: text == freezed
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
@@ -123,25 +154,49 @@ class _$CommentCopyWithImpl<$Res> implements $CommentCopyWith<$Res> {
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
               as String,
+      postTitle: postTitle == freezed
+          ? _value.postTitle
+          : postTitle // ignore: cast_nullable_to_non_nullable
+              as String,
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      userDisplayName: userDisplayName == freezed
+          ? _value.userDisplayName
+          : userDisplayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      userPhotoURL: userPhotoURL == freezed
+          ? _value.userPhotoURL
+          : userPhotoURL // ignore: cast_nullable_to_non_nullable
+              as String?,
+      postUserId: postUserId == freezed
+          ? _value.postUserId
+          : postUserId // ignore: cast_nullable_to_non_nullable
               as String,
       timestamp: timestamp == freezed
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      likedUsers: likedUsers == freezed
-          ? _value.likedUsers
-          : likedUsers // ignore: cast_nullable_to_non_nullable
-              as Set<String>,
+      likedCount: likedCount == freezed
+          ? _value.likedCount
+          : likedCount // ignore: cast_nullable_to_non_nullable
+              as int,
       level: level == freezed
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
               as int,
-      parent: parent == freezed
-          ? _value.parent
-          : parent // ignore: cast_nullable_to_non_nullable
+      parentCmt: parentCmt == freezed
+          ? _value.parentCmt
+          : parentCmt // ignore: cast_nullable_to_non_nullable
+              as String?,
+      parentCmtUserId: parentCmtUserId == freezed
+          ? _value.parentCmtUserId
+          : parentCmtUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      parentCmtText: parentCmtText == freezed
+          ? _value.parentCmtText
+          : parentCmtText // ignore: cast_nullable_to_non_nullable
               as String?,
       private: private == freezed
           ? _value.private
@@ -161,14 +216,20 @@ abstract class _$CommentCopyWith<$Res> implements $CommentCopyWith<$Res> {
       __$CommentCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? id,
+      {String id,
       String text,
       String postId,
+      String postTitle,
       String userId,
+      String userDisplayName,
+      String? userPhotoURL,
+      String postUserId,
       @TimestampConverter() DateTime? timestamp,
-      Set<String> likedUsers,
+      int likedCount,
       int level,
-      String? parent,
+      String? parentCmt,
+      String? parentCmtUserId,
+      String? parentCmtText,
       bool private,
       int childCount});
 }
@@ -187,11 +248,17 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
     Object? id = freezed,
     Object? text = freezed,
     Object? postId = freezed,
+    Object? postTitle = freezed,
     Object? userId = freezed,
+    Object? userDisplayName = freezed,
+    Object? userPhotoURL = freezed,
+    Object? postUserId = freezed,
     Object? timestamp = freezed,
-    Object? likedUsers = freezed,
+    Object? likedCount = freezed,
     Object? level = freezed,
-    Object? parent = freezed,
+    Object? parentCmt = freezed,
+    Object? parentCmtUserId = freezed,
+    Object? parentCmtText = freezed,
     Object? private = freezed,
     Object? childCount = freezed,
   }) {
@@ -199,7 +266,7 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       text: text == freezed
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
@@ -208,25 +275,49 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
               as String,
+      postTitle: postTitle == freezed
+          ? _value.postTitle
+          : postTitle // ignore: cast_nullable_to_non_nullable
+              as String,
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
+              as String,
+      userDisplayName: userDisplayName == freezed
+          ? _value.userDisplayName
+          : userDisplayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      userPhotoURL: userPhotoURL == freezed
+          ? _value.userPhotoURL
+          : userPhotoURL // ignore: cast_nullable_to_non_nullable
+              as String?,
+      postUserId: postUserId == freezed
+          ? _value.postUserId
+          : postUserId // ignore: cast_nullable_to_non_nullable
               as String,
       timestamp: timestamp == freezed
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      likedUsers: likedUsers == freezed
-          ? _value.likedUsers
-          : likedUsers // ignore: cast_nullable_to_non_nullable
-              as Set<String>,
+      likedCount: likedCount == freezed
+          ? _value.likedCount
+          : likedCount // ignore: cast_nullable_to_non_nullable
+              as int,
       level: level == freezed
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
               as int,
-      parent: parent == freezed
-          ? _value.parent
-          : parent // ignore: cast_nullable_to_non_nullable
+      parentCmt: parentCmt == freezed
+          ? _value.parentCmt
+          : parentCmt // ignore: cast_nullable_to_non_nullable
+              as String?,
+      parentCmtUserId: parentCmtUserId == freezed
+          ? _value.parentCmtUserId
+          : parentCmtUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      parentCmtText: parentCmtText == freezed
+          ? _value.parentCmtText
+          : parentCmtText // ignore: cast_nullable_to_non_nullable
               as String?,
       private: private == freezed
           ? _value.private
@@ -244,14 +335,20 @@ class __$CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Comment extends _Comment {
   const _$_Comment(
-      {this.id,
+      {required this.id,
       required this.text,
       required this.postId,
+      required this.postTitle,
       required this.userId,
+      required this.userDisplayName,
+      this.userPhotoURL,
+      required this.postUserId,
       @TimestampConverter() this.timestamp,
-      this.likedUsers = const {},
+      this.likedCount = 0,
       this.level = 0,
-      this.parent = null,
+      this.parentCmt = null,
+      this.parentCmtUserId = null,
+      this.parentCmtText = null,
       this.private = false,
       this.childCount = 0})
       : super._();
@@ -260,25 +357,39 @@ class _$_Comment extends _Comment {
       _$_$_CommentFromJson(json);
 
   @override
-  final String? id;
-  @override //Parent? parent,
+  final String id;
+  @override
   final String text;
   @override
   final String postId;
   @override
+  final String postTitle;
+  @override
   final String userId;
+  @override
+  final String userDisplayName;
+  @override
+  final String? userPhotoURL;
+  @override
+  final String postUserId;
   @override
   @TimestampConverter()
   final DateTime? timestamp;
-  @JsonKey(defaultValue: const {})
-  @override
-  final Set<String> likedUsers;
+  @JsonKey(defaultValue: 0)
+  @override // @Default({}) Set<String> likedUsers,
+  final int likedCount;
   @JsonKey(defaultValue: 0)
   @override
   final int level;
   @JsonKey(defaultValue: null)
   @override
-  final String? parent;
+  final String? parentCmt;
+  @JsonKey(defaultValue: null)
+  @override
+  final String? parentCmtUserId;
+  @JsonKey(defaultValue: null)
+  @override
+  final String? parentCmtText;
   @JsonKey(defaultValue: false)
   @override
   final bool private;
@@ -288,7 +399,7 @@ class _$_Comment extends _Comment {
 
   @override
   String toString() {
-    return 'Comment(id: $id, text: $text, postId: $postId, userId: $userId, timestamp: $timestamp, likedUsers: $likedUsers, level: $level, parent: $parent, private: $private, childCount: $childCount)';
+    return 'Comment(id: $id, text: $text, postId: $postId, postTitle: $postTitle, userId: $userId, userDisplayName: $userDisplayName, userPhotoURL: $userPhotoURL, postUserId: $postUserId, timestamp: $timestamp, likedCount: $likedCount, level: $level, parentCmt: $parentCmt, parentCmtUserId: $parentCmtUserId, parentCmtText: $parentCmtText, private: $private, childCount: $childCount)';
   }
 
   @override
@@ -301,18 +412,37 @@ class _$_Comment extends _Comment {
                 const DeepCollectionEquality().equals(other.text, text)) &&
             (identical(other.postId, postId) ||
                 const DeepCollectionEquality().equals(other.postId, postId)) &&
+            (identical(other.postTitle, postTitle) ||
+                const DeepCollectionEquality()
+                    .equals(other.postTitle, postTitle)) &&
             (identical(other.userId, userId) ||
                 const DeepCollectionEquality().equals(other.userId, userId)) &&
+            (identical(other.userDisplayName, userDisplayName) ||
+                const DeepCollectionEquality()
+                    .equals(other.userDisplayName, userDisplayName)) &&
+            (identical(other.userPhotoURL, userPhotoURL) ||
+                const DeepCollectionEquality()
+                    .equals(other.userPhotoURL, userPhotoURL)) &&
+            (identical(other.postUserId, postUserId) ||
+                const DeepCollectionEquality()
+                    .equals(other.postUserId, postUserId)) &&
             (identical(other.timestamp, timestamp) ||
                 const DeepCollectionEquality()
                     .equals(other.timestamp, timestamp)) &&
-            (identical(other.likedUsers, likedUsers) ||
+            (identical(other.likedCount, likedCount) ||
                 const DeepCollectionEquality()
-                    .equals(other.likedUsers, likedUsers)) &&
+                    .equals(other.likedCount, likedCount)) &&
             (identical(other.level, level) ||
                 const DeepCollectionEquality().equals(other.level, level)) &&
-            (identical(other.parent, parent) ||
-                const DeepCollectionEquality().equals(other.parent, parent)) &&
+            (identical(other.parentCmt, parentCmt) ||
+                const DeepCollectionEquality()
+                    .equals(other.parentCmt, parentCmt)) &&
+            (identical(other.parentCmtUserId, parentCmtUserId) ||
+                const DeepCollectionEquality()
+                    .equals(other.parentCmtUserId, parentCmtUserId)) &&
+            (identical(other.parentCmtText, parentCmtText) ||
+                const DeepCollectionEquality()
+                    .equals(other.parentCmtText, parentCmtText)) &&
             (identical(other.private, private) ||
                 const DeepCollectionEquality()
                     .equals(other.private, private)) &&
@@ -327,11 +457,17 @@ class _$_Comment extends _Comment {
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(text) ^
       const DeepCollectionEquality().hash(postId) ^
+      const DeepCollectionEquality().hash(postTitle) ^
       const DeepCollectionEquality().hash(userId) ^
+      const DeepCollectionEquality().hash(userDisplayName) ^
+      const DeepCollectionEquality().hash(userPhotoURL) ^
+      const DeepCollectionEquality().hash(postUserId) ^
       const DeepCollectionEquality().hash(timestamp) ^
-      const DeepCollectionEquality().hash(likedUsers) ^
+      const DeepCollectionEquality().hash(likedCount) ^
       const DeepCollectionEquality().hash(level) ^
-      const DeepCollectionEquality().hash(parent) ^
+      const DeepCollectionEquality().hash(parentCmt) ^
+      const DeepCollectionEquality().hash(parentCmtUserId) ^
+      const DeepCollectionEquality().hash(parentCmtText) ^
       const DeepCollectionEquality().hash(private) ^
       const DeepCollectionEquality().hash(childCount);
 
@@ -348,14 +484,20 @@ class _$_Comment extends _Comment {
 
 abstract class _Comment extends Comment {
   const factory _Comment(
-      {String? id,
+      {required String id,
       required String text,
       required String postId,
+      required String postTitle,
       required String userId,
+      required String userDisplayName,
+      String? userPhotoURL,
+      required String postUserId,
       @TimestampConverter() DateTime? timestamp,
-      Set<String> likedUsers,
+      int likedCount,
       int level,
-      String? parent,
+      String? parentCmt,
+      String? parentCmtUserId,
+      String? parentCmtText,
       bool private,
       int childCount}) = _$_Comment;
   const _Comment._() : super._();
@@ -363,22 +505,34 @@ abstract class _Comment extends Comment {
   factory _Comment.fromJson(Map<String, dynamic> json) = _$_Comment.fromJson;
 
   @override
-  String? get id => throw _privateConstructorUsedError;
-  @override //Parent? parent,
+  String get id => throw _privateConstructorUsedError;
+  @override
   String get text => throw _privateConstructorUsedError;
   @override
   String get postId => throw _privateConstructorUsedError;
   @override
+  String get postTitle => throw _privateConstructorUsedError;
+  @override
   String get userId => throw _privateConstructorUsedError;
+  @override
+  String get userDisplayName => throw _privateConstructorUsedError;
+  @override
+  String? get userPhotoURL => throw _privateConstructorUsedError;
+  @override
+  String get postUserId => throw _privateConstructorUsedError;
   @override
   @TimestampConverter()
   DateTime? get timestamp => throw _privateConstructorUsedError;
-  @override
-  Set<String> get likedUsers => throw _privateConstructorUsedError;
+  @override // @Default({}) Set<String> likedUsers,
+  int get likedCount => throw _privateConstructorUsedError;
   @override
   int get level => throw _privateConstructorUsedError;
   @override
-  String? get parent => throw _privateConstructorUsedError;
+  String? get parentCmt => throw _privateConstructorUsedError;
+  @override
+  String? get parentCmtUserId => throw _privateConstructorUsedError;
+  @override
+  String? get parentCmtText => throw _privateConstructorUsedError;
   @override
   bool get private => throw _privateConstructorUsedError;
   @override

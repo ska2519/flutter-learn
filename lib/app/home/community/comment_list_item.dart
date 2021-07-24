@@ -3,16 +3,25 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
+import 'package:flutter_learn/app/widgets/alert_dialogs/show_exception_alert_dialog.dart';
 import 'package:flutter_learn/app/widgets/avatar.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/models/comment.dart';
+import 'package:flutter_learn/models/comment_liked.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pedantic/pedantic.dart';
 
 import '../../../utils/format.dart';
+
+final commentLikedListStreamProvider = StreamProvider.autoDispose
+    .family<List<CommentLiked>, Comment>((ref, comment) {
+  final database = ref.watch(databaseProvider);
+  return database.commentLikedStream(comment);
+});
 
 class CommentListItem extends HookWidget {
   const CommentListItem({
@@ -28,14 +37,30 @@ class CommentListItem extends HookWidget {
   final bool? myComments;
   final bool selectableText;
 
-  Future<void> _likeComment(BuildContext context, Comment comment) async {
-    final appUser = context.read(appUserStreamProvider).data?.value;
+  Future<void> _likeComment(
+      BuildContext context, bool commentLiked, AppUser appUser) async {
     final database = context.read<FirestoreDatabase>(databaseProvider);
-    if (appUser == null) {
-      SignInPage.show(context);
-    } else {
-      comment.likeComment(appUser);
-      await database.updateComment(comment);
+    final commentLikedModel = CommentLiked(
+      userId: appUser.id,
+      userDisplayName: appUser.displayName,
+      commentId: comment.id,
+      commentUserId: comment.userId,
+      postId: comment.postId,
+      postUserId: comment.postUserId,
+      commentText: comment.text,
+    );
+    try {
+      if (!commentLiked) {
+        await database.setCommentLiked(commentLikedModel);
+      } else {
+        await database.deleteCommentLiked(commentLikedModel);
+      }
+    } catch (e) {
+      unawaited(showExceptionAlertDialog(
+        context: context,
+        title: LocaleKeys.operationFailed.tr(),
+        exception: e,
+      ));
     }
   }
 
@@ -43,6 +68,8 @@ class CommentListItem extends HookWidget {
   Widget build(BuildContext context) {
     final database = useProvider(databaseProvider);
     final appUser = useProvider(appUserStreamProvider).data?.value;
+    final commentLikedListAsyncValue =
+        useProvider(commentLikedListStreamProvider(comment));
     return FutureBuilder<AppUser?>(
       // key: Key('comment-${comment.id}'),
       future: database.getAppUser(comment.userId),
@@ -69,7 +96,7 @@ class CommentListItem extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${commentUser.deletedUser ? LocaleKeys.deletedUser.tr() : commentUser.displayName!}  •  ${duration(comment.timestamp!)}',
+                      '${commentUser.deletedUser ? LocaleKeys.deletedUser.tr() : commentUser.displayName}  •  ${duration(comment.timestamp!)}',
                       style: Theme.of(context)
                           .textTheme
                           .caption!
@@ -99,13 +126,13 @@ class CommentListItem extends HookWidget {
                     Row(
                       children: [
                         Text(
-                          comment.likedUsers.isNotEmpty
-                              ? '좋아요 ${comment.likedUsers.length.toString()}개'
+                          comment.likedCount > 0
+                              ? '좋아요 ${comment.likedCount.toString()}개'
                               : '',
                           style: TextStyle(
                               fontSize: 10, color: firebaseOrangeColor),
                         ),
-                        if (comment.likedUsers.isNotEmpty)
+                        if (comment.likedCount > 0)
                           const SizedBox(width: defaultPadding)
                         else
                           const SizedBox(),
@@ -157,23 +184,32 @@ class CommentListItem extends HookWidget {
                   ],
                 ),
               ),
-              InkWell(
-                onTap: () => _likeComment(context, comment),
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                child: Padding(
-                  padding: const EdgeInsets.all(defaultPadding),
-                  child: Icon(
-                    comment.likedUsers.contains(appUser?.id)
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    color: comment.likedUsers.contains(appUser?.id)
-                        ? firebaseOrangeColor
-                        : Colors.grey,
-                    size: 15,
-                  ),
-                ),
-              )
+              commentLikedListAsyncValue.when(
+                  loading: () => const SizedBox(),
+                  error: (error, stackTrace) => const SizedBox(),
+                  data: (cmtlikedList) {
+                    print('appUser?.id: ${appUser?.id}');
+                    print('cmtlikedList: $cmtlikedList');
+                    final commentLiked = cmtlikedList
+                        .any((element) => element.userId == appUser?.id);
+                    print('commentLiked1: $commentLiked');
+                    return InkWell(
+                      onTap: () => appUser == null
+                          ? SignInPage.show(context)
+                          : _likeComment(context, commentLiked, appUser),
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.all(defaultPadding),
+                        child: Icon(
+                          commentLiked ? Icons.favorite : Icons.favorite_border,
+                          color:
+                              commentLiked ? firebaseOrangeColor : Colors.grey,
+                          size: 15,
+                        ),
+                      ),
+                    );
+                  })
             ],
           );
         }

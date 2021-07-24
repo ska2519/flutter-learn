@@ -7,6 +7,9 @@
 //     functions.logger.info('Hello logs!', {structuredData: true});
 //     response.send('Hello from Firebase!');
 // });
+import * as admin from 'firebase-admin';
+admin.initializeApp();
+
 export {increaseUserCount} from './firestore';
 export {decreaseUserCount} from './firestore';
 
@@ -21,6 +24,16 @@ export {decreasePostCount} from './firestore';
 export {increasePostTagsCount} from './firestore';
 export {decreasePostTagsCount} from './firestore';
 export {updatePostTagsCount} from './firestore';
+
+export {increasePostLikedCount} from './firestore';
+export {decreasePostLikedCount} from './firestore';
+
+export {increaseCommentLikedCount} from './firestore';
+export {decreaseCommentLikedCount} from './firestore';
+
+export {sendToComment} from './fcm';
+export {sendToPostLiked} from './fcm';
+export {sendToCommentLiked} from './fcm';
 
 export {resizeAvatar} from './storage';
 // export {addPostId} from './firestore';
