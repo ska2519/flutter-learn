@@ -109,7 +109,7 @@ class _SearchPageState extends State<SearchPage> {
                                 currSearchStuff?[i].data['userId'] as String,
                             id: currSearchStuff?[i].data['id'] as String,
                             timestamp: DateTime.parse(
-                              currSearchStuff?[i].data['createdAt'] as String,
+                              currSearchStuff?[i].data['timestamp'] as String,
                             ),
                             commentCount:
                                 currSearchStuff?[i].data['commentCount'] as int,
