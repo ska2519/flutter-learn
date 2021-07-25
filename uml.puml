@@ -1,0 +1,4212 @@
+@startuml
+set namespaceSeparator ::
+
+class "flutter_learn::themes.dart::ThemeType" {
+  +int index
+  {static} +List<ThemeType> values
+  {static} +ThemeType orangeLight
+}
+
+"flutter_learn::themes.dart::ThemeType" o-- "flutter_learn::themes.dart::ThemeType"
+
+class "flutter_learn::themes.dart::AppTheme" {
+  {static} +ThemeType defaultTheme
+  +ThemeType? type
+  +bool isDark
+  +Color? bg1
+  +Color? surface1
+  +Color? accent1
+  +Color? greyWeak
+  +Color? grey
+  +Color? greyMedium
+  +Color? greyStrong
+  +Color? focus
+  +Color? mainTextColor
+  +Color? inverseTextColor
+  +ThemeData themeData
+  +Color shift()
+}
+
+"flutter_learn::themes.dart::AppTheme" o-- "flutter_learn::themes.dart::ThemeType"
+"flutter_learn::themes.dart::AppTheme" o-- "dart::ui::Color"
+"flutter_learn::themes.dart::AppTheme" o-- "flutter::src::material::theme_data.dart::ThemeData"
+
+class "flutter_learn::app::home::tab_item.dart::TabItem" {
+  +int index
+  {static} +List<TabItem> values
+  {static} +TabItem community
+  {static} +TabItem youTube
+  {static} +TabItem more
+}
+
+"flutter_learn::app::home::tab_item.dart::TabItem" o-- "flutter_learn::app::home::tab_item.dart::TabItem"
+
+class "flutter_learn::app::home::tab_item.dart::TabItemData" {
+  +String key
+  +String label
+  +IconData icon
+  {static} +Map<TabItem, TabItemData> allTabs
+}
+
+"flutter_learn::app::home::tab_item.dart::TabItemData" o-- "flutter::src::widgets::icon_data.dart::IconData"
+
+class "flutter_learn::app::home::desktop::youtube_screen.dart::YouTubeScreen" {
+  +Widget build()
+}
+
+class "flutter_learn::app::home::desktop::community_screen.dart::CommunityScreen" {
+  +Widget build()
+}
+
+class "flutter_learn::app::home::desktop::widgets::recent_files.dart::RecentFiles" {
+  +Widget build()
+}
+
+class "flutter_learn::app::home::desktop::widgets::storage_details.dart::StorageDetails" {
+  +Widget build()
+}
+
+class "flutter_learn::app::home::desktop::widgets::storage_info_card.dart::StorageInfoCard" {
+  +String title
+  +String svgSrc
+  +String amountOfFiles
+  +int numOfFiles
+  +Widget build()
+}
+
+class "flutter_learn::app::home::desktop::widgets::chart.dart::Chart" {
+  +Widget build()
+}
+
+class "flutter_learn::app::home::desktop::widgets::side_menu.dart::SideMenu" {
+  +Widget build()
+}
+
+class "flutter_learn::app::home::desktop::widgets::side_menu.dart::DrawerListTile" {
+  +String title
+  +void Function() onTap
+  +IconData icon
+  +Widget build()
+}
+
+"flutter_learn::app::home::desktop::widgets::side_menu.dart::DrawerListTile" o-- "dart::ui::void Function()"
+"flutter_learn::app::home::desktop::widgets::side_menu.dart::DrawerListTile" o-- "flutter::src::widgets::icon_data.dart::IconData"
+
+class "flutter_learn::app::home::youtube::youtube_page.dart::playListLoadFilter" {
+  +int index
+  {static} +List<playListLoadFilter> values
+  {static} +playListLoadFilter changeTag
+  {static} +playListLoadFilter loadMore
+}
+
+"flutter_learn::app::home::youtube::youtube_page.dart::playListLoadFilter" o-- "flutter_learn::app::home::youtube::youtube_page.dart::playListLoadFilter"
+
+class "flutter_learn::app::home::youtube::youtube_page.dart::PlaylistPage" {
+  +_PlaylistPageState createState()
+}
+
+class "flutter_learn::app::home::youtube::youtube_page.dart::_PlaylistPageState" {
+  +int selectedIndex
+  +ScrollController scrollController
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +CachedNetworkImage thumbnail()
+}
+
+"flutter_learn::app::home::youtube::youtube_page.dart::_PlaylistPageState" o-- "flutter::src::widgets::scroll_controller.dart::ScrollController"
+
+class "flutter_learn::app::home::youtube::youtube_play_page.dart::YouTubePlayPage" {
+  +Item item
+  +String tag
+  {static} +Future<void> show()
+  +Future<Video?> getVideo()
+  +Future<void> updateVideo()
+  +Future<void> createVideo()
+  +Widget build()
+}
+
+"flutter_learn::app::home::youtube::youtube_play_page.dart::YouTubePlayPage" o-- "flutter_learn::models::youtube_playlist_items.dart::Item"
+
+class "flutter_learn::app::home::youtube::youtube_play_page.dart::ChannelInfo" {
+  +Channel channel
+  +Widget build()
+}
+
+"flutter_learn::app::home::youtube::youtube_play_page.dart::ChannelInfo" o-- "flutter_learn::models::youtube_channel.dart::Channel"
+
+class "flutter_learn::app::home::youtube::youtube_play_page.dart::PlayerIconButton" {
+  +Widget icon
+  +String buttonText
+  +void Function() onPressed
+  +Widget build()
+}
+
+"flutter_learn::app::home::youtube::youtube_play_page.dart::PlayerIconButton" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter_learn::app::home::youtube::youtube_play_page.dart::PlayerIconButton" o-- "dart::ui::void Function()"
+
+class "flutter_learn::app::home::home_page.dart::HomePage" {
+  +FirebaseAnalytics analytics
+  +FirebaseAnalyticsObserver observer
+  +_HomePageState createState()
+}
+
+"flutter_learn::app::home::home_page.dart::HomePage" o-- "firebase_analytics::firebase_analytics.dart::FirebaseAnalytics"
+"flutter_learn::app::home::home_page.dart::HomePage" o-- "firebase_analytics::observer.dart::FirebaseAnalyticsObserver"
+
+class "flutter_learn::app::home::home_page.dart::_HomePageState" {
+  -List<Widget> _screens
+  -int _selectedIndex
+  -Future<void> _sendAnalyticsEvent()
+  +Future<void> setPostsBatch()
+  -void _submitMockPosts()
+  +void initState()
+  +Widget build()
+  -BottomNavigationBarItem _buildItem()
+}
+
+class "flutter_learn::app::home::account::liked_posts_page.dart::LikedPostsPage" {
+  +int initialIndex
+  {static} +Future<void> show()
+  +Widget build()
+  -Widget _buildLikedPosts()
+  -Widget _buildReadPosts()
+  -TabBar _buildTabBar()
+}
+
+class "flutter_learn::app::home::account::my_posts_page.dart::MyPostsPage" {
+  +int initialIndex
+  {static} +Future<void> show()
+  +Widget build()
+  -Widget _buildUserPosts()
+  -Widget _buildUserComments()
+  -TabBar _buildTabBar()
+}
+
+class "flutter_learn::app::home::account::license_page.dart::LicenseSimplePage" {
+  +_LicenseSimplePageState createState()
+}
+
+class "flutter_learn::app::home::account::license_page.dart::_LicenseSimplePageState" {
+  -PackageInfo _packageInfo
+  +void initState()
+  -Future<void> _initPackageInfo()
+  +Widget build()
+}
+
+"flutter_learn::app::home::account::license_page.dart::_LicenseSimplePageState" o-- "package_info_plus::package_info_plus.dart::PackageInfo"
+
+class "flutter_learn::app::home::account::menu_list_item.dart::MenuListItem" {
+  +void Function() onTap
+  +IconData? icon
+  +String title
+  +Widget build()
+}
+
+"flutter_learn::app::home::account::menu_list_item.dart::MenuListItem" o-- "dart::ui::void Function()"
+"flutter_learn::app::home::account::menu_list_item.dart::MenuListItem" o-- "flutter::src::widgets::icon_data.dart::IconData"
+
+class "flutter_learn::app::home::account::package_info_page.dart::PackageInfoPage" {
+  +_PackageInfoPageState createState()
+}
+
+class "flutter_learn::app::home::account::package_info_page.dart::_PackageInfoPageState" {
+  -PackageInfo _packageInfo
+  +void initState()
+  -Future<void> _initPackageInfo()
+  -Widget _infoTile()
+  +Widget build()
+}
+
+"flutter_learn::app::home::account::package_info_page.dart::_PackageInfoPageState" o-- "package_info_plus::package_info_plus.dart::PackageInfo"
+
+class "flutter_learn::app::home::account::account_page.dart::AccountPage" {
+  +_AccountPageState createState()
+}
+
+class "flutter_learn::app::home::account::account_page.dart::_AccountPageState" {
+  -String _displayName
+  +File? profileImageFile
+  -Future<bool?> _updateDisplayNameDialog()
+  +Widget build()
+  -Widget _buildUserInfo()
+  -Future<dynamic>? _updateProfileImageDialog()
+  +Future<void> setDefaultProfileImage()
+  +Future<void> updateProfileImage()
+}
+
+"flutter_learn::app::home::account::account_page.dart::_AccountPageState" o-- "dart::io::File"
+
+class "flutter_learn::app::home::account::settings_page.dart::SettingsPage" {
+  {static} +Future<void> show()
+  -Future<void> _signOut()
+  -Future<void> _confirmSignOut()
+  -Future<void> _deleteAccount()
+  -Future<void> _confirmDeleteAccount()
+  +Widget build()
+}
+
+class "flutter_learn::app::home::community::posts_page.dart::sortType" {
+  +int index
+  {static} +List<sortType> values
+  {static} +sortType likedCount
+  {static} +sortType commentCount
+  {static} +sortType readCount
+}
+
+"flutter_learn::app::home::community::posts_page.dart::sortType" o-- "flutter_learn::app::home::community::posts_page.dart::sortType"
+
+class "flutter_learn::app::home::community::posts_page.dart::PostsPage" {
+  {static} +Future<void> show()
+  +Widget build()
+  -Widget _buildPostList()
+  -Widget _buildFilterPostLists()
+  -Widget _buildPostFilter()
+  +Future<dynamic> filterDaysPopup()
+}
+
+class "flutter_learn::app::home::community::posts_page.dart::PostsPageSliverAppBar" {
+  +AppUser? appUser
+  +List<Tag> tags
+  +ValueNotifier<List<int>> selectedIndexList
+  +Widget build()
+  -Widget _buildTagFilterChip()
+  +Widget tagAvatar()
+  -void _selectFilter()
+  -void _resetFilter()
+}
+
+"flutter_learn::app::home::community::posts_page.dart::PostsPageSliverAppBar" o-- "flutter_learn::models::app_user.dart::AppUser"
+"flutter_learn::app::home::community::posts_page.dart::PostsPageSliverAppBar" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<List<int>>"
+
+class "flutter_learn::app::home::community::post_list_item.dart::PostListItem" {
+  +String postId
+  +void Function()? onTap
+  +Widget build()
+}
+
+"flutter_learn::app::home::community::post_list_item.dart::PostListItem" o-- "dart::ui::void Function()"
+
+class "flutter_learn::app::home::community::post_detail_page.dart::PostDetailPage" {
+  +String? postId
+  +bool? autoFocus
+  {static} +Future<void> show()
+  +_PostDetailPageState createState()
+}
+
+class "flutter_learn::app::home::community::post_detail_page.dart::_PostDetailPageState" {
+  -TextEditingController _textEditingController
+  +FocusNode focusNode
+  +String postId
+  +Comment? editComment
+  +Comment? parentComment
+  +bool autoFocus
+  -Future<dynamic> _checkReadUsers
+  +void initState()
+  +void didChangeDependencies()
+  +void dispose()
+  -Future<void> _submitMockComments()
+  +Future<void> setCommentsBatch()
+  +Future<void> editOrDeleteCommentPopup()
+  -Comment _commentFromState()
+  -void _replyComment()
+  -void _submitComment()
+  -Future<void> _addReadUsers()
+  -void _deletePost()
+  -void _editComment()
+  -void _deleteComment()
+  +void showPreventCommentSnackBar()
+  +Widget build()
+  +Future<void> editOrDeletePostPopup()
+}
+
+"flutter_learn::app::home::community::post_detail_page.dart::_PostDetailPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter_learn::app::home::community::post_detail_page.dart::_PostDetailPageState" o-- "flutter::src::widgets::focus_manager.dart::FocusNode"
+"flutter_learn::app::home::community::post_detail_page.dart::_PostDetailPageState" o-- "flutter_learn::models::comment.dart::Comment"
+
+class "flutter_learn::app::home::community::post_detail_page.dart::ReplyParentComment" {
+  +Comment? parentComment
+  +Widget build()
+}
+
+"flutter_learn::app::home::community::post_detail_page.dart::ReplyParentComment" o-- "flutter_learn::models::comment.dart::Comment"
+
+class "flutter_learn::app::home::community::post_detail_page.dart::PostDetailAppBarTitle" {
+  +Post post
+  +Widget build()
+}
+
+"flutter_learn::app::home::community::post_detail_page.dart::PostDetailAppBarTitle" o-- "flutter_learn::models::post.dart::Post"
+
+class "flutter_learn::app::home::community::edit_post_page.dart::EditPostPage" {
+  +Post? post
+  +bool? autoFocus
+  {static} +Future<dynamic> show()
+  +_EditPostPageState createState()
+}
+
+"flutter_learn::app::home::community::edit_post_page.dart::EditPostPage" o-- "flutter_learn::models::post.dart::Post"
+
+class "flutter_learn::app::home::community::edit_post_page.dart::_EditPostPageState" {
+  -String _title
+  -String _content
+  +Post? post
+  +bool autoFocus
+  -Set<String> _tags
+  +void initState()
+  -Post _postFromState()
+  -Future<void> _newPost()
+  +void showPreventPostSnackBar()
+  +Widget build()
+}
+
+"flutter_learn::app::home::community::edit_post_page.dart::_EditPostPageState" o-- "flutter_learn::models::post.dart::Post"
+
+class "flutter_learn::app::home::community::post_item_info.dart::PostItemInfo" {
+  +Post post
+  +bool selectableText
+  -Future<void> _likePost()
+  +void tapEmptyComment()
+  +Widget build()
+  -Widget _buildShimmer()
+}
+
+"flutter_learn::app::home::community::post_item_info.dart::PostItemInfo" o-- "flutter_learn::models::post.dart::Post"
+
+class "flutter_learn::app::home::community::child_comment_list_item.dart::ChildCommentListItem" {
+  +Comment topLevelComment
+  +void Function(Comment) menuIconTap
+  +void Function(Comment) replyIconTap
+  +Widget build()
+}
+
+"flutter_learn::app::home::community::child_comment_list_item.dart::ChildCommentListItem" o-- "flutter_learn::models::comment.dart::Comment"
+"flutter_learn::app::home::community::child_comment_list_item.dart::ChildCommentListItem" o-- "flutter_learn::app::home::community::child_comment_list_item.dart::void Function(Comment)"
+
+class "flutter_learn::app::home::community::comment_list_item.dart::CommentListItem" {
+  +Comment comment
+  +void Function()? menuIconTap
+  +void Function()? replyIconTap
+  +bool? myComments
+  +bool selectableText
+  -Future<void> _likeComment()
+  +Widget build()
+}
+
+"flutter_learn::app::home::community::comment_list_item.dart::CommentListItem" o-- "flutter_learn::models::comment.dart::Comment"
+"flutter_learn::app::home::community::comment_list_item.dart::CommentListItem" o-- "dart::ui::void Function()"
+
+class "flutter_learn::app::home::community::search_page.dart::SearchPage" {
+  {static} +Future<void> show()
+  +_SearchPageState createState()
+}
+
+class "flutter_learn::app::home::community::search_page.dart::_SearchPageState" {
+  -TextEditingController _textEditingController
+  -Algolia _algoliaApp
+  +void initState()
+  +void dispose()
+  -Future<List<AlgoliaObjectSnapshot>> _operation()
+  +Widget build()
+}
+
+"flutter_learn::app::home::community::search_page.dart::_SearchPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter_learn::app::home::community::search_page.dart::_SearchPageState" o-- "algolia::algolia.dart::Algolia"
+
+class "flutter_learn::app::home::community::search_page.dart::DisplaySearchResult" {
+  +String? artDes
+  +String? artistName
+  +String? genre
+  +Widget build()
+}
+
+class "flutter_learn::app::home::community::post_user_info.dart::PostUserInfo" {
+  +Post post
+  +Widget build()
+}
+
+"flutter_learn::app::home::community::post_user_info.dart::PostUserInfo" o-- "flutter_learn::models::post.dart::Post"
+
+class "flutter_learn::app::sign_in::sign_in_page.dart::SignInPage" {
+  {static} +Future<void> show()
+  +Widget build()
+}
+
+class "flutter_learn::app::sign_in::sign_in_page.dart::SignInPageContents" {
+  +SignViewModel viewModel
+  +String title
+  -Future<void> _showEmailPasswordSignInPage()
+  +Widget build()
+  -Widget _buildHeader()
+  -Widget _buildSignIn()
+}
+
+"flutter_learn::app::sign_in::sign_in_page.dart::SignInPageContents" o-- "flutter_learn::app::sign_in::sign_view_model.dart::SignViewModel"
+
+class "flutter_learn::app::sign_in::sign_view_model.dart::SignViewModel" {
+  +AuthBase auth
+  +bool isLoading
+  +dynamic error
+  -Future<void> _sign()
+  +Future<void> signInWithGoogle()
+  +Future<void> signInWithApple()
+  +Future<void> signOut()
+}
+
+"flutter_learn::app::sign_in::sign_view_model.dart::SignViewModel" o-- "flutter_learn::services::auth_base.dart::AuthBase"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "flutter_learn::app::sign_in::sign_view_model.dart::SignViewModel"
+
+class "flutter_learn::app::sign_in::sign_in_button.dart::SignInButton" {
+}
+
+class "flutter_learn::app::sign_in::social_sign_in_button.dart::SocialSignInButton" {
+}
+
+class "flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailPasswordSignInFormType" {
+  +int index
+  {static} +List<EmailPasswordSignInFormType> values
+  {static} +EmailPasswordSignInFormType signIn
+  {static} +EmailPasswordSignInFormType register
+  {static} +EmailPasswordSignInFormType forgotPassword
+}
+
+"flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailPasswordSignInFormType" o-- "flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailPasswordSignInFormType"
+
+class "flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailAndPasswordValidators" {
+  +TextInputFormatter emailInputFormatter
+  +StringValidator emailSubmitValidator
+  +StringValidator passwordRegisterSubmitValidator
+  +StringValidator passwordSignInSubmitValidator
+}
+
+"flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailAndPasswordValidators" o-- "flutter::src::services::text_formatter.dart::TextInputFormatter"
+"flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailAndPasswordValidators" o-- "flutter_learn::app::sign_in::email::string_validators.dart::StringValidator"
+
+class "flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailPasswordSignInModel" {
+  +AuthBase auth
+  +String email
+  +String password
+  +EmailPasswordSignInFormType formType
+  +bool isLoading
+  +bool submitted
+  +String passwordLabelText
+  +String primaryButtonText
+  +String secondaryButtonText
+  +EmailPasswordSignInFormType secondaryActionFormType
+  +String errorAlertTitle
+  +String title
+  +bool canSubmitEmail
+  +bool canSubmitPassword
+  +bool canSubmit
+  +String? emailErrorText
+  +String? passwordErrorText
+  +Future<bool> submit()
+  +void updateEmail()
+  +void updatePassword()
+  +void updateFormType()
+  +void updateWith()
+  +String toString()
+}
+
+"flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailPasswordSignInModel" o-- "flutter_learn::services::auth_base.dart::AuthBase"
+"flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailPasswordSignInModel" o-- "flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailPasswordSignInFormType"
+"flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailAndPasswordValidators" <|-- "flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailPasswordSignInModel"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailPasswordSignInModel"
+
+class "flutter_learn::app::sign_in::email::email_password_sign_in_page.dart::EmailPasswordSignInPage" {
+  +EmailPasswordSignInModel model
+  +void Function()? onSignedIn
+  +_EmailPasswordSignInPageState createState()
+}
+
+"flutter_learn::app::sign_in::email::email_password_sign_in_page.dart::EmailPasswordSignInPage" o-- "flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailPasswordSignInModel"
+"flutter_learn::app::sign_in::email::email_password_sign_in_page.dart::EmailPasswordSignInPage" o-- "dart::ui::void Function()"
+
+class "flutter_learn::app::sign_in::email::email_password_sign_in_page.dart::_EmailPasswordSignInPageState" {
+  -FocusScopeNode _node
+  -TextEditingController _emailController
+  -TextEditingController _passwordController
+  +EmailPasswordSignInModel model
+  +void initState()
+  +void dispose()
+  -void _showSignInError()
+  -Future<void> _submit()
+  -void _emailEditingComplete()
+  -void _passwordEditingComplete()
+  -void _updateFormType()
+  -Widget _buildEmailField()
+  -Widget _buildPasswordField()
+  -Widget _buildContent()
+  +Widget build()
+}
+
+"flutter_learn::app::sign_in::email::email_password_sign_in_page.dart::_EmailPasswordSignInPageState" o-- "flutter::src::widgets::focus_manager.dart::FocusScopeNode"
+"flutter_learn::app::sign_in::email::email_password_sign_in_page.dart::_EmailPasswordSignInPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter_learn::app::sign_in::email::email_password_sign_in_page.dart::_EmailPasswordSignInPageState" o-- "flutter_learn::app::sign_in::email::email_password_sign_in_model.dart::EmailPasswordSignInModel"
+
+abstract class "flutter_learn::app::sign_in::email::string_validators.dart::StringValidator" {
+  +bool isValid()
+}
+
+class "flutter_learn::app::sign_in::email::string_validators.dart::RegexValidator" {
+  +String regexSource
+  +bool isValid()
+}
+
+"flutter_learn::app::sign_in::email::string_validators.dart::StringValidator" <|-- "flutter_learn::app::sign_in::email::string_validators.dart::RegexValidator"
+
+class "flutter_learn::app::sign_in::email::string_validators.dart::ValidatorInputFormatter" {
+  +StringValidator editingValidator
+  +TextEditingValue formatEditUpdate()
+}
+
+"flutter_learn::app::sign_in::email::string_validators.dart::ValidatorInputFormatter" o-- "flutter_learn::app::sign_in::email::string_validators.dart::StringValidator"
+"flutter::src::services::text_formatter.dart::TextInputFormatter" <|-- "flutter_learn::app::sign_in::email::string_validators.dart::ValidatorInputFormatter"
+
+class "flutter_learn::app::sign_in::email::string_validators.dart::EmailEditingRegexValidator" {
+}
+
+class "flutter_learn::app::sign_in::email::string_validators.dart::EmailSubmitRegexValidator" {
+}
+
+class "flutter_learn::app::sign_in::email::string_validators.dart::NonEmptyStringValidator" {
+  +bool isValid()
+}
+
+class "flutter_learn::app::sign_in::email::string_validators.dart::MinLengthStringValidator" {
+  +int minLength
+  +bool isValid()
+}
+
+class "flutter_learn::app::widgets::buttons::custom_elevated_button.dart::CustomElevatedButton" {
+  +Widget child
+  +Color? color
+  +Color? textColor
+  +double height
+  +double borderRadius
+  +bool loading
+  +void Function()? onPressed
+  +Color borderColor
+  +TextStyle? textStyle
+  +Widget buildSpinner()
+  +Widget build()
+}
+
+"flutter_learn::app::widgets::buttons::custom_elevated_button.dart::CustomElevatedButton" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter_learn::app::widgets::buttons::custom_elevated_button.dart::CustomElevatedButton" o-- "dart::ui::Color"
+"flutter_learn::app::widgets::buttons::custom_elevated_button.dart::CustomElevatedButton" o-- "dart::ui::void Function()"
+"flutter_learn::app::widgets::buttons::custom_elevated_button.dart::CustomElevatedButton" o-- "flutter::src::painting::text_style.dart::TextStyle"
+
+class "flutter_learn::app::widgets::buttons::form_submit_button.dart::FormSubmitButton" {
+}
+
+class "flutter_learn::app::widgets::shimmer_widget.dart::ShimmerWidget" {
+  +double width
+  +double height
+  +ShapeBorder shapeBorder
+  +Widget build()
+}
+
+"flutter_learn::app::widgets::shimmer_widget.dart::ShimmerWidget" o-- "flutter::src::painting::borders.dart::ShapeBorder"
+
+class "flutter_learn::app::widgets::avatar.dart::Avatar" {
+  +String? photoUrl
+  +double radius
+  +Color? borderColor
+  +double? borderWidth
+  +String? displayName
+  +Widget build()
+  -Decoration? _borderDecoration()
+}
+
+"flutter_learn::app::widgets::avatar.dart::Avatar" o-- "dart::ui::Color"
+
+class "flutter_learn::app::widgets::list_items_builder.dart::ListItemsBuilder" {
+  +AsyncValue<List<T>> data
+  +Widget Function(BuildContext, T) itemBuilder
+  +Widget build()
+  -Widget _buildList()
+}
+
+"flutter_learn::app::widgets::list_items_builder.dart::ListItemsBuilder" o-- "riverpod::src::common.dart::AsyncValue<List<T>>"
+"flutter_learn::app::widgets::list_items_builder.dart::ListItemsBuilder" o-- "flutter_learn::app::widgets::list_items_builder.dart::Widget Function(BuildContext, T)"
+
+class "flutter_learn::app::widgets::empty_content.dart::EmptyContent" {
+  +String title
+  +String message
+  +Widget build()
+}
+
+class "flutter_learn::constants::keys.dart::Keys" {
+  {static} +String communityTab
+  {static} +String youTubeTab
+  {static} +String moreTab
+  {static} +String bottomNavigationBar
+  {static} +String emailPassword
+  {static} +String anonymous
+  {static} +String logout
+  {static} +String login
+  {static} +String alertDefault
+  {static} +String alertCancel
+}
+
+class "flutter_learn::constants::responsive.dart::Responsive" {
+  +Widget mobile
+  +Widget? tablet
+  +Widget desktop
+  {static} +bool isMobile()
+  {static} +bool isTablet()
+  {static} +bool isDesktop()
+  +Widget build()
+}
+
+"flutter_learn::constants::responsive.dart::Responsive" o-- "flutter::src::widgets::framework.dart::Widget"
+
+class "flutter_learn::models::post_liked.dart::PostLiked" {
+}
+
+"flutter_learn::models::post_liked.dart::_$PostLiked" <|-- "flutter_learn::models::post_liked.dart::PostLiked"
+
+abstract class "flutter_learn::models::post_liked.dart::_$PostLiked" {
+  +String userId
+  +String userDisplayName
+  +String postId
+  +String postUserId
+  +String postTitle
+  +DateTime? timestamp
+  +$PostLikedCopyWith<PostLiked> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::post_liked.dart::_$PostLiked" o-- "flutter_learn::models::post_liked.dart::$PostLikedCopyWith<PostLiked>"
+
+class "flutter_learn::models::post_liked.dart::_$PostLikedTearOff" {
+  +_PostLiked call()
+  +PostLiked fromJson()
+}
+
+abstract class "flutter_learn::models::post_liked.dart::$PostLikedCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::post_liked.dart::_$PostLikedCopyWithImpl" {
+  -PostLiked _value
+  -$Res Function(PostLiked) _then
+  +$Res call()
+}
+
+"flutter_learn::models::post_liked.dart::_$PostLikedCopyWithImpl" o-- "flutter_learn::models::post_liked.dart::PostLiked"
+"flutter_learn::models::post_liked.dart::_$PostLikedCopyWithImpl" o-- "null::$Res Function(PostLiked)"
+"flutter_learn::models::post_liked.dart::$PostLikedCopyWith" <|-- "flutter_learn::models::post_liked.dart::_$PostLikedCopyWithImpl"
+
+abstract class "flutter_learn::models::post_liked.dart::_$PostLikedCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::post_liked.dart::$PostLikedCopyWith" <|-- "flutter_learn::models::post_liked.dart::_$PostLikedCopyWith"
+
+class "flutter_learn::models::post_liked.dart::__$PostLikedCopyWithImpl" {
+  -_PostLiked _value
+  +$Res call()
+}
+
+"flutter_learn::models::post_liked.dart::__$PostLikedCopyWithImpl" o-- "flutter_learn::models::post_liked.dart::_PostLiked"
+"flutter_learn::models::post_liked.dart::_$PostLikedCopyWith" <|-- "flutter_learn::models::post_liked.dart::__$PostLikedCopyWithImpl"
+
+class "flutter_learn::models::post_liked.dart::_$_PostLiked" {
+  +String userId
+  +String userDisplayName
+  +String postId
+  +String postUserId
+  +String postTitle
+  +DateTime? timestamp
+  +int hashCode
+  +_$PostLikedCopyWith<_PostLiked> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::post_liked.dart::_$_PostLiked" o-- "flutter_learn::models::post_liked.dart::_$PostLikedCopyWith<_PostLiked>"
+"flutter_learn::models::post_liked.dart::_PostLiked" <|-- "flutter_learn::models::post_liked.dart::_$_PostLiked"
+
+abstract class "flutter_learn::models::post_liked.dart::_PostLiked" {
+  +String userId
+  +String userDisplayName
+  +String postId
+  +String postUserId
+  +String postTitle
+  +DateTime? timestamp
+  +_$PostLikedCopyWith<_PostLiked> copyWith
+}
+
+"flutter_learn::models::post_liked.dart::_PostLiked" o-- "flutter_learn::models::post_liked.dart::_$PostLikedCopyWith<_PostLiked>"
+"flutter_learn::models::post_liked.dart::PostLiked" <|-- "flutter_learn::models::post_liked.dart::_PostLiked"
+
+class "flutter_learn::models::post.dart::Post" {
+}
+
+"flutter_learn::models::post.dart::_$Post" <|-- "flutter_learn::models::post.dart::Post"
+
+abstract class "flutter_learn::models::post.dart::_$Post" {
+  +String id
+  +String userId
+  +String title
+  +String content
+  +DateTime? timestamp
+  +int commentCount
+  +int likedCount
+  +int readCount
+  +bool private
+  +String userDisplayName
+  +String? userPhotoURL
+  +Set<String> tags
+  +bool notice
+  +$PostCopyWith<Post> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::post.dart::_$Post" o-- "flutter_learn::models::post.dart::$PostCopyWith<Post>"
+
+class "flutter_learn::models::post.dart::_$PostTearOff" {
+  +_Post call()
+  +Post fromJson()
+}
+
+abstract class "flutter_learn::models::post.dart::$PostCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::post.dart::_$PostCopyWithImpl" {
+  -Post _value
+  -$Res Function(Post) _then
+  +$Res call()
+}
+
+"flutter_learn::models::post.dart::_$PostCopyWithImpl" o-- "flutter_learn::models::post.dart::Post"
+"flutter_learn::models::post.dart::_$PostCopyWithImpl" o-- "null::$Res Function(Post)"
+"flutter_learn::models::post.dart::$PostCopyWith" <|-- "flutter_learn::models::post.dart::_$PostCopyWithImpl"
+
+abstract class "flutter_learn::models::post.dart::_$PostCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::post.dart::$PostCopyWith" <|-- "flutter_learn::models::post.dart::_$PostCopyWith"
+
+class "flutter_learn::models::post.dart::__$PostCopyWithImpl" {
+  -_Post _value
+  +$Res call()
+}
+
+"flutter_learn::models::post.dart::__$PostCopyWithImpl" o-- "flutter_learn::models::post.dart::_Post"
+"flutter_learn::models::post.dart::_$PostCopyWith" <|-- "flutter_learn::models::post.dart::__$PostCopyWithImpl"
+
+class "flutter_learn::models::post.dart::_$_Post" {
+  +String id
+  +String userId
+  +String title
+  +String content
+  +DateTime? timestamp
+  +int commentCount
+  +int likedCount
+  +int readCount
+  +bool private
+  +String userDisplayName
+  +String? userPhotoURL
+  +Set<String> tags
+  +bool notice
+  +int hashCode
+  +_$PostCopyWith<_Post> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::post.dart::_$_Post" o-- "flutter_learn::models::post.dart::_$PostCopyWith<_Post>"
+
+abstract class "flutter_learn::models::post.dart::_Post" {
+  +String id
+  +String userId
+  +String title
+  +String content
+  +DateTime? timestamp
+  +int commentCount
+  +int likedCount
+  +int readCount
+  +bool private
+  +String userDisplayName
+  +String? userPhotoURL
+  +Set<String> tags
+  +bool notice
+  +_$PostCopyWith<_Post> copyWith
+}
+
+"flutter_learn::models::post.dart::_Post" o-- "flutter_learn::models::post.dart::_$PostCopyWith<_Post>"
+
+class "flutter_learn::models::values.dart::SuperHero" {
+  {static} +String random()
+}
+
+class "flutter_learn::models::youtube_playlist_items.dart::PlaylistItems" {
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItems" <|-- "flutter_learn::models::youtube_playlist_items.dart::PlaylistItems"
+
+class "flutter_learn::models::youtube_playlist_items.dart::Item" {
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$Item" <|-- "flutter_learn::models::youtube_playlist_items.dart::Item"
+
+class "flutter_learn::models::youtube_playlist_items.dart::ContentDetails" {
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$ContentDetails" <|-- "flutter_learn::models::youtube_playlist_items.dart::ContentDetails"
+
+class "flutter_learn::models::youtube_playlist_items.dart::Snippet" {
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$Snippet" <|-- "flutter_learn::models::youtube_playlist_items.dart::Snippet"
+
+class "flutter_learn::models::youtube_playlist_items.dart::ResourceId" {
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$ResourceId" <|-- "flutter_learn::models::youtube_playlist_items.dart::ResourceId"
+
+class "flutter_learn::models::youtube_playlist_items.dart::Thumbnails" {
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$Thumbnails" <|-- "flutter_learn::models::youtube_playlist_items.dart::Thumbnails"
+
+class "flutter_learn::models::youtube_playlist_items.dart::Thumbnail" {
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$Thumbnail" <|-- "flutter_learn::models::youtube_playlist_items.dart::Thumbnail"
+
+class "flutter_learn::models::youtube_playlist_items.dart::Status" {
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$Status" <|-- "flutter_learn::models::youtube_playlist_items.dart::Status"
+
+class "flutter_learn::models::youtube_playlist_items.dart::PageInfo" {
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$PageInfo" <|-- "flutter_learn::models::youtube_playlist_items.dart::PageInfo"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItems" {
+  +String kind
+  +String etag
+  +String? nextPageToken
+  +String? prevPageToken
+  +List<Item> items
+  +PageInfo pageInfo
+  +$PlaylistItemsCopyWith<PlaylistItems> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItems" o-- "flutter_learn::models::youtube_playlist_items.dart::PageInfo"
+"flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItems" o-- "flutter_learn::models::youtube_playlist_items.dart::$PlaylistItemsCopyWith<PlaylistItems>"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$Item" {
+  +String kind
+  +String etag
+  +String id
+  +Snippet snippet
+  +ContentDetails contentDetails
+  +Status status
+  +$ItemCopyWith<Item> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$Item" o-- "flutter_learn::models::youtube_playlist_items.dart::Snippet"
+"flutter_learn::models::youtube_playlist_items.dart::_$Item" o-- "flutter_learn::models::youtube_playlist_items.dart::ContentDetails"
+"flutter_learn::models::youtube_playlist_items.dart::_$Item" o-- "flutter_learn::models::youtube_playlist_items.dart::Status"
+"flutter_learn::models::youtube_playlist_items.dart::_$Item" o-- "flutter_learn::models::youtube_playlist_items.dart::$ItemCopyWith<Item>"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$ContentDetails" {
+  +String videoId
+  +DateTime? videoPublishedAt
+  +$ContentDetailsCopyWith<ContentDetails> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$ContentDetails" o-- "flutter_learn::models::youtube_playlist_items.dart::$ContentDetailsCopyWith<ContentDetails>"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$Snippet" {
+  +DateTime publishedAt
+  +String channelId
+  +String title
+  +String description
+  +Thumbnails thumbnails
+  +String channelTitle
+  +String playlistId
+  +int position
+  +ResourceId resourceId
+  +String? videoOwnerChannelTitle
+  +String? videoOwnerChannelId
+  +$SnippetCopyWith<Snippet> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$Snippet" o-- "flutter_learn::models::youtube_playlist_items.dart::Thumbnails"
+"flutter_learn::models::youtube_playlist_items.dart::_$Snippet" o-- "flutter_learn::models::youtube_playlist_items.dart::ResourceId"
+"flutter_learn::models::youtube_playlist_items.dart::_$Snippet" o-- "flutter_learn::models::youtube_playlist_items.dart::$SnippetCopyWith<Snippet>"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$ResourceId" {
+  +String kind
+  +String videoId
+  +$ResourceIdCopyWith<ResourceId> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$ResourceId" o-- "flutter_learn::models::youtube_playlist_items.dart::$ResourceIdCopyWith<ResourceId>"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$Thumbnails" {
+  +Thumbnail? dflt
+  +Thumbnail? medium
+  +Thumbnail? high
+  +Thumbnail? standard
+  +Thumbnail? maxres
+  +$ThumbnailsCopyWith<Thumbnails> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$Thumbnails" o-- "flutter_learn::models::youtube_playlist_items.dart::Thumbnail"
+"flutter_learn::models::youtube_playlist_items.dart::_$Thumbnails" o-- "flutter_learn::models::youtube_playlist_items.dart::$ThumbnailsCopyWith<Thumbnails>"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$Thumbnail" {
+  +String url
+  +int width
+  +int height
+  +$ThumbnailCopyWith<Thumbnail> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$Thumbnail" o-- "flutter_learn::models::youtube_playlist_items.dart::$ThumbnailCopyWith<Thumbnail>"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$Status" {
+  +String privacyStatus
+  +$StatusCopyWith<Status> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$Status" o-- "flutter_learn::models::youtube_playlist_items.dart::$StatusCopyWith<Status>"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$PageInfo" {
+  +int totalResults
+  +int resultsPerPage
+  +$PageInfoCopyWith<PageInfo> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$PageInfo" o-- "flutter_learn::models::youtube_playlist_items.dart::$PageInfoCopyWith<PageInfo>"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItemsTearOff" {
+  +_PlaylistItems call()
+  +PlaylistItems fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::$PlaylistItemsCopyWith" {
+  +$PageInfoCopyWith<$Res> pageInfo
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::$PlaylistItemsCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$PageInfoCopyWith<$Res>"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItemsCopyWithImpl" {
+  -PlaylistItems _value
+  -$Res Function(PlaylistItems) _then
+  +$PageInfoCopyWith<$Res> pageInfo
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItemsCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::PlaylistItems"
+"flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItemsCopyWithImpl" o-- "null::$Res Function(PlaylistItems)"
+"flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItemsCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::$PageInfoCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::$PlaylistItemsCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItemsCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItemsCopyWith" {
+  +$PageInfoCopyWith<$Res> pageInfo
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItemsCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$PageInfoCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::$PlaylistItemsCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItemsCopyWith"
+
+class "flutter_learn::models::youtube_playlist_items.dart::__$PlaylistItemsCopyWithImpl" {
+  -_PlaylistItems _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::__$PlaylistItemsCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::_PlaylistItems"
+"flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItemsCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::__$PlaylistItemsCopyWithImpl"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$_PlaylistItems" {
+  +String kind
+  +String etag
+  +String? nextPageToken
+  +String? prevPageToken
+  +List<Item> items
+  +PageInfo pageInfo
+  +int hashCode
+  +_$PlaylistItemsCopyWith<_PlaylistItems> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$_PlaylistItems" o-- "flutter_learn::models::youtube_playlist_items.dart::PageInfo"
+"flutter_learn::models::youtube_playlist_items.dart::_$_PlaylistItems" o-- "flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItemsCopyWith<_PlaylistItems>"
+"flutter_learn::models::youtube_playlist_items.dart::_PlaylistItems" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$_PlaylistItems"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_PlaylistItems" {
+  +String kind
+  +String etag
+  +String? nextPageToken
+  +String? prevPageToken
+  +List<Item> items
+  +PageInfo pageInfo
+  +_$PlaylistItemsCopyWith<_PlaylistItems> copyWith
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_PlaylistItems" o-- "flutter_learn::models::youtube_playlist_items.dart::PageInfo"
+"flutter_learn::models::youtube_playlist_items.dart::_PlaylistItems" o-- "flutter_learn::models::youtube_playlist_items.dart::_$PlaylistItemsCopyWith<_PlaylistItems>"
+"flutter_learn::models::youtube_playlist_items.dart::PlaylistItems" <|-- "flutter_learn::models::youtube_playlist_items.dart::_PlaylistItems"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$ItemTearOff" {
+  +_Item call()
+  +Item fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::$ItemCopyWith" {
+  +$SnippetCopyWith<$Res> snippet
+  +$ContentDetailsCopyWith<$Res> contentDetails
+  +$StatusCopyWith<$Res> status
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::$ItemCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$SnippetCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::$ItemCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$ContentDetailsCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::$ItemCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$StatusCopyWith<$Res>"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWithImpl" {
+  -Item _value
+  -$Res Function(Item) _then
+  +$SnippetCopyWith<$Res> snippet
+  +$ContentDetailsCopyWith<$Res> contentDetails
+  +$StatusCopyWith<$Res> status
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::Item"
+"flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWithImpl" o-- "null::$Res Function(Item)"
+"flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::$SnippetCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::$ContentDetailsCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::$StatusCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::$ItemCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWith" {
+  +$SnippetCopyWith<$Res> snippet
+  +$ContentDetailsCopyWith<$Res> contentDetails
+  +$StatusCopyWith<$Res> status
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$SnippetCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$ContentDetailsCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$StatusCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::$ItemCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWith"
+
+class "flutter_learn::models::youtube_playlist_items.dart::__$ItemCopyWithImpl" {
+  -_Item _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::__$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::_Item"
+"flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::__$ItemCopyWithImpl"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$_Item" {
+  +String kind
+  +String etag
+  +String id
+  +Snippet snippet
+  +ContentDetails contentDetails
+  +Status status
+  +int hashCode
+  +_$ItemCopyWith<_Item> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$_Item" o-- "flutter_learn::models::youtube_playlist_items.dart::Snippet"
+"flutter_learn::models::youtube_playlist_items.dart::_$_Item" o-- "flutter_learn::models::youtube_playlist_items.dart::ContentDetails"
+"flutter_learn::models::youtube_playlist_items.dart::_$_Item" o-- "flutter_learn::models::youtube_playlist_items.dart::Status"
+"flutter_learn::models::youtube_playlist_items.dart::_$_Item" o-- "flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWith<_Item>"
+"flutter_learn::models::youtube_playlist_items.dart::_Item" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$_Item"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_Item" {
+  +String kind
+  +String etag
+  +String id
+  +Snippet snippet
+  +ContentDetails contentDetails
+  +Status status
+  +_$ItemCopyWith<_Item> copyWith
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_Item" o-- "flutter_learn::models::youtube_playlist_items.dart::Snippet"
+"flutter_learn::models::youtube_playlist_items.dart::_Item" o-- "flutter_learn::models::youtube_playlist_items.dart::ContentDetails"
+"flutter_learn::models::youtube_playlist_items.dart::_Item" o-- "flutter_learn::models::youtube_playlist_items.dart::Status"
+"flutter_learn::models::youtube_playlist_items.dart::_Item" o-- "flutter_learn::models::youtube_playlist_items.dart::_$ItemCopyWith<_Item>"
+"flutter_learn::models::youtube_playlist_items.dart::Item" <|-- "flutter_learn::models::youtube_playlist_items.dart::_Item"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$ContentDetailsTearOff" {
+  +_ContentDetails call()
+  +ContentDetails fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::$ContentDetailsCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$ContentDetailsCopyWithImpl" {
+  -ContentDetails _value
+  -$Res Function(ContentDetails) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$ContentDetailsCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::ContentDetails"
+"flutter_learn::models::youtube_playlist_items.dart::_$ContentDetailsCopyWithImpl" o-- "null::$Res Function(ContentDetails)"
+"flutter_learn::models::youtube_playlist_items.dart::$ContentDetailsCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$ContentDetailsCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$ContentDetailsCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::$ContentDetailsCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$ContentDetailsCopyWith"
+
+class "flutter_learn::models::youtube_playlist_items.dart::__$ContentDetailsCopyWithImpl" {
+  -_ContentDetails _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::__$ContentDetailsCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::_ContentDetails"
+"flutter_learn::models::youtube_playlist_items.dart::_$ContentDetailsCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::__$ContentDetailsCopyWithImpl"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$_ContentDetails" {
+  +String videoId
+  +DateTime? videoPublishedAt
+  +int hashCode
+  +_$ContentDetailsCopyWith<_ContentDetails> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$_ContentDetails" o-- "flutter_learn::models::youtube_playlist_items.dart::_$ContentDetailsCopyWith<_ContentDetails>"
+"flutter_learn::models::youtube_playlist_items.dart::_ContentDetails" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$_ContentDetails"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_ContentDetails" {
+  +String videoId
+  +DateTime? videoPublishedAt
+  +_$ContentDetailsCopyWith<_ContentDetails> copyWith
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_ContentDetails" o-- "flutter_learn::models::youtube_playlist_items.dart::_$ContentDetailsCopyWith<_ContentDetails>"
+"flutter_learn::models::youtube_playlist_items.dart::ContentDetails" <|-- "flutter_learn::models::youtube_playlist_items.dart::_ContentDetails"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$SnippetTearOff" {
+  +_Snippet call()
+  +Snippet fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::$SnippetCopyWith" {
+  +$ThumbnailsCopyWith<$Res> thumbnails
+  +$ResourceIdCopyWith<$Res> resourceId
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::$SnippetCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$ThumbnailsCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::$SnippetCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$ResourceIdCopyWith<$Res>"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWithImpl" {
+  -Snippet _value
+  -$Res Function(Snippet) _then
+  +$ThumbnailsCopyWith<$Res> thumbnails
+  +$ResourceIdCopyWith<$Res> resourceId
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::Snippet"
+"flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWithImpl" o-- "null::$Res Function(Snippet)"
+"flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::$ThumbnailsCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::$ResourceIdCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::$SnippetCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWith" {
+  +$ThumbnailsCopyWith<$Res> thumbnails
+  +$ResourceIdCopyWith<$Res> resourceId
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$ThumbnailsCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$ResourceIdCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::$SnippetCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWith"
+
+class "flutter_learn::models::youtube_playlist_items.dart::__$SnippetCopyWithImpl" {
+  -_Snippet _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::__$SnippetCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::_Snippet"
+"flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::__$SnippetCopyWithImpl"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$_Snippet" {
+  +DateTime publishedAt
+  +String channelId
+  +String title
+  +String description
+  +Thumbnails thumbnails
+  +String channelTitle
+  +String playlistId
+  +int position
+  +ResourceId resourceId
+  +String? videoOwnerChannelTitle
+  +String? videoOwnerChannelId
+  +int hashCode
+  +_$SnippetCopyWith<_Snippet> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$_Snippet" o-- "flutter_learn::models::youtube_playlist_items.dart::Thumbnails"
+"flutter_learn::models::youtube_playlist_items.dart::_$_Snippet" o-- "flutter_learn::models::youtube_playlist_items.dart::ResourceId"
+"flutter_learn::models::youtube_playlist_items.dart::_$_Snippet" o-- "flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWith<_Snippet>"
+"flutter_learn::models::youtube_playlist_items.dart::_Snippet" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$_Snippet"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_Snippet" {
+  +DateTime publishedAt
+  +String channelId
+  +String title
+  +String description
+  +Thumbnails thumbnails
+  +String channelTitle
+  +String playlistId
+  +int position
+  +ResourceId resourceId
+  +String? videoOwnerChannelTitle
+  +String? videoOwnerChannelId
+  +_$SnippetCopyWith<_Snippet> copyWith
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_Snippet" o-- "flutter_learn::models::youtube_playlist_items.dart::Thumbnails"
+"flutter_learn::models::youtube_playlist_items.dart::_Snippet" o-- "flutter_learn::models::youtube_playlist_items.dart::ResourceId"
+"flutter_learn::models::youtube_playlist_items.dart::_Snippet" o-- "flutter_learn::models::youtube_playlist_items.dart::_$SnippetCopyWith<_Snippet>"
+"flutter_learn::models::youtube_playlist_items.dart::Snippet" <|-- "flutter_learn::models::youtube_playlist_items.dart::_Snippet"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$ResourceIdTearOff" {
+  +_ResourceId call()
+  +ResourceId fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::$ResourceIdCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$ResourceIdCopyWithImpl" {
+  -ResourceId _value
+  -$Res Function(ResourceId) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$ResourceIdCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::ResourceId"
+"flutter_learn::models::youtube_playlist_items.dart::_$ResourceIdCopyWithImpl" o-- "null::$Res Function(ResourceId)"
+"flutter_learn::models::youtube_playlist_items.dart::$ResourceIdCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$ResourceIdCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$ResourceIdCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::$ResourceIdCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$ResourceIdCopyWith"
+
+class "flutter_learn::models::youtube_playlist_items.dart::__$ResourceIdCopyWithImpl" {
+  -_ResourceId _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::__$ResourceIdCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::_ResourceId"
+"flutter_learn::models::youtube_playlist_items.dart::_$ResourceIdCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::__$ResourceIdCopyWithImpl"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$_ResourceId" {
+  +String kind
+  +String videoId
+  +int hashCode
+  +_$ResourceIdCopyWith<_ResourceId> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$_ResourceId" o-- "flutter_learn::models::youtube_playlist_items.dart::_$ResourceIdCopyWith<_ResourceId>"
+"flutter_learn::models::youtube_playlist_items.dart::_ResourceId" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$_ResourceId"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_ResourceId" {
+  +String kind
+  +String videoId
+  +_$ResourceIdCopyWith<_ResourceId> copyWith
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_ResourceId" o-- "flutter_learn::models::youtube_playlist_items.dart::_$ResourceIdCopyWith<_ResourceId>"
+"flutter_learn::models::youtube_playlist_items.dart::ResourceId" <|-- "flutter_learn::models::youtube_playlist_items.dart::_ResourceId"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailsTearOff" {
+  +_Thumbnails call()
+  +Thumbnails fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::$ThumbnailsCopyWith" {
+  +$ThumbnailCopyWith<$Res>? dflt
+  +$ThumbnailCopyWith<$Res>? medium
+  +$ThumbnailCopyWith<$Res>? high
+  +$ThumbnailCopyWith<$Res>? standard
+  +$ThumbnailCopyWith<$Res>? maxres
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::$ThumbnailsCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$ThumbnailCopyWith<$Res>"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailsCopyWithImpl" {
+  -Thumbnails _value
+  -$Res Function(Thumbnails) _then
+  +$ThumbnailCopyWith<$Res>? dflt
+  +$ThumbnailCopyWith<$Res>? medium
+  +$ThumbnailCopyWith<$Res>? high
+  +$ThumbnailCopyWith<$Res>? standard
+  +$ThumbnailCopyWith<$Res>? maxres
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailsCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::Thumbnails"
+"flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailsCopyWithImpl" o-- "null::$Res Function(Thumbnails)"
+"flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailsCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::$ThumbnailCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::$ThumbnailsCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailsCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailsCopyWith" {
+  +$ThumbnailCopyWith<$Res>? dflt
+  +$ThumbnailCopyWith<$Res>? medium
+  +$ThumbnailCopyWith<$Res>? high
+  +$ThumbnailCopyWith<$Res>? standard
+  +$ThumbnailCopyWith<$Res>? maxres
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailsCopyWith" o-- "flutter_learn::models::youtube_playlist_items.dart::$ThumbnailCopyWith<$Res>"
+"flutter_learn::models::youtube_playlist_items.dart::$ThumbnailsCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailsCopyWith"
+
+class "flutter_learn::models::youtube_playlist_items.dart::__$ThumbnailsCopyWithImpl" {
+  -_Thumbnails _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::__$ThumbnailsCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::_Thumbnails"
+"flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailsCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::__$ThumbnailsCopyWithImpl"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$_Thumbnails" {
+  +Thumbnail? dflt
+  +Thumbnail? medium
+  +Thumbnail? high
+  +Thumbnail? standard
+  +Thumbnail? maxres
+  +int hashCode
+  +_$ThumbnailsCopyWith<_Thumbnails> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$_Thumbnails" o-- "flutter_learn::models::youtube_playlist_items.dart::Thumbnail"
+"flutter_learn::models::youtube_playlist_items.dart::_$_Thumbnails" o-- "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailsCopyWith<_Thumbnails>"
+"flutter_learn::models::youtube_playlist_items.dart::_Thumbnails" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$_Thumbnails"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_Thumbnails" {
+  +Thumbnail? dflt
+  +Thumbnail? medium
+  +Thumbnail? high
+  +Thumbnail? standard
+  +Thumbnail? maxres
+  +_$ThumbnailsCopyWith<_Thumbnails> copyWith
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_Thumbnails" o-- "flutter_learn::models::youtube_playlist_items.dart::Thumbnail"
+"flutter_learn::models::youtube_playlist_items.dart::_Thumbnails" o-- "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailsCopyWith<_Thumbnails>"
+"flutter_learn::models::youtube_playlist_items.dart::Thumbnails" <|-- "flutter_learn::models::youtube_playlist_items.dart::_Thumbnails"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailTearOff" {
+  +_Thumbnail call()
+  +Thumbnail fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::$ThumbnailCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailCopyWithImpl" {
+  -Thumbnail _value
+  -$Res Function(Thumbnail) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::Thumbnail"
+"flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailCopyWithImpl" o-- "null::$Res Function(Thumbnail)"
+"flutter_learn::models::youtube_playlist_items.dart::$ThumbnailCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::$ThumbnailCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailCopyWith"
+
+class "flutter_learn::models::youtube_playlist_items.dart::__$ThumbnailCopyWithImpl" {
+  -_Thumbnail _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::__$ThumbnailCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::_Thumbnail"
+"flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::__$ThumbnailCopyWithImpl"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$_Thumbnail" {
+  +String url
+  +int width
+  +int height
+  +int hashCode
+  +_$ThumbnailCopyWith<_Thumbnail> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$_Thumbnail" o-- "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailCopyWith<_Thumbnail>"
+"flutter_learn::models::youtube_playlist_items.dart::_Thumbnail" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$_Thumbnail"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_Thumbnail" {
+  +String url
+  +int width
+  +int height
+  +_$ThumbnailCopyWith<_Thumbnail> copyWith
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_Thumbnail" o-- "flutter_learn::models::youtube_playlist_items.dart::_$ThumbnailCopyWith<_Thumbnail>"
+"flutter_learn::models::youtube_playlist_items.dart::Thumbnail" <|-- "flutter_learn::models::youtube_playlist_items.dart::_Thumbnail"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$StatusTearOff" {
+  +_Status call()
+  +Status fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::$StatusCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$StatusCopyWithImpl" {
+  -Status _value
+  -$Res Function(Status) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$StatusCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::Status"
+"flutter_learn::models::youtube_playlist_items.dart::_$StatusCopyWithImpl" o-- "null::$Res Function(Status)"
+"flutter_learn::models::youtube_playlist_items.dart::$StatusCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$StatusCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$StatusCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::$StatusCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$StatusCopyWith"
+
+class "flutter_learn::models::youtube_playlist_items.dart::__$StatusCopyWithImpl" {
+  -_Status _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::__$StatusCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::_Status"
+"flutter_learn::models::youtube_playlist_items.dart::_$StatusCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::__$StatusCopyWithImpl"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$_Status" {
+  +String privacyStatus
+  +int hashCode
+  +_$StatusCopyWith<_Status> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$_Status" o-- "flutter_learn::models::youtube_playlist_items.dart::_$StatusCopyWith<_Status>"
+"flutter_learn::models::youtube_playlist_items.dart::_Status" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$_Status"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_Status" {
+  +String privacyStatus
+  +_$StatusCopyWith<_Status> copyWith
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_Status" o-- "flutter_learn::models::youtube_playlist_items.dart::_$StatusCopyWith<_Status>"
+"flutter_learn::models::youtube_playlist_items.dart::Status" <|-- "flutter_learn::models::youtube_playlist_items.dart::_Status"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$PageInfoTearOff" {
+  +_PageInfo call()
+  +PageInfo fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::$PageInfoCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$PageInfoCopyWithImpl" {
+  -PageInfo _value
+  -$Res Function(PageInfo) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$PageInfoCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::PageInfo"
+"flutter_learn::models::youtube_playlist_items.dart::_$PageInfoCopyWithImpl" o-- "null::$Res Function(PageInfo)"
+"flutter_learn::models::youtube_playlist_items.dart::$PageInfoCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$PageInfoCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_$PageInfoCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::$PageInfoCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$PageInfoCopyWith"
+
+class "flutter_learn::models::youtube_playlist_items.dart::__$PageInfoCopyWithImpl" {
+  -_PageInfo _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::__$PageInfoCopyWithImpl" o-- "flutter_learn::models::youtube_playlist_items.dart::_PageInfo"
+"flutter_learn::models::youtube_playlist_items.dart::_$PageInfoCopyWith" <|-- "flutter_learn::models::youtube_playlist_items.dart::__$PageInfoCopyWithImpl"
+
+class "flutter_learn::models::youtube_playlist_items.dart::_$_PageInfo" {
+  +int totalResults
+  +int resultsPerPage
+  +int hashCode
+  +_$PageInfoCopyWith<_PageInfo> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_$_PageInfo" o-- "flutter_learn::models::youtube_playlist_items.dart::_$PageInfoCopyWith<_PageInfo>"
+"flutter_learn::models::youtube_playlist_items.dart::_PageInfo" <|-- "flutter_learn::models::youtube_playlist_items.dart::_$_PageInfo"
+
+abstract class "flutter_learn::models::youtube_playlist_items.dart::_PageInfo" {
+  +int totalResults
+  +int resultsPerPage
+  +_$PageInfoCopyWith<_PageInfo> copyWith
+}
+
+"flutter_learn::models::youtube_playlist_items.dart::_PageInfo" o-- "flutter_learn::models::youtube_playlist_items.dart::_$PageInfoCopyWith<_PageInfo>"
+"flutter_learn::models::youtube_playlist_items.dart::PageInfo" <|-- "flutter_learn::models::youtube_playlist_items.dart::_PageInfo"
+
+class "flutter_learn::models::youtube_channel.dart::Channel" {
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Channel" <|-- "flutter_learn::models::youtube_channel.dart::Channel"
+
+class "flutter_learn::models::youtube_channel.dart::Item" {
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Item" <|-- "flutter_learn::models::youtube_channel.dart::Item"
+
+class "flutter_learn::models::youtube_channel.dart::BrandingSettings" {
+}
+
+"flutter_learn::models::youtube_channel.dart::_$BrandingSettings" <|-- "flutter_learn::models::youtube_channel.dart::BrandingSettings"
+
+class "flutter_learn::models::youtube_channel.dart::ChannelClass" {
+}
+
+"flutter_learn::models::youtube_channel.dart::_$ChannelClass" <|-- "flutter_learn::models::youtube_channel.dart::ChannelClass"
+
+class "flutter_learn::models::youtube_channel.dart::Image" {
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Image" <|-- "flutter_learn::models::youtube_channel.dart::Image"
+
+class "flutter_learn::models::youtube_channel.dart::Snippet" {
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Snippet" <|-- "flutter_learn::models::youtube_channel.dart::Snippet"
+
+class "flutter_learn::models::youtube_channel.dart::Localized" {
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Localized" <|-- "flutter_learn::models::youtube_channel.dart::Localized"
+
+class "flutter_learn::models::youtube_channel.dart::Thumbnails" {
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Thumbnails" <|-- "flutter_learn::models::youtube_channel.dart::Thumbnails"
+
+class "flutter_learn::models::youtube_channel.dart::Default" {
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Default" <|-- "flutter_learn::models::youtube_channel.dart::Default"
+
+class "flutter_learn::models::youtube_channel.dart::Statistics" {
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Statistics" <|-- "flutter_learn::models::youtube_channel.dart::Statistics"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$Channel" {
+  +String kind
+  +String etag
+  +List<Item> items
+  +$ChannelCopyWith<Channel> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Channel" o-- "flutter_learn::models::youtube_channel.dart::$ChannelCopyWith<Channel>"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$Item" {
+  +String kind
+  +String etag
+  +String id
+  +Snippet snippet
+  +Statistics statistics
+  +BrandingSettings brandingSettings
+  +$ItemCopyWith<Item> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Item" o-- "flutter_learn::models::youtube_channel.dart::Snippet"
+"flutter_learn::models::youtube_channel.dart::_$Item" o-- "flutter_learn::models::youtube_channel.dart::Statistics"
+"flutter_learn::models::youtube_channel.dart::_$Item" o-- "flutter_learn::models::youtube_channel.dart::BrandingSettings"
+"flutter_learn::models::youtube_channel.dart::_$Item" o-- "flutter_learn::models::youtube_channel.dart::$ItemCopyWith<Item>"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$BrandingSettings" {
+  +ChannelClass channel
+  +Image image
+  +$BrandingSettingsCopyWith<BrandingSettings> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$BrandingSettings" o-- "flutter_learn::models::youtube_channel.dart::ChannelClass"
+"flutter_learn::models::youtube_channel.dart::_$BrandingSettings" o-- "flutter_learn::models::youtube_channel.dart::Image"
+"flutter_learn::models::youtube_channel.dart::_$BrandingSettings" o-- "flutter_learn::models::youtube_channel.dart::$BrandingSettingsCopyWith<BrandingSettings>"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$ChannelClass" {
+  +String title
+  +String description
+  +String? keywords
+  +bool showRelatedChannels
+  +bool showBrowseView
+  +String? country
+  +$ChannelClassCopyWith<ChannelClass> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$ChannelClass" o-- "flutter_learn::models::youtube_channel.dart::$ChannelClassCopyWith<ChannelClass>"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$Image" {
+  +String bannerExternalUrl
+  +$ImageCopyWith<Image> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Image" o-- "flutter_learn::models::youtube_channel.dart::$ImageCopyWith<Image>"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$Snippet" {
+  +String title
+  +String description
+  +DateTime publishedAt
+  +Thumbnails thumbnails
+  +Localized localized
+  +String? country
+  +$SnippetCopyWith<Snippet> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Snippet" o-- "flutter_learn::models::youtube_channel.dart::Thumbnails"
+"flutter_learn::models::youtube_channel.dart::_$Snippet" o-- "flutter_learn::models::youtube_channel.dart::Localized"
+"flutter_learn::models::youtube_channel.dart::_$Snippet" o-- "flutter_learn::models::youtube_channel.dart::$SnippetCopyWith<Snippet>"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$Localized" {
+  +String title
+  +String description
+  +$LocalizedCopyWith<Localized> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Localized" o-- "flutter_learn::models::youtube_channel.dart::$LocalizedCopyWith<Localized>"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$Thumbnails" {
+  +Default? thumbnailsDefault
+  +Default? medium
+  +Default? high
+  +$ThumbnailsCopyWith<Thumbnails> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Thumbnails" o-- "flutter_learn::models::youtube_channel.dart::Default"
+"flutter_learn::models::youtube_channel.dart::_$Thumbnails" o-- "flutter_learn::models::youtube_channel.dart::$ThumbnailsCopyWith<Thumbnails>"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$Default" {
+  +String url
+  +int width
+  +int height
+  +$DefaultCopyWith<Default> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Default" o-- "flutter_learn::models::youtube_channel.dart::$DefaultCopyWith<Default>"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$Statistics" {
+  +String viewCount
+  +String? subscriberCount
+  +bool hiddenSubscriberCount
+  +String videoCount
+  +$StatisticsCopyWith<Statistics> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$Statistics" o-- "flutter_learn::models::youtube_channel.dart::$StatisticsCopyWith<Statistics>"
+
+class "flutter_learn::models::youtube_channel.dart::_$ChannelTearOff" {
+  +_Channel call()
+  +Channel fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_channel.dart::$ChannelCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_channel.dart::_$ChannelCopyWithImpl" {
+  -Channel _value
+  -$Res Function(Channel) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$ChannelCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::Channel"
+"flutter_learn::models::youtube_channel.dart::_$ChannelCopyWithImpl" o-- "null::$Res Function(Channel)"
+"flutter_learn::models::youtube_channel.dart::$ChannelCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$ChannelCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$ChannelCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::$ChannelCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$ChannelCopyWith"
+
+class "flutter_learn::models::youtube_channel.dart::__$ChannelCopyWithImpl" {
+  -_Channel _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::__$ChannelCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::_Channel"
+"flutter_learn::models::youtube_channel.dart::_$ChannelCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::__$ChannelCopyWithImpl"
+
+class "flutter_learn::models::youtube_channel.dart::_$_Channel" {
+  +String kind
+  +String etag
+  +List<Item> items
+  +int hashCode
+  +_$ChannelCopyWith<_Channel> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$_Channel" o-- "flutter_learn::models::youtube_channel.dart::_$ChannelCopyWith<_Channel>"
+"flutter_learn::models::youtube_channel.dart::_Channel" <|-- "flutter_learn::models::youtube_channel.dart::_$_Channel"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_Channel" {
+  +String kind
+  +String etag
+  +List<Item> items
+  +_$ChannelCopyWith<_Channel> copyWith
+}
+
+"flutter_learn::models::youtube_channel.dart::_Channel" o-- "flutter_learn::models::youtube_channel.dart::_$ChannelCopyWith<_Channel>"
+"flutter_learn::models::youtube_channel.dart::Channel" <|-- "flutter_learn::models::youtube_channel.dart::_Channel"
+
+class "flutter_learn::models::youtube_channel.dart::_$ItemTearOff" {
+  +_Item call()
+  +Item fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_channel.dart::$ItemCopyWith" {
+  +$SnippetCopyWith<$Res> snippet
+  +$StatisticsCopyWith<$Res> statistics
+  +$BrandingSettingsCopyWith<$Res> brandingSettings
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::$ItemCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$SnippetCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::$ItemCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$StatisticsCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::$ItemCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$BrandingSettingsCopyWith<$Res>"
+
+class "flutter_learn::models::youtube_channel.dart::_$ItemCopyWithImpl" {
+  -Item _value
+  -$Res Function(Item) _then
+  +$SnippetCopyWith<$Res> snippet
+  +$StatisticsCopyWith<$Res> statistics
+  +$BrandingSettingsCopyWith<$Res> brandingSettings
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::Item"
+"flutter_learn::models::youtube_channel.dart::_$ItemCopyWithImpl" o-- "null::$Res Function(Item)"
+"flutter_learn::models::youtube_channel.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::$SnippetCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::$StatisticsCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::$BrandingSettingsCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::$ItemCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$ItemCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$ItemCopyWith" {
+  +$SnippetCopyWith<$Res> snippet
+  +$StatisticsCopyWith<$Res> statistics
+  +$BrandingSettingsCopyWith<$Res> brandingSettings
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$ItemCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$SnippetCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::_$ItemCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$StatisticsCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::_$ItemCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$BrandingSettingsCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::$ItemCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$ItemCopyWith"
+
+class "flutter_learn::models::youtube_channel.dart::__$ItemCopyWithImpl" {
+  -_Item _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::__$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::_Item"
+"flutter_learn::models::youtube_channel.dart::_$ItemCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::__$ItemCopyWithImpl"
+
+class "flutter_learn::models::youtube_channel.dart::_$_Item" {
+  +String kind
+  +String etag
+  +String id
+  +Snippet snippet
+  +Statistics statistics
+  +BrandingSettings brandingSettings
+  +int hashCode
+  +_$ItemCopyWith<_Item> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$_Item" o-- "flutter_learn::models::youtube_channel.dart::Snippet"
+"flutter_learn::models::youtube_channel.dart::_$_Item" o-- "flutter_learn::models::youtube_channel.dart::Statistics"
+"flutter_learn::models::youtube_channel.dart::_$_Item" o-- "flutter_learn::models::youtube_channel.dart::BrandingSettings"
+"flutter_learn::models::youtube_channel.dart::_$_Item" o-- "flutter_learn::models::youtube_channel.dart::_$ItemCopyWith<_Item>"
+"flutter_learn::models::youtube_channel.dart::_Item" <|-- "flutter_learn::models::youtube_channel.dart::_$_Item"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_Item" {
+  +String kind
+  +String etag
+  +String id
+  +Snippet snippet
+  +Statistics statistics
+  +BrandingSettings brandingSettings
+  +_$ItemCopyWith<_Item> copyWith
+}
+
+"flutter_learn::models::youtube_channel.dart::_Item" o-- "flutter_learn::models::youtube_channel.dart::Snippet"
+"flutter_learn::models::youtube_channel.dart::_Item" o-- "flutter_learn::models::youtube_channel.dart::Statistics"
+"flutter_learn::models::youtube_channel.dart::_Item" o-- "flutter_learn::models::youtube_channel.dart::BrandingSettings"
+"flutter_learn::models::youtube_channel.dart::_Item" o-- "flutter_learn::models::youtube_channel.dart::_$ItemCopyWith<_Item>"
+"flutter_learn::models::youtube_channel.dart::Item" <|-- "flutter_learn::models::youtube_channel.dart::_Item"
+
+class "flutter_learn::models::youtube_channel.dart::_$BrandingSettingsTearOff" {
+  +_BrandingSettings call()
+  +BrandingSettings fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_channel.dart::$BrandingSettingsCopyWith" {
+  +$ChannelClassCopyWith<$Res> channel
+  +$ImageCopyWith<$Res> image
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::$BrandingSettingsCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$ChannelClassCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::$BrandingSettingsCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$ImageCopyWith<$Res>"
+
+class "flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWithImpl" {
+  -BrandingSettings _value
+  -$Res Function(BrandingSettings) _then
+  +$ChannelClassCopyWith<$Res> channel
+  +$ImageCopyWith<$Res> image
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::BrandingSettings"
+"flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWithImpl" o-- "null::$Res Function(BrandingSettings)"
+"flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::$ChannelClassCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::$ImageCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::$BrandingSettingsCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWith" {
+  +$ChannelClassCopyWith<$Res> channel
+  +$ImageCopyWith<$Res> image
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$ChannelClassCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$ImageCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::$BrandingSettingsCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWith"
+
+class "flutter_learn::models::youtube_channel.dart::__$BrandingSettingsCopyWithImpl" {
+  -_BrandingSettings _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::__$BrandingSettingsCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::_BrandingSettings"
+"flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::__$BrandingSettingsCopyWithImpl"
+
+class "flutter_learn::models::youtube_channel.dart::_$_BrandingSettings" {
+  +ChannelClass channel
+  +Image image
+  +int hashCode
+  +_$BrandingSettingsCopyWith<_BrandingSettings> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$_BrandingSettings" o-- "flutter_learn::models::youtube_channel.dart::ChannelClass"
+"flutter_learn::models::youtube_channel.dart::_$_BrandingSettings" o-- "flutter_learn::models::youtube_channel.dart::Image"
+"flutter_learn::models::youtube_channel.dart::_$_BrandingSettings" o-- "flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWith<_BrandingSettings>"
+"flutter_learn::models::youtube_channel.dart::_BrandingSettings" <|-- "flutter_learn::models::youtube_channel.dart::_$_BrandingSettings"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_BrandingSettings" {
+  +ChannelClass channel
+  +Image image
+  +_$BrandingSettingsCopyWith<_BrandingSettings> copyWith
+}
+
+"flutter_learn::models::youtube_channel.dart::_BrandingSettings" o-- "flutter_learn::models::youtube_channel.dart::ChannelClass"
+"flutter_learn::models::youtube_channel.dart::_BrandingSettings" o-- "flutter_learn::models::youtube_channel.dart::Image"
+"flutter_learn::models::youtube_channel.dart::_BrandingSettings" o-- "flutter_learn::models::youtube_channel.dart::_$BrandingSettingsCopyWith<_BrandingSettings>"
+"flutter_learn::models::youtube_channel.dart::BrandingSettings" <|-- "flutter_learn::models::youtube_channel.dart::_BrandingSettings"
+
+class "flutter_learn::models::youtube_channel.dart::_$ChannelClassTearOff" {
+  +_ChannelClass call()
+  +ChannelClass fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_channel.dart::$ChannelClassCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_channel.dart::_$ChannelClassCopyWithImpl" {
+  -ChannelClass _value
+  -$Res Function(ChannelClass) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$ChannelClassCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::ChannelClass"
+"flutter_learn::models::youtube_channel.dart::_$ChannelClassCopyWithImpl" o-- "null::$Res Function(ChannelClass)"
+"flutter_learn::models::youtube_channel.dart::$ChannelClassCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$ChannelClassCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$ChannelClassCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::$ChannelClassCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$ChannelClassCopyWith"
+
+class "flutter_learn::models::youtube_channel.dart::__$ChannelClassCopyWithImpl" {
+  -_ChannelClass _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::__$ChannelClassCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::_ChannelClass"
+"flutter_learn::models::youtube_channel.dart::_$ChannelClassCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::__$ChannelClassCopyWithImpl"
+
+class "flutter_learn::models::youtube_channel.dart::_$_ChannelClass" {
+  +String title
+  +String description
+  +String? keywords
+  +bool showRelatedChannels
+  +bool showBrowseView
+  +String? country
+  +int hashCode
+  +_$ChannelClassCopyWith<_ChannelClass> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$_ChannelClass" o-- "flutter_learn::models::youtube_channel.dart::_$ChannelClassCopyWith<_ChannelClass>"
+"flutter_learn::models::youtube_channel.dart::_ChannelClass" <|-- "flutter_learn::models::youtube_channel.dart::_$_ChannelClass"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_ChannelClass" {
+  +String title
+  +String description
+  +String? keywords
+  +bool showRelatedChannels
+  +bool showBrowseView
+  +String? country
+  +_$ChannelClassCopyWith<_ChannelClass> copyWith
+}
+
+"flutter_learn::models::youtube_channel.dart::_ChannelClass" o-- "flutter_learn::models::youtube_channel.dart::_$ChannelClassCopyWith<_ChannelClass>"
+"flutter_learn::models::youtube_channel.dart::ChannelClass" <|-- "flutter_learn::models::youtube_channel.dart::_ChannelClass"
+
+class "flutter_learn::models::youtube_channel.dart::_$ImageTearOff" {
+  +_Image call()
+  +Image fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_channel.dart::$ImageCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_channel.dart::_$ImageCopyWithImpl" {
+  -Image _value
+  -$Res Function(Image) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$ImageCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::Image"
+"flutter_learn::models::youtube_channel.dart::_$ImageCopyWithImpl" o-- "null::$Res Function(Image)"
+"flutter_learn::models::youtube_channel.dart::$ImageCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$ImageCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$ImageCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::$ImageCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$ImageCopyWith"
+
+class "flutter_learn::models::youtube_channel.dart::__$ImageCopyWithImpl" {
+  -_Image _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::__$ImageCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::_Image"
+"flutter_learn::models::youtube_channel.dart::_$ImageCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::__$ImageCopyWithImpl"
+
+class "flutter_learn::models::youtube_channel.dart::_$_Image" {
+  +String bannerExternalUrl
+  +int hashCode
+  +_$ImageCopyWith<_Image> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$_Image" o-- "flutter_learn::models::youtube_channel.dart::_$ImageCopyWith<_Image>"
+"flutter_learn::models::youtube_channel.dart::_Image" <|-- "flutter_learn::models::youtube_channel.dart::_$_Image"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_Image" {
+  +String bannerExternalUrl
+  +_$ImageCopyWith<_Image> copyWith
+}
+
+"flutter_learn::models::youtube_channel.dart::_Image" o-- "flutter_learn::models::youtube_channel.dart::_$ImageCopyWith<_Image>"
+"flutter_learn::models::youtube_channel.dart::Image" <|-- "flutter_learn::models::youtube_channel.dart::_Image"
+
+class "flutter_learn::models::youtube_channel.dart::_$SnippetTearOff" {
+  +_Snippet call()
+  +Snippet fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_channel.dart::$SnippetCopyWith" {
+  +$ThumbnailsCopyWith<$Res> thumbnails
+  +$LocalizedCopyWith<$Res> localized
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::$SnippetCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$ThumbnailsCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::$SnippetCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$LocalizedCopyWith<$Res>"
+
+class "flutter_learn::models::youtube_channel.dart::_$SnippetCopyWithImpl" {
+  -Snippet _value
+  -$Res Function(Snippet) _then
+  +$ThumbnailsCopyWith<$Res> thumbnails
+  +$LocalizedCopyWith<$Res> localized
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$SnippetCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::Snippet"
+"flutter_learn::models::youtube_channel.dart::_$SnippetCopyWithImpl" o-- "null::$Res Function(Snippet)"
+"flutter_learn::models::youtube_channel.dart::_$SnippetCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::$ThumbnailsCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::_$SnippetCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::$LocalizedCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::$SnippetCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$SnippetCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$SnippetCopyWith" {
+  +$ThumbnailsCopyWith<$Res> thumbnails
+  +$LocalizedCopyWith<$Res> localized
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$SnippetCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$ThumbnailsCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::_$SnippetCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$LocalizedCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::$SnippetCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$SnippetCopyWith"
+
+class "flutter_learn::models::youtube_channel.dart::__$SnippetCopyWithImpl" {
+  -_Snippet _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::__$SnippetCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::_Snippet"
+"flutter_learn::models::youtube_channel.dart::_$SnippetCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::__$SnippetCopyWithImpl"
+
+class "flutter_learn::models::youtube_channel.dart::_$_Snippet" {
+  +String title
+  +String description
+  +DateTime publishedAt
+  +Thumbnails thumbnails
+  +Localized localized
+  +String? country
+  +int hashCode
+  +_$SnippetCopyWith<_Snippet> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$_Snippet" o-- "flutter_learn::models::youtube_channel.dart::Thumbnails"
+"flutter_learn::models::youtube_channel.dart::_$_Snippet" o-- "flutter_learn::models::youtube_channel.dart::Localized"
+"flutter_learn::models::youtube_channel.dart::_$_Snippet" o-- "flutter_learn::models::youtube_channel.dart::_$SnippetCopyWith<_Snippet>"
+"flutter_learn::models::youtube_channel.dart::_Snippet" <|-- "flutter_learn::models::youtube_channel.dart::_$_Snippet"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_Snippet" {
+  +String title
+  +String description
+  +DateTime publishedAt
+  +Thumbnails thumbnails
+  +Localized localized
+  +String? country
+  +_$SnippetCopyWith<_Snippet> copyWith
+}
+
+"flutter_learn::models::youtube_channel.dart::_Snippet" o-- "flutter_learn::models::youtube_channel.dart::Thumbnails"
+"flutter_learn::models::youtube_channel.dart::_Snippet" o-- "flutter_learn::models::youtube_channel.dart::Localized"
+"flutter_learn::models::youtube_channel.dart::_Snippet" o-- "flutter_learn::models::youtube_channel.dart::_$SnippetCopyWith<_Snippet>"
+"flutter_learn::models::youtube_channel.dart::Snippet" <|-- "flutter_learn::models::youtube_channel.dart::_Snippet"
+
+class "flutter_learn::models::youtube_channel.dart::_$LocalizedTearOff" {
+  +_Localized call()
+  +Localized fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_channel.dart::$LocalizedCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_channel.dart::_$LocalizedCopyWithImpl" {
+  -Localized _value
+  -$Res Function(Localized) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$LocalizedCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::Localized"
+"flutter_learn::models::youtube_channel.dart::_$LocalizedCopyWithImpl" o-- "null::$Res Function(Localized)"
+"flutter_learn::models::youtube_channel.dart::$LocalizedCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$LocalizedCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$LocalizedCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::$LocalizedCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$LocalizedCopyWith"
+
+class "flutter_learn::models::youtube_channel.dart::__$LocalizedCopyWithImpl" {
+  -_Localized _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::__$LocalizedCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::_Localized"
+"flutter_learn::models::youtube_channel.dart::_$LocalizedCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::__$LocalizedCopyWithImpl"
+
+class "flutter_learn::models::youtube_channel.dart::_$_Localized" {
+  +String title
+  +String description
+  +int hashCode
+  +_$LocalizedCopyWith<_Localized> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$_Localized" o-- "flutter_learn::models::youtube_channel.dart::_$LocalizedCopyWith<_Localized>"
+"flutter_learn::models::youtube_channel.dart::_Localized" <|-- "flutter_learn::models::youtube_channel.dart::_$_Localized"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_Localized" {
+  +String title
+  +String description
+  +_$LocalizedCopyWith<_Localized> copyWith
+}
+
+"flutter_learn::models::youtube_channel.dart::_Localized" o-- "flutter_learn::models::youtube_channel.dart::_$LocalizedCopyWith<_Localized>"
+"flutter_learn::models::youtube_channel.dart::Localized" <|-- "flutter_learn::models::youtube_channel.dart::_Localized"
+
+class "flutter_learn::models::youtube_channel.dart::_$ThumbnailsTearOff" {
+  +_Thumbnails call()
+  +Thumbnails fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_channel.dart::$ThumbnailsCopyWith" {
+  +$DefaultCopyWith<$Res>? thumbnailsDefault
+  +$DefaultCopyWith<$Res>? medium
+  +$DefaultCopyWith<$Res>? high
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::$ThumbnailsCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$DefaultCopyWith<$Res>"
+
+class "flutter_learn::models::youtube_channel.dart::_$ThumbnailsCopyWithImpl" {
+  -Thumbnails _value
+  -$Res Function(Thumbnails) _then
+  +$DefaultCopyWith<$Res>? thumbnailsDefault
+  +$DefaultCopyWith<$Res>? medium
+  +$DefaultCopyWith<$Res>? high
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$ThumbnailsCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::Thumbnails"
+"flutter_learn::models::youtube_channel.dart::_$ThumbnailsCopyWithImpl" o-- "null::$Res Function(Thumbnails)"
+"flutter_learn::models::youtube_channel.dart::_$ThumbnailsCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::$DefaultCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::$ThumbnailsCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$ThumbnailsCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$ThumbnailsCopyWith" {
+  +$DefaultCopyWith<$Res>? thumbnailsDefault
+  +$DefaultCopyWith<$Res>? medium
+  +$DefaultCopyWith<$Res>? high
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$ThumbnailsCopyWith" o-- "flutter_learn::models::youtube_channel.dart::$DefaultCopyWith<$Res>"
+"flutter_learn::models::youtube_channel.dart::$ThumbnailsCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$ThumbnailsCopyWith"
+
+class "flutter_learn::models::youtube_channel.dart::__$ThumbnailsCopyWithImpl" {
+  -_Thumbnails _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::__$ThumbnailsCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::_Thumbnails"
+"flutter_learn::models::youtube_channel.dart::_$ThumbnailsCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::__$ThumbnailsCopyWithImpl"
+
+class "flutter_learn::models::youtube_channel.dart::_$_Thumbnails" {
+  +Default? thumbnailsDefault
+  +Default? medium
+  +Default? high
+  +int hashCode
+  +_$ThumbnailsCopyWith<_Thumbnails> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$_Thumbnails" o-- "flutter_learn::models::youtube_channel.dart::Default"
+"flutter_learn::models::youtube_channel.dart::_$_Thumbnails" o-- "flutter_learn::models::youtube_channel.dart::_$ThumbnailsCopyWith<_Thumbnails>"
+"flutter_learn::models::youtube_channel.dart::_Thumbnails" <|-- "flutter_learn::models::youtube_channel.dart::_$_Thumbnails"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_Thumbnails" {
+  +Default? thumbnailsDefault
+  +Default? medium
+  +Default? high
+  +_$ThumbnailsCopyWith<_Thumbnails> copyWith
+}
+
+"flutter_learn::models::youtube_channel.dart::_Thumbnails" o-- "flutter_learn::models::youtube_channel.dart::Default"
+"flutter_learn::models::youtube_channel.dart::_Thumbnails" o-- "flutter_learn::models::youtube_channel.dart::_$ThumbnailsCopyWith<_Thumbnails>"
+"flutter_learn::models::youtube_channel.dart::Thumbnails" <|-- "flutter_learn::models::youtube_channel.dart::_Thumbnails"
+
+class "flutter_learn::models::youtube_channel.dart::_$DefaultTearOff" {
+  +_Default call()
+  +Default fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_channel.dart::$DefaultCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_channel.dart::_$DefaultCopyWithImpl" {
+  -Default _value
+  -$Res Function(Default) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$DefaultCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::Default"
+"flutter_learn::models::youtube_channel.dart::_$DefaultCopyWithImpl" o-- "null::$Res Function(Default)"
+"flutter_learn::models::youtube_channel.dart::$DefaultCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$DefaultCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$DefaultCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::$DefaultCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$DefaultCopyWith"
+
+class "flutter_learn::models::youtube_channel.dart::__$DefaultCopyWithImpl" {
+  -_Default _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::__$DefaultCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::_Default"
+"flutter_learn::models::youtube_channel.dart::_$DefaultCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::__$DefaultCopyWithImpl"
+
+class "flutter_learn::models::youtube_channel.dart::_$_Default" {
+  +String url
+  +int width
+  +int height
+  +int hashCode
+  +_$DefaultCopyWith<_Default> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$_Default" o-- "flutter_learn::models::youtube_channel.dart::_$DefaultCopyWith<_Default>"
+"flutter_learn::models::youtube_channel.dart::_Default" <|-- "flutter_learn::models::youtube_channel.dart::_$_Default"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_Default" {
+  +String url
+  +int width
+  +int height
+  +_$DefaultCopyWith<_Default> copyWith
+}
+
+"flutter_learn::models::youtube_channel.dart::_Default" o-- "flutter_learn::models::youtube_channel.dart::_$DefaultCopyWith<_Default>"
+"flutter_learn::models::youtube_channel.dart::Default" <|-- "flutter_learn::models::youtube_channel.dart::_Default"
+
+class "flutter_learn::models::youtube_channel.dart::_$StatisticsTearOff" {
+  +_Statistics call()
+  +Statistics fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_channel.dart::$StatisticsCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_channel.dart::_$StatisticsCopyWithImpl" {
+  -Statistics _value
+  -$Res Function(Statistics) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$StatisticsCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::Statistics"
+"flutter_learn::models::youtube_channel.dart::_$StatisticsCopyWithImpl" o-- "null::$Res Function(Statistics)"
+"flutter_learn::models::youtube_channel.dart::$StatisticsCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$StatisticsCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_$StatisticsCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::$StatisticsCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::_$StatisticsCopyWith"
+
+class "flutter_learn::models::youtube_channel.dart::__$StatisticsCopyWithImpl" {
+  -_Statistics _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_channel.dart::__$StatisticsCopyWithImpl" o-- "flutter_learn::models::youtube_channel.dart::_Statistics"
+"flutter_learn::models::youtube_channel.dart::_$StatisticsCopyWith" <|-- "flutter_learn::models::youtube_channel.dart::__$StatisticsCopyWithImpl"
+
+class "flutter_learn::models::youtube_channel.dart::_$_Statistics" {
+  +String viewCount
+  +String? subscriberCount
+  +bool hiddenSubscriberCount
+  +String videoCount
+  +int hashCode
+  +_$StatisticsCopyWith<_Statistics> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_channel.dart::_$_Statistics" o-- "flutter_learn::models::youtube_channel.dart::_$StatisticsCopyWith<_Statistics>"
+"flutter_learn::models::youtube_channel.dart::_Statistics" <|-- "flutter_learn::models::youtube_channel.dart::_$_Statistics"
+
+abstract class "flutter_learn::models::youtube_channel.dart::_Statistics" {
+  +String viewCount
+  +String? subscriberCount
+  +bool hiddenSubscriberCount
+  +String videoCount
+  +_$StatisticsCopyWith<_Statistics> copyWith
+}
+
+"flutter_learn::models::youtube_channel.dart::_Statistics" o-- "flutter_learn::models::youtube_channel.dart::_$StatisticsCopyWith<_Statistics>"
+"flutter_learn::models::youtube_channel.dart::Statistics" <|-- "flutter_learn::models::youtube_channel.dart::_Statistics"
+
+class "flutter_learn::models::received_notification.dart::ReceivedNotification" {
+  +int id
+  +String? title
+  +String? body
+  +String? payload
+}
+
+class "flutter_learn::models::video.dart::Video" {
+}
+
+"flutter_learn::models::video.dart::_$Video" <|-- "flutter_learn::models::video.dart::Video"
+
+abstract class "flutter_learn::models::video.dart::_$Video" {
+  +String id
+  +String title
+  +String thumbnail
+  +String channelTitle
+  +String channelUrl
+  +String channelThumbnail
+  +Set<String> tags
+  +int level
+  +int likedCount
+  +int watchCount
+  +int commentCount
+  +$VideoCopyWith<Video> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::video.dart::_$Video" o-- "flutter_learn::models::video.dart::$VideoCopyWith<Video>"
+
+class "flutter_learn::models::video.dart::_$VideoTearOff" {
+  +_Video call()
+  +Video fromJson()
+}
+
+abstract class "flutter_learn::models::video.dart::$VideoCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::video.dart::_$VideoCopyWithImpl" {
+  -Video _value
+  -$Res Function(Video) _then
+  +$Res call()
+}
+
+"flutter_learn::models::video.dart::_$VideoCopyWithImpl" o-- "flutter_learn::models::video.dart::Video"
+"flutter_learn::models::video.dart::_$VideoCopyWithImpl" o-- "null::$Res Function(Video)"
+"flutter_learn::models::video.dart::$VideoCopyWith" <|-- "flutter_learn::models::video.dart::_$VideoCopyWithImpl"
+
+abstract class "flutter_learn::models::video.dart::_$VideoCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::video.dart::$VideoCopyWith" <|-- "flutter_learn::models::video.dart::_$VideoCopyWith"
+
+class "flutter_learn::models::video.dart::__$VideoCopyWithImpl" {
+  -_Video _value
+  +$Res call()
+}
+
+"flutter_learn::models::video.dart::__$VideoCopyWithImpl" o-- "flutter_learn::models::video.dart::_Video"
+"flutter_learn::models::video.dart::_$VideoCopyWith" <|-- "flutter_learn::models::video.dart::__$VideoCopyWithImpl"
+
+class "flutter_learn::models::video.dart::_$_Video" {
+  +String id
+  +String title
+  +String thumbnail
+  +String channelTitle
+  +String channelUrl
+  +String channelThumbnail
+  +Set<String> tags
+  +int level
+  +int likedCount
+  +int watchCount
+  +int commentCount
+  +int hashCode
+  +_$VideoCopyWith<_Video> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::video.dart::_$_Video" o-- "flutter_learn::models::video.dart::_$VideoCopyWith<_Video>"
+"flutter_learn::models::video.dart::_Video" <|-- "flutter_learn::models::video.dart::_$_Video"
+
+abstract class "flutter_learn::models::video.dart::_Video" {
+  +String id
+  +String title
+  +String thumbnail
+  +String channelTitle
+  +String channelUrl
+  +String channelThumbnail
+  +Set<String> tags
+  +int level
+  +int likedCount
+  +int watchCount
+  +int commentCount
+  +_$VideoCopyWith<_Video> copyWith
+}
+
+"flutter_learn::models::video.dart::_Video" o-- "flutter_learn::models::video.dart::_$VideoCopyWith<_Video>"
+"flutter_learn::models::video.dart::Video" <|-- "flutter_learn::models::video.dart::_Video"
+
+class "flutter_learn::models::tag.dart::Tag" {
+  {static} -Tag _customFromJson()
+}
+
+"flutter_learn::models::tag.dart::_$Tag" <|-- "flutter_learn::models::tag.dart::Tag"
+
+abstract class "flutter_learn::models::tag.dart::_$Tag" {
+  +String name
+  +String? playlistId
+  +int level
+  +int postCount
+  +int videoCount
+  +String? color
+  +String? image
+  +bool youTube
+  +String? imageUrl
+  +$TagCopyWith<Tag> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::tag.dart::_$Tag" o-- "flutter_learn::models::tag.dart::$TagCopyWith<Tag>"
+
+class "flutter_learn::models::tag.dart::_$TagTearOff" {
+  +_Tag call()
+  +Tag fromJson()
+}
+
+abstract class "flutter_learn::models::tag.dart::$TagCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::tag.dart::_$TagCopyWithImpl" {
+  -Tag _value
+  -$Res Function(Tag) _then
+  +$Res call()
+}
+
+"flutter_learn::models::tag.dart::_$TagCopyWithImpl" o-- "flutter_learn::models::tag.dart::Tag"
+"flutter_learn::models::tag.dart::_$TagCopyWithImpl" o-- "null::$Res Function(Tag)"
+"flutter_learn::models::tag.dart::$TagCopyWith" <|-- "flutter_learn::models::tag.dart::_$TagCopyWithImpl"
+
+abstract class "flutter_learn::models::tag.dart::_$TagCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::tag.dart::$TagCopyWith" <|-- "flutter_learn::models::tag.dart::_$TagCopyWith"
+
+class "flutter_learn::models::tag.dart::__$TagCopyWithImpl" {
+  -_Tag _value
+  +$Res call()
+}
+
+"flutter_learn::models::tag.dart::__$TagCopyWithImpl" o-- "flutter_learn::models::tag.dart::_Tag"
+"flutter_learn::models::tag.dart::_$TagCopyWith" <|-- "flutter_learn::models::tag.dart::__$TagCopyWithImpl"
+
+class "flutter_learn::models::tag.dart::_$_Tag" {
+  +String name
+  +String? playlistId
+  +int level
+  +int postCount
+  +int videoCount
+  +String? color
+  +String? image
+  +bool youTube
+  +String? imageUrl
+  +int hashCode
+  +_$TagCopyWith<_Tag> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::tag.dart::_$_Tag" o-- "flutter_learn::models::tag.dart::_$TagCopyWith<_Tag>"
+"flutter_learn::models::tag.dart::_Tag" <|-- "flutter_learn::models::tag.dart::_$_Tag"
+
+abstract class "flutter_learn::models::tag.dart::_Tag" {
+  +String name
+  +String? playlistId
+  +int level
+  +int postCount
+  +int videoCount
+  +String? color
+  +String? image
+  +bool youTube
+  +String? imageUrl
+  +_$TagCopyWith<_Tag> copyWith
+}
+
+"flutter_learn::models::tag.dart::_Tag" o-- "flutter_learn::models::tag.dart::_$TagCopyWith<_Tag>"
+"flutter_learn::models::tag.dart::Tag" <|-- "flutter_learn::models::tag.dart::_Tag"
+
+class "flutter_learn::models::comment_liked.dart::CommentLiked" {
+}
+
+"flutter_learn::models::comment_liked.dart::_$CommentLiked" <|-- "flutter_learn::models::comment_liked.dart::CommentLiked"
+
+abstract class "flutter_learn::models::comment_liked.dart::_$CommentLiked" {
+  +String userId
+  +String userDisplayName
+  +String commentId
+  +String commentUserId
+  +String postId
+  +String postUserId
+  +String commentText
+  +DateTime? timestamp
+  +$CommentLikedCopyWith<CommentLiked> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::comment_liked.dart::_$CommentLiked" o-- "flutter_learn::models::comment_liked.dart::$CommentLikedCopyWith<CommentLiked>"
+
+class "flutter_learn::models::comment_liked.dart::_$CommentLikedTearOff" {
+  +_CommentLiked call()
+  +CommentLiked fromJson()
+}
+
+abstract class "flutter_learn::models::comment_liked.dart::$CommentLikedCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::comment_liked.dart::_$CommentLikedCopyWithImpl" {
+  -CommentLiked _value
+  -$Res Function(CommentLiked) _then
+  +$Res call()
+}
+
+"flutter_learn::models::comment_liked.dart::_$CommentLikedCopyWithImpl" o-- "flutter_learn::models::comment_liked.dart::CommentLiked"
+"flutter_learn::models::comment_liked.dart::_$CommentLikedCopyWithImpl" o-- "null::$Res Function(CommentLiked)"
+"flutter_learn::models::comment_liked.dart::$CommentLikedCopyWith" <|-- "flutter_learn::models::comment_liked.dart::_$CommentLikedCopyWithImpl"
+
+abstract class "flutter_learn::models::comment_liked.dart::_$CommentLikedCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::comment_liked.dart::$CommentLikedCopyWith" <|-- "flutter_learn::models::comment_liked.dart::_$CommentLikedCopyWith"
+
+class "flutter_learn::models::comment_liked.dart::__$CommentLikedCopyWithImpl" {
+  -_CommentLiked _value
+  +$Res call()
+}
+
+"flutter_learn::models::comment_liked.dart::__$CommentLikedCopyWithImpl" o-- "flutter_learn::models::comment_liked.dart::_CommentLiked"
+"flutter_learn::models::comment_liked.dart::_$CommentLikedCopyWith" <|-- "flutter_learn::models::comment_liked.dart::__$CommentLikedCopyWithImpl"
+
+class "flutter_learn::models::comment_liked.dart::_$_CommentLiked" {
+  +String userId
+  +String userDisplayName
+  +String commentId
+  +String commentUserId
+  +String postId
+  +String postUserId
+  +String commentText
+  +DateTime? timestamp
+  +int hashCode
+  +_$CommentLikedCopyWith<_CommentLiked> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::comment_liked.dart::_$_CommentLiked" o-- "flutter_learn::models::comment_liked.dart::_$CommentLikedCopyWith<_CommentLiked>"
+"flutter_learn::models::comment_liked.dart::_CommentLiked" <|-- "flutter_learn::models::comment_liked.dart::_$_CommentLiked"
+
+abstract class "flutter_learn::models::comment_liked.dart::_CommentLiked" {
+  +String userId
+  +String userDisplayName
+  +String commentId
+  +String commentUserId
+  +String postId
+  +String postUserId
+  +String commentText
+  +DateTime? timestamp
+  +_$CommentLikedCopyWith<_CommentLiked> copyWith
+}
+
+"flutter_learn::models::comment_liked.dart::_CommentLiked" o-- "flutter_learn::models::comment_liked.dart::_$CommentLikedCopyWith<_CommentLiked>"
+"flutter_learn::models::comment_liked.dart::CommentLiked" <|-- "flutter_learn::models::comment_liked.dart::_CommentLiked"
+
+class "flutter_learn::models::recent_file.dart::RecentFile" {
+  +String? icon
+  +String? title
+  +String? date
+  +String? size
+}
+
+class "flutter_learn::models::my_files.dart::CloudStorageInfo" {
+  +String svgSrc
+  +String title
+  +String totalStorage
+  +int numOfFiles
+  +int percentage
+  +Color color
+}
+
+"flutter_learn::models::my_files.dart::CloudStorageInfo" o-- "dart::ui::Color"
+
+class "flutter_learn::models::comment.dart::Comment" {
+}
+
+"flutter_learn::models::comment.dart::_$Comment" <|-- "flutter_learn::models::comment.dart::Comment"
+
+abstract class "flutter_learn::models::comment.dart::_$Comment" {
+  +String id
+  +String text
+  +String postId
+  +String postTitle
+  +String userId
+  +String userDisplayName
+  +String? userPhotoURL
+  +String postUserId
+  +DateTime? timestamp
+  +int likedCount
+  +int level
+  +String? parentCmt
+  +String? parentCmtUserId
+  +String? parentCmtText
+  +bool private
+  +int childCount
+  +$CommentCopyWith<Comment> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::comment.dart::_$Comment" o-- "flutter_learn::models::comment.dart::$CommentCopyWith<Comment>"
+
+class "flutter_learn::models::comment.dart::_$CommentTearOff" {
+  +_Comment call()
+  +Comment fromJson()
+}
+
+abstract class "flutter_learn::models::comment.dart::$CommentCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::comment.dart::_$CommentCopyWithImpl" {
+  -Comment _value
+  -$Res Function(Comment) _then
+  +$Res call()
+}
+
+"flutter_learn::models::comment.dart::_$CommentCopyWithImpl" o-- "flutter_learn::models::comment.dart::Comment"
+"flutter_learn::models::comment.dart::_$CommentCopyWithImpl" o-- "null::$Res Function(Comment)"
+"flutter_learn::models::comment.dart::$CommentCopyWith" <|-- "flutter_learn::models::comment.dart::_$CommentCopyWithImpl"
+
+abstract class "flutter_learn::models::comment.dart::_$CommentCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::comment.dart::$CommentCopyWith" <|-- "flutter_learn::models::comment.dart::_$CommentCopyWith"
+
+class "flutter_learn::models::comment.dart::__$CommentCopyWithImpl" {
+  -_Comment _value
+  +$Res call()
+}
+
+"flutter_learn::models::comment.dart::__$CommentCopyWithImpl" o-- "flutter_learn::models::comment.dart::_Comment"
+"flutter_learn::models::comment.dart::_$CommentCopyWith" <|-- "flutter_learn::models::comment.dart::__$CommentCopyWithImpl"
+
+class "flutter_learn::models::comment.dart::_$_Comment" {
+  +String id
+  +String text
+  +String postId
+  +String postTitle
+  +String userId
+  +String userDisplayName
+  +String? userPhotoURL
+  +String postUserId
+  +DateTime? timestamp
+  +int likedCount
+  +int level
+  +String? parentCmt
+  +String? parentCmtUserId
+  +String? parentCmtText
+  +bool private
+  +int childCount
+  +int hashCode
+  +_$CommentCopyWith<_Comment> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::comment.dart::_$_Comment" o-- "flutter_learn::models::comment.dart::_$CommentCopyWith<_Comment>"
+
+abstract class "flutter_learn::models::comment.dart::_Comment" {
+  +String id
+  +String text
+  +String postId
+  +String postTitle
+  +String userId
+  +String userDisplayName
+  +String? userPhotoURL
+  +String postUserId
+  +DateTime? timestamp
+  +int likedCount
+  +int level
+  +String? parentCmt
+  +String? parentCmtUserId
+  +String? parentCmtText
+  +bool private
+  +int childCount
+  +_$CommentCopyWith<_Comment> copyWith
+}
+
+"flutter_learn::models::comment.dart::_Comment" o-- "flutter_learn::models::comment.dart::_$CommentCopyWith<_Comment>"
+
+class "flutter_learn::models::app_user.dart::AppUser" {
+}
+
+"flutter_learn::models::app_user.dart::_$AppUser" <|-- "flutter_learn::models::app_user.dart::AppUser"
+
+abstract class "flutter_learn::models::app_user.dart::_$AppUser" {
+  +String id
+  +String email
+  +String displayName
+  +String? photoURL
+  +bool deletedUser
+  +int point
+  +DateTime? timestamp
+  +$AppUserCopyWith<AppUser> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::app_user.dart::_$AppUser" o-- "flutter_learn::models::app_user.dart::$AppUserCopyWith<AppUser>"
+
+class "flutter_learn::models::app_user.dart::_$AppUserTearOff" {
+  +_AppUser call()
+  +AppUser fromJson()
+}
+
+abstract class "flutter_learn::models::app_user.dart::$AppUserCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::app_user.dart::_$AppUserCopyWithImpl" {
+  -AppUser _value
+  -$Res Function(AppUser) _then
+  +$Res call()
+}
+
+"flutter_learn::models::app_user.dart::_$AppUserCopyWithImpl" o-- "flutter_learn::models::app_user.dart::AppUser"
+"flutter_learn::models::app_user.dart::_$AppUserCopyWithImpl" o-- "null::$Res Function(AppUser)"
+"flutter_learn::models::app_user.dart::$AppUserCopyWith" <|-- "flutter_learn::models::app_user.dart::_$AppUserCopyWithImpl"
+
+abstract class "flutter_learn::models::app_user.dart::_$AppUserCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::app_user.dart::$AppUserCopyWith" <|-- "flutter_learn::models::app_user.dart::_$AppUserCopyWith"
+
+class "flutter_learn::models::app_user.dart::__$AppUserCopyWithImpl" {
+  -_AppUser _value
+  +$Res call()
+}
+
+"flutter_learn::models::app_user.dart::__$AppUserCopyWithImpl" o-- "flutter_learn::models::app_user.dart::_AppUser"
+"flutter_learn::models::app_user.dart::_$AppUserCopyWith" <|-- "flutter_learn::models::app_user.dart::__$AppUserCopyWithImpl"
+
+class "flutter_learn::models::app_user.dart::_$_AppUser" {
+  +String id
+  +String email
+  +String displayName
+  +String? photoURL
+  +bool deletedUser
+  +int point
+  +DateTime? timestamp
+  +int hashCode
+  +_$AppUserCopyWith<_AppUser> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::app_user.dart::_$_AppUser" o-- "flutter_learn::models::app_user.dart::_$AppUserCopyWith<_AppUser>"
+"flutter_learn::models::app_user.dart::_AppUser" <|-- "flutter_learn::models::app_user.dart::_$_AppUser"
+
+abstract class "flutter_learn::models::app_user.dart::_AppUser" {
+  +String id
+  +String email
+  +String displayName
+  +String? photoURL
+  +bool deletedUser
+  +int point
+  +DateTime? timestamp
+  +_$AppUserCopyWith<_AppUser> copyWith
+}
+
+"flutter_learn::models::app_user.dart::_AppUser" o-- "flutter_learn::models::app_user.dart::_$AppUserCopyWith<_AppUser>"
+"flutter_learn::models::app_user.dart::AppUser" <|-- "flutter_learn::models::app_user.dart::_AppUser"
+
+class "flutter_learn::models::youtube_video.dart::YouTubeVideo" {
+}
+
+"flutter_learn::models::youtube_video.dart::_$YouTubeVideo" <|-- "flutter_learn::models::youtube_video.dart::YouTubeVideo"
+
+class "flutter_learn::models::youtube_video.dart::Item" {
+}
+
+"flutter_learn::models::youtube_video.dart::_$Item" <|-- "flutter_learn::models::youtube_video.dart::Item"
+
+class "flutter_learn::models::youtube_video.dart::ContentDetails" {
+}
+
+"flutter_learn::models::youtube_video.dart::_$ContentDetails" <|-- "flutter_learn::models::youtube_video.dart::ContentDetails"
+
+class "flutter_learn::models::youtube_video.dart::ContentRating" {
+}
+
+"flutter_learn::models::youtube_video.dart::_$ContentRating" <|-- "flutter_learn::models::youtube_video.dart::ContentRating"
+
+class "flutter_learn::models::youtube_video.dart::Snippet" {
+}
+
+"flutter_learn::models::youtube_video.dart::_$Snippet" <|-- "flutter_learn::models::youtube_video.dart::Snippet"
+
+class "flutter_learn::models::youtube_video.dart::Localized" {
+}
+
+"flutter_learn::models::youtube_video.dart::_$Localized" <|-- "flutter_learn::models::youtube_video.dart::Localized"
+
+class "flutter_learn::models::youtube_video.dart::Thumbnails" {
+}
+
+"flutter_learn::models::youtube_video.dart::_$Thumbnails" <|-- "flutter_learn::models::youtube_video.dart::Thumbnails"
+
+class "flutter_learn::models::youtube_video.dart::Default" {
+}
+
+"flutter_learn::models::youtube_video.dart::_$Default" <|-- "flutter_learn::models::youtube_video.dart::Default"
+
+class "flutter_learn::models::youtube_video.dart::Statistics" {
+}
+
+"flutter_learn::models::youtube_video.dart::_$Statistics" <|-- "flutter_learn::models::youtube_video.dart::Statistics"
+
+class "flutter_learn::models::youtube_video.dart::Status" {
+}
+
+"flutter_learn::models::youtube_video.dart::_$Status" <|-- "flutter_learn::models::youtube_video.dart::Status"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$YouTubeVideo" {
+  +String kind
+  +String etag
+  +List<Item> items
+  +$YouTubeVideoCopyWith<YouTubeVideo> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$YouTubeVideo" o-- "flutter_learn::models::youtube_video.dart::$YouTubeVideoCopyWith<YouTubeVideo>"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$Item" {
+  +String kind
+  +String etag
+  +String id
+  +Snippet snippet
+  +ContentDetails contentDetails
+  +Status status
+  +Statistics statistics
+  +$ItemCopyWith<Item> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$Item" o-- "flutter_learn::models::youtube_video.dart::Snippet"
+"flutter_learn::models::youtube_video.dart::_$Item" o-- "flutter_learn::models::youtube_video.dart::ContentDetails"
+"flutter_learn::models::youtube_video.dart::_$Item" o-- "flutter_learn::models::youtube_video.dart::Status"
+"flutter_learn::models::youtube_video.dart::_$Item" o-- "flutter_learn::models::youtube_video.dart::Statistics"
+"flutter_learn::models::youtube_video.dart::_$Item" o-- "flutter_learn::models::youtube_video.dart::$ItemCopyWith<Item>"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$ContentDetails" {
+  +String duration
+  +String dimension
+  +String definition
+  +String caption
+  +bool licensedContent
+  +ContentRating contentRating
+  +String projection
+  +$ContentDetailsCopyWith<ContentDetails> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$ContentDetails" o-- "flutter_learn::models::youtube_video.dart::ContentRating"
+"flutter_learn::models::youtube_video.dart::_$ContentDetails" o-- "flutter_learn::models::youtube_video.dart::$ContentDetailsCopyWith<ContentDetails>"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$ContentRating" {
+  +Map<String, dynamic> toJson()
+}
+
+abstract class "flutter_learn::models::youtube_video.dart::_$Snippet" {
+  +DateTime publishedAt
+  +String channelId
+  +String title
+  +String description
+  +Thumbnails thumbnails
+  +String channelTitle
+  +String categoryId
+  +String liveBroadcastContent
+  +Localized localized
+  +String? defaultAudioLanguage
+  +$SnippetCopyWith<Snippet> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$Snippet" o-- "flutter_learn::models::youtube_video.dart::Thumbnails"
+"flutter_learn::models::youtube_video.dart::_$Snippet" o-- "flutter_learn::models::youtube_video.dart::Localized"
+"flutter_learn::models::youtube_video.dart::_$Snippet" o-- "flutter_learn::models::youtube_video.dart::$SnippetCopyWith<Snippet>"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$Localized" {
+  +String title
+  +String description
+  +$LocalizedCopyWith<Localized> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$Localized" o-- "flutter_learn::models::youtube_video.dart::$LocalizedCopyWith<Localized>"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$Thumbnails" {
+  +Default? thumbnailsDefault
+  +Default? medium
+  +Default? high
+  +Default? standard
+  +Default? maxres
+  +$ThumbnailsCopyWith<Thumbnails> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$Thumbnails" o-- "flutter_learn::models::youtube_video.dart::Default"
+"flutter_learn::models::youtube_video.dart::_$Thumbnails" o-- "flutter_learn::models::youtube_video.dart::$ThumbnailsCopyWith<Thumbnails>"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$Default" {
+  +String url
+  +int width
+  +int height
+  +$DefaultCopyWith<Default> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$Default" o-- "flutter_learn::models::youtube_video.dart::$DefaultCopyWith<Default>"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$Statistics" {
+  +String viewCount
+  +String likeCount
+  +String dislikeCount
+  +String favoriteCount
+  +String commentCount
+  +$StatisticsCopyWith<Statistics> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$Statistics" o-- "flutter_learn::models::youtube_video.dart::$StatisticsCopyWith<Statistics>"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$Status" {
+  +String uploadStatus
+  +String privacyStatus
+  +String license
+  +bool embeddable
+  +bool publicStatsViewable
+  +bool madeForKids
+  +$StatusCopyWith<Status> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$Status" o-- "flutter_learn::models::youtube_video.dart::$StatusCopyWith<Status>"
+
+class "flutter_learn::models::youtube_video.dart::_$YouTubeVideoTearOff" {
+  +_YouTubeVideo call()
+  +YouTubeVideo fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_video.dart::$YouTubeVideoCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_video.dart::_$YouTubeVideoCopyWithImpl" {
+  -YouTubeVideo _value
+  -$Res Function(YouTubeVideo) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$YouTubeVideoCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::YouTubeVideo"
+"flutter_learn::models::youtube_video.dart::_$YouTubeVideoCopyWithImpl" o-- "null::$Res Function(YouTubeVideo)"
+"flutter_learn::models::youtube_video.dart::$YouTubeVideoCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$YouTubeVideoCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$YouTubeVideoCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::$YouTubeVideoCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$YouTubeVideoCopyWith"
+
+class "flutter_learn::models::youtube_video.dart::__$YouTubeVideoCopyWithImpl" {
+  -_YouTubeVideo _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::__$YouTubeVideoCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::_YouTubeVideo"
+"flutter_learn::models::youtube_video.dart::_$YouTubeVideoCopyWith" <|-- "flutter_learn::models::youtube_video.dart::__$YouTubeVideoCopyWithImpl"
+
+class "flutter_learn::models::youtube_video.dart::_$_YouTubeVideo" {
+  +String kind
+  +String etag
+  +List<Item> items
+  +int hashCode
+  +_$YouTubeVideoCopyWith<_YouTubeVideo> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$_YouTubeVideo" o-- "flutter_learn::models::youtube_video.dart::_$YouTubeVideoCopyWith<_YouTubeVideo>"
+"flutter_learn::models::youtube_video.dart::_YouTubeVideo" <|-- "flutter_learn::models::youtube_video.dart::_$_YouTubeVideo"
+
+abstract class "flutter_learn::models::youtube_video.dart::_YouTubeVideo" {
+  +String kind
+  +String etag
+  +List<Item> items
+  +_$YouTubeVideoCopyWith<_YouTubeVideo> copyWith
+}
+
+"flutter_learn::models::youtube_video.dart::_YouTubeVideo" o-- "flutter_learn::models::youtube_video.dart::_$YouTubeVideoCopyWith<_YouTubeVideo>"
+"flutter_learn::models::youtube_video.dart::YouTubeVideo" <|-- "flutter_learn::models::youtube_video.dart::_YouTubeVideo"
+
+class "flutter_learn::models::youtube_video.dart::_$ItemTearOff" {
+  +_Item call()
+  +Item fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_video.dart::$ItemCopyWith" {
+  +$SnippetCopyWith<$Res> snippet
+  +$ContentDetailsCopyWith<$Res> contentDetails
+  +$StatusCopyWith<$Res> status
+  +$StatisticsCopyWith<$Res> statistics
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::$ItemCopyWith" o-- "flutter_learn::models::youtube_video.dart::$SnippetCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::$ItemCopyWith" o-- "flutter_learn::models::youtube_video.dart::$ContentDetailsCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::$ItemCopyWith" o-- "flutter_learn::models::youtube_video.dart::$StatusCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::$ItemCopyWith" o-- "flutter_learn::models::youtube_video.dart::$StatisticsCopyWith<$Res>"
+
+class "flutter_learn::models::youtube_video.dart::_$ItemCopyWithImpl" {
+  -Item _value
+  -$Res Function(Item) _then
+  +$SnippetCopyWith<$Res> snippet
+  +$ContentDetailsCopyWith<$Res> contentDetails
+  +$StatusCopyWith<$Res> status
+  +$StatisticsCopyWith<$Res> statistics
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::Item"
+"flutter_learn::models::youtube_video.dart::_$ItemCopyWithImpl" o-- "null::$Res Function(Item)"
+"flutter_learn::models::youtube_video.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::$SnippetCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::$ContentDetailsCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::$StatusCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::_$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::$StatisticsCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::$ItemCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$ItemCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$ItemCopyWith" {
+  +$SnippetCopyWith<$Res> snippet
+  +$ContentDetailsCopyWith<$Res> contentDetails
+  +$StatusCopyWith<$Res> status
+  +$StatisticsCopyWith<$Res> statistics
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$ItemCopyWith" o-- "flutter_learn::models::youtube_video.dart::$SnippetCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::_$ItemCopyWith" o-- "flutter_learn::models::youtube_video.dart::$ContentDetailsCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::_$ItemCopyWith" o-- "flutter_learn::models::youtube_video.dart::$StatusCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::_$ItemCopyWith" o-- "flutter_learn::models::youtube_video.dart::$StatisticsCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::$ItemCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$ItemCopyWith"
+
+class "flutter_learn::models::youtube_video.dart::__$ItemCopyWithImpl" {
+  -_Item _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::__$ItemCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::_Item"
+"flutter_learn::models::youtube_video.dart::_$ItemCopyWith" <|-- "flutter_learn::models::youtube_video.dart::__$ItemCopyWithImpl"
+
+class "flutter_learn::models::youtube_video.dart::_$_Item" {
+  +String kind
+  +String etag
+  +String id
+  +Snippet snippet
+  +ContentDetails contentDetails
+  +Status status
+  +Statistics statistics
+  +int hashCode
+  +_$ItemCopyWith<_Item> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$_Item" o-- "flutter_learn::models::youtube_video.dart::Snippet"
+"flutter_learn::models::youtube_video.dart::_$_Item" o-- "flutter_learn::models::youtube_video.dart::ContentDetails"
+"flutter_learn::models::youtube_video.dart::_$_Item" o-- "flutter_learn::models::youtube_video.dart::Status"
+"flutter_learn::models::youtube_video.dart::_$_Item" o-- "flutter_learn::models::youtube_video.dart::Statistics"
+"flutter_learn::models::youtube_video.dart::_$_Item" o-- "flutter_learn::models::youtube_video.dart::_$ItemCopyWith<_Item>"
+"flutter_learn::models::youtube_video.dart::_Item" <|-- "flutter_learn::models::youtube_video.dart::_$_Item"
+
+abstract class "flutter_learn::models::youtube_video.dart::_Item" {
+  +String kind
+  +String etag
+  +String id
+  +Snippet snippet
+  +ContentDetails contentDetails
+  +Status status
+  +Statistics statistics
+  +_$ItemCopyWith<_Item> copyWith
+}
+
+"flutter_learn::models::youtube_video.dart::_Item" o-- "flutter_learn::models::youtube_video.dart::Snippet"
+"flutter_learn::models::youtube_video.dart::_Item" o-- "flutter_learn::models::youtube_video.dart::ContentDetails"
+"flutter_learn::models::youtube_video.dart::_Item" o-- "flutter_learn::models::youtube_video.dart::Status"
+"flutter_learn::models::youtube_video.dart::_Item" o-- "flutter_learn::models::youtube_video.dart::Statistics"
+"flutter_learn::models::youtube_video.dart::_Item" o-- "flutter_learn::models::youtube_video.dart::_$ItemCopyWith<_Item>"
+"flutter_learn::models::youtube_video.dart::Item" <|-- "flutter_learn::models::youtube_video.dart::_Item"
+
+class "flutter_learn::models::youtube_video.dart::_$ContentDetailsTearOff" {
+  +_ContentDetails call()
+  +ContentDetails fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_video.dart::$ContentDetailsCopyWith" {
+  +$ContentRatingCopyWith<$Res> contentRating
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::$ContentDetailsCopyWith" o-- "flutter_learn::models::youtube_video.dart::$ContentRatingCopyWith<$Res>"
+
+class "flutter_learn::models::youtube_video.dart::_$ContentDetailsCopyWithImpl" {
+  -ContentDetails _value
+  -$Res Function(ContentDetails) _then
+  +$ContentRatingCopyWith<$Res> contentRating
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$ContentDetailsCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::ContentDetails"
+"flutter_learn::models::youtube_video.dart::_$ContentDetailsCopyWithImpl" o-- "null::$Res Function(ContentDetails)"
+"flutter_learn::models::youtube_video.dart::_$ContentDetailsCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::$ContentRatingCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::$ContentDetailsCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$ContentDetailsCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$ContentDetailsCopyWith" {
+  +$ContentRatingCopyWith<$Res> contentRating
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$ContentDetailsCopyWith" o-- "flutter_learn::models::youtube_video.dart::$ContentRatingCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::$ContentDetailsCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$ContentDetailsCopyWith"
+
+class "flutter_learn::models::youtube_video.dart::__$ContentDetailsCopyWithImpl" {
+  -_ContentDetails _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::__$ContentDetailsCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::_ContentDetails"
+"flutter_learn::models::youtube_video.dart::_$ContentDetailsCopyWith" <|-- "flutter_learn::models::youtube_video.dart::__$ContentDetailsCopyWithImpl"
+
+class "flutter_learn::models::youtube_video.dart::_$_ContentDetails" {
+  +String duration
+  +String dimension
+  +String definition
+  +String caption
+  +bool licensedContent
+  +ContentRating contentRating
+  +String projection
+  +int hashCode
+  +_$ContentDetailsCopyWith<_ContentDetails> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$_ContentDetails" o-- "flutter_learn::models::youtube_video.dart::ContentRating"
+"flutter_learn::models::youtube_video.dart::_$_ContentDetails" o-- "flutter_learn::models::youtube_video.dart::_$ContentDetailsCopyWith<_ContentDetails>"
+"flutter_learn::models::youtube_video.dart::_ContentDetails" <|-- "flutter_learn::models::youtube_video.dart::_$_ContentDetails"
+
+abstract class "flutter_learn::models::youtube_video.dart::_ContentDetails" {
+  +String duration
+  +String dimension
+  +String definition
+  +String caption
+  +bool licensedContent
+  +ContentRating contentRating
+  +String projection
+  +_$ContentDetailsCopyWith<_ContentDetails> copyWith
+}
+
+"flutter_learn::models::youtube_video.dart::_ContentDetails" o-- "flutter_learn::models::youtube_video.dart::ContentRating"
+"flutter_learn::models::youtube_video.dart::_ContentDetails" o-- "flutter_learn::models::youtube_video.dart::_$ContentDetailsCopyWith<_ContentDetails>"
+"flutter_learn::models::youtube_video.dart::ContentDetails" <|-- "flutter_learn::models::youtube_video.dart::_ContentDetails"
+
+class "flutter_learn::models::youtube_video.dart::_$ContentRatingTearOff" {
+  +_ContentRating call()
+  +ContentRating fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_video.dart::$ContentRatingCopyWith" {
+}
+
+class "flutter_learn::models::youtube_video.dart::_$ContentRatingCopyWithImpl" {
+  -ContentRating _value
+  -$Res Function(ContentRating) _then
+}
+
+"flutter_learn::models::youtube_video.dart::_$ContentRatingCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::ContentRating"
+"flutter_learn::models::youtube_video.dart::_$ContentRatingCopyWithImpl" o-- "null::$Res Function(ContentRating)"
+"flutter_learn::models::youtube_video.dart::$ContentRatingCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$ContentRatingCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$ContentRatingCopyWith" {
+}
+
+class "flutter_learn::models::youtube_video.dart::__$ContentRatingCopyWithImpl" {
+  -_ContentRating _value
+}
+
+"flutter_learn::models::youtube_video.dart::__$ContentRatingCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::_ContentRating"
+"flutter_learn::models::youtube_video.dart::_$ContentRatingCopyWith" <|-- "flutter_learn::models::youtube_video.dart::__$ContentRatingCopyWithImpl"
+
+class "flutter_learn::models::youtube_video.dart::_$_ContentRating" {
+  +int hashCode
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_ContentRating" <|-- "flutter_learn::models::youtube_video.dart::_$_ContentRating"
+
+abstract class "flutter_learn::models::youtube_video.dart::_ContentRating" {
+}
+
+"flutter_learn::models::youtube_video.dart::ContentRating" <|-- "flutter_learn::models::youtube_video.dart::_ContentRating"
+
+class "flutter_learn::models::youtube_video.dart::_$SnippetTearOff" {
+  +_Snippet call()
+  +Snippet fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_video.dart::$SnippetCopyWith" {
+  +$ThumbnailsCopyWith<$Res> thumbnails
+  +$LocalizedCopyWith<$Res> localized
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::$SnippetCopyWith" o-- "flutter_learn::models::youtube_video.dart::$ThumbnailsCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::$SnippetCopyWith" o-- "flutter_learn::models::youtube_video.dart::$LocalizedCopyWith<$Res>"
+
+class "flutter_learn::models::youtube_video.dart::_$SnippetCopyWithImpl" {
+  -Snippet _value
+  -$Res Function(Snippet) _then
+  +$ThumbnailsCopyWith<$Res> thumbnails
+  +$LocalizedCopyWith<$Res> localized
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$SnippetCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::Snippet"
+"flutter_learn::models::youtube_video.dart::_$SnippetCopyWithImpl" o-- "null::$Res Function(Snippet)"
+"flutter_learn::models::youtube_video.dart::_$SnippetCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::$ThumbnailsCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::_$SnippetCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::$LocalizedCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::$SnippetCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$SnippetCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$SnippetCopyWith" {
+  +$ThumbnailsCopyWith<$Res> thumbnails
+  +$LocalizedCopyWith<$Res> localized
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$SnippetCopyWith" o-- "flutter_learn::models::youtube_video.dart::$ThumbnailsCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::_$SnippetCopyWith" o-- "flutter_learn::models::youtube_video.dart::$LocalizedCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::$SnippetCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$SnippetCopyWith"
+
+class "flutter_learn::models::youtube_video.dart::__$SnippetCopyWithImpl" {
+  -_Snippet _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::__$SnippetCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::_Snippet"
+"flutter_learn::models::youtube_video.dart::_$SnippetCopyWith" <|-- "flutter_learn::models::youtube_video.dart::__$SnippetCopyWithImpl"
+
+class "flutter_learn::models::youtube_video.dart::_$_Snippet" {
+  +DateTime publishedAt
+  +String channelId
+  +String title
+  +String description
+  +Thumbnails thumbnails
+  +String channelTitle
+  +String categoryId
+  +String liveBroadcastContent
+  +Localized localized
+  +String? defaultAudioLanguage
+  +int hashCode
+  +_$SnippetCopyWith<_Snippet> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$_Snippet" o-- "flutter_learn::models::youtube_video.dart::Thumbnails"
+"flutter_learn::models::youtube_video.dart::_$_Snippet" o-- "flutter_learn::models::youtube_video.dart::Localized"
+"flutter_learn::models::youtube_video.dart::_$_Snippet" o-- "flutter_learn::models::youtube_video.dart::_$SnippetCopyWith<_Snippet>"
+"flutter_learn::models::youtube_video.dart::_Snippet" <|-- "flutter_learn::models::youtube_video.dart::_$_Snippet"
+
+abstract class "flutter_learn::models::youtube_video.dart::_Snippet" {
+  +DateTime publishedAt
+  +String channelId
+  +String title
+  +String description
+  +Thumbnails thumbnails
+  +String channelTitle
+  +String categoryId
+  +String liveBroadcastContent
+  +Localized localized
+  +String? defaultAudioLanguage
+  +_$SnippetCopyWith<_Snippet> copyWith
+}
+
+"flutter_learn::models::youtube_video.dart::_Snippet" o-- "flutter_learn::models::youtube_video.dart::Thumbnails"
+"flutter_learn::models::youtube_video.dart::_Snippet" o-- "flutter_learn::models::youtube_video.dart::Localized"
+"flutter_learn::models::youtube_video.dart::_Snippet" o-- "flutter_learn::models::youtube_video.dart::_$SnippetCopyWith<_Snippet>"
+"flutter_learn::models::youtube_video.dart::Snippet" <|-- "flutter_learn::models::youtube_video.dart::_Snippet"
+
+class "flutter_learn::models::youtube_video.dart::_$LocalizedTearOff" {
+  +_Localized call()
+  +Localized fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_video.dart::$LocalizedCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_video.dart::_$LocalizedCopyWithImpl" {
+  -Localized _value
+  -$Res Function(Localized) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$LocalizedCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::Localized"
+"flutter_learn::models::youtube_video.dart::_$LocalizedCopyWithImpl" o-- "null::$Res Function(Localized)"
+"flutter_learn::models::youtube_video.dart::$LocalizedCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$LocalizedCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$LocalizedCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::$LocalizedCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$LocalizedCopyWith"
+
+class "flutter_learn::models::youtube_video.dart::__$LocalizedCopyWithImpl" {
+  -_Localized _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::__$LocalizedCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::_Localized"
+"flutter_learn::models::youtube_video.dart::_$LocalizedCopyWith" <|-- "flutter_learn::models::youtube_video.dart::__$LocalizedCopyWithImpl"
+
+class "flutter_learn::models::youtube_video.dart::_$_Localized" {
+  +String title
+  +String description
+  +int hashCode
+  +_$LocalizedCopyWith<_Localized> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$_Localized" o-- "flutter_learn::models::youtube_video.dart::_$LocalizedCopyWith<_Localized>"
+"flutter_learn::models::youtube_video.dart::_Localized" <|-- "flutter_learn::models::youtube_video.dart::_$_Localized"
+
+abstract class "flutter_learn::models::youtube_video.dart::_Localized" {
+  +String title
+  +String description
+  +_$LocalizedCopyWith<_Localized> copyWith
+}
+
+"flutter_learn::models::youtube_video.dart::_Localized" o-- "flutter_learn::models::youtube_video.dart::_$LocalizedCopyWith<_Localized>"
+"flutter_learn::models::youtube_video.dart::Localized" <|-- "flutter_learn::models::youtube_video.dart::_Localized"
+
+class "flutter_learn::models::youtube_video.dart::_$ThumbnailsTearOff" {
+  +_Thumbnails call()
+  +Thumbnails fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_video.dart::$ThumbnailsCopyWith" {
+  +$DefaultCopyWith<$Res>? thumbnailsDefault
+  +$DefaultCopyWith<$Res>? medium
+  +$DefaultCopyWith<$Res>? high
+  +$DefaultCopyWith<$Res>? standard
+  +$DefaultCopyWith<$Res>? maxres
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::$ThumbnailsCopyWith" o-- "flutter_learn::models::youtube_video.dart::$DefaultCopyWith<$Res>"
+
+class "flutter_learn::models::youtube_video.dart::_$ThumbnailsCopyWithImpl" {
+  -Thumbnails _value
+  -$Res Function(Thumbnails) _then
+  +$DefaultCopyWith<$Res>? thumbnailsDefault
+  +$DefaultCopyWith<$Res>? medium
+  +$DefaultCopyWith<$Res>? high
+  +$DefaultCopyWith<$Res>? standard
+  +$DefaultCopyWith<$Res>? maxres
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$ThumbnailsCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::Thumbnails"
+"flutter_learn::models::youtube_video.dart::_$ThumbnailsCopyWithImpl" o-- "null::$Res Function(Thumbnails)"
+"flutter_learn::models::youtube_video.dart::_$ThumbnailsCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::$DefaultCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::$ThumbnailsCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$ThumbnailsCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$ThumbnailsCopyWith" {
+  +$DefaultCopyWith<$Res>? thumbnailsDefault
+  +$DefaultCopyWith<$Res>? medium
+  +$DefaultCopyWith<$Res>? high
+  +$DefaultCopyWith<$Res>? standard
+  +$DefaultCopyWith<$Res>? maxres
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$ThumbnailsCopyWith" o-- "flutter_learn::models::youtube_video.dart::$DefaultCopyWith<$Res>"
+"flutter_learn::models::youtube_video.dart::$ThumbnailsCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$ThumbnailsCopyWith"
+
+class "flutter_learn::models::youtube_video.dart::__$ThumbnailsCopyWithImpl" {
+  -_Thumbnails _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::__$ThumbnailsCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::_Thumbnails"
+"flutter_learn::models::youtube_video.dart::_$ThumbnailsCopyWith" <|-- "flutter_learn::models::youtube_video.dart::__$ThumbnailsCopyWithImpl"
+
+class "flutter_learn::models::youtube_video.dart::_$_Thumbnails" {
+  +Default? thumbnailsDefault
+  +Default? medium
+  +Default? high
+  +Default? standard
+  +Default? maxres
+  +int hashCode
+  +_$ThumbnailsCopyWith<_Thumbnails> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$_Thumbnails" o-- "flutter_learn::models::youtube_video.dart::Default"
+"flutter_learn::models::youtube_video.dart::_$_Thumbnails" o-- "flutter_learn::models::youtube_video.dart::_$ThumbnailsCopyWith<_Thumbnails>"
+"flutter_learn::models::youtube_video.dart::_Thumbnails" <|-- "flutter_learn::models::youtube_video.dart::_$_Thumbnails"
+
+abstract class "flutter_learn::models::youtube_video.dart::_Thumbnails" {
+  +Default? thumbnailsDefault
+  +Default? medium
+  +Default? high
+  +Default? standard
+  +Default? maxres
+  +_$ThumbnailsCopyWith<_Thumbnails> copyWith
+}
+
+"flutter_learn::models::youtube_video.dart::_Thumbnails" o-- "flutter_learn::models::youtube_video.dart::Default"
+"flutter_learn::models::youtube_video.dart::_Thumbnails" o-- "flutter_learn::models::youtube_video.dart::_$ThumbnailsCopyWith<_Thumbnails>"
+"flutter_learn::models::youtube_video.dart::Thumbnails" <|-- "flutter_learn::models::youtube_video.dart::_Thumbnails"
+
+class "flutter_learn::models::youtube_video.dart::_$DefaultTearOff" {
+  +_Default call()
+  +Default fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_video.dart::$DefaultCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_video.dart::_$DefaultCopyWithImpl" {
+  -Default _value
+  -$Res Function(Default) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$DefaultCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::Default"
+"flutter_learn::models::youtube_video.dart::_$DefaultCopyWithImpl" o-- "null::$Res Function(Default)"
+"flutter_learn::models::youtube_video.dart::$DefaultCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$DefaultCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$DefaultCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::$DefaultCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$DefaultCopyWith"
+
+class "flutter_learn::models::youtube_video.dart::__$DefaultCopyWithImpl" {
+  -_Default _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::__$DefaultCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::_Default"
+"flutter_learn::models::youtube_video.dart::_$DefaultCopyWith" <|-- "flutter_learn::models::youtube_video.dart::__$DefaultCopyWithImpl"
+
+class "flutter_learn::models::youtube_video.dart::_$_Default" {
+  +String url
+  +int width
+  +int height
+  +int hashCode
+  +_$DefaultCopyWith<_Default> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$_Default" o-- "flutter_learn::models::youtube_video.dart::_$DefaultCopyWith<_Default>"
+"flutter_learn::models::youtube_video.dart::_Default" <|-- "flutter_learn::models::youtube_video.dart::_$_Default"
+
+abstract class "flutter_learn::models::youtube_video.dart::_Default" {
+  +String url
+  +int width
+  +int height
+  +_$DefaultCopyWith<_Default> copyWith
+}
+
+"flutter_learn::models::youtube_video.dart::_Default" o-- "flutter_learn::models::youtube_video.dart::_$DefaultCopyWith<_Default>"
+"flutter_learn::models::youtube_video.dart::Default" <|-- "flutter_learn::models::youtube_video.dart::_Default"
+
+class "flutter_learn::models::youtube_video.dart::_$StatisticsTearOff" {
+  +_Statistics call()
+  +Statistics fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_video.dart::$StatisticsCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_video.dart::_$StatisticsCopyWithImpl" {
+  -Statistics _value
+  -$Res Function(Statistics) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$StatisticsCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::Statistics"
+"flutter_learn::models::youtube_video.dart::_$StatisticsCopyWithImpl" o-- "null::$Res Function(Statistics)"
+"flutter_learn::models::youtube_video.dart::$StatisticsCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$StatisticsCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$StatisticsCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::$StatisticsCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$StatisticsCopyWith"
+
+class "flutter_learn::models::youtube_video.dart::__$StatisticsCopyWithImpl" {
+  -_Statistics _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::__$StatisticsCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::_Statistics"
+"flutter_learn::models::youtube_video.dart::_$StatisticsCopyWith" <|-- "flutter_learn::models::youtube_video.dart::__$StatisticsCopyWithImpl"
+
+class "flutter_learn::models::youtube_video.dart::_$_Statistics" {
+  +String viewCount
+  +String likeCount
+  +String dislikeCount
+  +String favoriteCount
+  +String commentCount
+  +int hashCode
+  +_$StatisticsCopyWith<_Statistics> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$_Statistics" o-- "flutter_learn::models::youtube_video.dart::_$StatisticsCopyWith<_Statistics>"
+"flutter_learn::models::youtube_video.dart::_Statistics" <|-- "flutter_learn::models::youtube_video.dart::_$_Statistics"
+
+abstract class "flutter_learn::models::youtube_video.dart::_Statistics" {
+  +String viewCount
+  +String likeCount
+  +String dislikeCount
+  +String favoriteCount
+  +String commentCount
+  +_$StatisticsCopyWith<_Statistics> copyWith
+}
+
+"flutter_learn::models::youtube_video.dart::_Statistics" o-- "flutter_learn::models::youtube_video.dart::_$StatisticsCopyWith<_Statistics>"
+"flutter_learn::models::youtube_video.dart::Statistics" <|-- "flutter_learn::models::youtube_video.dart::_Statistics"
+
+class "flutter_learn::models::youtube_video.dart::_$StatusTearOff" {
+  +_Status call()
+  +Status fromJson()
+}
+
+abstract class "flutter_learn::models::youtube_video.dart::$StatusCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::youtube_video.dart::_$StatusCopyWithImpl" {
+  -Status _value
+  -$Res Function(Status) _then
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::_$StatusCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::Status"
+"flutter_learn::models::youtube_video.dart::_$StatusCopyWithImpl" o-- "null::$Res Function(Status)"
+"flutter_learn::models::youtube_video.dart::$StatusCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$StatusCopyWithImpl"
+
+abstract class "flutter_learn::models::youtube_video.dart::_$StatusCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::$StatusCopyWith" <|-- "flutter_learn::models::youtube_video.dart::_$StatusCopyWith"
+
+class "flutter_learn::models::youtube_video.dart::__$StatusCopyWithImpl" {
+  -_Status _value
+  +$Res call()
+}
+
+"flutter_learn::models::youtube_video.dart::__$StatusCopyWithImpl" o-- "flutter_learn::models::youtube_video.dart::_Status"
+"flutter_learn::models::youtube_video.dart::_$StatusCopyWith" <|-- "flutter_learn::models::youtube_video.dart::__$StatusCopyWithImpl"
+
+class "flutter_learn::models::youtube_video.dart::_$_Status" {
+  +String uploadStatus
+  +String privacyStatus
+  +String license
+  +bool embeddable
+  +bool publicStatsViewable
+  +bool madeForKids
+  +int hashCode
+  +_$StatusCopyWith<_Status> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::youtube_video.dart::_$_Status" o-- "flutter_learn::models::youtube_video.dart::_$StatusCopyWith<_Status>"
+"flutter_learn::models::youtube_video.dart::_Status" <|-- "flutter_learn::models::youtube_video.dart::_$_Status"
+
+abstract class "flutter_learn::models::youtube_video.dart::_Status" {
+  +String uploadStatus
+  +String privacyStatus
+  +String license
+  +bool embeddable
+  +bool publicStatsViewable
+  +bool madeForKids
+  +_$StatusCopyWith<_Status> copyWith
+}
+
+"flutter_learn::models::youtube_video.dart::_Status" o-- "flutter_learn::models::youtube_video.dart::_$StatusCopyWith<_Status>"
+"flutter_learn::models::youtube_video.dart::Status" <|-- "flutter_learn::models::youtube_video.dart::_Status"
+
+class "flutter_learn::models::timestamp_converter.dart::TimestampConverter" {
+  +DateTime fromJson()
+  +Timestamp toJson()
+}
+
+"json_annotation::src::json_converter.dart::JsonConverter" <|-- "flutter_learn::models::timestamp_converter.dart::TimestampConverter"
+
+class "flutter_learn::models::read_post.dart::ReadPost" {
+}
+
+"flutter_learn::models::read_post.dart::_$ReadPost" <|-- "flutter_learn::models::read_post.dart::ReadPost"
+
+abstract class "flutter_learn::models::read_post.dart::_$ReadPost" {
+  +String postId
+  +String userId
+  +DateTime? timestamp
+  +$ReadPostCopyWith<ReadPost> copyWith
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::read_post.dart::_$ReadPost" o-- "flutter_learn::models::read_post.dart::$ReadPostCopyWith<ReadPost>"
+
+class "flutter_learn::models::read_post.dart::_$ReadPostTearOff" {
+  +_ReadPost call()
+  +ReadPost fromJson()
+}
+
+abstract class "flutter_learn::models::read_post.dart::$ReadPostCopyWith" {
+  +$Res call()
+}
+
+class "flutter_learn::models::read_post.dart::_$ReadPostCopyWithImpl" {
+  -ReadPost _value
+  -$Res Function(ReadPost) _then
+  +$Res call()
+}
+
+"flutter_learn::models::read_post.dart::_$ReadPostCopyWithImpl" o-- "flutter_learn::models::read_post.dart::ReadPost"
+"flutter_learn::models::read_post.dart::_$ReadPostCopyWithImpl" o-- "null::$Res Function(ReadPost)"
+"flutter_learn::models::read_post.dart::$ReadPostCopyWith" <|-- "flutter_learn::models::read_post.dart::_$ReadPostCopyWithImpl"
+
+abstract class "flutter_learn::models::read_post.dart::_$ReadPostCopyWith" {
+  +$Res call()
+}
+
+"flutter_learn::models::read_post.dart::$ReadPostCopyWith" <|-- "flutter_learn::models::read_post.dart::_$ReadPostCopyWith"
+
+class "flutter_learn::models::read_post.dart::__$ReadPostCopyWithImpl" {
+  -_ReadPost _value
+  +$Res call()
+}
+
+"flutter_learn::models::read_post.dart::__$ReadPostCopyWithImpl" o-- "flutter_learn::models::read_post.dart::_ReadPost"
+"flutter_learn::models::read_post.dart::_$ReadPostCopyWith" <|-- "flutter_learn::models::read_post.dart::__$ReadPostCopyWithImpl"
+
+class "flutter_learn::models::read_post.dart::_$_ReadPost" {
+  +String postId
+  +String userId
+  +DateTime? timestamp
+  +int hashCode
+  +_$ReadPostCopyWith<_ReadPost> copyWith
+  +String toString()
+  +bool ==()
+  +Map<String, dynamic> toJson()
+}
+
+"flutter_learn::models::read_post.dart::_$_ReadPost" o-- "flutter_learn::models::read_post.dart::_$ReadPostCopyWith<_ReadPost>"
+"flutter_learn::models::read_post.dart::_ReadPost" <|-- "flutter_learn::models::read_post.dart::_$_ReadPost"
+
+abstract class "flutter_learn::models::read_post.dart::_ReadPost" {
+  +String postId
+  +String userId
+  +DateTime? timestamp
+  +_$ReadPostCopyWith<_ReadPost> copyWith
+}
+
+"flutter_learn::models::read_post.dart::_ReadPost" o-- "flutter_learn::models::read_post.dart::_$ReadPostCopyWith<_ReadPost>"
+"flutter_learn::models::read_post.dart::ReadPost" <|-- "flutter_learn::models::read_post.dart::_ReadPost"
+
+class "flutter_learn::exceptions::firestore_api_exception.dart::FirestoreApiException" {
+  +String message
+  +String? devDetails
+  +String? prettyDetails
+  +String toString()
+}
+
+"dart::core::Exception" <|-- "flutter_learn::exceptions::firestore_api_exception.dart::FirestoreApiException"
+
+class "flutter_learn::main.dart::MyApp" {
+  {static} +FirebaseAnalytics analytics
+  {static} +FirebaseAnalyticsObserver observer
+  +Widget build()
+}
+
+"flutter_learn::main.dart::MyApp" o-- "firebase_analytics::firebase_analytics.dart::FirebaseAnalytics"
+"flutter_learn::main.dart::MyApp" o-- "firebase_analytics::observer.dart::FirebaseAnalyticsObserver"
+
+class "flutter_learn::controllers::menu_controller.dart::MenuController" {
+  -GlobalKey<ScaffoldState> _scaffoldKey
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +void controlMenu()
+}
+
+"flutter_learn::controllers::menu_controller.dart::MenuController" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+
+class "flutter_learn::routes::app_router.dart::AppRoutes" {
+  {static} +String homePage
+  {static} +String emailPasswordSignInPage
+  {static} +String signInPage
+  {static} +String editPostPage
+  {static} +String postDetailPage
+  {static} +String communityScreen
+  {static} +String youtubeScreen
+  {static} +String accountScreen
+  {static} +String postsPage
+  {static} +String settingsPage
+  {static} +String myPostsPage
+  {static} +String myLikedPostsPage
+  {static} +String searchPage
+  {static} +String youTubePlayPage
+}
+
+class "flutter_learn::routes::app_router.dart::AppRouter" {
+  {static} +Route<dynamic>? onGenerateRoute()
+}
+
+class "flutter_learn::translations::codegen_loader.g.dart::CodegenLoader" {
+  {static} +Map<String, dynamic> en
+  {static} +Map<String, dynamic> ko
+  {static} +Map<String, Map<String, dynamic>> mapLocales
+  +Future<Map<String, dynamic>> load()
+}
+
+abstract class "flutter_learn::translations::locale_keys.g.dart::LocaleKeys" {
+  {static} +String community
+  {static} +String test
+  {static} +String post
+  {static} +String email
+  {static} +String password
+  {static} +String register
+  {static} +String my_profile
+  {static} +String title
+  {static} +String ago
+  {static} +String edit
+  {static} +String delete
+  {static} +String cancel
+  {static} +String like
+  {static} +String comment
+  {static} +String tag
+  {static} +String ok
+  {static} +String more
+  {static} +String haveAnAccount
+  {static} +String backToSignIn
+  {static} +String cantLoadDataRightNow
+  {static} +String createAnAccount
+  {static} +String flutterLearn
+  {static} +String signInFailed
+  {static} +String sendResetLink
+  {static} +String registrationFailed
+  {static} +String operationFailed
+  {static} +String needAnAccount
+  {static} +String forgotPassword
+  {static} +String makeAUsername
+  {static} +String signOutFailed
+  {static} +String signOut
+  {static} +String signIn
+  {static} +String signInPageTitle
+  {static} +String signInWithApple
+  {static} +String signInWithEmail
+  {static} +String signInWithGoogle
+  {static} +String somethingWentWrong
+  {static} +String youAreSignOut
+  {static} +String youTube
+  {static} +String pleaseWriteComment
+  {static} +String pleaseWriteContent
+  {static} +String pleaseWriteTitle
+  {static} +String invalidPasswordEmpty
+  {static} +String invalidPasswordTooShort
+  {static} +String invalidEmailEmpty
+  {static} +String invalidEmailErrorText
+  {static} +String password8CharactersLabel
+  {static} +String resetLinkSentTitle
+  {static} +String emailHint
+  {static} +String resetLinkSentMessage
+  {static} +String passwordResetFailed
+  {static} +String requiredSignIn
+  {static} +String shareQuestionsExperiences
+  {static} +String signInAbortedByUser
+  {static} +String missingGoogleAuthToken
+  {static} +String failedToCreateNewUser
+  {static} +String uidPassedEmpty
+  {static} +String forgotPasswordQuestion
+  {static} +String signOutAreYouSure
+  {static} +String writeNameYouWant
+  {static} +String writePost
+  {static} +String myPosts
+  {static} +String myComments
+  {static} +String settingApp
+  {static} +String settings
+  {static} +String myBookmarks
+  {static} +String deleteAccount
+  {static} +String deleteAccountAreYouSure
+  {static} +String deletedUser
+  {static} +String myReadPosts
+  {static} +String myLikedPosts
+  {static} +String appInfo
+  {static} +String deletedByAuthor
+  {static} +String changeProfileImage
+  {static} +String defaultProfileImage
+  {static} +String addProfileImage
+  {static} +String changeToPublic
+  {static} +String privateComment
+  {static} +String noticePrivateComment
+  {static} +String privatePost
+  {static} +String noticePrivatePost
+  {static} +String enterSearchTerm
+  {static} +String save
+  {static} +String share
+  {static} +String subscribers
+  {static} +String SUBSCRIBE
+  {static} +String views
+  {static} +String openSourceLicenses
+  {static} +String tagLengthValidate
+  {static} +String tagWriteNotice
+  {static} +String tagsLengthValidate
+  {static} +String mentor
+  {static} +String foucs
+  {static} +String mindset
+  {static} +String learn
+  {static} +String dev
+  {static} +String nothingHere
+  {static} +String addANewItem
+}
+
+class "flutter_learn::services::firestore_service.dart::FirestoreService" {
+  {static} +FirestoreService instance
+  +Future<void> setData()
+  +Future<DocumentReference<Map<String, dynamic>>> addData()
+  +Future<List<T>> getCollection()
+  +Future<void> updateDoc()
+  +Future<void> setDelTransaction()
+  +Future<void> deleteData()
+  +Stream<List<T>> collectionGroupStream()
+  +Stream<List<T>> collectionStream()
+  +Future<T> getDoc()
+  +Stream<T> documentStream()
+}
+
+"flutter_learn::services::firestore_service.dart::FirestoreService" o-- "flutter_learn::services::firestore_service.dart::FirestoreService"
+
+class "flutter_learn::services::firebase_auth_service.dart::FirebaseAuthService" {
+  -T Function<T>(RootProvider<Object?, T>) _read
+  -FirebaseAuth _firebaseAuth
+  +GoogleSignIn googleSignIn
+  +Future<User?> currentUser
+  +Future<AppUser?> currentAppUser
+  +Stream<User?> onAuthStateChanged
+  +Stream<User?> idTokenChanges
+  +Future<AppUser?> userFromFirebase()
+  +Future<AppUser?> createUser()
+  +Future<AppUser?> fetchUser()
+  +Future<void> deleteUser()
+  +Future<AppUser?> signInWithEmailAndPassword()
+  +Future<AppUser?> createUserWithEmailAndPassword()
+  +Future<void> sendPasswordResetEmail()
+  +Future<AppUser?> signInWithEmailAndLink()
+  +bool isSignInWithEmailLink()
+  +Future<void> sendSignInWithEmailLink()
+  +Future<AppUser?> signInWithGoogle()
+  +String generateNonce()
+  +String sha256ofString()
+  +Future<AppUser?> signInWithApple()
+  +Future<void> signOut()
+  +Future<User?> signInAnonymously()
+  +void dispose()
+}
+
+"flutter_learn::services::firebase_auth_service.dart::FirebaseAuthService" o-- "riverpod::src::framework.dart::T Function<T>(RootProvider<Object, T>)"
+"flutter_learn::services::firebase_auth_service.dart::FirebaseAuthService" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"flutter_learn::services::firebase_auth_service.dart::FirebaseAuthService" o-- "google_sign_in::google_sign_in.dart::GoogleSignIn"
+"flutter_learn::services::firebase_auth_service.dart::FirebaseAuthService" o-- "dart::async::Stream<User>"
+"flutter_learn::services::auth_base.dart::AuthBase" <|-- "flutter_learn::services::firebase_auth_service.dart::FirebaseAuthService"
+
+class "flutter_learn::services::firebase_path.dart::FirebasePath" {
+  {static} +String appUser()
+  {static} +String post()
+  {static} +String posts()
+  {static} +String comment()
+  {static} +String comments()
+  {static} +String collectionGroupComments()
+  {static} +String collectionGroupPostLikedUsers()
+  {static} +String postReadUsers()
+  {static} +String postReadUser()
+  {static} +String collectionGroupReadUsers()
+  {static} +String postLiked()
+  {static} +String postLikedUser()
+  {static} +String commentLiked()
+  {static} +String commentLikedUser()
+  {static} +String tags()
+  {static} +String tag()
+  {static} +String video()
+  {static} +String profileImages()
+  {static} +String tagIcon()
+  {static} +String tokens()
+}
+
+abstract class "flutter_learn::services::auth_base.dart::AuthBase" {
+  +Future<User?> currentUser
+  +Future<AppUser?> currentAppUser
+  +Stream<User?> onAuthStateChanged
+  +Stream<User?> idTokenChanges
+  +Future<User?> signInAnonymously()
+  +Future<AppUser?> signInWithEmailAndPassword()
+  +Future<AppUser?> createUserWithEmailAndPassword()
+  +Future<void> sendPasswordResetEmail()
+  +Future<AppUser?> signInWithEmailAndLink()
+  +bool isSignInWithEmailLink()
+  +Future<void> sendSignInWithEmailLink()
+  +Future<AppUser?> signInWithGoogle()
+  +Future<AppUser?> signInWithApple()
+  +Future<void> signOut()
+  +Future<AppUser?> createUser()
+  +Future<AppUser?> fetchUser()
+  +Future<void> deleteUser()
+  +Future<AppUser?> userFromFirebase()
+  +void dispose()
+}
+
+"flutter_learn::services::auth_base.dart::AuthBase" o-- "dart::async::Stream<User>"
+
+class "flutter_learn::services::youtube_service.dart::YouTubeService" {
+  +APIService apiService
+  +API api
+  +Future<PlaylistItems> fetchPlaylistItems()
+  +Future<Channel> fetchYouTubeChannel()
+  +Future<YouTubeVideo> fetchYouTubeVideo()
+}
+
+"flutter_learn::services::youtube_service.dart::YouTubeService" o-- "flutter_learn::services::api_service.dart::APIService"
+"flutter_learn::services::youtube_service.dart::YouTubeService" o-- "flutter_learn::services::api.dart::API"
+
+class "flutter_learn::services::firebase_storage.dart::FirestoreStorage" {
+  -StorageService _storage
+  +Future<String> profileDownloadURL()
+  +Future<String?> tagDownloadURL()
+  +Future<void> uploadProfileImage()
+}
+
+"flutter_learn::services::firebase_storage.dart::FirestoreStorage" o-- "flutter_learn::services::storage_service.dart::StorageService"
+
+class "flutter_learn::services::api_service.dart::APIService" {
+  -T Function<T>(RootProvider<Object?, T>) _read
+  +Future<dynamic> getData()
+  +Future<dynamic> postData()
+  +Future<dynamic> deleteData()
+}
+
+"flutter_learn::services::api_service.dart::APIService" o-- "riverpod::src::framework.dart::T Function<T>(RootProvider<Object, T>)"
+
+class "flutter_learn::services::fcm_service.dart::FCMService" {
+  -T Function<T>(RootProvider<Object?, T>) _read
+  -FirebaseMessaging _fcm
+  +Future<String?> getToken
+  +Future<void> saveTokenToDatabase()
+  +Future<void> setupInteractedPostUpdate()
+}
+
+"flutter_learn::services::fcm_service.dart::FCMService" o-- "riverpod::src::framework.dart::T Function<T>(RootProvider<Object, T>)"
+"flutter_learn::services::fcm_service.dart::FCMService" o-- "firebase_messaging::firebase_messaging.dart::FirebaseMessaging"
+
+class "flutter_learn::services::algolia_service.dart::AlgoliaService" {
+  {static} +Algolia algolia
+}
+
+"flutter_learn::services::algolia_service.dart::AlgoliaService" o-- "algolia::algolia.dart::Algolia"
+
+class "flutter_learn::services::storage_service.dart::StorageService" {
+  {static} +StorageService instance
+  +Future<String> downloadURL()
+  +Future<void> uploadFile()
+}
+
+"flutter_learn::services::storage_service.dart::StorageService" o-- "flutter_learn::services::storage_service.dart::StorageService"
+
+class "flutter_learn::services::firestore_database.dart::FirestoreDatabase" {
+  -FirestoreService _service
+  +Function unOrdDeepEq
+  +bool containsAll()
+  +bool countBiggerThanZero()
+  +Stream<AppUser?> appUserStream()
+  +Future<AppUser?> getAppUser()
+  +Future<void> deleteAppUser()
+  +Future<void> setAppUser()
+  +Future<Post?> getPost()
+  +Future<void> updateAppUser()
+  +Future<void> setPost()
+  +Future<void> updatePost()
+  +Future<void> deletePost()
+  +Future<void> setComment()
+  +Future<void> updateComment()
+  +Future<void> deleteComment()
+  +Future<void> setReadUser()
+  +Future<void> setPostLiked()
+  +Future<void> deletePostLiked()
+  +Future<void> setCommentLiked()
+  +Future<void> deleteCommentLiked()
+  +Future<List<String>> getPostReadUsers()
+  +Future<List<Tag>> getTags()
+  +Future<void> updateTag()
+  +Future<List<Post>> getPosts()
+  +Stream<List<Post?>> postsStream()
+  +Stream<Post> postStream()
+  +Stream<List<Comment>> topLevelCommentsStream()
+  +Stream<List<Comment>> childCommentsStream()
+  +Stream<List<PostLiked>> postLikedStream()
+  +Stream<List<Post>> userPostsStream()
+  +Stream<List<Comment>> userCommentsStream()
+  +Stream<List<PostLiked>> userLikedPostsStream()
+  +Stream<List<ReadPost>> userReadPostsStream()
+  +Future<void> setVideo()
+  +Future<Video?> getVideo()
+  +Future<void> setToken()
+  +Stream<List<CommentLiked>> commentLikedStream()
+}
+
+"flutter_learn::services::firestore_database.dart::FirestoreDatabase" o-- "flutter_learn::services::firestore_service.dart::FirestoreService"
+
+class "flutter_learn::services::api.dart::API" {
+  {static} +String youTubePath
+  {static} +String playlistItemsPart
+  {static} +String channelPart
+  {static} +String videoPart
+  +String playlistItemsPath
+  +String channelPath
+  +String videoPath
+  +Map<String, dynamic> playlistItemsParam()
+  +Map<String, dynamic> channelParam()
+  +Map<String, dynamic> videoParam()
+}
+
+
+@enduml

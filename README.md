@@ -120,6 +120,10 @@ Flutter와 Firebase Firestore, Cloud Functions으로 서버리스 다중 플랫�
   - [x] 글 읽은 유저 수 카운트
   - [x] 댓글 추가, 삭제 시 총 댓글 카운트
   - [x] 태그 카운트
+  - [x] 댓글 FCM 알림
+  - [x] 대댓글 FCM 알림
+  - [x] 좋아요 FCM 알림
+  - [x] 댓글 좋아요 FCM 알림
 
 ##  CI/CD 출시 자동화 - Codemagic
 - [x] Build for Android
@@ -169,6 +173,7 @@ Flutter와 Firebase Firestore, Cloud Functions으로 서버리스 다중 플랫�
 - [firebase_auth](https://pub.dev/packages/firebase_auth) 비밀번호, 전화번호, ID 제공업체(예: Google, Facebook, Twitter 등)를 통한 회원 가입
 - [cloud_firestore](https://pub.dev/packages/cloud_firestore) 유연하고 확장 가능한 NoSQL 클라우드 데이터베이스
 - [cloud_firestore](https://pub.dev/packages/cloud_firestore)Google의 강력하고 단순하며 경제적인 객체 저장소 서비스
+- [firebase_messaging](https://pub.dev/packages/firebase_messaging)Firebase 클라우드 메시징(FCM) 무료 앱 알림 메시지
 - [firebase_crashlytics](https://pub.dev/packages/cloud_firestore) 오류 보고 솔루션으로 앱(iOS, Android) 문제에 대한 명확하고 활용 가능한 분석 정보를 확인
 - [algolia](https://www.algolia.com) Cloud functions으로 결합하여 Firestore 글 검색 구현
 - [dio](https://pub.dev/packages/dio) for the API client

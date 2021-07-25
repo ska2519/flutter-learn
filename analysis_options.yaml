@@ -1,9 +1,11 @@
 include: package:lint/analysis_options.yaml
 analyzer:
   exclude:
+  # dcdg 사용시 주석처 필요
+
     - "**/*.g.dart"
     - "**/*.freezed.dart"
-    # - "**/models/*.dart"
+    - "**/models/*.dart"
 
 linter:
   rules:

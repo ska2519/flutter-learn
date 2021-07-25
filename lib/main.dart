@@ -3,21 +3,21 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
+// import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:flutter_learn/app/home/home_page.dart';
+import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/auth_base.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/translations/codegen_loader.g.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'constants/constants.dart';
-import 'utils/format.dart';
+import 'package:flutter_learn/utils/format.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -30,9 +30,13 @@ Future<void> main() async {
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  await FirebaseAppCheck.instance
-      .activate(webRecaptchaSiteKey: 'recaptcha-v3-site-key');
+  // await FirebaseAppCheck.instance.activate(
+  //     webRecaptchaSiteKey: '6LdWxbsbAAAAAFEf6W9Ewh1r7iXCUhO8MphnX0cZ');
   await EasyLocalization.ensureInitialized();
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('google_fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+  });
 
   runApp(ProviderScope(
     child: EasyLocalization(
@@ -66,8 +70,7 @@ class MyApp extends StatelessWidget {
         accentColor: flutterAccentColor,
         iconTheme: IconThemeData(color: flutterPrimaryColor, size: 20),
         primaryIconTheme: IconThemeData(color: flutterPrimaryColor, size: 20),
-        textTheme: GoogleFonts.latoTextTheme(),
-        fontFamily: 'roboto',
+        fontFamily: 'Roboto',
         appBarTheme: AppBarTheme(
           elevation: 1.0,
           centerTitle: false,

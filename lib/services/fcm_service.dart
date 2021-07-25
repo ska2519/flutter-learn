@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_learn/constants/constants.dart';
@@ -20,6 +18,10 @@ class FCMService {
 
   Future<String?> get getToken => _fcm.getToken();
 
+  Future<String?> get webToken => _fcm.getToken(
+      vapidKey:
+          "BPvO3TOK1207AzrjYszUKNldgNOqYkPt6bCiuJPXQguueZAg9TZKpDY3642mcNNUx659d1BYH6VdyiaYX-qJeeA");
+
   Future<void> saveTokenToDatabase(String? token) async {
     final database = _read(databaseProvider);
     final appUser = _read(appUserStreamProvider).data?.value;
@@ -32,7 +34,7 @@ class FCMService {
     // Initialize the [FlutterLocalNotificationsPlugin] package.
     late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-    final String? token = await getToken;
+    final String? token = kIsWeb ? await webToken : await getToken;
     print('fcm_token: $token');
     if (token != null) saveTokenToDatabase(token);
     // Any time the token refreshes, store this in the database too.
@@ -55,15 +57,14 @@ class FCMService {
           .setForegroundNotificationPresentationOptions(
               alert: true, badge: true, sound: true);
     }
+    // iOS & Web
+    final NotificationSettings settings = await _fcm.requestPermission(
+      announcement: true,
+      carPlay: true,
+      criticalAlert: true,
+    );
+    print('fcm_User granted permission: ${settings.authorizationStatus}');
 
-    if (Platform.isIOS) {
-      final NotificationSettings settings = await _fcm.requestPermission(
-        announcement: true,
-        carPlay: true,
-        criticalAlert: true,
-      );
-      print('fcm_User granted permission: ${settings.authorizationStatus}');
-    }
     // Get any messages which caused the application to open from a terminated state.
     final RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
