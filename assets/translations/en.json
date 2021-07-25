@@ -96,5 +96,12 @@
   "learn": "learn",
   "dev": "dev",
   "nothingHere": "Nothaing here",
-  "addANewItem": "Add a new item"
+  "addANewItem": "Add a new item",
+  "last1Day": "last 1 day",
+  "last3Days": "last 3 days",
+  "last7Days": "last 7 days",
+  "postRanking": "Post Ranking",
+  "oneDay": "1 day",
+  "threeDay": "3 day",
+  "sevenDay": "7 day"
 }

@@ -98,7 +98,6 @@ class YouTubePlayPage extends HookWidget {
       controller: _youTubeController.value,
       child: Scaffold(
         appBar: AppBar(
-          // title: Text('tags'),
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: Icon(Icons.arrow_back_ios_new, size: 20),

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
+import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'posts_page.dart';
 
 class PostFilter extends HookWidget {
@@ -83,7 +84,7 @@ class PostFilter extends HookWidget {
               Navigator.pop(context);
             },
             child: Text(
-              '1일',
+              LocaleKeys.oneDay.tr(),
               style: TextStyle(
                 color: filterDays.state == 1
                     ? firebaseOrangeColor
@@ -97,7 +98,7 @@ class PostFilter extends HookWidget {
               Navigator.pop(context);
             },
             child: Text(
-              '3일',
+              LocaleKeys.threeDay.tr(),
               style: TextStyle(
                 color: filterDays.state == 3
                     ? firebaseOrangeColor
@@ -111,7 +112,7 @@ class PostFilter extends HookWidget {
               Navigator.pop(context);
             },
             child: Text(
-              '7일',
+              LocaleKeys.sevenDay.tr(),
               style: TextStyle(
                 color: filterDays.state == 7
                     ? firebaseOrangeColor

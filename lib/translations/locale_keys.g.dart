@@ -99,5 +99,12 @@ abstract class  LocaleKeys {
   static const dev = 'dev';
   static const nothingHere = 'nothingHere';
   static const addANewItem = 'addANewItem';
+  static const last1Day = 'last1Day';
+  static const last3Days = 'last3Days';
+  static const last7Days = 'last7Days';
+  static const postRanking = 'postRanking';
+  static const oneDay = 'oneDay';
+  static const threeDay = 'threeDay';
+  static const sevenDay = 'sevenDay';
 
 }

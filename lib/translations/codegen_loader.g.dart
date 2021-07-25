@@ -112,7 +112,14 @@ class CodegenLoader extends AssetLoader{
   "learn": "learn",
   "dev": "dev",
   "nothingHere": "Nothaing here",
-  "addANewItem": "Add a new item"
+  "addANewItem": "Add a new item",
+  "last1Day": "last 1 day",
+  "last3Days": "last 3 days",
+  "last7Days": "last 7 days",
+  "postRanking": "Post Ranking",
+  "oneDay": "1 day",
+  "threeDay": "3 day",
+  "sevenDay": "7 day"
 };
 static const Map<String,dynamic> ko = {
   "community": "커뮤니티",
@@ -212,7 +219,14 @@ static const Map<String,dynamic> ko = {
   "learn": "학습",
   "dev": "개발",
   "nothingHere": "아무것도 없어요",
-  "addANewItem": "새 항목을 추가해주세요"
+  "addANewItem": "새 항목을 추가해주세요",
+  "last1Day": "최근 1일",
+  "last3Days": "최근 3일",
+  "last7Days": "최근 7일",
+  "postRanking": "인기글 순위",
+  "oneDay": "1일",
+  "threeDay": "3일",
+  "sevenDay": "7일"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "ko": ko};
 }
