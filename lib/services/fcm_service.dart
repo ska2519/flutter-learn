@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_learn/app/home/home_page.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/received_notification.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,7 +10,6 @@ import 'firebase_auth_service.dart';
 import 'firestore_database.dart';
 
 final fcmServiceProvider = Provider<FCMService>((ref) => FCMService(ref.read));
-final fcmDataProvider = StateProvider<Map<String, dynamic>?>((ref) => null);
 
 class FCMService {
   FCMService(this._read);
@@ -116,72 +116,80 @@ class FCMService {
       }
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      print(
-          'fcm_A new onMessageOpenedApp event was published!: ${message.data}');
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (RemoteMessage message) async {
+        print(
+            'fcm_A new onMessageOpenedApp event was published!: ${message.data}');
 
-      // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      //     FlutterLocalNotificationsPlugin();
+        // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        //     FlutterLocalNotificationsPlugin();
 
-      final didReceiveLocalNotificationProvider =
-          StateProvider<ReceivedNotification?>((ref) => null);
+        final didReceiveLocalNotificationProvider =
+            StateProvider<ReceivedNotification?>((ref) => null);
 
-      final selectNotificationProvider = StateProvider<String?>((ref) => null);
+        final selectNotificationProvider =
+            StateProvider<String?>((ref) => null);
 
-      // String? selectedNotificationPayload;
-      // final NotificationAppLaunchDetails? notificationAppLaunchDetails =
-      //     await flutterLocalNotificationsPlugin
-      //         .getNotificationAppLaunchDetails();
-      // // String initialRoute = HomePage.routeName;
-      // print(
-      //     'notificationAppLaunchDetails?.didNotificationLaunchApp: ${notificationAppLaunchDetails?.didNotificationLaunchApp}');
-      // print(
-      //     'notificationAppLaunchDetails!.payload: ${notificationAppLaunchDetails?.payload}');
-      // if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
-      //   selectedNotificationPayload = notificationAppLaunchDetails!.payload;
-      //   print('selectedNotificationPayload: $selectedNotificationPayload');
-      //   // initialRoute = SecondPage.routeName;
-      // }
+        // String? selectedNotificationPayload;
+        // final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+        //     await flutterLocalNotificationsPlugin
+        //         .getNotificationAppLaunchDetails();
+        // // String initialRoute = HomePage.routeName;
+        // print(
+        //     'notificationAppLaunchDetails?.didNotificationLaunchApp: ${notificationAppLaunchDetails?.didNotificationLaunchApp}');
+        // print(
+        //     'notificationAppLaunchDetails!.payload: ${notificationAppLaunchDetails?.payload}');
+        // if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+        //   selectedNotificationPayload = notificationAppLaunchDetails!.payload;
+        //   print('selectedNotificationPayload: $selectedNotificationPayload');
+        //   // initialRoute = SecondPage.routeName;
+        // }
 
-      const AndroidInitializationSettings initializationSettingsAndroid =
-          AndroidInitializationSettings('flutter_icon');
+        const AndroidInitializationSettings initializationSettingsAndroid =
+            AndroidInitializationSettings('flutter_icon');
 
-      /// Note: permissions aren't requested here just to demonstrate that can be done later
-      final IOSInitializationSettings initializationSettingsIOS =
-          IOSInitializationSettings(onDidReceiveLocalNotification:
-              (int id, String? title, String? body, String? payload) async {
-        ProviderContainer().read(didReceiveLocalNotificationProvider).state =
-            ReceivedNotification(
-          id: id,
-          title: title,
-          body: body,
-          payload: payload,
+        /// Note: permissions aren't requested here just to demonstrate that can be done later
+        final IOSInitializationSettings initializationSettingsIOS =
+            IOSInitializationSettings(onDidReceiveLocalNotification:
+                (int id, String? title, String? body, String? payload) async {
+          ProviderContainer().read(didReceiveLocalNotificationProvider).state =
+              ReceivedNotification(
+            id: id,
+            title: title,
+            body: body,
+            payload: payload,
+          );
+        });
+        const MacOSInitializationSettings initializationSettingsMacOS =
+            MacOSInitializationSettings(
+                requestAlertPermission: false,
+                requestBadgePermission: false,
+                requestSoundPermission: false);
+        final InitializationSettings initializationSettings =
+            InitializationSettings(
+          android: initializationSettingsAndroid,
+          iOS: initializationSettingsIOS,
+          macOS: initializationSettingsMacOS,
         );
-      });
-      const MacOSInitializationSettings initializationSettingsMacOS =
-          MacOSInitializationSettings(
-              requestAlertPermission: false,
-              requestBadgePermission: false,
-              requestSoundPermission: false);
-      final InitializationSettings initializationSettings =
-          InitializationSettings(
-              android: initializationSettingsAndroid,
-              iOS: initializationSettingsIOS,
-              macOS: initializationSettingsMacOS);
-      await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-          onSelectNotification: (String? payload) async {
-        if (payload != null) {
-          debugPrint('fcm_notification payload: $payload');
-        }
-        // selectedNotificationPayload = payload;
-        ProviderContainer().read(selectNotificationProvider).state = payload;
-      });
+        await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+            onSelectNotification: (String? payload) async {
+          if (payload != null) {
+            debugPrint('fcm_notification payload: $payload');
+          }
+          // selectedNotificationPayload = payload;
+          ProviderContainer().read(selectNotificationProvider).state = payload;
+        });
 
-      if (message.data.isNotEmpty) {
-        print('fcm_messageData.keys.1: ${message.data.keys.first}');
-        print('fcm_messageData.values.1: ${message.data.values.first}');
-        _read(fcmDataProvider).state = message.data;
-      }
-    });
+        if (message.data.isNotEmpty) {
+          final messageData = message.data;
+          print('fcm_messageData.keys.1: ${messageData.keys.first}');
+          print('fcm_messageData.values.1: ${messageData.values.first}');
+          if (messageData.keys.first == 'postId') {
+            final postId = messageData.values.first.toString();
+            _read(fcmModelProvider.notifier).setPageOpenPostId(postId);
+          }
+        }
+      },
+    );
   }
 }

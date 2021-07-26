@@ -77,10 +77,12 @@ class YouTubePlayPage extends HookWidget {
     final channelAsyncValue = useProvider(channelProvider(item));
     final youTubeVideoAsyncValue = useProvider(youTubeVideoProvider(item));
     const player = YoutubePlayerIFrame();
-    final _youTubeController = useState(YoutubePlayerController(
-      initialVideoId: item.contentDetails.videoId,
-      params: YoutubePlayerParams(showFullscreenButton: true),
-    ));
+    final _youTubeController = useState(
+      YoutubePlayerController(
+        initialVideoId: item.contentDetails.videoId,
+        params: YoutubePlayerParams(showFullscreenButton: true),
+      ),
+    );
 
     useEffect(() {
       _youTubeController.value.onEnterFullscreen = () {

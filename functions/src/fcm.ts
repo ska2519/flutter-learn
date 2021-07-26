@@ -17,7 +17,8 @@ export const sendToComment = functions.firestore.document('posts/{postId}/commen
             .doc(comment.parentCmtUserId)
             .collection('tokens')
             .get();
-        const parentCmtText = comment.parentCmtText.substr(0, 6);
+        const substrLength = 18 - comment.userDisplayName.length;
+        const parentCmtText = comment.parentCmtText.substr(0, substrLength);
         const tokens = querySnapshot.docs.map((snap) => snap.id);
         const payload: admin.messaging.MessagingPayload = {
             notification: {
@@ -43,7 +44,8 @@ export const sendToComment = functions.firestore.document('posts/{postId}/commen
         .get();
 
     const tokens = querySnapshot.docs.map((snap) => snap.id);
-    const postTitle = comment.postTitle.substr(0, 6);
+    const substrLength = 19 - comment.userDisplayName.length;
+    const postTitle = comment.postTitle.substr(0, substrLength);
     const payload: admin.messaging.MessagingPayload = {
         notification: {
             title: comment.userDisplayName + '님이 "' + postTitle + '"에 댓글을 달았습니다',
@@ -65,6 +67,16 @@ export const sendToPostLiked = functions.firestore.document('posts/{postId}/post
         return null;
     }
 
+    const ExistPostLiked = await db
+        .collection('posts')
+        .doc(postLiked.postId)
+        .collection('postLiked').doc(postLiked.postUserId);
+
+    if (ExistPostLiked != null) {
+        return null;
+    }
+
+
     const querySnapshot = await db
         .collection('users')
         .doc(postLiked.postUserId)
@@ -72,10 +84,11 @@ export const sendToPostLiked = functions.firestore.document('posts/{postId}/post
         .get();
 
     const tokens = querySnapshot.docs.map((snap) => snap.id);
-    const postTitle = postLiked.postTitle.substr(0, 6);
+    const substrLength = 19 - postLiked.userDisplayName.length;
+    const postTitle = postLiked.postTitle.substr(0, substrLength);
     const payload: admin.messaging.MessagingPayload = {
         notification: {
-            title: postLiked.userDisplayName + '님이 "' + postTitle + '"  게시물을 좋아합니다',
+            title: postLiked.userDisplayName + '님이 "' + postTitle + '" 게시물을 좋아합니다',
             // icon: 'your-icon-url',
             click_action: 'FLUTTER_NOTIFICATION_CLICK',
         },
@@ -100,7 +113,8 @@ export const sendToCommentLiked = functions.firestore.document('posts/{postId}/c
         .get();
 
     const tokens = querySnapshot.docs.map((snap) => snap.id);
-    const commentText = commentLiked.commentText.substr(0, 6);
+    const substrLength = 20 - commentLiked.userDisplayName.length;
+    const commentText = commentLiked.commentText.substr(0, substrLength);
     const payload: admin.messaging.MessagingPayload = {
         notification: {
             title: commentLiked.userDisplayName + '님이 "' + commentText + '" 댓글을 좋아합니다',

@@ -10,6 +10,7 @@ import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/side_menu.dart';
 import 'package:flutter_learn/app/home/tab_item.dart';
 import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
+import 'package:flutter_learn/app/home/fcm_view_model.dart';
 import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/responsive.dart';
 import 'package:flutter_learn/controllers/menu_controller.dart';
@@ -20,6 +21,9 @@ import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final fcmModelProvider =
+    StateNotifierProvider<FcmViewModel, String?>((ref) => FcmViewModel());
 
 class HomePage extends StatefulHookWidget {
   const HomePage({required this.analytics, required this.observer});
@@ -76,16 +80,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final appUser = useProvider(appUserStreamProvider).data?.value;
-    final fcmData = useProvider(fcmDataProvider).state;
+    final fcmModel = useProvider(fcmModelProvider);
+
     useEffect(() {
-      print('fcmData: $fcmData');
-      if (fcmData != null && fcmData.keys.first == 'postId') {
-        final postId = fcmData.values.first.toString();
-        WidgetsBinding.instance!.addPostFrameCallback(
-            (_) => PostDetailPage.show(context, postId: postId));
+      print('fcmModel: $fcmModel');
+      if (fcmModel != null) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          PostDetailPage.show(context, postId: fcmModel);
+          context.read(fcmModelProvider.notifier).setPageOpenPostId(null);
+        });
       }
     });
     print('HomePage appUser: $appUser');
+
     return Scaffold(
       floatingActionButton:
           appUser?.id == debugAdminUid || appUser?.id == releaseAdminUid

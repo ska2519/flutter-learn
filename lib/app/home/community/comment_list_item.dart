@@ -187,12 +187,9 @@ class CommentListItem extends HookWidget {
               commentLikedListAsyncValue.when(
                   loading: () => const SizedBox(),
                   error: (error, stackTrace) => const SizedBox(),
-                  data: (cmtlikedList) {
-                    print('appUser?.id: ${appUser?.id}');
-                    print('cmtlikedList: $cmtlikedList');
-                    final commentLiked = cmtlikedList
+                  data: (cmtLikedList) {
+                    final commentLiked = cmtLikedList
                         .any((element) => element.userId == appUser?.id);
-                    print('commentLiked1: $commentLiked');
                     return InkWell(
                       onTap: () => appUser == null
                           ? SignInPage.show(context)

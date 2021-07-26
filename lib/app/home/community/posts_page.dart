@@ -11,7 +11,6 @@ import 'package:flutter_learn/app/home/community/search_page.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/constants/constants.dart';
-import 'package:flutter_learn/constants/responsive.dart';
 import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/models/post.dart';
 import 'package:flutter_learn/models/tag.dart';
