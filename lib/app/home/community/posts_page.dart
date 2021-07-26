@@ -287,17 +287,6 @@ class PostsPageSliverAppBar extends StatelessWidget {
       // ignore: avoid_bool_literals_in_conditional_expressions
       selected: selectedIndexList.value.contains(i) ? true : false,
       avatar: tagAvatar(tag),
-      shape: StadiumBorder(
-        side: BorderSide(
-          width: 1.3,
-          color:
-              tag.color != null ? Color(int.parse(tag.color!)) : Colors.black,
-        ),
-      ),
-      backgroundColor: Colors.transparent,
-      selectedColor: Colors.transparent,
-      checkmarkColor:
-          tag.color != null ? Color(int.parse(tag.color!)) : Colors.black,
     );
   }
 
