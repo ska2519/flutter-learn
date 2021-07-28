@@ -35,7 +35,7 @@ packages:
       name: args
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.2.0"
   async:
     dependency: transitive
     description:
@@ -239,13 +239,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.3"
-  dcdg:
-    dependency: "direct main"
+  dbus:
+    dependency: transitive
     description:
-      name: dcdg
+      name: dbus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.1"
+    version: "0.5.4"
   dio:
     dependency: "direct main"
     description:
@@ -523,21 +523,28 @@ packages:
       name: flutter_launcher_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.0"
+    version: "0.9.1"
   flutter_local_notifications:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.0"
+    version: "6.1.0"
+  flutter_local_notifications_linux:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_linux
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0+1"
   flutter_local_notifications_platform_interface:
     dependency: transitive
     description:
       name: flutter_local_notifications_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0"
+    version: "4.0.1"
   flutter_localizations:
     dependency: transitive
     description: flutter
@@ -862,7 +869,7 @@ packages:
     source: hosted
     version: "0.2.1"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
@@ -931,13 +938,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.0"
+  posix:
+    dependency: transitive
+    description:
+      name: posix
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.2"
   process:
     dependency: transitive
     description:
       name: process
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.1"
+    version: "4.2.3"
   pub_semver:
     dependency: transitive
     description:
@@ -1252,7 +1266,7 @@ packages:
     source: hosted
     version: "2.0.0"
   uuid:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: uuid
       url: "https://pub.dartlang.org"

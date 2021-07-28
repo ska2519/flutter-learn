@@ -87,27 +87,28 @@ class FCMService {
       print('fcm_message.notification: ${message.notification!.title}');
       if (notification != null && android != null && !kIsWeb) {
         flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id, channel.name, channel.description,
-                // largeIcon: FilePathAndroidBitmap(largeIconPath),
-                icon: 'flutter_icon',
-                // largeIcon:
-                //     const DrawableResourceAndroidBitmap('sample_large_icon'),
-                enableLights: true,
-                color: flutterPrimaryColor,
-                ledColor: flutterPrimaryColor,
-                ledOnMs: 1000,
-                ledOffMs: 500,
-                importance: Importance.max,
-                priority: Priority.max,
-                // fullScreenIntent: true,
-              ),
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id, channel.name, channel.description,
+              // largeIcon: FilePathAndroidBitmap(largeIconPath),
+              icon: 'flutter_icon',
+              // largeIcon:
+              //     const DrawableResourceAndroidBitmap('sample_large_icon'),
+              enableLights: true,
+              color: flutterPrimaryColor,
+              ledColor: flutterPrimaryColor,
+              ledOnMs: 1000,
+              ledOffMs: 500,
+              importance: Importance.max,
+              priority: Priority.max,
+              // fullScreenIntent: true,
             ),
-            payload: 'item x');
+          ),
+          payload: 'item x',
+        );
       }
       if (message.data.isNotEmpty) {
         print('fcm_onMessage.listen.keys.1: ${message.data.keys.first}');

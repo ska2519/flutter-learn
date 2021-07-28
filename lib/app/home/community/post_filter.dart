@@ -10,7 +10,7 @@ import 'posts_page.dart';
 class PostFilter extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final filter = useProvider(sortPostsFilter);
+    final filter = useProvider(postsFilter);
     final filterDays = useProvider(postsFilterDays);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: defaultPadding),

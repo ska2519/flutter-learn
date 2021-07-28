@@ -4,10 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_learn/app/home/community/edit_post_page.dart';
-import 'package:flutter_learn/app/home/community/post_detail_page.dart';
-import 'package:flutter_learn/app/home/community/post_item_info.dart';
-import 'package:flutter_learn/app/home/community/search_page.dart';
+import 'package:flutter_learn/app/widgets/tag_avatar.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
 import 'package:flutter_learn/constants/constants.dart';
@@ -18,62 +17,47 @@ import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'edit_post_page.dart';
+import 'post_detail_page.dart';
 import 'post_filter.dart';
 import 'post_filter_item.dart';
 import 'post_item_info.dart';
 import 'post_user_info.dart';
+import 'search_page.dart';
 
-// const iconPath = 'assets/icons/';
-// const imagePath = 'assets/pixel_perfect/';
-//assetPath: '${imagePath}Screenshot_1620879287-393x830.png',
 enum sortType { likedCount, commentCount, readCount }
-final sortPostsFilter = StateProvider<sortType>((_) => sortType.likedCount);
+final postsFilter = StateProvider<sortType>((_) => sortType.likedCount);
 final postsFilterDays = StateProvider<int>((_) => 1);
 
 final sortPostsProvider = FutureProvider<List<Post?>>((ref) {
   final database = ref.read(databaseProvider);
-  final filter = ref.watch(sortPostsFilter);
+  final filter = ref.watch(postsFilter);
   final filterDays = ref.watch(postsFilterDays);
   final filterDurationDay =
       DateTime.now().subtract(Duration(days: filterDays.state));
   final dateFormatted =
       DateFormat("yyyy-MM-ddTHH:mm:ss").format(filterDurationDay);
-
-  final sortPosts = database.getPosts(startDay: dateFormatted, filter: filter);
-  return sortPosts;
+  return database.getPosts(startDay: dateFormatted, filter: filter);
 });
 
 final selectedTagsProvider = StateProvider<Set<Tag>>((ref) => {});
 
 final tagsProvider = FutureProvider<List<Tag>>((ref) async {
   final database = ref.read(databaseProvider);
-  late final List<Tag> postsTags = [];
+  final List<Tag> postsTags = [];
   final totalTags = await database.getTags();
   totalTags
-      .map(
-        (tag) => tag.postCount > 0 ? postsTags.add(tag) : null,
-      )
+      .map((tag) => tag.postCount > 0 ? postsTags.add(tag) : null)
       .toList();
   postsTags.sort((a, b) => b.level.compareTo(a.level));
   postsTags.sort((a, b) => b.postCount.compareTo(a.postCount));
-
-  // for (var i = 0; i < postsTags.length; i++) {
-  //   if (postsTags[i].imageUrl == null || postsTags[i].imageUrl == '') {
-  //     postsTags[i] = postsTags[i].copyWith(
-  //       imageUrl: postsTags[i].image != null
-  //           ? await storage.tagDownloadURL(tagIcon: postsTags[i].image)
-  //           : null,
-  //     );
-  //     await database.updateTag(postsTags[i]);
-  //   }
-  // }
   return postsTags;
 });
+
 final postsStreamProvider =
     StreamProvider.family.autoDispose<List<Post?>, List<Tag?>?>((ref, tags) {
-  final database = ref.watch(databaseProvider);
+  final database = ref.read(databaseProvider);
   final selectedTags = ref.watch(selectedTagsProvider).state;
   final Set<String> stringTags = {};
 
@@ -85,14 +69,13 @@ final postsStreamProvider =
 
 class PostsPage extends HookWidget {
   const PostsPage();
-  static Future<void> show(BuildContext context) async {
-    await Navigator.of(context, rootNavigator: true)
-        .pushNamed(AppRoutes.postsPage);
-  }
+
+  static Future<void> show(BuildContext context) async =>
+      Navigator.of(context, rootNavigator: true).pushNamed(AppRoutes.postsPage);
 
   @override
   Widget build(BuildContext context) {
-    final selectedIndex = useState(<int>[]);
+    final selectedIndexList = useState(<int>[]);
     final tagsAsyncValue = useProvider(tagsProvider);
 
     print('PostsPage build');
@@ -103,9 +86,9 @@ class PostsPage extends HookWidget {
         message: LocaleKeys.cantLoadDataRightNow.tr(),
       ),
       data: (tags) {
-        final postsAsyncValue = useProvider(postsStreamProvider(null));
-        final sortPosts = useProvider(sortPostsProvider);
         final appUser = useProvider(appUserStreamProvider).data?.value;
+        final sortPosts = useProvider(sortPostsProvider);
+        final postsAsyncValue = useProvider(postsStreamProvider(null));
         return SafeArea(
           child: CustomScrollView(
             physics: const BouncingScrollPhysics(
@@ -114,15 +97,12 @@ class PostsPage extends HookWidget {
               PostsPageSliverAppBar(
                 appUser: appUser,
                 tags: tags,
-                selectedIndexList: selectedIndex,
+                selectedIndexList: selectedIndexList,
               ),
               CupertinoSliverRefreshControl(
                 onRefresh: () async =>
                     context.refresh(postsStreamProvider(tags)),
               ),
-              // if (kIsWeb)
-              //   SliverToBoxAdapter()
-              // else
               SliverToBoxAdapter(child: PostFilter()),
               SliverToBoxAdapter(child: Divider()),
               sortPosts.when(
@@ -234,7 +214,7 @@ class PostsPageSliverAppBar extends StatelessWidget {
           style: Theme.of(context).textTheme.headline6!.copyWith(
                 color: flutterPrimaryColor,
                 fontWeight: FontWeight.bold,
-                letterSpacing: 0.3,
+                letterSpacing: 0.5,
               ),
         ),
       ),
@@ -245,13 +225,16 @@ class PostsPageSliverAppBar extends StatelessWidget {
           height: 50,
           child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(right: defaultPadding),
-                child: InkWell(
-                  onTap: () => _resetFilter(context),
-                  child: Icon(Icons.highlight_off_outlined),
+              if (selectedIndexList.value.isEmpty)
+                const SizedBox()
+              else
+                Padding(
+                  padding: const EdgeInsets.only(right: defaultPadding),
+                  child: InkWell(
+                    onTap: () => _resetFilter(context),
+                    child: Icon(Icons.highlight_off_outlined),
+                  ),
                 ),
-              ),
               Expanded(
                 child: ListView.separated(
                   physics: BouncingScrollPhysics(),
@@ -286,28 +269,15 @@ class PostsPageSliverAppBar extends StatelessWidget {
       onSelected: (bool selected) => _selectFilter(context, i),
       // ignore: avoid_bool_literals_in_conditional_expressions
       selected: selectedIndexList.value.contains(i) ? true : false,
-      avatar: tagAvatar(tag),
+      avatar: TagAvatar(tag),
     );
   }
 
-  Widget tagAvatar(Tag tag) {
-    if (tag.image != null) {
-      final path = 'assets/icons/${tag.image}';
-      // rootBundle.load(path).then((value) => print(value));
-      return Image.asset(path);
-    } else {
-      return tag.imageUrl != null
-          ? CachedNetworkImage(imageUrl: tag.imageUrl!)
-          : Image.asset('assets/icons/dino_icon_180.png');
-    }
-  }
-
   void _selectFilter(BuildContext context, int i) {
-    if (selectedIndexList.value.contains(i)) {
-      selectedIndexList.value.remove(i);
-    } else {
-      selectedIndexList.value.add(i);
-    }
+    selectedIndexList.value.contains(i)
+        ? selectedIndexList.value.remove(i)
+        : selectedIndexList.value.add(i);
+
     final selectedTags = <Tag>{};
     for (final selectedIndex in selectedIndexList.value) {
       selectedTags.add(tags[selectedIndex]);
