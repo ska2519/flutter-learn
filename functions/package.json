@@ -12,13 +12,14 @@
     "engines": {
         "node": "14"
     },
-    "main": "lib/index.js",
+    "main": "lib/src/index.js",
     "dependencies": {
         "14": "^3.1.6",
         "@google-cloud/storage": "^5.8.5",
+        "axios": "^0.21.4",
         "express": "^4.17.1",
-        "firebase-admin": "^9.9.0",
-        "firebase-functions": "^3.14.1",
+        "firebase-admin": "9.11.1",
+        "firebase-functions": "^3.15.7",
         "fs-extra": "^10.0.0",
         "n": "^7.3.0",
         "sharp": "^0.28.3",

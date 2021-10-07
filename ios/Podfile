@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '12.0'
+platform :ios, '13.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -39,3 +39,12 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
   end
 end
+
+# add the Firebase pod for Google Analytics
+pod 'GoogleAnalytics'
+# add pods for any other desired Firebase products
+# https://firebase.google.com/docs/ios/setup#available-pods
+pod 'KakaoSDKCommon'  # 필수 요소를 담은 공통 모듈
+pod 'KakaoSDKAuth'  # 사용자 인증
+pod 'KakaoSDKUser'  # 카카오 로그인, 사용자 관리
+pod 'KakaoSDKLink'  # 메시지(카카오링크)

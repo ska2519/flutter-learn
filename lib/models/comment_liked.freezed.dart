@@ -25,18 +25,18 @@ class _$CommentLikedTearOff {
       required String userDisplayName,
       required String commentId,
       required String commentUserId,
+      required String commentText,
       required String postId,
       required String postUserId,
-      required String commentText,
       @TimestampConverter() DateTime? timestamp}) {
     return _CommentLiked(
       userId: userId,
       userDisplayName: userDisplayName,
       commentId: commentId,
       commentUserId: commentUserId,
+      commentText: commentText,
       postId: postId,
       postUserId: postUserId,
-      commentText: commentText,
       timestamp: timestamp,
     );
   }
@@ -55,9 +55,9 @@ mixin _$CommentLiked {
   String get userDisplayName => throw _privateConstructorUsedError;
   String get commentId => throw _privateConstructorUsedError;
   String get commentUserId => throw _privateConstructorUsedError;
+  String get commentText => throw _privateConstructorUsedError;
   String get postId => throw _privateConstructorUsedError;
   String get postUserId => throw _privateConstructorUsedError;
-  String get commentText => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get timestamp => throw _privateConstructorUsedError;
 
@@ -77,9 +77,9 @@ abstract class $CommentLikedCopyWith<$Res> {
       String userDisplayName,
       String commentId,
       String commentUserId,
+      String commentText,
       String postId,
       String postUserId,
-      String commentText,
       @TimestampConverter() DateTime? timestamp});
 }
 
@@ -97,9 +97,9 @@ class _$CommentLikedCopyWithImpl<$Res> implements $CommentLikedCopyWith<$Res> {
     Object? userDisplayName = freezed,
     Object? commentId = freezed,
     Object? commentUserId = freezed,
+    Object? commentText = freezed,
     Object? postId = freezed,
     Object? postUserId = freezed,
-    Object? commentText = freezed,
     Object? timestamp = freezed,
   }) {
     return _then(_value.copyWith(
@@ -119,6 +119,10 @@ class _$CommentLikedCopyWithImpl<$Res> implements $CommentLikedCopyWith<$Res> {
           ? _value.commentUserId
           : commentUserId // ignore: cast_nullable_to_non_nullable
               as String,
+      commentText: commentText == freezed
+          ? _value.commentText
+          : commentText // ignore: cast_nullable_to_non_nullable
+              as String,
       postId: postId == freezed
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
@@ -126,10 +130,6 @@ class _$CommentLikedCopyWithImpl<$Res> implements $CommentLikedCopyWith<$Res> {
       postUserId: postUserId == freezed
           ? _value.postUserId
           : postUserId // ignore: cast_nullable_to_non_nullable
-              as String,
-      commentText: commentText == freezed
-          ? _value.commentText
-          : commentText // ignore: cast_nullable_to_non_nullable
               as String,
       timestamp: timestamp == freezed
           ? _value.timestamp
@@ -151,9 +151,9 @@ abstract class _$CommentLikedCopyWith<$Res>
       String userDisplayName,
       String commentId,
       String commentUserId,
+      String commentText,
       String postId,
       String postUserId,
-      String commentText,
       @TimestampConverter() DateTime? timestamp});
 }
 
@@ -173,9 +173,9 @@ class __$CommentLikedCopyWithImpl<$Res> extends _$CommentLikedCopyWithImpl<$Res>
     Object? userDisplayName = freezed,
     Object? commentId = freezed,
     Object? commentUserId = freezed,
+    Object? commentText = freezed,
     Object? postId = freezed,
     Object? postUserId = freezed,
-    Object? commentText = freezed,
     Object? timestamp = freezed,
   }) {
     return _then(_CommentLiked(
@@ -195,6 +195,10 @@ class __$CommentLikedCopyWithImpl<$Res> extends _$CommentLikedCopyWithImpl<$Res>
           ? _value.commentUserId
           : commentUserId // ignore: cast_nullable_to_non_nullable
               as String,
+      commentText: commentText == freezed
+          ? _value.commentText
+          : commentText // ignore: cast_nullable_to_non_nullable
+              as String,
       postId: postId == freezed
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
@@ -202,10 +206,6 @@ class __$CommentLikedCopyWithImpl<$Res> extends _$CommentLikedCopyWithImpl<$Res>
       postUserId: postUserId == freezed
           ? _value.postUserId
           : postUserId // ignore: cast_nullable_to_non_nullable
-              as String,
-      commentText: commentText == freezed
-          ? _value.commentText
-          : commentText // ignore: cast_nullable_to_non_nullable
               as String,
       timestamp: timestamp == freezed
           ? _value.timestamp
@@ -223,9 +223,9 @@ class _$_CommentLiked implements _CommentLiked {
       required this.userDisplayName,
       required this.commentId,
       required this.commentUserId,
+      required this.commentText,
       required this.postId,
       required this.postUserId,
-      required this.commentText,
       @TimestampConverter() this.timestamp});
 
   factory _$_CommentLiked.fromJson(Map<String, dynamic> json) =>
@@ -240,18 +240,18 @@ class _$_CommentLiked implements _CommentLiked {
   @override
   final String commentUserId;
   @override
+  final String commentText;
+  @override
   final String postId;
   @override
   final String postUserId;
-  @override
-  final String commentText;
   @override
   @TimestampConverter()
   final DateTime? timestamp;
 
   @override
   String toString() {
-    return 'CommentLiked(userId: $userId, userDisplayName: $userDisplayName, commentId: $commentId, commentUserId: $commentUserId, postId: $postId, postUserId: $postUserId, commentText: $commentText, timestamp: $timestamp)';
+    return 'CommentLiked(userId: $userId, userDisplayName: $userDisplayName, commentId: $commentId, commentUserId: $commentUserId, commentText: $commentText, postId: $postId, postUserId: $postUserId, timestamp: $timestamp)';
   }
 
   @override
@@ -269,14 +269,14 @@ class _$_CommentLiked implements _CommentLiked {
             (identical(other.commentUserId, commentUserId) ||
                 const DeepCollectionEquality()
                     .equals(other.commentUserId, commentUserId)) &&
+            (identical(other.commentText, commentText) ||
+                const DeepCollectionEquality()
+                    .equals(other.commentText, commentText)) &&
             (identical(other.postId, postId) ||
                 const DeepCollectionEquality().equals(other.postId, postId)) &&
             (identical(other.postUserId, postUserId) ||
                 const DeepCollectionEquality()
                     .equals(other.postUserId, postUserId)) &&
-            (identical(other.commentText, commentText) ||
-                const DeepCollectionEquality()
-                    .equals(other.commentText, commentText)) &&
             (identical(other.timestamp, timestamp) ||
                 const DeepCollectionEquality()
                     .equals(other.timestamp, timestamp)));
@@ -289,9 +289,9 @@ class _$_CommentLiked implements _CommentLiked {
       const DeepCollectionEquality().hash(userDisplayName) ^
       const DeepCollectionEquality().hash(commentId) ^
       const DeepCollectionEquality().hash(commentUserId) ^
+      const DeepCollectionEquality().hash(commentText) ^
       const DeepCollectionEquality().hash(postId) ^
       const DeepCollectionEquality().hash(postUserId) ^
-      const DeepCollectionEquality().hash(commentText) ^
       const DeepCollectionEquality().hash(timestamp);
 
   @JsonKey(ignore: true)
@@ -311,9 +311,9 @@ abstract class _CommentLiked implements CommentLiked {
       required String userDisplayName,
       required String commentId,
       required String commentUserId,
+      required String commentText,
       required String postId,
       required String postUserId,
-      required String commentText,
       @TimestampConverter() DateTime? timestamp}) = _$_CommentLiked;
 
   factory _CommentLiked.fromJson(Map<String, dynamic> json) =
@@ -328,11 +328,11 @@ abstract class _CommentLiked implements CommentLiked {
   @override
   String get commentUserId => throw _privateConstructorUsedError;
   @override
+  String get commentText => throw _privateConstructorUsedError;
+  @override
   String get postId => throw _privateConstructorUsedError;
   @override
   String get postUserId => throw _privateConstructorUsedError;
-  @override
-  String get commentText => throw _privateConstructorUsedError;
   @override
   @TimestampConverter()
   DateTime? get timestamp => throw _privateConstructorUsedError;

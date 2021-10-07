@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:crypto/crypto.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,9 +10,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_learn/exceptions/firestore_api_exception.dart';
 import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kakao_flutter_sdk/auth.dart';
+import 'package:kakao_flutter_sdk/common.dart';
+import 'package:kakao_flutter_sdk/user.dart' as kakao;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'auth_base.dart';
@@ -20,10 +25,11 @@ import 'firestore_database.dart';
 final authServiceProvider =
     Provider<AuthBase>((ref) => FirebaseAuthService(ref.read));
 
-final userStreamProvider = StreamProvider.autoDispose<User?>((ref) {
-  final authService = ref.read(authServiceProvider);
-  return authService.idTokenChanges;
-});
+final userStreamProvider = StreamProvider.autoDispose<User?>(
+    (ref) => ref.watch(authServiceProvider).userChanges);
+
+final authStateChangesProvider = StreamProvider.autoDispose<User?>(
+    (ref) => ref.watch(authServiceProvider).authStateChanges);
 
 final appUserStreamProvider = StreamProvider.autoDispose<AppUser?>((ref) {
   final userAsyncValue = ref.watch(userStreamProvider);
@@ -37,10 +43,11 @@ final appUserStreamProvider = StreamProvider.autoDispose<AppUser?>((ref) {
   );
 });
 
-class FirebaseAuthService implements AuthBase {
+class FirebaseAuthService with AuthBase {
   FirebaseAuthService(this._read);
   final Reader _read;
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final _firebaseAuth = FirebaseAuth.instance;
+
   final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: [
       // 'profile',
@@ -54,27 +61,31 @@ class FirebaseAuthService implements AuthBase {
 
   @override
   Future<AppUser?> get currentAppUser async =>
-      userFromFirebase(_firebaseAuth.currentUser);
+      userFromFirebase(await currentUser);
 
   @override
-  Future<AppUser?> userFromFirebase(User? user) async {
-    return user == null || user.isAnonymous ? null : await fetchUser(user);
-  }
+  Future<AppUser?> userFromFirebase(User? user) async =>
+      user == null || user.isAnonymous ? null : await fetchUser(user);
 
   @override
-  Stream<User?> get onAuthStateChanged => _firebaseAuth
+  Stream<User?> get authStateChanges => _firebaseAuth
       .authStateChanges()
       .asyncMap((User? user) async => user ?? await signInAnonymously());
 
   @override
-  Stream<User?> get idTokenChanges => _firebaseAuth
+  Stream<User?> get iDTokenChanges => _firebaseAuth
       .idTokenChanges()
       .asyncMap((User? user) async => user ?? await signInAnonymously());
 
   @override
+  Stream<User?> get userChanges =>
+      _firebaseAuth.userChanges().asyncMap((User? user) async => user);
+
+  @override
   Future<AppUser?> createUser(User user) async {
-    final database = _read(databaseProvider);
     try {
+      final database = _read(databaseProvider);
+      print('createUser: $user');
       await database.setAppUser(user);
       return await database.getAppUser(user.uid);
     } catch (error) {
@@ -90,6 +101,7 @@ class FirebaseAuthService implements AuthBase {
     final database = _read(databaseProvider);
     print('fetchUser: $user');
     if (user.uid.isNotEmpty) {
+      print('user.uid: ${user.uid}');
       AppUser? appUser = await database.getAppUser(user.uid);
       return appUser ??= await createUser(user);
     } else {
@@ -117,8 +129,7 @@ class FirebaseAuthService implements AuthBase {
   @override
   Future<AppUser?> signInWithEmailAndPassword(
       String email, String password) async {
-    final UserCredential userCredential =
-        await _firebaseAuth.signInWithEmailAndPassword(
+    final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -128,8 +139,8 @@ class FirebaseAuthService implements AuthBase {
   @override
   Future<AppUser?> createUserWithEmailAndPassword(
       String email, String password) async {
-    final UserCredential userCredential = await _firebaseAuth
-        .createUserWithEmailAndPassword(email: email, password: password);
+    final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
     return userFromFirebase(userCredential.user);
   }
 
@@ -141,7 +152,7 @@ class FirebaseAuthService implements AuthBase {
   @override
   Future<AppUser?> signInWithEmailAndLink(
       {required String email, required String link}) async {
-    final UserCredential userCredential =
+    final userCredential =
         await _firebaseAuth.signInWithEmailLink(email: email, emailLink: link);
     return userFromFirebase(userCredential.user);
   }
@@ -178,8 +189,8 @@ class FirebaseAuthService implements AuthBase {
   Future<AppUser?> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
     if (googleUser != null) {
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final googleAuth = await googleUser.authentication;
+
       if (googleAuth.accessToken != null && googleAuth.idToken != null) {
         // Create a new credential.
         final googleCredential = GoogleAuthProvider.credential(
@@ -187,7 +198,7 @@ class FirebaseAuthService implements AuthBase {
           idToken: googleAuth.idToken,
         );
         // Sign in to Firebase with the Google [UserCredential].
-        final UserCredential googleUserCredential =
+        final googleUserCredential =
             await _firebaseAuth.signInWithCredential(googleCredential);
         return userFromFirebase(googleUserCredential.user);
       } else {
@@ -262,8 +273,57 @@ class FirebaseAuthService implements AuthBase {
   }
 
   @override
+  Future<AppUser?> signInWithNaver() async {
+    final NaverLoginResult res = await FlutterNaverLogin.logIn();
+    switch (res.status) {
+      case NaverLoginStatus.loggedIn:
+        final accessToken = await FlutterNaverLogin.currentAccessToken;
+        final functions = FirebaseFunctions.instance;
+        final HttpsCallableResult<Map<String, dynamic>> httpCallResult =
+            await functions
+                .httpsCallable('customTokenFromNaver')
+                .call({'accessToken': accessToken.accessToken});
+        final customToken = httpCallResult.data['token'].toString();
+        final naverUserCredential =
+            await _firebaseAuth.signInWithCustomToken(customToken);
+        final naverFirebaseUser = naverUserCredential.user;
+        return userFromFirebase(naverFirebaseUser);
+      case NaverLoginStatus.cancelledByUser:
+        break;
+      case NaverLoginStatus.error:
+        throw PlatformException(
+            code: 'NAVER LOGIN_ERR', message: '네이버 로그인 오류 다시 시도해주세요.');
+    }
+  }
+
+  @override
+  Future<AppUser?> signInWithKakao() async {
+    try {
+      final installed = await isKakaoTalkInstalled();
+      final authCode = installed
+          ? await AuthCodeClient.instance.requestWithTalk()
+          : await AuthCodeClient.instance.request();
+      final token = await AuthApi.instance.issueAccessToken(authCode);
+      final functions = FirebaseFunctions.instance;
+      final HttpsCallableResult<Map<String, dynamic>> httpCallResult =
+          await functions
+              .httpsCallable('customTokenFromKakao')
+              .call({'accessToken': token.accessToken});
+      final customToken = httpCallResult.data['token'].toString();
+      final userCredential =
+          await _firebaseAuth.signInWithCustomToken(customToken);
+      final firebaseUser = userCredential.user;
+      return userFromFirebase(firebaseUser);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
   Future<void> signOut() async {
-    await googleSignIn.signOut();
+    googleSignIn.signOut();
+    FlutterNaverLogin.logOut();
+    kakao.UserApi.instance.logout();
     return _firebaseAuth.signOut();
   }
 

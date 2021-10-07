@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,8 +21,6 @@ class TagAvatar extends StatelessWidget {
       future: myLoadAsset('assets/icons/${tag.image}'),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          // final buffer = snapshot.data!.buffer;
-          // return Image.memory(buffer.asUint8List());
           final path = 'assets/icons/${tag.image}';
           return Image.asset(path);
         } else if (snapshot.data == null) {

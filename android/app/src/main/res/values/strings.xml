@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- naver_app_key -->
+    <string name="client_id">Hpq7ov8TK9c8LxB2UjEr</string>
+    <string name="client_secret">3AOd1v16QN</string>
+    <string name="client_name">플러터런</string>
+</resources>

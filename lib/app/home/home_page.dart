@@ -8,9 +8,9 @@ import 'package:flutter_learn/app/home/community/post_detail_page.dart';
 import 'package:flutter_learn/app/home/community/posts_page.dart';
 import 'package:flutter_learn/app/home/desktop/community_screen.dart';
 import 'package:flutter_learn/app/home/desktop/widgets/side_menu.dart';
+import 'package:flutter_learn/app/home/fcm_view_model.dart';
 import 'package:flutter_learn/app/home/tab_item.dart';
 import 'package:flutter_learn/app/home/youtube/youtube_page.dart';
-import 'package:flutter_learn/app/home/fcm_view_model.dart';
 import 'package:flutter_learn/constants/keys.dart';
 import 'package:flutter_learn/constants/responsive.dart';
 import 'package:flutter_learn/controllers/menu_controller.dart';
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     final fcm = context.read(fcmServiceProvider);
-    fcm.setupInteractedPostUpdate();
+    fcm.setupInteractedPost();
   }
 
   @override

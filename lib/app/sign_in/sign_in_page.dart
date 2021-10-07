@@ -19,9 +19,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final signModelProvider = ChangeNotifierProvider<SignViewModel>(
-    (ref) => SignViewModel(auth: ref.watch(authServiceProvider)));
-
 class SignInPage extends HookWidget {
   const SignInPage({Key? key}) : super(key: key);
 
@@ -83,24 +80,21 @@ class SignInPageContents extends StatelessWidget {
     final _size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(_size.height * 0.2),
+        preferredSize: Size.fromHeight(_size.height * 0.15),
         child: AppBar(
           elevation: 0.0,
-          flexibleSpace: Padding(
-            padding: const EdgeInsets.all(33),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                      letterSpacing: 1.5,
-                      wordSpacing: 2,
-                    ),
-              ),
+          flexibleSpace: Align(
+            alignment: Alignment.bottomCenter,
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                    letterSpacing: 1.5,
+                    wordSpacing: 2,
+                  ),
             ),
           ),
         ),
@@ -113,10 +107,7 @@ class SignInPageContents extends StatelessWidget {
     if (viewModel.isLoading) {
       return const Center(child: CupertinoActivityIndicator());
     }
-    return SvgPicture.asset(
-      'assets/images/Group Chat-rafiki.svg',
-      fit: BoxFit.fitHeight,
-    );
+    return SvgPicture.asset('assets/images/Group Chat-rafiki.svg');
   }
 
   Widget _buildSignIn(BuildContext context) {
@@ -127,18 +118,17 @@ class SignInPageContents extends StatelessWidget {
           width: min(constraints.maxWidth, 600),
           padding: const EdgeInsets.all(16),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              const SizedBox(height: 33),
               SizedBox(
                 height: _size.height * 0.3,
                 child: _buildHeader(),
               ),
               const SizedBox(height: 33),
               SignInButton(
+                imageAsset: 'assets/icons/btnG_아이콘사각.png',
                 text: LocaleKeys.signInWithEmail.tr(),
-                textStyle: TextStyle(fontWeight: FontWeight.w500),
                 onPressed: viewModel.isLoading
                     ? null
                     : () => _showEmailPasswordSignInPage(context),
@@ -161,6 +151,22 @@ class SignInPageContents extends StatelessWidget {
                     viewModel.isLoading ? null : viewModel.signInWithGoogle,
               ),
               const SizedBox(height: defaultPadding),
+              SignInButton(
+                imageAsset: 'assets/icons/btnG_아이콘사각.png',
+                text: '네이버 로그인',
+                color: naverGreenColor,
+                textColor: Colors.white,
+                onPressed:
+                    viewModel.isLoading ? null : viewModel.signInWithNaver,
+              ),
+              const SizedBox(height: defaultPadding),
+              SignInButton(
+                imageAsset: 'assets/icons/kakao_symbol.png',
+                color: kakaoYellowColor,
+                text: '카카오 로그인',
+                onPressed:
+                    viewModel.isLoading ? null : viewModel.signInWithKakao,
+              ),
             ],
           ),
         );

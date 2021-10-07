@@ -2,13 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:flutter_learn/app/home/community/post_filter.dart';
 import 'package:flutter_learn/app/home/community/post_filter_item.dart';
 import 'package:flutter_learn/app/home/community/posts_page.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CommunityScreen extends HookWidget {
   @override

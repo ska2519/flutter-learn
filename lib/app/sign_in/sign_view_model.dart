@@ -3,6 +3,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter_learn/services/auth_base.dart';
+import 'package:flutter_learn/services/firebase_auth_service.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final signModelProvider = ChangeNotifierProvider<SignViewModel>(
+    (ref) => SignViewModel(auth: ref.watch(authServiceProvider)));
 
 class SignViewModel with ChangeNotifier {
   SignViewModel({required this.auth});
@@ -35,6 +40,14 @@ class SignViewModel with ChangeNotifier {
 
   Future<void> signInWithApple() async {
     await _sign(auth.signInWithApple);
+  }
+
+  Future<void> signInWithNaver() async {
+    await _sign(auth.signInWithNaver);
+  }
+
+  Future<void> signInWithKakao() async {
+    await _sign(auth.signInWithKakao);
   }
 
   Future<void> signOut() async {

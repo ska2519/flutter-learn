@@ -4,6 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_learn/models/youtube_channel.dart' as ch;
 import 'package:flutter_learn/models/youtube_playlist_items.dart';
+import 'package:flutter_learn/models/app_user.dart';
+import 'package:flutter_learn/models/chat.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
 
 late String locale;
@@ -48,3 +50,24 @@ String getChannelThumbnail(ch.Thumbnails thumbnails) {
       thumbnails.medium?.url ??
       thumbnails.high!.url;
 }
+
+String getChatId(String userID, String peerID) =>
+    userID.hashCode <= peerID.hashCode
+        ? '${userID}_$peerID'
+        : '${peerID}_$userID';
+
+List<String> getUserIds(List<Chat>? _chatList, AppUser appUser) {
+  final List<String> users = <String>[];
+  if (_chatList != null) {
+    for (final chat in _chatList) {
+      chat.userIds[0] != appUser.id
+          ? users.add(chat.userIds[0])
+          : users.add(chat.userIds[1]);
+    }
+  }
+  return users;
+}
+
+/// 날짜&시간 포맷에 맞춰서 파싱
+String date(DateTime dateTime, String format) =>
+    DateFormat(format).format(dateTime);

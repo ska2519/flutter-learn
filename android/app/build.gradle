@@ -32,7 +32,7 @@ def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
     }
-   
+
 android {
     compileSdkVersion 30
     ndkVersion '22.1.7171670'
@@ -49,33 +49,32 @@ android {
     }
 
     signingConfigs {
-       release {
+        release {
            if (System.getenv()["CI"]) { // CI=true is exported by Codemagic
                 storeFile file(System.getenv()["FCI_KEYSTORE_PATH"])
                 storePassword System.getenv()["FCI_KEYSTORE_PASSWORD"]
                 keyAlias System.getenv()["FCI_KEY_ALIAS"]
                 keyPassword System.getenv()["FCI_KEY_PASSWORD"]
             } else {
-           keyAlias keystoreProperties['keyAlias']
-           keyPassword keystoreProperties['keyPassword']
-           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-           storePassword keystoreProperties['storePassword']
-           }
-       }
-   }
-   buildTypes {
-       release {
-           signingConfig signingConfigs.release
-           ndk {
-                debugSymbolLevel 'SYMBOL_TABLE'
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+                storePassword keystoreProperties['storePassword']
             }
-       }
-       
-       debug{
-           applicationIdSuffix ".debug"
-           debuggable true
-       }
-   }
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            ndk {
+                    debugSymbolLevel 'SYMBOL_TABLE'
+                }
+        }
+        debug{
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
+    }
 }
 
 flutter {
@@ -84,4 +83,8 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation ('com.naver.nid:naveridlogin-android-sdk:4.2.6')
+    implementation "com.kakao.sdk:v2-user:2.7.0" // 카카오 로그인
+    implementation "com.kakao.sdk:v2-talk:2.7.0" // 친구, 메시지(카카오톡)
+    implementation "com.kakao.sdk:v2-link:2.7.0" // 메시지(카카오링크)
 }

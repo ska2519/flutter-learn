@@ -9,40 +9,41 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
   algolia: ^1.0.1
+  bubble: ^1.2.1
   cached_network_image: ^3.0.0
   cloud_firestore: ^2.3.0
+  cloud_functions: ^3.0.3
   cupertino_icons: ^1.0.2
   dio: ^4.0.0
   duration: ^3.0.6
   easy_localization: ^3.0.0
-  equatable: ^2.0.2
   extended_image: ^4.1.0
   file_picker: ^3.0.3
   firebase_analytics: ^8.1.2
-  firebase_app_check: ^0.0.1+3
   firebase_auth: ^2.0.0
   firebase_core: ^1.3.0
   firebase_crashlytics: ^2.0.7
   firebase_messaging: ^10.0.3
   firebase_storage: ^9.0.0
   fl_chart: ^0.36.1
+  flutter:
+    sdk: flutter
   flutter_hooks: ^0.17.0
   flutter_local_notifications: ^6.0.0
+  flutter_naver_login: ^1.2.2
   flutter_svg: ^0.22.0
   freezed_annotation: ^0.14.2
   google_sign_in: ^5.0.4
   hooks_riverpod: ^0.14.0+4
   image: ^3.0.2
-  image_picker: ^0.7.4
+  image_picker: ^0.7.4 #iOS에서 업데이트 시 에러 발생 Cancelled by a second request
+
   intl: ^0.17.0
-  lint: ^1.5.3
+  kakao_flutter_sdk: ^0.7.1
+
   numeral: ^1.2.4
   package_info_plus: ^1.0.3
-  path_provider: ^2.0.2
-  pedantic: ^1.11.0
   shimmer: ^2.0.0
   sign_in_with_apple: ^3.0.0
   textfield_tags: ^1.3.1
@@ -52,15 +53,16 @@ dependencies:
 dependency_overrides: null
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   build_runner: ^2.0.4
   flutter_launcher_icons: ^0.9.0
   flutter_native_splash: 1.1.8+4
+  flutter_test:
+    sdk: flutter
   freezed: ^0.14.2
   json_serializable: ^4.1.3
   test: null
-
+  lint: ^1.5.3
+  
 flutter_native_splash:
   color: "#ffffff"
   color_dark: "#428eff"
@@ -86,12 +88,17 @@ flutter:
     - assets/icons/
     - assets/pixel_perfect/
     - assets/translations/
-    - google_fonts/
 
   fonts:
-    - family: Roboto
+    - family: SFProDisplay
       fonts:
-        - asset: google_fonts/Roboto-Regular.ttf
+        - asset: fonts/SF-Pro-Display-Light.otf
+          weight: 300
+        - asset: fonts/SF-Pro-Display-Regular.otf
           weight: 400
-        - asset: google_fonts/Roboto-Bold.ttf
+        - asset: fonts/SF-Pro-Display-Medium.otf
+          weight: 500
+        - asset: fonts/SF-Pro-Display-Semibold.otf
+          weight: 600
+        - asset: fonts/SF-Pro-Display-Bold.otf
           weight: 700

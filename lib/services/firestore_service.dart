@@ -57,23 +57,32 @@ class FirestoreService {
   }) async =>
       FirebaseFirestore.instance.doc(path).update(data);
 
-  Future<void> setDelTransaction({
-    required String deletePath,
-    required String updatePath,
-    Map<String, dynamic>? deleteData,
-    required Map<String, dynamic> updateData,
+  Future<void> setTransaction({
+    required String firstPath,
+    required String secondPath,
+    Map<String, dynamic>? firstData,
+    Map<String, dynamic>? secondData,
+    Transaction? action,
   }) async {
-    final firstTransactionRef = FirebaseFirestore.instance.doc(deletePath);
-    final secondTransactionRef = FirebaseFirestore.instance.doc(updatePath);
+    final firstTransactionRef = FirebaseFirestore.instance.doc(firstPath);
+    final secondTransactionRef = FirebaseFirestore.instance.doc(secondPath);
     FirebaseFirestore.instance.runTransaction((transaction) async {
-      transaction.delete(firstTransactionRef);
-      transaction.update(secondTransactionRef, updateData);
+      transaction.set(firstTransactionRef, firstData);
+      transaction.set(secondTransactionRef, secondData!);
     });
   }
 
-  Future<void> deleteData({required String path}) async {
+  Future<void> deleteDoc({required String path}) async {
     final ref = FirebaseFirestore.instance.doc(path);
     await ref.delete();
+  }
+
+  Future<void> deleteCollection({required String path}) async {
+    final ref = FirebaseFirestore.instance.collection(path);
+    final snapshots = await ref.get();
+    for (final doc in snapshots.docs) {
+      await doc.reference.delete();
+    }
   }
 
   Stream<List<T>> collectionGroupStream<T>({

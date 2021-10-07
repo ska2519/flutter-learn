@@ -32,4 +32,10 @@ class FirebasePath {
   static String tagIcon(String icon) => 'icons/$icon';
   static String tokens(String userId, String token) =>
       'users/$userId/tokens/$token';
+
+  static String chatList() => 'chats';
+  static String chat(String chatId) => 'chats/$chatId';
+  static String messages(String chatId) => 'chats/$chatId/$chatId';
+  static String message(String chatId, String documentID) =>
+      'chats/$chatId/$chatId/$documentID';
 }

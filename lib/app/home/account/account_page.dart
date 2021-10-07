@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_learn/app/home/account/chat_list_page.dart';
 import 'package:flutter_learn/app/home/account/my_posts_page.dart';
 import 'package:flutter_learn/app/home/account/settings_page.dart';
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
@@ -53,8 +54,8 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Size _size = MediaQuery.of(context).size;
-    final AppUser? appUser = useProvider(appUserStreamProvider).data?.value;
+    final _size = MediaQuery.of(context).size;
+    final appUser = useProvider(appUserStreamProvider).data?.value;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -141,23 +142,31 @@ class _AccountPageState extends State<AccountPage> {
           ),
         ),
         const SizedBox(height: defaultPadding),
-        TextButton(
-          onPressed: () => appUser == null
-              ? SignInPage.show(context)
-              : _updateDisplayNameDialog(context, appUser).then(
-                  (value) {
-                    if (value == true) {
-                      database.updateAppUser(
-                        appUser.copyWith(displayName: _displayName),
-                      );
-                    }
-                  },
-                ),
-          child: Text(
-            appUser == null
-                ? LocaleKeys.requiredSignIn.tr()
-                : appUser.displayName,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: () => appUser == null
+                  ? SignInPage.show(context)
+                  : _updateDisplayNameDialog(context, appUser).then(
+                      (value) {
+                        if (value == true) {
+                          database.updateAppUser(
+                            appUser.copyWith(displayName: _displayName),
+                          );
+                        }
+                      },
+                    ),
+              child: Text(
+                appUser == null
+                    ? LocaleKeys.requiredSignIn.tr()
+                    : appUser.displayName,
+              ),
+            ),
+            IconButton(
+                onPressed: () => ChatListPage.show(context),
+                icon: Icon(Icons.chat_bubble_outline_outlined, size: 20))
+          ],
         ),
         const SizedBox(height: defaultPadding),
       ],
@@ -191,7 +200,11 @@ class _AccountPageState extends State<AccountPage> {
   Future<void> updateProfileImage(AppUser appUser) async {
     final ImagePicker _picker = ImagePicker();
     try {
-      final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+      final pickedFile = await _picker.getImage(
+        source: ImageSource.gallery,
+        maxWidth: 1024,
+        maxHeight: 1024,
+      );
       if (pickedFile != null) {
         final dialogKey = GlobalKey<State>();
         loadingIndicator(context, dialogKey);

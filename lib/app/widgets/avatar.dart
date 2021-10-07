@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 class Avatar extends StatelessWidget {
   const Avatar({
     this.photoUrl,
-    required this.radius,
+    this.radius = 25,
     this.borderColor,
     this.borderWidth,
     this.displayName,

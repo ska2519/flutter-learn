@@ -25,6 +25,16 @@
     <application
         android:label="플러터 런"
         android:icon="@mipmap/ic_launcher">
+         <!-- set_naver_app_key -->
+        <meta-data
+            android:name="com.naver.sdk.clientId"
+            android:value="@string/client_id" />
+        <meta-data
+            android:name="com.naver.sdk.clientSecret"
+            android:value="@string/client_secret" />
+         <meta-data
+            android:name="com.naver.sdk.clientName"
+            android:value="@string/client_name" />
         <meta-data
         android:name="com.google.firebase.messaging.default_notification_icon"
         android:resource="@drawable/flutter_icon" />
@@ -71,6 +81,8 @@
                 <action android:name="FLUTTER_NOTIFICATION_CLICK" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
+            
         </activity>
 
         <!-- Set up the Sign in with Apple activity, such that it's callable from the browser-redirect -->
@@ -90,8 +102,18 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <!-- 카카오 로그인 -->
+        <activity android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity">
+            <intent-filter android:label="flutter_web_auth">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth" android:scheme="kakao0116cd9761718d85103dd847d64eb906" />
+            </intent-filter>
+        </activity>
         <!-- Don't delete the meta-data below.
-             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

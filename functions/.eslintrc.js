@@ -1,4 +1,4 @@
-module.exports={
+module.exports = {
     root: true,
     env: {
         es6: true,
@@ -31,5 +31,6 @@ module.exports={
         'max-len': 'off',
         // 'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': 'off',
+        'camelcase': 'off',
     },
 };

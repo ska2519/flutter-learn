@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_learn/app/home/community/posts_page.dart';
 import 'package:flutter_learn/models/app_user.dart';
+import 'package:flutter_learn/models/chat.dart';
 import 'package:flutter_learn/models/comment.dart';
 import 'package:flutter_learn/models/comment_liked.dart';
 import 'package:flutter_learn/models/post.dart';
@@ -56,7 +56,7 @@ class FirestoreDatabase {
               data == null ? null : AppUser.fromJson(data));
 
   Future<void> deleteAppUser(String uid) =>
-      _service.deleteData(path: FirebasePath.appUser(uid));
+      _service.deleteDoc(path: FirebasePath.appUser(uid));
 
   Future<void> setAppUser(User user) async => _service.setData(
       path: FirebasePath.appUser(user.uid),
@@ -82,7 +82,7 @@ class FirestoreDatabase {
       _service.updateDoc(path: FirebasePath.post(post.id), data: post.toJson());
 
   Future<void> deletePost(String postId) =>
-      _service.deleteData(path: FirebasePath.post(postId));
+      _service.deleteDoc(path: FirebasePath.post(postId));
 
   Future<void> setComment(Comment comment) => _service.setData(
       path: FirebasePath.comment(comment.postId, comment.id),
@@ -92,7 +92,7 @@ class FirestoreDatabase {
       path: FirebasePath.comment(comment.postId, comment.id),
       data: comment.toJson());
 
-  Future<void> deleteComment(Comment comment) => _service.deleteData(
+  Future<void> deleteComment(Comment comment) => _service.deleteDoc(
       path: FirebasePath.comment(comment.postId, comment.id));
 
   Future<void> setReadUser(ReadPost readPost) async => _service.setData(
@@ -104,7 +104,7 @@ class FirestoreDatabase {
       data: likedPost.toJson());
 
   Future<void> deletePostLiked(String userId, Post post) =>
-      _service.deleteData(path: FirebasePath.postLikedUser(post.id, userId));
+      _service.deleteDoc(path: FirebasePath.postLikedUser(post.id, userId));
 
   Future<void> setCommentLiked(CommentLiked commentLiked) async =>
       _service.setData(
@@ -112,7 +112,7 @@ class FirestoreDatabase {
           data: commentLiked.toJson());
 
   Future<void> deleteCommentLiked(CommentLiked commentLiked) =>
-      _service.deleteData(path: FirebasePath.commentLikedUser(commentLiked));
+      _service.deleteDoc(path: FirebasePath.commentLikedUser(commentLiked));
 
   Future<List<String>> getPostReadUsers(String postId) async =>
       _service.getCollection(
@@ -248,5 +248,65 @@ class FirestoreDatabase {
         path: FirebasePath.commentLiked(comment.postId, comment.id),
         queryBuilder: (query) => query.orderBy('timestamp', descending: true),
         builder: (data, documentId) => CommentLiked.fromJson(data!),
+      );
+
+  Stream<List<Chat>?> chatListStream(String userId) =>
+      _service.collectionStream(
+        path: FirebasePath.chatList(),
+        builder: (data, documentID) => Chat.fromJson(data!),
+        queryBuilder: (query) => query
+            .orderBy('lastMessage.timestamp', descending: true)
+            .where('userIds', arrayContains: userId),
+      );
+
+  // Stream<List<AppUser>> getUsersByList(List<String> userIds) {
+  //   final List<Stream<AppUser>> streams = [];
+  //   for (final id in userIds) {
+  //     streams.add(_service.documentStream(
+  //       path: FirebasePath.appUser(id),
+  //       builder: (data, documentID) => AppUser.fromJson(data!),
+  //     ));
+  //   }
+  //   return StreamZip<AppUser>(streams).asBroadcastStream();
+  // }
+  Future<List<AppUser>> getUsersByList(List<String> userIds) async {
+    final List<AppUser> chatUsers = [];
+    for (final id in userIds) {
+      chatUsers.add(
+        await _service.getDoc(
+          path: FirebasePath.appUser(id),
+          builder: (data, documentID) => AppUser.fromJson(data!),
+        ),
+      );
+    }
+    return chatUsers;
+  }
+
+  Future<void> setChat(Chat chat) async => _service.setData(
+      path: FirebasePath.chat(chat.id),
+      data: chat.copyWith(lastMessage: chat.lastMessage).toJson());
+
+  Future<void> addMessage(Chat chat) async => _service.addData(
+      path: FirebasePath.messages(chat.id), data: chat.lastMessage.toJson());
+
+  Stream<List<Message>> messagesStream(String chatId) =>
+      _service.collectionStream(
+          path: FirebasePath.messages(chatId),
+          builder: (data, documentID) {
+            data!.addAll({'documentID': documentID});
+            return Message.fromJson(data);
+          },
+          queryBuilder: (query) =>
+              query.orderBy('timestamp', descending: true));
+
+  Future<void> deleteChat(Chat chat) async {
+    await _service.deleteCollection(path: FirebasePath.messages(chat.id));
+    _service.deleteDoc(path: FirebasePath.chat(chat.id));
+  }
+
+  void updateMessageRead(Message message, String chatId) => _service.setData(
+        path: FirebasePath.message(chatId, message.documentID!),
+        data: {'read': true},
+        merge: true,
       );
 }

@@ -2,7 +2,9 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_learn/app/home/account/account_page.dart';
+import 'package:flutter_learn/app/home/account/chat_page.dart';
 import 'package:flutter_learn/app/home/account/liked_posts_page.dart';
+import 'package:flutter_learn/app/home/account/chat_list_page.dart';
 import 'package:flutter_learn/app/home/account/my_posts_page.dart';
 import 'package:flutter_learn/app/home/account/settings_page.dart';
 import 'package:flutter_learn/app/home/community/edit_post_page.dart';
@@ -32,8 +34,10 @@ class AppRoutes {
   static const settingsPage = '/settings-page';
   static const myPostsPage = '/my-posts-page';
   static const myLikedPostsPage = '/my-liked-posts-page';
-  static const searchPage = 'search-page';
-  static const youTubePlayPage = 'you-tube-play-page';
+  static const searchPage = '/search-page';
+  static const youTubePlayPage = '/you-tube-play-page';
+  static const chatListPage = '/chat-list-page';
+  static const chatPage = '/chat-page';
 }
 
 class AppRouter {
@@ -110,7 +114,6 @@ class AppRouter {
             observer: observer,
           ),
           //maintainState false = pop으로 돌아가면 위젯 rebuild
-          // maintainState: false,
           settings: settings,
         );
       case AppRoutes.postsPage:
@@ -136,6 +139,21 @@ class AppRouter {
             item: item,
             tag: tag,
           ),
+          settings: settings,
+          maintainState: false,
+        );
+      case AppRoutes.chatListPage:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => ChatListPage(),
+          settings: settings,
+          maintainState: false,
+        );
+      case AppRoutes.chatPage:
+        final mapArgs = args as Map<String, dynamic>?;
+        final idTo = mapArgs!['idTo'] as String;
+        final displayName = mapArgs['displayName'] as String;
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => ChatPage(idTo: idTo, displayName: displayName),
           settings: settings,
           maintainState: false,
         );

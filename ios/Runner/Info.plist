@@ -36,6 +36,23 @@
 				<string>com.googleusercontent.apps.874778751078-l0oc2q02f3pnmnnttbcnsm8rs6jj1dja</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>naverlogin</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>kakao</string>
+				<string>0116cd9761718d85103dd847d64eb906</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -45,15 +62,44 @@
 	<array>
 		<string>https</string>
 		<string>http</string>
+		<!-- 네이버로 로그인 -->
+		<string>naversearchapp</string>
+		<string>naversearchthirdlogin</string>
+
+		<!-- 카카오톡으로 로그인 -->
+		<string>kakaokompassauth</string>
+		<string>storykompassauth</string>
+		<string>kakaolink</string>
+		<string>kakaotalk-5.9.7</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>naver.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<false/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+			<key>naver.net</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<false/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
 			<key>www.youtube.com</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>
@@ -65,6 +111,7 @@
 			</dict>
 		</dict>
 	</dict>
+	<!-- image_picker setting -->
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Get profile picture from Photo Library</string>
 	<key>UIBackgroundModes</key>
@@ -93,5 +140,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>kConsumerKey</key>
+	<string>Hpq7ov8TK9c8LxB2UjEr</string>
+	<key>kConsumerSecret</key>
+	<string>3AOd1v16QN</string>
+	<key>kServiceAppName</key>
+	<string>플러터런</string>
+	<key>kServiceAppUrlScheme</key>
+	<string>naverlogin</string>
 </dict>
 </plist>

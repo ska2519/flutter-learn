@@ -20,6 +20,7 @@ export const sendToComment = functions.firestore.document('posts/{postId}/commen
         const substrLength = 18 - comment.userDisplayName.length;
         const parentCmtText = comment.parentCmtText.substr(0, substrLength);
         const tokens = querySnapshot.docs.map((snap) => snap.id);
+
         const payload: admin.messaging.MessagingPayload = {
             notification: {
                 title: comment.userDisplayName + '님이 "' + parentCmtText + '"에 대댓글을 달았습니다',

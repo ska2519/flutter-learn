@@ -28,25 +28,29 @@ class FCMService {
     if (appUser != null && token != null) database.setToken(appUser.id, token);
   }
 
-  Future<void> setupInteractedPostUpdate() async {
-    // Create a Foreground [AndroidNotificationChannel] for heads up notifications
-    late AndroidNotificationChannel channel;
-    // Initialize the [FlutterLocalNotificationsPlugin] package.
-    late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-
+  /// Get the token each time the application loads
+  Future<void> saveAndRefreshToken() async {
     final String? token = kIsWeb ? await webToken : await getToken;
-    print('fcm_token: $token');
-    if (token != null) saveTokenToDatabase(token);
+    if (token != null) await saveTokenToDatabase(token);
+    debugPrint('fcm_token: $token');
     // Any time the token refreshes, store this in the database too.
     _fcm.onTokenRefresh.listen(saveTokenToDatabase);
+  }
 
+  Future<void> setupInteractedPost() async {
+    late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+    late AndroidNotificationChannel channel;
+    await saveAndRefreshToken();
     if (!kIsWeb) {
+      //  Create Android a Foreground [AndroidNotificationChannel] for heads up notifications
       channel = const AndroidNotificationChannel(
         'high_importance_channel', // id
         'High Importance Notifications', // title
         'This channel is used for important notifications.', // description
         importance: Importance.max,
       );
+
+      // Initialize the [FlutterLocalNotificationsPlugin] package.
       flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
       await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
@@ -57,11 +61,12 @@ class FCMService {
           .setForegroundNotificationPresentationOptions(
               alert: true, badge: true, sound: true);
     }
-    // iOS & Web
+    // iOS
     final NotificationSettings settings = await _fcm.requestPermission(
       announcement: true,
       carPlay: true,
       criticalAlert: true,
+      provisional: true,
     );
     print('fcm_User granted permission: ${settings.authorizationStatus}');
 
@@ -119,32 +124,11 @@ class FCMService {
 
     FirebaseMessaging.onMessageOpenedApp.listen(
       (RemoteMessage message) async {
-        print(
-            'fcm_A new onMessageOpenedApp event was published!: ${message.data}');
-
-        // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        //     FlutterLocalNotificationsPlugin();
-
         final didReceiveLocalNotificationProvider =
             StateProvider<ReceivedNotification?>((ref) => null);
 
         final selectNotificationProvider =
             StateProvider<String?>((ref) => null);
-
-        // String? selectedNotificationPayload;
-        // final NotificationAppLaunchDetails? notificationAppLaunchDetails =
-        //     await flutterLocalNotificationsPlugin
-        //         .getNotificationAppLaunchDetails();
-        // // String initialRoute = HomePage.routeName;
-        // print(
-        //     'notificationAppLaunchDetails?.didNotificationLaunchApp: ${notificationAppLaunchDetails?.didNotificationLaunchApp}');
-        // print(
-        //     'notificationAppLaunchDetails!.payload: ${notificationAppLaunchDetails?.payload}');
-        // if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
-        //   selectedNotificationPayload = notificationAppLaunchDetails!.payload;
-        //   print('selectedNotificationPayload: $selectedNotificationPayload');
-        //   // initialRoute = SecondPage.routeName;
-        // }
 
         const AndroidInitializationSettings initializationSettingsAndroid =
             AndroidInitializationSettings('flutter_icon');
@@ -166,6 +150,7 @@ class FCMService {
                 requestAlertPermission: false,
                 requestBadgePermission: false,
                 requestSoundPermission: false);
+
         final InitializationSettings initializationSettings =
             InitializationSettings(
           android: initializationSettingsAndroid,

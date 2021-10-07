@@ -1,12 +1,3 @@
-// import * as functions from 'firebase-functions';
-
-// Start writing Firebase Functions
-// https://firebase.google.com/docs/functions/typescript
-
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//     functions.logger.info('Hello logs!', {structuredData: true});
-//     response.send('Hello from Firebase!');
-// });
 import * as admin from 'firebase-admin';
 admin.initializeApp();
 
@@ -36,6 +27,10 @@ export {sendToPostLiked} from './fcm';
 export {sendToCommentLiked} from './fcm';
 
 export {resizeAvatar} from './storage';
+
+export {customTokenFromKakao} from './kakao';
+export {customTokenFromNaver} from './naver';
+
 // export {addPostId} from './firestore';
 // export {createdUserRecord} from './firestore';
 // export {resizeAvatar} from './storage';

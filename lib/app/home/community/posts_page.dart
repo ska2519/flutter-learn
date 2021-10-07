@@ -1,14 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_learn/app/widgets/tag_avatar.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
 import 'package:flutter_learn/app/sign_in/sign_in_page.dart';
 import 'package:flutter_learn/app/widgets/empty_content.dart';
+import 'package:flutter_learn/app/widgets/tag_avatar.dart';
 import 'package:flutter_learn/constants/constants.dart';
 import 'package:flutter_learn/models/app_user.dart';
 import 'package:flutter_learn/models/post.dart';
@@ -17,6 +14,7 @@ import 'package:flutter_learn/routes/app_router.dart';
 import 'package:flutter_learn/services/firebase_auth_service.dart';
 import 'package:flutter_learn/services/firestore_database.dart';
 import 'package:flutter_learn/translations/locale_keys.g.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'edit_post_page.dart';
 import 'post_detail_page.dart';
@@ -28,7 +26,7 @@ import 'search_page.dart';
 
 enum sortType { likedCount, commentCount, readCount }
 final postsFilter = StateProvider<sortType>((_) => sortType.likedCount);
-final postsFilterDays = StateProvider<int>((_) => 1);
+final postsFilterDays = StateProvider<int>((_) => 3);
 
 final sortPostsProvider = FutureProvider<List<Post?>>((ref) {
   final database = ref.read(databaseProvider);
@@ -225,16 +223,18 @@ class PostsPageSliverAppBar extends StatelessWidget {
           height: 50,
           child: Row(
             children: [
-              if (selectedIndexList.value.isEmpty)
-                const SizedBox()
-              else
-                Padding(
-                  padding: const EdgeInsets.only(right: defaultPadding),
-                  child: InkWell(
-                    onTap: () => _resetFilter(context),
-                    child: Icon(Icons.highlight_off_outlined),
-                  ),
-                ),
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 300),
+                child: selectedIndexList.value.isEmpty
+                    ? const SizedBox()
+                    : Padding(
+                        padding: const EdgeInsets.only(right: defaultPadding),
+                        child: InkWell(
+                          onTap: () => _resetFilter(context),
+                          child: Icon(Icons.highlight_off_outlined),
+                        ),
+                      ),
+              ),
               Expanded(
                 child: ListView.separated(
                   physics: BouncingScrollPhysics(),
@@ -243,10 +243,8 @@ class PostsPageSliverAppBar extends StatelessWidget {
                       const SizedBox(width: defaultPadding * 1.2),
                   scrollDirection: Axis.horizontal,
                   itemCount: tags.length,
-                  itemBuilder: (context, i) {
-                    final tag = tags[i];
-                    return _buildTagFilterChip(context, tag, i);
-                  },
+                  itemBuilder: (context, i) =>
+                      _buildTagFilterChip(context, tags[i], i),
                 ),
               ),
             ],
