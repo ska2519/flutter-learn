@@ -1,8 +1,8 @@
 # Flutter Learn
 
-I'll build a multi-platform community app powered by Flutter and Cloud Firestore.  
+Build a multi-platform community app powered by Flutter and Cloud Firestore.  
 
-The finished app runs on Android, iOS, and web, from a single Dart codebase.  
+App runs on Android, iOS, and web, from a single Dart codebase.  
 
 This project implement a community app ([Lawfully](https://www.lawfully.com/)-inspired) with [Riverpod](https://riverpod.dev) state management techniques in Flutter.  
 
